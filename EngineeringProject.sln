@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35931.197
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Data\Data.csproj", "{CF16FEA7-85D1-4C20-8FE8-0DD736376FA9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLogic", "BusinessLogic\BusinessLogic.csproj", "{803304CB-05D2-43E2-A3DD-D204FFA7A59C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API", "API\API.csproj", "{D4F237B9-AB8C-4E07-8D7E-C32E21138681}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CF16FEA7-85D1-4C20-8FE8-0DD736376FA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF16FEA7-85D1-4C20-8FE8-0DD736376FA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF16FEA7-85D1-4C20-8FE8-0DD736376FA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF16FEA7-85D1-4C20-8FE8-0DD736376FA9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{803304CB-05D2-43E2-A3DD-D204FFA7A59C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{803304CB-05D2-43E2-A3DD-D204FFA7A59C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{803304CB-05D2-43E2-A3DD-D204FFA7A59C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{803304CB-05D2-43E2-A3DD-D204FFA7A59C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4F237B9-AB8C-4E07-8D7E-C32E21138681}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4F237B9-AB8C-4E07-8D7E-C32E21138681}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4F237B9-AB8C-4E07-8D7E-C32E21138681}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4F237B9-AB8C-4E07-8D7E-C32E21138681}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6BC989EA-D2BA-4B32-840F-49DB3FF0D17A}
+	EndGlobalSection
+EndGlobal
