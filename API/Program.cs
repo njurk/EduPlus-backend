@@ -1,4 +1,5 @@
-
+using Microsoft.EntityFrameworkCore;
+using Data.Data;
 namespace API
 {
     public class Program
@@ -14,7 +15,28 @@ namespace API
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            builder.Services.AddDbContext<SchoolDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
             var app = builder.Build();
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                try
+                {
+                    var context = services.GetRequiredService<SchoolDbContext>();
+
+                    context.Database.Migrate(); 
+
+                    DataSeeder.Seed(context);
+                }
+                catch (Exception ex)
+                {
+                    var logger = services.GetRequiredService<ILogger<Program>>();
+                    logger.LogError(ex, "Wyst¹pi³ b³¹d przy seedowaniu danych");
+                }
+            }
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

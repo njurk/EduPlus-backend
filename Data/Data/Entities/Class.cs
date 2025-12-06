@@ -1,0 +1,26 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+
+namespace Data.Data.Entities
+{
+    public class Class
+    {
+        [Key]
+        public int Id { get; set; }
+
+        public required int Level { get; set; }
+
+        [Required, MaxLength(10)]
+        public required string Letter { get; set; }
+
+        public int SchoolYearId { get; set; }
+        [ForeignKey(nameof(SchoolYearId))]
+        public virtual SchoolYear SchoolYear { get; set; } = null!;
+
+        public bool IsActive { get; set; } = true;
+
+        public virtual ICollection<ClassStudent> ClassStudents { get; set; } = new List<ClassStudent>();
+    }
+}

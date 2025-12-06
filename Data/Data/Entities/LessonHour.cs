@@ -1,0 +1,21 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Data.Data.Entities
+{
+    public class LessonHour
+    {
+        [Key]
+        public int Id { get; set; }
+
+        public int OrderNumber { get; set; }
+
+        public TimeOnly StartTime { get; set; }
+        public TimeOnly EndTime { get; set; }
+        public bool IsActive { get; set; } = true;
+    }
+}
