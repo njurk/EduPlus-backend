@@ -1,7 +1,7 @@
-﻿using Data.Data.DTOs;
-using Data.Data.Entities;
+﻿using Data.Data.Entities;
 using Data.Data.EntitiesForView;
 using Microsoft.EntityFrameworkCore;
+using System.Drawing;
 using System.Linq.Expressions;
 
 namespace Data.Data
@@ -14,10 +14,8 @@ namespace Data.Data
 
         public DbSet<Announcement> Announcements { get; set; } = null!;
         public DbSet<AnnouncementRead> AnnouncementReads { get; set; } = null!;
-        public DbSet<AnnouncementTarget> AnnouncementTargets { get; set; } = null!;
         public DbSet<Attendance> Attendances { get; set; } = null!;
         public DbSet<AttendanceType> AttendanceTypes { get; set; } = null!;
-        public DbSet<BehaviorGrade> BehaviorGrades { get; set; } = null!;
         public DbSet<BehaviorGradeRange> BehaviorGradeRanges { get; set; } = null!;
         public DbSet<BehaviorNote> BehaviorNotes { get; set; } = null!;
         public DbSet<BehaviorNoteType> BehaviorNoteTypes { get; set; } = null!;
@@ -35,23 +33,37 @@ namespace Data.Data
         public DbSet<Role> Roles { get; set; } = null!;
         public DbSet<SchoolYear> SchoolYears { get; set; } = null!;
         public DbSet<Semester> Semesters { get; set; } = null!;
-        public DbSet<SharedFiles> SharedFiles { get; set; } = null!;
         public DbSet<Subject> Subjects { get; set; } = null!;
         public DbSet<TeacherClassSubject> TeacherClassSubjects { get; set; } = null!;
         public DbSet<User> Users { get; set; } = null!;
         public DbSet<UserRole> UserRoles { get; set; } = null!;
         public DbSet<WeeklySchedule> WeeklySchedules { get; set; } = null!;
+        public DbSet<CalendarColor> CalendarColors { get; set; } = null!;
+        public DbSet<CalendarEventType> CalendarEventTypes { get; set; } = null!;
+        public DbSet<CalendarEvent> CalendarEvents { get; set; } = null!;
+        public DbSet<ParentStudent> ParentStudents { get; set; } = null!;
 
         // widoki
-        public DbSet<StudentAttendanceSummary> StudentAttendanceSummaries { get; set; } = null!;
+        public DbSet<ViewStudentAttendance> ViewStudentAttendances { get; set; } = null!;
+        public DbSet<ViewClassRegister> ViewClassRegisters { get; set; } = null!;
+        public DbSet<ViewLessonSchedule> ViewLessonSchedules { get; set; } = null!;
+        public DbSet<ViewGradeDetails> ViewGradeDetails { get; set; } = null!;
+        public DbSet<ViewAttendanceDetails> ViewAttendanceDetails { get; set; } = null!;
+        public DbSet<ViewBehaviorDetails> ViewBehaviorDetails { get; set; } = null!;
+        public DbSet<ViewUpcomingEvent> ViewUpcomingEvents { get; set; } = null!;
+        public DbSet<ViewAnnouncementDetails> ViewAnnouncementDetails { get; set; } = null!;
+        public DbSet<ViewBehaviorGradeSummary> ViewBehaviorGradeSummaries { get; set; } = null!;
+        public DbSet<ViewTeacherClass> ViewTeacherClasses { get; set; } = null!;
+        public DbSet<ViewClassStudentDetails> ViewClassStudentDetails { get; set; } = null!;
+        public DbSet<ViewPendingExcuse> ViewPendingExcuses { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            // query filter na soft delete (domyślnie ukrywa nieaktywne rekordy)
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
+                // query filter na soft delete
                 var isActiveProperty = entityType.FindProperty("IsActive");
                 if (isActiveProperty != null && isActiveProperty.ClrType == typeof(bool))
                 {
@@ -74,12 +86,19 @@ namespace Data.Data
 
             modelBuilder.Entity<UserRole>(e =>
             {
-                e.HasIndex(ur => new { ur.UserId, ur.RoleId }).IsUnique(); // każdy użytkownik może mieć tylko jedną role
+                e.HasIndex(ur => new { ur.UserId, ur.RoleId }).IsUnique();
+            });
+
+            modelBuilder.Entity<ParentStudent>(e =>
+            {
+                e.HasIndex(ps => new { ps.ParentId, ps.StudentId }).IsUnique();
+                e.HasOne(ps => ps.Parent).WithMany().OnDelete(DeleteBehavior.Restrict);
+                e.HasOne(ps => ps.Student).WithMany().OnDelete(DeleteBehavior.Restrict);
+                e.HasQueryFilter(x => x.IsActive);
             });
 
             modelBuilder.Entity<ClassStudent>(e =>
             {
-                // zabezpieczenie przed duplikatami uczniów w klasie
                 e.HasIndex(cs => new { cs.ClassId, cs.StudentId })
                  .IsUnique()
                  .HasFilter("[IsActive] = 1");
@@ -87,18 +106,15 @@ namespace Data.Data
 
             modelBuilder.Entity<TeacherClassSubject>(e =>
             {
-                // zabezpieczenie przed duplikatami nauczycieli danego przedmiotu w klasie
                 e.HasIndex(tcs => new { tcs.TeacherId, tcs.ClassId, tcs.SubjectId })
                  .IsUnique()
                  .HasFilter("[IsActive] = 1");
 
-                // blokada kaskadowego usuwania
                 e.HasOne(x => x.Teacher).WithMany().OnDelete(DeleteBehavior.Restrict);
             });
 
             modelBuilder.Entity<Attendance>(e =>
             {
-                // zabezpieczenie przed duplikatami frekwencji dla danego ucznia na lekcji
                 e.HasIndex(a => new { a.LessonId, a.StudentId })
                  .IsUnique()
                  .HasFilter("[IsActive] = 1");
@@ -106,7 +122,6 @@ namespace Data.Data
                 e.HasOne(x => x.Student).WithMany().OnDelete(DeleteBehavior.Restrict);
             });
 
-            // restrict delete
             modelBuilder.Entity<Grade>(e =>
             {
                 e.HasOne(g => g.Student).WithMany().OnDelete(DeleteBehavior.Restrict);
@@ -117,11 +132,6 @@ namespace Data.Data
             {
                 e.HasOne(n => n.Student).WithMany().OnDelete(DeleteBehavior.Restrict);
                 e.HasOne(n => n.Teacher).WithMany().OnDelete(DeleteBehavior.Restrict);
-            });
-
-            modelBuilder.Entity<BehaviorGrade>(e =>
-            {
-                e.HasOne(bg => bg.Student).WithMany().OnDelete(DeleteBehavior.Restrict);
             });
 
             modelBuilder.Entity<Announcement>(e =>
@@ -135,16 +145,6 @@ namespace Data.Data
                 e.HasOne(ar => ar.User).WithMany().OnDelete(DeleteBehavior.Restrict);
             });
 
-            modelBuilder.Entity<SharedFiles>(e =>
-            {
-                e.HasOne(f => f.Uploader).WithMany().OnDelete(DeleteBehavior.Restrict);
-            });
-
-            modelBuilder.Entity<Excuse>(e =>
-            {
-                e.HasOne(ex => ex.Parent).WithMany().OnDelete(DeleteBehavior.Restrict);
-            });
-
             modelBuilder.Entity<Lesson>(e =>
             {
                 e.HasOne(l => l.Teacher).WithMany().OnDelete(DeleteBehavior.Restrict);
@@ -152,23 +152,54 @@ namespace Data.Data
 
             modelBuilder.Entity<WeeklySchedule>(e =>
             {
-                e.HasOne(ws => ws.Teacher).WithMany().OnDelete(DeleteBehavior.Restrict);
+                e.HasOne(ws => ws.SchoolYear)
+                 .WithMany()
+                 .HasForeignKey(ws => ws.SchoolYearId)
+                 .OnDelete(DeleteBehavior.Restrict);
+
+                e.HasOne(ws => ws.Semester)
+                 .WithMany()
+                 .HasForeignKey(ws => ws.SemesterId)
+                 .OnDelete(DeleteBehavior.Restrict);
+
+                e.HasOne(ws => ws.Class)
+                 .WithMany()
+                 .HasForeignKey(ws => ws.ClassId)
+                 .OnDelete(DeleteBehavior.Restrict);
+
+                e.HasOne(ws => ws.Subject)
+                 .WithMany()
+                 .HasForeignKey(ws => ws.SubjectId)
+                 .OnDelete(DeleteBehavior.Restrict);
             });
 
             modelBuilder.Entity<GradeType>().Property(p => p.Value).HasColumnType("decimal(2,1)");
 
             // widoki
-            modelBuilder.Entity<ViewStudentAttendance>()
-                .HasNoKey()
-                .ToView("vw_StudentAttendanceSummary");
+            modelBuilder.Entity<ViewStudentAttendance>().HasNoKey().ToView("vw_StudentAttendanceSummary");
+            modelBuilder.Entity<ViewGradeDetails>().HasNoKey().ToView("vw_GradeDetails");
+            modelBuilder.Entity<ViewClassRegister>().HasNoKey().ToView("vw_ClassRegister");
+            modelBuilder.Entity<ViewAnnouncementDetails>().HasNoKey().ToView("vw_AnnouncementDetails");
+            modelBuilder.Entity<ViewLessonSchedule>().HasNoKey().ToView("vw_LessonSchedule");
+            modelBuilder.Entity<ViewAttendanceDetails>().HasNoKey().ToView("vw_AttendanceDetails");
+            modelBuilder.Entity<ViewBehaviorDetails>().HasNoKey().ToView("vw_BehaviorDetails");
+            modelBuilder.Entity<ViewUpcomingEvent>().HasNoKey().ToView("vw_UpcomingEvents");
+            modelBuilder.Entity<ViewBehaviorGradeSummary>().HasNoKey().ToView("vw_BehaviorGradeSummary");
+            modelBuilder.Entity<ViewTeacherClass>().HasNoKey().ToView("vw_TeacherClasses");
+            modelBuilder.Entity<ViewClassStudentDetails>().HasNoKey().ToView("vw_ClassStudentDetails");
+            modelBuilder.Entity<ViewPendingExcuse>().HasNoKey().ToView("vw_PendingExcuses");
 
-            // seedowanie tabel słownikowych (reszta za pomocą DataSeeder.cs)
+            // seedowanie tabel słownikowych (reszta w DataSeeder.cs)
             modelBuilder.Entity<Role>().HasData(
-                new Role { Id = 1, Name = "Administrator", IsActive = true },
-                new Role { Id = 2, Name = "Dyrekcja", IsActive = true },
-                new Role { Id = 3, Name = "Nauczyciel", IsActive = true },
-                new Role { Id = 4, Name = "Uczeń", IsActive = true },
-                new Role { Id = 5, Name = "Rodzic", IsActive = true }
+                new Role { Id = 1, Name = "Admin", IsActive = true },
+                new Role { Id = 2, Name = "Nauczyciel", IsActive = true },
+                new Role { Id = 3, Name = "Rodzic", IsActive = true },
+                new Role { Id = 4, Name = "Uczeń", IsActive = true }
+            );
+
+            modelBuilder.Entity<SchoolYear>().HasData(
+                new SchoolYear { Id = 1, Name = "2025/2026", StartDate = new DateOnly(2025, 9, 1), EndDate = new DateOnly(2026, 6, 30), IsActive = true },
+                new SchoolYear { Id = 2, Name = "2026/2027", StartDate = new DateOnly(2026, 9, 1), EndDate = new DateOnly(2027, 6, 30), IsActive = true }
             );
 
             modelBuilder.Entity<AttendanceType>().HasData(
@@ -180,18 +211,18 @@ namespace Data.Data
             );
 
             modelBuilder.Entity<GradeType>().HasData(
-                new GradeType { Id = 1, Name = "Niedostateczny", Value = 1.0m, IsActive = true },
-                new GradeType { Id = 2, Name = "Dopuszczający", Value = 2.0m, IsActive = true },
-                new GradeType { Id = 3, Name = "Dostateczny", Value = 3.0m, IsActive = true },
-                new GradeType { Id = 4, Name = "Dobry", Value = 4.0m, IsActive = true },
-                new GradeType { Id = 5, Name = "Bardzo dobry", Value = 5.0m, IsActive = true },
-                new GradeType { Id = 6, Name = "Celujący", Value = 6.0m, IsActive = true }
+                new GradeType { Id = 1, Numeric = "1", Name = "Niedostateczny", Value = 1.0m, IsActive = true },
+                new GradeType { Id = 2, Numeric = "2", Name = "Dopuszczający", Value = 2.0m, IsActive = true },
+                new GradeType { Id = 3, Numeric = "3", Name = "Dostateczny", Value = 3.0m, IsActive = true },
+                new GradeType { Id = 4, Numeric = "4", Name = "Dobry", Value = 4.0m, IsActive = true },
+                new GradeType { Id = 5, Numeric = "5", Name = "Bardzo dobry", Value = 5.0m, IsActive = true },
+                new GradeType { Id = 6, Numeric = "6", Name = "Celujący", Value = 6.0m, IsActive = true }
             );
 
             modelBuilder.Entity<GradeCategory>().HasData(
                 new GradeCategory { Id = 1, Name = "Sprawdzian", Weight = 3, IsActive = true },
                 new GradeCategory { Id = 2, Name = "Kartkówka", Weight = 2, IsActive = true },
-                new GradeCategory { Id = 3, Name = "Odpowiedź", Weight = 1, IsActive = true },
+                new GradeCategory { Id = 3, Name = "Odpowiedź ustna", Weight = 1, IsActive = true },
                 new GradeCategory { Id = 4, Name = "Aktywność", Weight = 1, IsActive = true },
                 new GradeCategory { Id = 5, Name = "Zadanie domowe", Weight = 1, IsActive = true }
             );
@@ -202,12 +233,12 @@ namespace Data.Data
             );
 
             modelBuilder.Entity<BehaviorGradeRange>().HasData(
-                new BehaviorGradeRange { Id = 1, GradeName = "Wzorowe", MinPoints = 51, MaxPoints = 200, IsActive = true },
-                new BehaviorGradeRange { Id = 2, GradeName = "Bardzo dobre", MinPoints = 41, MaxPoints = 50, IsActive = true },
-                new BehaviorGradeRange { Id = 3, GradeName = "Dobre", MinPoints = 31, MaxPoints = 40, IsActive = true },
-                new BehaviorGradeRange { Id = 4, GradeName = "Poprawne", MinPoints = 21, MaxPoints = 30, IsActive = true },
-                new BehaviorGradeRange { Id = 5, GradeName = "Nieodpowiednie", MinPoints = 11, MaxPoints = 20, IsActive = true },
-                new BehaviorGradeRange { Id = 6, GradeName = "Naganne", MinPoints = 0, MaxPoints = 10, IsActive = true }
+                new BehaviorGradeRange { Id = 1, SchoolYearId = 1, GradeName = "Wzorowe", MinPoints = 51, MaxPoints = 200, IsActive = true },
+                new BehaviorGradeRange { Id = 2, SchoolYearId = 1, GradeName = "Bardzo dobre", MinPoints = 41, MaxPoints = 50, IsActive = true },
+                new BehaviorGradeRange { Id = 3, SchoolYearId = 1, GradeName = "Dobre", MinPoints = 31, MaxPoints = 40, IsActive = true },
+                new BehaviorGradeRange { Id = 4, SchoolYearId = 1, GradeName = "Poprawne", MinPoints = 21, MaxPoints = 30, IsActive = true },
+                new BehaviorGradeRange { Id = 5, SchoolYearId = 1, GradeName = "Nieodpowiednie", MinPoints = 11, MaxPoints = 20, IsActive = true },
+                new BehaviorGradeRange { Id = 6, SchoolYearId = 1, GradeName = "Naganne", MinPoints = 0, MaxPoints = 10, IsActive = true }
             );
 
             modelBuilder.Entity<LessonStatus>().HasData(
@@ -244,37 +275,33 @@ namespace Data.Data
                 new Classroom { Id = 13, Name = "303", IsActive = true },
                 new Classroom { Id = 14, Name = "304", IsActive = true },
                 new Classroom { Id = 15, Name = "305", IsActive = true },
-                new Classroom { Id = 16, Name = "Sala gimnastyczna 1", IsActive = true },
-                new Classroom { Id = 17, Name = "Sala gimnastyczna 2", IsActive = true },
-                new Classroom { Id = 18, Name = "Aula", IsActive = true }
+                new Classroom { Id = 16, Name = "gimnastyczna 1", IsActive = true },
+                new Classroom { Id = 17, Name = "gimnastyczna 2", IsActive = true },
+                new Classroom { Id = 18, Name = "aula", IsActive = true }
             );
 
             modelBuilder.Entity<Subject>().HasData(
-                new Subject { Id = 1, Name = "Matematyka", IsActive = true },
-                new Subject { Id = 2, Name = "Język polski", IsActive = true },
-                new Subject { Id = 3, Name = "Język angielski", IsActive = true },
-                new Subject { Id = 4, Name = "Informatyka", IsActive = true },
-                new Subject { Id = 5, Name = "Wychowanie fizyczne", IsActive = true },
-                new Subject { Id = 6, Name = "Historia", IsActive = true },
-                new Subject { Id = 7, Name = "WOS", IsActive = true },
-                new Subject { Id = 8, Name = "Biologia", IsActive = true },
-                new Subject { Id = 9, Name = "Chemia", IsActive = true },
-                new Subject { Id = 10, Name = "Fizyka", IsActive = true },
-                new Subject { Id = 11, Name = "Geografia", IsActive = true },
-                new Subject { Id = 12, Name = "Przyroda", IsActive = true },
-                new Subject { Id = 13, Name = "Plastyka", IsActive = true },
-                new Subject { Id = 14, Name = "Muzyka", IsActive = true },
-                new Subject { Id = 15, Name = "Zajęcia artystyczne", IsActive = true },
-                new Subject { Id = 16, Name = "Religia", IsActive = true },
-                new Subject { Id = 17, Name = "Etyka", IsActive = true },
-                new Subject { Id = 18, Name = "WDŻ", IsActive = true },
-                new Subject { Id = 19, Name = "Technika", IsActive = true },
-                new Subject { Id = 20, Name = "EDB", IsActive = true }
-            );
-
-            modelBuilder.Entity<SchoolYear>().HasData(
-                new SchoolYear { Id = 1, Name = "2025/2026", StartDate = new DateOnly(2025, 9, 1), EndDate = new DateOnly(2026, 6, 30), IsActive = true },
-                new SchoolYear { Id = 2, Name = "2026/2027", StartDate = new DateOnly(2026, 9, 1), EndDate = new DateOnly(2027, 6, 30), IsActive = true }
+                new Subject { Id = 1, Name = "matematyka", IsActive = true },
+                new Subject { Id = 2, Name = "język polski", IsActive = true },
+                new Subject { Id = 3, Name = "język angielski", IsActive = true },
+                new Subject { Id = 4, Name = "język niemiecki", IsActive = true },
+                new Subject { Id = 5, Name = "informatyka", IsActive = true },
+                new Subject { Id = 6, Name = "wychowanie fizyczne", IsActive = true },
+                new Subject { Id = 7, Name = "historia", IsActive = true },
+                new Subject { Id = 8, Name = "WOS", IsActive = true },
+                new Subject { Id = 9, Name = "biologia", IsActive = true },
+                new Subject { Id = 10, Name = "chemia", IsActive = true },
+                new Subject { Id = 11, Name = "fizyka", IsActive = true },
+                new Subject { Id = 12, Name = "Geografia", IsActive = true },
+                new Subject { Id = 13, Name = "przyroda", IsActive = true },
+                new Subject { Id = 14, Name = "plastyka", IsActive = true },
+                new Subject { Id = 15, Name = "muzyka", IsActive = true },
+                new Subject { Id = 16, Name = "zajęcia artystyczne", IsActive = true },
+                new Subject { Id = 17, Name = "religia", IsActive = true },
+                new Subject { Id = 18, Name = "etyka", IsActive = true },
+                new Subject { Id = 19, Name = "WDŻ", IsActive = true },
+                new Subject { Id = 20, Name = "technika", IsActive = true },
+                new Subject { Id = 21, Name = "EDB", IsActive = true }
             );
 
             modelBuilder.Entity<Semester>().HasData(
@@ -288,6 +315,20 @@ namespace Data.Data
                 new Class { Id = 1, Level = 1, Letter = "A", SchoolYearId = 1, IsActive = true },
                 new Class { Id = 2, Level = 4, Letter = "B", SchoolYearId = 1, IsActive = true },
                 new Class { Id = 3, Level = 8, Letter = "C", SchoolYearId = 1, IsActive = true }
+            );
+
+            modelBuilder.Entity<CalendarColor>().HasData(
+                new CalendarColor { Id = 1, Name = "Czerwony", Code = "#FF0000" },
+                new CalendarColor { Id = 2, Name = "Zielony", Code = "#00FF00" },
+                new CalendarColor { Id = 3, Name = "Niebieski", Code = "#0000FF" },
+                new CalendarColor { Id = 4, Name = "Żółty", Code = "#FFFF00" }
+            );
+
+            modelBuilder.Entity<CalendarEventType>().HasData(
+                new CalendarEventType { Id = 1, Name = "Sprawdzian", CalendarColorId = 1 },
+                new CalendarEventType { Id = 2, Name = "Kartkówka", CalendarColorId = 2 },
+                new CalendarEventType { Id = 3, Name = "Zadanie domowe", CalendarColorId = 3 },
+                new CalendarEventType { Id = 4, Name = "Inne", CalendarColorId = 4 }
             );
         }
     }

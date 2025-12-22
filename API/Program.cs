@@ -27,9 +27,11 @@ namespace API
                 {
                     var context = services.GetRequiredService<SchoolDbContext>();
 
-                    context.Database.Migrate(); 
+                    context.Database.Migrate();
 
-                    DataSeeder.Seed(context);
+                    var seeder = new DataSeeder(context);
+
+                    seeder.Seed();
                 }
                 catch (Exception ex)
                 {

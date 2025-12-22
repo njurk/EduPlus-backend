@@ -8,19 +8,16 @@ using System.Threading.Tasks;
 
 namespace Data.Data.Entities
 {
-    public class AnnouncementTarget
+    public class ParentStudent
     {
         [Key]
         public int Id { get; set; }
-
-        public int AnnouncementId { get; set; }
-        [ForeignKey(nameof(AnnouncementId))]
-        public virtual Announcement Announcement { get; set; } = null!;
-
+        public int ParentId { get; set; }
+        [ForeignKey(nameof(ParentId))]
+        public virtual User Parent { get; set; } = null!;
+        public int StudentId { get; set; }
+        [ForeignKey(nameof(StudentId))]
+        public virtual User Student { get; set; } = null!;
         public bool IsActive { get; set; } = true;
-
-        public int? ClassId { get; set; }
-        [ForeignKey(nameof(ClassId))]
-        public virtual Class? Class { get; set; }
     }
 }
