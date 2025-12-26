@@ -36,7 +36,7 @@ namespace API
                 catch (Exception ex)
                 {
                     var logger = services.GetRequiredService<ILogger<Program>>();
-                    logger.LogError(ex, "Wyst¹pi³ b³¹d przy seedowaniu danych");
+                    logger.LogError(ex, "Error w DataSeeder.cs");
                 }
             }
 

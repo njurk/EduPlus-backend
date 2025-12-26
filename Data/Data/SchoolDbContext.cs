@@ -313,8 +313,7 @@ namespace Data.Data
 
             modelBuilder.Entity<Class>().HasData(
                 new Class { Id = 1, Level = 1, Letter = "A", SchoolYearId = 1, IsActive = true },
-                new Class { Id = 2, Level = 4, Letter = "B", SchoolYearId = 1, IsActive = true },
-                new Class { Id = 3, Level = 8, Letter = "C", SchoolYearId = 1, IsActive = true }
+                new Class { Id = 2, Level = 8, Letter = "C", SchoolYearId = 1, IsActive = true }
             );
 
             modelBuilder.Entity<CalendarColor>().HasData(

@@ -40,6 +40,11 @@ namespace Data.Data
             {
                 SeedCalendarEvents();
             }
+
+            if (!_context.Announcements.Any())
+            {
+                SeedAnnouncements();
+            }
         }
 
         // dane nauczycieli
@@ -83,7 +88,7 @@ namespace Data.Data
                 ("Nikodem", "Mróz", "nmroz", "Piotr", "pmroz"),
                 ("Iga", "Wróblewska", "iwroblewska", "Anna", "awroblewska"),
                 ("Tymon", "Głowacki", "tglowacki", "Krzysztof", "kglowacki"),
-                ("Marcelina", "Zakrzewska", "mzakrzewska", "Maria", "mzakrzewska"),
+                ("Marcelina", "Zakrzewska", "mzakrzewska", "Maria", "mazakrzewska"),
                 ("Ignacy", "Laskowski", "ilaskowski", "Paweł", "plaskowski"),
                 ("Klara", "Makowska", "kmakowska", "Zofia", "zmakowska")
             };
@@ -247,8 +252,17 @@ namespace Data.Data
         private void SeedWeeklySchedule()
         {
             var schedules = new List<WeeklySchedule>();
+            var teachersData = GetTeachersData();
+            var subjectToEmail = teachersData.ToDictionary(t => t.SubjectId, t => $"{t.EmailPrefix}@szkola.edu.pl");
 
-            int GetTeacherId(int subjId) => _context.Users.First(u => u.Email == $"nauczyciel_{subjId}@szkola.edu.pl").Id;
+            int GetTeacherId(int subjId)
+            {
+                if (!subjectToEmail.ContainsKey(subjId))
+                    throw new Exception($"Brak nauczyciela dla przedmiotu: {subjId}");
+
+                var email = subjectToEmail[subjId];
+                return _context.Users.First(u => u.Email == email).Id;
+            }
 
             // klasa 1a
             schedules.Add(new WeeklySchedule { ClassId = 1, DayOfWeek = 1, LessonHourId = 1, SubjectId = 1, TeacherId = GetTeacherId(1), ClassroomId = 1, SchoolYearId = 1, SemesterId = 1 });
@@ -416,9 +430,9 @@ namespace Data.Data
             {
                 // informacja ogólnoszkolna
                 Title = "Pokaz talentów",
-                Description = "O godz. 10:30 w auli",
+                Description = "Klasy 1-3 w auli",
                 CalendarEventTypeId = 3,
-                StartDateTime = today.AddDays(10).AddHours(9),
+                StartDateTime = today.AddDays(10).AddHours(10),
                 ClassId = null, // null == wszystkie klasy
                 ClassSubjectId = null // w przypadku kiedy ClassId == null, tutaj również null
             });
@@ -477,7 +491,7 @@ namespace Data.Data
                 Description = "Proszę przygotować się z całego działu w podręczniku oraz z notatek w zeszycie",
                 CalendarEventTypeId = 1,
                 ClassId = 2,
-                ClassSubjectId = GetClassSubjectId(3, 10),
+                ClassSubjectId = GetClassSubjectId(2, 10),
                 StartDateTime = today.AddDays(4).AddHours(8).AddMinutes(55)
             });
 
@@ -488,7 +502,7 @@ namespace Data.Data
                 Description = "Definicja, właściwości, przykłady, wzory ",
                 CalendarEventTypeId = 2,
                 ClassId = 2,
-                ClassSubjectId = GetClassSubjectId(3, 9),
+                ClassSubjectId = GetClassSubjectId(2, 9),
                 StartDateTime = today.AddDays(2).AddHours(11)
             });
 
@@ -499,7 +513,7 @@ namespace Data.Data
                 Description = "Przeczytać rozdział 2 w podręczniku (s.95-96) i odpowiedzieć na pytania pod tekstem",
                 CalendarEventTypeId = 3,
                 ClassId = 2,
-                ClassSubjectId = GetClassSubjectId(3, 6),
+                ClassSubjectId = GetClassSubjectId(2, 6),
                 StartDateTime = today.AddDays(6).AddHours(12)
             });
 
@@ -510,11 +524,57 @@ namespace Data.Data
                 Description = "Proszę przynieść podręcznik, obowiązkowo",
                 CalendarEventTypeId = 4,
                 ClassId = 2,
-                ClassSubjectId = GetClassSubjectId(3, 1),
+                ClassSubjectId = GetClassSubjectId(2, 1),
                 StartDateTime = today.AddDays(7).AddHours(8)
             });
 
             _context.CalendarEvents.AddRange(events);
+            _context.SaveChanges();
+        }
+
+        private void SeedAnnouncements()
+        {
+            var adminId = _context.UserRoles.First(ur => ur.RoleId == 1).UserId;
+
+            var teacherIds = _context.UserRoles
+                .Where(ur => ur.RoleId == 2)
+                .Select(ur => ur.UserId)
+                .Take(3)
+                .ToList();
+
+            var announcements = new List<Announcement>
+            {
+                new Announcement
+                {
+                    Title = "Wpłaty na radę rodziców - przypomnienie",
+                    Description = "Szanowni Państwo, przypominamy o konieczności uiszczenia opłaty na Radę Rodziców do 18 października. Wpłaty można dokonywać na konto bankowe szkoły (PL08ALBPPLPW8327467812294561) lub w sekretariacie.",
+                    CreatedAt = new DateTime(2025, 10, 12),
+                    AuthorId = adminId
+                },
+                new Announcement
+                {
+                    Title = "Dzień Nauczyciela - godziny rektorskie",
+                    Description = "W związku z obchodami Dnia Edukacji Narodowej, w dniu 14 października lekcje zostają skrócone. Świetlica szkolna pracuje bez zmian.",
+                    CreatedAt = new DateTime(2025, 10, 7),
+                    AuthorId = teacherIds[0]
+                },
+                new Announcement
+                {
+                    Title = "Konkurs matematyczny 'Kangur'",
+                    Description = "Zapraszamy wszystkich chętnych uczniów klas 4-8 do udziału w międzynarodowym konkursie matematycznym Kangur. Zapisy u nauczycieli matematyki do końca tygodnia.",
+                    CreatedAt = DateTime.UtcNow.AddDays(-2),
+                    AuthorId = teacherIds[1]
+                },
+                new Announcement
+                {
+                    Title = "Zebranie rodziców - klasy 1-3",
+                    Description = "Zapraszamy na zebranie rodziców klas 1-3, które odbędzie się w najbliższy wtorek o godzinie 17:00 w auli.",
+                    CreatedAt = DateTime.UtcNow.AddDays(-1),
+                    AuthorId = teacherIds[2]
+                }
+            };
+
+            _context.Announcements.AddRange(announcements);
             _context.SaveChanges();
         }
     }

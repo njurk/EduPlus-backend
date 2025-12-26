@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(SchoolDbContext))]
-    [Migration("20251222121017_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20251226180935_AddFunctions")]
+    partial class AddFunctions
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -538,14 +538,6 @@ namespace Data.Migrations
                         new
                         {
                             Id = 2,
-                            IsActive = true,
-                            Letter = "B",
-                            Level = 4,
-                            SchoolYearId = 1
-                        },
-                        new
-                        {
-                            Id = 3,
                             IsActive = true,
                             Letter = "C",
                             Level = 8,
