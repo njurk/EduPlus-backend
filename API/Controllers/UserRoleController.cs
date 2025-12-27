@@ -5,18 +5,18 @@ using Microsoft.EntityFrameworkCore;
 
 [ApiController]
 [Route("api/[controller]")]
-public class RoleController : ControllerBase
+public class UserRoleController : ControllerBase
 {
     private readonly SchoolDbContext _context;
-    public RoleController(SchoolDbContext context) => _context = context;
+    public UserRoleController(SchoolDbContext context) => _context = context;
 
     [HttpGet]
-    public async Task<IActionResult> GetAll() => Ok(await _context.Roles.ToListAsync());
+    public async Task<IActionResult> GetAll() => Ok(await _context.UserRoles.ToListAsync());
 
     [HttpPost]
-    public async Task<IActionResult> Create(Role entity)
+    public async Task<IActionResult> Create(UserRole entity)
     {
-        _context.Roles.Add(entity);
+        _context.UserRoles.Add(entity);
         await _context.SaveChangesAsync();
         return Ok(entity);
     }
@@ -24,7 +24,7 @@ public class RoleController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
-        var item = await _context.Roles.FindAsync(id);
+        var item = await _context.UserRoles.FindAsync(id);
         if (item == null) return NotFound();
         item.IsActive = false;
         item.UpdatedAt = DateTime.UtcNow;
