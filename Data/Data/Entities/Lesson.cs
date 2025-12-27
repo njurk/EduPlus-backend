@@ -39,7 +39,14 @@ namespace Data.Data.Entities
         public int StatusId { get; set; }
         [ForeignKey(nameof(StatusId))]
         public virtual LessonStatus Status { get; set; } = null!;
+        public DateTime Date { get; set; }
 
         public bool IsActive { get; set; } = true;
+
+        [Required]
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        [Required]
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     }
 }

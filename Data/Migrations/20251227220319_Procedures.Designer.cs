@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(SchoolDbContext))]
-    [Migration("20251222121354_Init")]
-    partial class Init
+    [Migration("20251227220319_Procedures")]
+    partial class Procedures
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -37,7 +37,9 @@ namespace Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -50,6 +52,11 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.HasKey("Id");
 
@@ -69,8 +76,18 @@ namespace Data.Migrations
                     b.Property<int>("AnnouncementId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("ReadAt")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -96,6 +113,11 @@ namespace Data.Migrations
                     b.Property<int>("AttendanceTypeId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -104,6 +126,11 @@ namespace Data.Migrations
 
                     b.Property<int>("StudentId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.HasKey("Id");
 
@@ -126,6 +153,11 @@ namespace Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -139,6 +171,11 @@ namespace Data.Migrations
                         .HasMaxLength(5)
                         .HasColumnType("nvarchar(5)");
 
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
                     b.HasKey("Id");
 
                     b.ToTable("AttendanceTypes");
@@ -147,37 +184,47 @@ namespace Data.Migrations
                         new
                         {
                             Id = 1,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             Name = "Obecność",
-                            ShortCode = "OB"
+                            ShortCode = "OB",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 2,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             Name = "Nieobecność",
-                            ShortCode = "NB"
+                            ShortCode = "NB",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 3,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             Name = "Spóźnienie",
-                            ShortCode = "SP"
+                            ShortCode = "SP",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 4,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             Name = "Usprawiedliwione",
-                            ShortCode = "U"
+                            ShortCode = "U",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 5,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             Name = "Zwolnienie",
-                            ShortCode = "ZW"
+                            ShortCode = "ZW",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         });
                 });
 
@@ -188,6 +235,11 @@ namespace Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.Property<string>("GradeName")
                         .IsRequired()
@@ -205,6 +257,11 @@ namespace Data.Migrations
                     b.Property<int>("SchoolYearId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
                     b.HasKey("Id");
 
                     b.HasIndex("SchoolYearId");
@@ -215,56 +272,68 @@ namespace Data.Migrations
                         new
                         {
                             Id = 1,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             GradeName = "Wzorowe",
                             IsActive = true,
                             MaxPoints = 200,
                             MinPoints = 51,
-                            SchoolYearId = 1
+                            SchoolYearId = 1,
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 2,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             GradeName = "Bardzo dobre",
                             IsActive = true,
                             MaxPoints = 50,
                             MinPoints = 41,
-                            SchoolYearId = 1
+                            SchoolYearId = 1,
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 3,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             GradeName = "Dobre",
                             IsActive = true,
                             MaxPoints = 40,
                             MinPoints = 31,
-                            SchoolYearId = 1
+                            SchoolYearId = 1,
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 4,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             GradeName = "Poprawne",
                             IsActive = true,
                             MaxPoints = 30,
                             MinPoints = 21,
-                            SchoolYearId = 1
+                            SchoolYearId = 1,
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 5,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             GradeName = "Nieodpowiednie",
                             IsActive = true,
                             MaxPoints = 20,
                             MinPoints = 11,
-                            SchoolYearId = 1
+                            SchoolYearId = 1,
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 6,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             GradeName = "Naganne",
                             IsActive = true,
                             MaxPoints = 10,
                             MinPoints = 0,
-                            SchoolYearId = 1
+                            SchoolYearId = 1,
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         });
                 });
 
@@ -280,7 +349,9 @@ namespace Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -301,6 +372,11 @@ namespace Data.Migrations
 
                     b.Property<int>("TeacherId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.HasKey("Id");
 
@@ -323,6 +399,11 @@ namespace Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
                     b.Property<int>("DefaultPoints")
                         .HasColumnType("int");
 
@@ -337,6 +418,11 @@ namespace Data.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
                     b.HasKey("Id");
 
                     b.ToTable("BehaviorNoteTypes");
@@ -345,18 +431,22 @@ namespace Data.Migrations
                         new
                         {
                             Id = 1,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             DefaultPoints = 5,
                             IsActive = true,
                             IsPositive = true,
-                            Name = "Pozytywna"
+                            Name = "Pozytywna",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 2,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             DefaultPoints = -5,
                             IsActive = true,
                             IsPositive = false,
-                            Name = "Negatywna"
+                            Name = "Negatywna",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         });
                 });
 
@@ -373,10 +463,23 @@ namespace Data.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.HasKey("Id");
 
@@ -387,25 +490,37 @@ namespace Data.Migrations
                         {
                             Id = 1,
                             Code = "#FF0000",
-                            Name = "Czerwony"
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            Name = "Czerwony",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 2,
                             Code = "#00FF00",
-                            Name = "Zielony"
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            Name = "Zielony",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 3,
                             Code = "#0000FF",
-                            Name = "Niebieski"
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            Name = "Niebieski",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 4,
                             Code = "#FFFF00",
-                            Name = "Żółty"
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            Name = "Żółty",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         });
                 });
 
@@ -426,9 +541,17 @@ namespace Data.Migrations
                     b.Property<int?>("ClassSubjectId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
                     b.Property<string>("Description")
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime>("StartDateTime")
                         .HasColumnType("datetime2");
@@ -437,6 +560,11 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.HasKey("Id");
 
@@ -460,10 +588,23 @@ namespace Data.Migrations
                     b.Property<int>("CalendarColorId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.HasKey("Id");
 
@@ -476,25 +617,37 @@ namespace Data.Migrations
                         {
                             Id = 1,
                             CalendarColorId = 1,
-                            Name = "Sprawdzian"
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            Name = "Sprawdzian",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 2,
                             CalendarColorId = 2,
-                            Name = "Kartkówka"
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            Name = "Kartkówka",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 3,
                             CalendarColorId = 3,
-                            Name = "Zadanie domowe"
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            Name = "Zadanie domowe",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 4,
                             CalendarColorId = 4,
-                            Name = "Inne"
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            Name = "Inne",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         });
                 });
 
@@ -505,6 +658,11 @@ namespace Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -520,6 +678,11 @@ namespace Data.Migrations
                     b.Property<int>("SchoolYearId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
                     b.HasKey("Id");
 
                     b.HasIndex("SchoolYearId");
@@ -530,26 +693,22 @@ namespace Data.Migrations
                         new
                         {
                             Id = 1,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             Letter = "A",
                             Level = 1,
-                            SchoolYearId = 1
+                            SchoolYearId = 1,
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 2,
-                            IsActive = true,
-                            Letter = "B",
-                            Level = 4,
-                            SchoolYearId = 1
-                        },
-                        new
-                        {
-                            Id = 3,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             Letter = "C",
                             Level = 8,
-                            SchoolYearId = 1
+                            SchoolYearId = 1,
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         });
                 });
 
@@ -564,11 +723,21 @@ namespace Data.Migrations
                     b.Property<int>("ClassId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
                     b.Property<int>("StudentId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.HasKey("Id");
 
@@ -592,11 +761,21 @@ namespace Data.Migrations
                     b.Property<int>("ClassId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
                     b.Property<int>("SubjectId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.HasKey("Id");
 
@@ -615,6 +794,11 @@ namespace Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -622,6 +806,11 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.HasKey("Id");
 
@@ -631,110 +820,146 @@ namespace Data.Migrations
                         new
                         {
                             Id = 1,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
-                            Name = "101"
+                            Name = "101",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 2,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
-                            Name = "102"
+                            Name = "102",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 3,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
-                            Name = "103"
+                            Name = "103",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 4,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
-                            Name = "104"
+                            Name = "104",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 5,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
-                            Name = "105"
+                            Name = "105",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 6,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
-                            Name = "201"
+                            Name = "201",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 7,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
-                            Name = "202"
+                            Name = "202",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 8,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
-                            Name = "203"
+                            Name = "203",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 9,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
-                            Name = "204"
+                            Name = "204",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 10,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
-                            Name = "205"
+                            Name = "205",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 11,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
-                            Name = "301"
+                            Name = "301",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 12,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
-                            Name = "302"
+                            Name = "302",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 13,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
-                            Name = "303"
+                            Name = "303",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 14,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
-                            Name = "304"
+                            Name = "304",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 15,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
-                            Name = "305"
+                            Name = "305",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 16,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
-                            Name = "gimnastyczna 1"
+                            Name = "gimnastyczna 1",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 17,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
-                            Name = "gimnastyczna 2"
+                            Name = "gimnastyczna 2",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 18,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
-                            Name = "aula"
+                            Name = "aula",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         });
                 });
 
@@ -748,6 +973,11 @@ namespace Data.Migrations
 
                     b.Property<int>("AttendanceId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.Property<bool?>("IsAccepted")
                         .HasColumnType("bit");
@@ -765,6 +995,11 @@ namespace Data.Migrations
 
                     b.Property<DateTime>("SubmittedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.HasKey("Id");
 
@@ -787,6 +1022,11 @@ namespace Data.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("datetime2");
 
@@ -807,6 +1047,11 @@ namespace Data.Migrations
 
                     b.Property<int>("TeacherId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.HasKey("Id");
 
@@ -831,6 +1076,11 @@ namespace Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -838,6 +1088,11 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.Property<int>("Weight")
                         .HasColumnType("int");
@@ -850,36 +1105,46 @@ namespace Data.Migrations
                         new
                         {
                             Id = 1,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             Name = "Sprawdzian",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             Weight = 3
                         },
                         new
                         {
                             Id = 2,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             Name = "Kartkówka",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             Weight = 2
                         },
                         new
                         {
                             Id = 3,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             Name = "Odpowiedź ustna",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             Weight = 1
                         },
                         new
                         {
                             Id = 4,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             Name = "Aktywność",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             Weight = 1
                         },
                         new
                         {
                             Id = 5,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             Name = "Zadanie domowe",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             Weight = 1
                         });
                 });
@@ -891,6 +1156,11 @@ namespace Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -904,6 +1174,11 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
                     b.Property<decimal>("Value")
                         .HasColumnType("decimal(2,1)");
 
@@ -915,49 +1190,61 @@ namespace Data.Migrations
                         new
                         {
                             Id = 1,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             Name = "Niedostateczny",
                             Numeric = "1",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             Value = 1.0m
                         },
                         new
                         {
                             Id = 2,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             Name = "Dopuszczający",
                             Numeric = "2",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             Value = 2.0m
                         },
                         new
                         {
                             Id = 3,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             Name = "Dostateczny",
                             Numeric = "3",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             Value = 3.0m
                         },
                         new
                         {
                             Id = 4,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             Name = "Dobry",
                             Numeric = "4",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             Value = 4.0m
                         },
                         new
                         {
                             Id = 5,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             Name = "Bardzo dobry",
                             Numeric = "5",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             Value = 5.0m
                         },
                         new
                         {
                             Id = 6,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             Name = "Celujący",
                             Numeric = "6",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             Value = 6.0m
                         });
                 });
@@ -975,6 +1262,14 @@ namespace Data.Migrations
 
                     b.Property<int>("ClassroomId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -995,6 +1290,11 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.HasKey("Id");
 
@@ -1021,6 +1321,11 @@ namespace Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
                     b.Property<TimeOnly>("EndTime")
                         .HasColumnType("time");
 
@@ -1033,6 +1338,11 @@ namespace Data.Migrations
                     b.Property<TimeOnly>("StartTime")
                         .HasColumnType("time");
 
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
                     b.HasKey("Id");
 
                     b.ToTable("LessonHours");
@@ -1041,74 +1351,92 @@ namespace Data.Migrations
                         new
                         {
                             Id = 1,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             EndTime = new TimeOnly(8, 45, 0),
                             IsActive = true,
                             OrderNumber = 1,
-                            StartTime = new TimeOnly(8, 0, 0)
+                            StartTime = new TimeOnly(8, 0, 0),
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 2,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             EndTime = new TimeOnly(9, 40, 0),
                             IsActive = true,
                             OrderNumber = 2,
-                            StartTime = new TimeOnly(8, 55, 0)
+                            StartTime = new TimeOnly(8, 55, 0),
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 3,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             EndTime = new TimeOnly(10, 35, 0),
                             IsActive = true,
                             OrderNumber = 3,
-                            StartTime = new TimeOnly(9, 50, 0)
+                            StartTime = new TimeOnly(9, 50, 0),
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 4,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             EndTime = new TimeOnly(11, 30, 0),
                             IsActive = true,
                             OrderNumber = 4,
-                            StartTime = new TimeOnly(10, 45, 0)
+                            StartTime = new TimeOnly(10, 45, 0),
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 5,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             EndTime = new TimeOnly(12, 30, 0),
                             IsActive = true,
                             OrderNumber = 5,
-                            StartTime = new TimeOnly(11, 45, 0)
+                            StartTime = new TimeOnly(11, 45, 0),
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 6,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             EndTime = new TimeOnly(13, 35, 0),
                             IsActive = true,
                             OrderNumber = 6,
-                            StartTime = new TimeOnly(12, 50, 0)
+                            StartTime = new TimeOnly(12, 50, 0),
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 7,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             EndTime = new TimeOnly(14, 30, 0),
                             IsActive = true,
                             OrderNumber = 7,
-                            StartTime = new TimeOnly(13, 45, 0)
+                            StartTime = new TimeOnly(13, 45, 0),
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 8,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             EndTime = new TimeOnly(15, 25, 0),
                             IsActive = true,
                             OrderNumber = 8,
-                            StartTime = new TimeOnly(14, 40, 0)
+                            StartTime = new TimeOnly(14, 40, 0),
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 9,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             EndTime = new TimeOnly(16, 15, 0),
                             IsActive = true,
                             OrderNumber = 9,
-                            StartTime = new TimeOnly(15, 30, 0)
+                            StartTime = new TimeOnly(15, 30, 0),
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         });
                 });
 
@@ -1120,6 +1448,11 @@ namespace Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -1127,6 +1460,11 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.HasKey("Id");
 
@@ -1136,20 +1474,26 @@ namespace Data.Migrations
                         new
                         {
                             Id = 1,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
-                            Name = "Zaplanowana"
+                            Name = "Zaplanowana",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 2,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
-                            Name = "Zrealizowana"
+                            Name = "Zrealizowana",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 3,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
-                            Name = "Odwołana"
+                            Name = "Odwołana",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         });
                 });
 
@@ -1161,6 +1505,11 @@ namespace Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -1169,6 +1518,11 @@ namespace Data.Migrations
 
                     b.Property<int>("StudentId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.HasKey("Id");
 
@@ -1188,6 +1542,11 @@ namespace Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -1195,6 +1554,11 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.HasKey("Id");
 
@@ -1204,26 +1568,34 @@ namespace Data.Migrations
                         new
                         {
                             Id = 1,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
-                            Name = "Admin"
+                            Name = "Admin",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 2,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
-                            Name = "Nauczyciel"
+                            Name = "Nauczyciel",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 3,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
-                            Name = "Rodzic"
+                            Name = "Rodzic",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 4,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
-                            Name = "Uczeń"
+                            Name = "Uczeń",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         });
                 });
 
@@ -1234,6 +1606,11 @@ namespace Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.Property<DateOnly>("EndDate")
                         .HasColumnType("date");
@@ -1249,6 +1626,11 @@ namespace Data.Migrations
                     b.Property<DateOnly>("StartDate")
                         .HasColumnType("date");
 
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
                     b.HasKey("Id");
 
                     b.ToTable("SchoolYears");
@@ -1257,18 +1639,22 @@ namespace Data.Migrations
                         new
                         {
                             Id = 1,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             EndDate = new DateOnly(2026, 6, 30),
                             IsActive = true,
                             Name = "2025/2026",
-                            StartDate = new DateOnly(2025, 9, 1)
+                            StartDate = new DateOnly(2025, 9, 1),
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 2,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             EndDate = new DateOnly(2027, 6, 30),
                             IsActive = true,
                             Name = "2026/2027",
-                            StartDate = new DateOnly(2026, 9, 1)
+                            StartDate = new DateOnly(2026, 9, 1),
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         });
                 });
 
@@ -1279,6 +1665,11 @@ namespace Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.Property<DateOnly>("EndDate")
                         .HasColumnType("date");
@@ -1297,6 +1688,11 @@ namespace Data.Migrations
                     b.Property<DateOnly>("StartDate")
                         .HasColumnType("date");
 
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
                     b.HasKey("Id");
 
                     b.HasIndex("SchoolYearId");
@@ -1307,38 +1703,46 @@ namespace Data.Migrations
                         new
                         {
                             Id = 1,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             EndDate = new DateOnly(2025, 1, 31),
                             IsActive = true,
                             Name = "Semestr 1",
                             SchoolYearId = 1,
-                            StartDate = new DateOnly(2025, 9, 1)
+                            StartDate = new DateOnly(2025, 9, 1),
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 2,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             EndDate = new DateOnly(2025, 6, 30),
                             IsActive = true,
                             Name = "Semestr 2",
                             SchoolYearId = 1,
-                            StartDate = new DateOnly(2026, 2, 1)
+                            StartDate = new DateOnly(2026, 2, 1),
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 3,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             EndDate = new DateOnly(2026, 1, 31),
                             IsActive = true,
                             Name = "Semestr 1",
                             SchoolYearId = 2,
-                            StartDate = new DateOnly(2026, 9, 1)
+                            StartDate = new DateOnly(2026, 9, 1),
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 4,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             EndDate = new DateOnly(2026, 6, 30),
                             IsActive = true,
                             Name = "Semestr 2",
                             SchoolYearId = 2,
-                            StartDate = new DateOnly(2027, 2, 1)
+                            StartDate = new DateOnly(2027, 2, 1),
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         });
                 });
 
@@ -1350,6 +1754,11 @@ namespace Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -1357,6 +1766,11 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.HasKey("Id");
 
@@ -1366,128 +1780,170 @@ namespace Data.Migrations
                         new
                         {
                             Id = 1,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
-                            Name = "matematyka"
+                            Name = "matematyka",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 2,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
-                            Name = "język polski"
+                            Name = "język polski",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 3,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
-                            Name = "język angielski"
+                            Name = "język angielski",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 4,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
-                            Name = "język niemiecki"
+                            Name = "język niemiecki",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 5,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
-                            Name = "informatyka"
+                            Name = "informatyka",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 6,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
-                            Name = "wychowanie fizyczne"
+                            Name = "wychowanie fizyczne",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 7,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
-                            Name = "historia"
+                            Name = "historia",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 8,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
-                            Name = "WOS"
+                            Name = "WOS",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 9,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
-                            Name = "biologia"
+                            Name = "biologia",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 10,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
-                            Name = "chemia"
+                            Name = "chemia",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 11,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
-                            Name = "fizyka"
+                            Name = "fizyka",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 12,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
-                            Name = "Geografia"
+                            Name = "Geografia",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 13,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
-                            Name = "przyroda"
+                            Name = "przyroda",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 14,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
-                            Name = "plastyka"
+                            Name = "plastyka",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 15,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
-                            Name = "muzyka"
+                            Name = "muzyka",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 16,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
-                            Name = "zajęcia artystyczne"
+                            Name = "zajęcia artystyczne",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 17,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
-                            Name = "religia"
+                            Name = "religia",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 18,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
-                            Name = "etyka"
+                            Name = "etyka",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 19,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
-                            Name = "WDŻ"
+                            Name = "WDŻ",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 20,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
-                            Name = "technika"
+                            Name = "technika",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 21,
+                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
-                            Name = "EDB"
+                            Name = "EDB",
+                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         });
                 });
 
@@ -1502,6 +1958,11 @@ namespace Data.Migrations
                     b.Property<int>("ClassId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -1510,6 +1971,11 @@ namespace Data.Migrations
 
                     b.Property<int>("TeacherId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.HasKey("Id");
 
@@ -1533,7 +1999,9 @@ namespace Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -1562,6 +2030,11 @@ namespace Data.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
                     b.HasKey("Id");
 
                     b.HasIndex("Email")
@@ -1578,11 +2051,21 @@ namespace Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
                     b.Property<int>("RoleId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -1611,6 +2094,11 @@ namespace Data.Migrations
                     b.Property<int>("ClassroomId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
                     b.Property<int>("DayOfWeek")
                         .HasColumnType("int");
 
@@ -1631,6 +2119,11 @@ namespace Data.Migrations
 
                     b.Property<int>("TeacherId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.HasKey("Id");
 
@@ -1794,31 +2287,6 @@ namespace Data.Migrations
                     b.ToTable((string)null);
 
                     b.ToView("vw_BehaviorGradeSummary", (string)null);
-                });
-
-            modelBuilder.Entity("Data.Data.EntitiesForView.ViewClassRegister", b =>
-                {
-                    b.Property<int>("ClassId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ClassName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("StudentFullName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int");
-
-                    b.ToTable((string)null);
-
-                    b.ToView("vw_ClassRegister", (string)null);
                 });
 
             modelBuilder.Entity("Data.Data.EntitiesForView.ViewClassStudentDetails", b =>

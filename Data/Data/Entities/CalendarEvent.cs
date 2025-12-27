@@ -26,12 +26,20 @@ namespace Data.Data.Entities
         public virtual CalendarEventType CalendarEventType { get; set; } = null!;
 
         // jeśli null - wydarzenie widoczne dla wszystkich
-        // w przeciwnym razie wydarzenie tylko dla danej klasy
+        // w przeciwnym razie wydarzenie widoczne tylko dla danej klasy
         public int? ClassId { get; set; }
         [ForeignKey(nameof(ClassId))]
         public virtual Class? Class { get; set; }
         public int? ClassSubjectId { get; set; }
         [ForeignKey(nameof(ClassSubjectId))]
         public virtual ClassSubject? ClassSubject { get; set; }
+
+        [Required]
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        [Required]
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+
+        public bool IsActive { get; set; } = true;
     }
 }

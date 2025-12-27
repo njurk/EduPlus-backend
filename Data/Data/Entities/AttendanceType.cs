@@ -19,5 +19,11 @@ namespace Data.Data.Entities
         public required string ShortCode { get; set; }
 
         public bool IsActive { get; set; } = true;
+
+        [Required]
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        [Required]
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     }
 }

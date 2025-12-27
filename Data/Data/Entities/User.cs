@@ -29,10 +29,13 @@ namespace Data.Data.Entities
         [MaxLength(20)]
         public string? Phone { get; set; }
 
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
         public bool IsActive { get; set; } = true;
 
+        [Required]
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        [Required]
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
         public virtual ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
     }

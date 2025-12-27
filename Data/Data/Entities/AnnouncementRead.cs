@@ -23,6 +23,12 @@ namespace Data.Data.Entities
         [ForeignKey(nameof(UserId))]
         public virtual User User { get; set; } = null!;
 
-        public DateTime ReadAt { get; set; } = DateTime.UtcNow;
+        [Required]
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        [Required]
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+
+        public bool IsActive { get; set; } = true;
     }
 }

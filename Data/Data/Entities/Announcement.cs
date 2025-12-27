@@ -19,13 +19,16 @@ namespace Data.Data.Entities
         [Required]
         public required string Description { get; set; }
 
-        [Required]
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
         public bool IsActive { get; set; } = true;
 
         public int AuthorId { get; set; }
         [ForeignKey(nameof(AuthorId))]
         public virtual User Author { get; set; } = null!;
+
+        [Required]
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        [Required]
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     }
 }

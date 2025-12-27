@@ -43,9 +43,12 @@ namespace Data.Data.Entities
         [Required]
         public int Points { get; set; }
 
+        public bool IsActive { get; set; } = true;
+
         [Required]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        public bool IsActive { get; set; } = true;
+        [Required]
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     }
 }

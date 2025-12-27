@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Data.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class InitDB : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -21,7 +21,9 @@ namespace Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     ShortCode = table.Column<string>(type: "nvarchar(5)", maxLength: 5, nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
                 },
                 constraints: table =>
                 {
@@ -37,7 +39,9 @@ namespace Data.Migrations
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     IsPositive = table.Column<bool>(type: "bit", nullable: false),
                     DefaultPoints = table.Column<int>(type: "int", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
                 },
                 constraints: table =>
                 {
@@ -51,7 +55,10 @@ namespace Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false)
+                    Code = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
                 },
                 constraints: table =>
                 {
@@ -65,7 +72,9 @@ namespace Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
                 },
                 constraints: table =>
                 {
@@ -80,7 +89,9 @@ namespace Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Weight = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
                 },
                 constraints: table =>
                 {
@@ -96,7 +107,9 @@ namespace Data.Migrations
                     Numeric = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Value = table.Column<decimal>(type: "decimal(2,1)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
                 },
                 constraints: table =>
                 {
@@ -112,7 +125,9 @@ namespace Data.Migrations
                     OrderNumber = table.Column<int>(type: "int", nullable: false),
                     StartTime = table.Column<TimeOnly>(type: "time", nullable: false),
                     EndTime = table.Column<TimeOnly>(type: "time", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
                 },
                 constraints: table =>
                 {
@@ -126,7 +141,9 @@ namespace Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
                 },
                 constraints: table =>
                 {
@@ -140,7 +157,9 @@ namespace Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
                 },
                 constraints: table =>
                 {
@@ -156,7 +175,9 @@ namespace Data.Migrations
                     Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     StartDate = table.Column<DateOnly>(type: "date", nullable: false),
                     EndDate = table.Column<DateOnly>(type: "date", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
                 },
                 constraints: table =>
                 {
@@ -170,7 +191,9 @@ namespace Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
                 },
                 constraints: table =>
                 {
@@ -188,8 +211,9 @@ namespace Data.Migrations
                     Email = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Password = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Phone = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
                 },
                 constraints: table =>
                 {
@@ -203,7 +227,10 @@ namespace Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    CalendarColorId = table.Column<int>(type: "int", nullable: false)
+                    CalendarColorId = table.Column<int>(type: "int", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
                 },
                 constraints: table =>
                 {
@@ -226,7 +253,9 @@ namespace Data.Migrations
                     GradeName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     MinPoints = table.Column<int>(type: "int", nullable: false),
                     MaxPoints = table.Column<int>(type: "int", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
                 },
                 constraints: table =>
                 {
@@ -248,7 +277,9 @@ namespace Data.Migrations
                     Level = table.Column<int>(type: "int", nullable: false),
                     Letter = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
                     SchoolYearId = table.Column<int>(type: "int", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
                 },
                 constraints: table =>
                 {
@@ -271,6 +302,8 @@ namespace Data.Migrations
                     StartDate = table.Column<DateOnly>(type: "date", nullable: false),
                     EndDate = table.Column<DateOnly>(type: "date", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
                     SchoolYearId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -292,9 +325,10 @@ namespace Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    AuthorId = table.Column<int>(type: "int", nullable: false)
+                    AuthorId = table.Column<int>(type: "int", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
                 },
                 constraints: table =>
                 {
@@ -320,7 +354,9 @@ namespace Data.Migrations
                     GradeCategoryId = table.Column<int>(type: "int", nullable: false),
                     DateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Comment = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
                 },
                 constraints: table =>
                 {
@@ -365,7 +401,9 @@ namespace Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ParentId = table.Column<int>(type: "int", nullable: false),
                     StudentId = table.Column<int>(type: "int", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
                 },
                 constraints: table =>
                 {
@@ -392,7 +430,9 @@ namespace Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(type: "int", nullable: false),
                     RoleId = table.Column<int>(type: "int", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
                 },
                 constraints: table =>
                 {
@@ -419,7 +459,9 @@ namespace Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ClassId = table.Column<int>(type: "int", nullable: false),
                     StudentId = table.Column<int>(type: "int", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
                 },
                 constraints: table =>
                 {
@@ -446,7 +488,9 @@ namespace Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ClassId = table.Column<int>(type: "int", nullable: false),
                     SubjectId = table.Column<int>(type: "int", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
                 },
                 constraints: table =>
                 {
@@ -478,7 +522,10 @@ namespace Data.Migrations
                     LessonHourId = table.Column<int>(type: "int", nullable: false),
                     Topic = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     StatusId = table.Column<int>(type: "int", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
                 },
                 constraints: table =>
                 {
@@ -530,7 +577,9 @@ namespace Data.Migrations
                     TeacherId = table.Column<int>(type: "int", nullable: false),
                     ClassId = table.Column<int>(type: "int", nullable: false),
                     SubjectId = table.Column<int>(type: "int", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
                 },
                 constraints: table =>
                 {
@@ -567,8 +616,9 @@ namespace Data.Migrations
                     SemesterId = table.Column<int>(type: "int", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     Points = table.Column<int>(type: "int", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
                 },
                 constraints: table =>
                 {
@@ -613,7 +663,9 @@ namespace Data.Migrations
                     ClassroomId = table.Column<int>(type: "int", nullable: false),
                     DayOfWeek = table.Column<int>(type: "int", nullable: false),
                     LessonHourId = table.Column<int>(type: "int", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
                 },
                 constraints: table =>
                 {
@@ -670,7 +722,9 @@ namespace Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     AnnouncementId = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false),
-                    ReadAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -700,7 +754,10 @@ namespace Data.Migrations
                     StartDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CalendarEventTypeId = table.Column<int>(type: "int", nullable: false),
                     ClassId = table.Column<int>(type: "int", nullable: true),
-                    ClassSubjectId = table.Column<int>(type: "int", nullable: true)
+                    ClassSubjectId = table.Column<int>(type: "int", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -732,7 +789,9 @@ namespace Data.Migrations
                     LessonId = table.Column<int>(type: "int", nullable: false),
                     StudentId = table.Column<int>(type: "int", nullable: false),
                     AttendanceTypeId = table.Column<int>(type: "int", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
                 },
                 constraints: table =>
                 {
@@ -768,7 +827,9 @@ namespace Data.Migrations
                     Reason = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     SubmittedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsAccepted = table.Column<bool>(type: "bit", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
                 },
                 constraints: table =>
                 {
@@ -789,203 +850,202 @@ namespace Data.Migrations
 
             migrationBuilder.InsertData(
                 table: "AttendanceTypes",
-                columns: new[] { "Id", "IsActive", "Name", "ShortCode" },
+                columns: new[] { "Id", "CreatedAt", "IsActive", "Name", "ShortCode", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, true, "Obecność", "OB" },
-                    { 2, true, "Nieobecność", "NB" },
-                    { 3, true, "Spóźnienie", "SP" },
-                    { 4, true, "Usprawiedliwione", "U" },
-                    { 5, true, "Zwolnienie", "ZW" }
+                    { 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Obecność", "OB", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 2, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Nieobecność", "NB", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 3, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Spóźnienie", "SP", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 4, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Usprawiedliwione", "U", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 5, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Zwolnienie", "ZW", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) }
                 });
 
             migrationBuilder.InsertData(
                 table: "BehaviorNoteTypes",
-                columns: new[] { "Id", "DefaultPoints", "IsActive", "IsPositive", "Name" },
+                columns: new[] { "Id", "CreatedAt", "DefaultPoints", "IsActive", "IsPositive", "Name", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, 5, true, true, "Pozytywna" },
-                    { 2, -5, true, false, "Negatywna" }
+                    { 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), 5, true, true, "Pozytywna", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 2, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), -5, true, false, "Negatywna", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) }
                 });
 
             migrationBuilder.InsertData(
                 table: "CalendarColors",
-                columns: new[] { "Id", "Code", "Name" },
+                columns: new[] { "Id", "Code", "CreatedAt", "IsActive", "Name", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, "#FF0000", "Czerwony" },
-                    { 2, "#00FF00", "Zielony" },
-                    { 3, "#0000FF", "Niebieski" },
-                    { 4, "#FFFF00", "Żółty" }
+                    { 1, "#FF0000", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Czerwony", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 2, "#00FF00", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Zielony", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 3, "#0000FF", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Niebieski", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 4, "#FFFF00", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Żółty", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) }
                 });
 
             migrationBuilder.InsertData(
                 table: "Classrooms",
-                columns: new[] { "Id", "IsActive", "Name" },
+                columns: new[] { "Id", "CreatedAt", "IsActive", "Name", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, true, "101" },
-                    { 2, true, "102" },
-                    { 3, true, "103" },
-                    { 4, true, "104" },
-                    { 5, true, "105" },
-                    { 6, true, "201" },
-                    { 7, true, "202" },
-                    { 8, true, "203" },
-                    { 9, true, "204" },
-                    { 10, true, "205" },
-                    { 11, true, "301" },
-                    { 12, true, "302" },
-                    { 13, true, "303" },
-                    { 14, true, "304" },
-                    { 15, true, "305" },
-                    { 16, true, "gimnastyczna 1" },
-                    { 17, true, "gimnastyczna 2" },
-                    { 18, true, "aula" }
+                    { 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "101", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 2, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "102", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 3, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "103", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 4, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "104", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 5, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "105", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 6, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "201", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 7, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "202", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 8, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "203", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 9, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "204", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 10, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "205", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 11, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "301", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 12, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "302", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 13, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "303", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 14, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "304", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 15, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "305", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 16, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "gimnastyczna 1", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 17, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "gimnastyczna 2", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 18, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "aula", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) }
                 });
 
             migrationBuilder.InsertData(
                 table: "GradeCategories",
-                columns: new[] { "Id", "IsActive", "Name", "Weight" },
+                columns: new[] { "Id", "CreatedAt", "IsActive", "Name", "UpdatedAt", "Weight" },
                 values: new object[,]
                 {
-                    { 1, true, "Sprawdzian", 3 },
-                    { 2, true, "Kartkówka", 2 },
-                    { 3, true, "Odpowiedź ustna", 1 },
-                    { 4, true, "Aktywność", 1 },
-                    { 5, true, "Zadanie domowe", 1 }
+                    { 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Sprawdzian", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), 3 },
+                    { 2, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Kartkówka", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), 2 },
+                    { 3, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Odpowiedź ustna", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), 1 },
+                    { 4, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Aktywność", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), 1 },
+                    { 5, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Zadanie domowe", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), 1 }
                 });
 
             migrationBuilder.InsertData(
                 table: "GradeTypes",
-                columns: new[] { "Id", "IsActive", "Name", "Numeric", "Value" },
+                columns: new[] { "Id", "CreatedAt", "IsActive", "Name", "Numeric", "UpdatedAt", "Value" },
                 values: new object[,]
                 {
-                    { 1, true, "Niedostateczny", "1", 1.0m },
-                    { 2, true, "Dopuszczający", "2", 2.0m },
-                    { 3, true, "Dostateczny", "3", 3.0m },
-                    { 4, true, "Dobry", "4", 4.0m },
-                    { 5, true, "Bardzo dobry", "5", 5.0m },
-                    { 6, true, "Celujący", "6", 6.0m }
+                    { 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Niedostateczny", "1", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), 1.0m },
+                    { 2, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Dopuszczający", "2", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), 2.0m },
+                    { 3, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Dostateczny", "3", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), 3.0m },
+                    { 4, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Dobry", "4", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), 4.0m },
+                    { 5, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Bardzo dobry", "5", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), 5.0m },
+                    { 6, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Celujący", "6", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), 6.0m }
                 });
 
             migrationBuilder.InsertData(
                 table: "LessonHours",
-                columns: new[] { "Id", "EndTime", "IsActive", "OrderNumber", "StartTime" },
+                columns: new[] { "Id", "CreatedAt", "EndTime", "IsActive", "OrderNumber", "StartTime", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, new TimeOnly(8, 45, 0), true, 1, new TimeOnly(8, 0, 0) },
-                    { 2, new TimeOnly(9, 40, 0), true, 2, new TimeOnly(8, 55, 0) },
-                    { 3, new TimeOnly(10, 35, 0), true, 3, new TimeOnly(9, 50, 0) },
-                    { 4, new TimeOnly(11, 30, 0), true, 4, new TimeOnly(10, 45, 0) },
-                    { 5, new TimeOnly(12, 30, 0), true, 5, new TimeOnly(11, 45, 0) },
-                    { 6, new TimeOnly(13, 35, 0), true, 6, new TimeOnly(12, 50, 0) },
-                    { 7, new TimeOnly(14, 30, 0), true, 7, new TimeOnly(13, 45, 0) },
-                    { 8, new TimeOnly(15, 25, 0), true, 8, new TimeOnly(14, 40, 0) },
-                    { 9, new TimeOnly(16, 15, 0), true, 9, new TimeOnly(15, 30, 0) }
+                    { 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new TimeOnly(8, 45, 0), true, 1, new TimeOnly(8, 0, 0), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 2, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new TimeOnly(9, 40, 0), true, 2, new TimeOnly(8, 55, 0), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 3, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new TimeOnly(10, 35, 0), true, 3, new TimeOnly(9, 50, 0), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 4, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new TimeOnly(11, 30, 0), true, 4, new TimeOnly(10, 45, 0), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 5, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new TimeOnly(12, 30, 0), true, 5, new TimeOnly(11, 45, 0), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 6, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new TimeOnly(13, 35, 0), true, 6, new TimeOnly(12, 50, 0), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 7, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new TimeOnly(14, 30, 0), true, 7, new TimeOnly(13, 45, 0), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 8, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new TimeOnly(15, 25, 0), true, 8, new TimeOnly(14, 40, 0), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 9, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new TimeOnly(16, 15, 0), true, 9, new TimeOnly(15, 30, 0), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) }
                 });
 
             migrationBuilder.InsertData(
                 table: "LessonStatuses",
-                columns: new[] { "Id", "IsActive", "Name" },
+                columns: new[] { "Id", "CreatedAt", "IsActive", "Name", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, true, "Zaplanowana" },
-                    { 2, true, "Zrealizowana" },
-                    { 3, true, "Odwołana" }
+                    { 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Zaplanowana", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 2, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Zrealizowana", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 3, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Odwołana", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) }
                 });
 
             migrationBuilder.InsertData(
                 table: "Roles",
-                columns: new[] { "Id", "IsActive", "Name" },
+                columns: new[] { "Id", "CreatedAt", "IsActive", "Name", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, true, "Admin" },
-                    { 2, true, "Nauczyciel" },
-                    { 3, true, "Rodzic" },
-                    { 4, true, "Uczeń" }
+                    { 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Admin", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 2, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Nauczyciel", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 3, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Rodzic", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 4, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Uczeń", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) }
                 });
 
             migrationBuilder.InsertData(
                 table: "SchoolYears",
-                columns: new[] { "Id", "EndDate", "IsActive", "Name", "StartDate" },
+                columns: new[] { "Id", "CreatedAt", "EndDate", "IsActive", "Name", "StartDate", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, new DateOnly(2026, 6, 30), true, "2025/2026", new DateOnly(2025, 9, 1) },
-                    { 2, new DateOnly(2027, 6, 30), true, "2026/2027", new DateOnly(2026, 9, 1) }
+                    { 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new DateOnly(2026, 6, 30), true, "2025/2026", new DateOnly(2025, 9, 1), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 2, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new DateOnly(2027, 6, 30), true, "2026/2027", new DateOnly(2026, 9, 1), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) }
                 });
 
             migrationBuilder.InsertData(
                 table: "Subjects",
-                columns: new[] { "Id", "IsActive", "Name" },
+                columns: new[] { "Id", "CreatedAt", "IsActive", "Name", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, true, "matematyka" },
-                    { 2, true, "język polski" },
-                    { 3, true, "język angielski" },
-                    { 4, true, "język niemiecki" },
-                    { 5, true, "informatyka" },
-                    { 6, true, "wychowanie fizyczne" },
-                    { 7, true, "historia" },
-                    { 8, true, "WOS" },
-                    { 9, true, "biologia" },
-                    { 10, true, "chemia" },
-                    { 11, true, "fizyka" },
-                    { 12, true, "Geografia" },
-                    { 13, true, "przyroda" },
-                    { 14, true, "plastyka" },
-                    { 15, true, "muzyka" },
-                    { 16, true, "zajęcia artystyczne" },
-                    { 17, true, "religia" },
-                    { 18, true, "etyka" },
-                    { 19, true, "WDŻ" },
-                    { 20, true, "technika" },
-                    { 21, true, "EDB" }
+                    { 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "matematyka", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 2, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "język polski", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 3, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "język angielski", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 4, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "język niemiecki", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 5, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "informatyka", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 6, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "wychowanie fizyczne", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 7, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "historia", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 8, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "WOS", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 9, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "biologia", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 10, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "chemia", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 11, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "fizyka", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 12, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Geografia", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 13, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "przyroda", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 14, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "plastyka", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 15, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "muzyka", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 16, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "zajęcia artystyczne", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 17, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "religia", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 18, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "etyka", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 19, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "WDŻ", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 20, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "technika", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 21, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "EDB", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) }
                 });
 
             migrationBuilder.InsertData(
                 table: "BehaviorGradeRanges",
-                columns: new[] { "Id", "GradeName", "IsActive", "MaxPoints", "MinPoints", "SchoolYearId" },
+                columns: new[] { "Id", "CreatedAt", "GradeName", "IsActive", "MaxPoints", "MinPoints", "SchoolYearId", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, "Wzorowe", true, 200, 51, 1 },
-                    { 2, "Bardzo dobre", true, 50, 41, 1 },
-                    { 3, "Dobre", true, 40, 31, 1 },
-                    { 4, "Poprawne", true, 30, 21, 1 },
-                    { 5, "Nieodpowiednie", true, 20, 11, 1 },
-                    { 6, "Naganne", true, 10, 0, 1 }
+                    { 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), "Wzorowe", true, 200, 51, 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 2, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), "Bardzo dobre", true, 50, 41, 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 3, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), "Dobre", true, 40, 31, 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 4, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), "Poprawne", true, 30, 21, 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 5, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), "Nieodpowiednie", true, 20, 11, 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 6, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), "Naganne", true, 10, 0, 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) }
                 });
 
             migrationBuilder.InsertData(
                 table: "CalendarEventTypes",
-                columns: new[] { "Id", "CalendarColorId", "Name" },
+                columns: new[] { "Id", "CalendarColorId", "CreatedAt", "IsActive", "Name", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, 1, "Sprawdzian" },
-                    { 2, 2, "Kartkówka" },
-                    { 3, 3, "Zadanie domowe" },
-                    { 4, 4, "Inne" }
+                    { 1, 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Sprawdzian", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 2, 2, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Kartkówka", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 3, 3, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Zadanie domowe", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 4, 4, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Inne", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) }
                 });
 
             migrationBuilder.InsertData(
                 table: "Classes",
-                columns: new[] { "Id", "IsActive", "Letter", "Level", "SchoolYearId" },
+                columns: new[] { "Id", "CreatedAt", "IsActive", "Letter", "Level", "SchoolYearId", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, true, "A", 1, 1 },
-                    { 2, true, "B", 4, 1 },
-                    { 3, true, "C", 8, 1 }
+                    { 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "A", 1, 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 2, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "C", 8, 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) }
                 });
 
             migrationBuilder.InsertData(
                 table: "Semesters",
-                columns: new[] { "Id", "EndDate", "IsActive", "Name", "SchoolYearId", "StartDate" },
+                columns: new[] { "Id", "CreatedAt", "EndDate", "IsActive", "Name", "SchoolYearId", "StartDate", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, new DateOnly(2025, 1, 31), true, "Semestr 1", 1, new DateOnly(2025, 9, 1) },
-                    { 2, new DateOnly(2025, 6, 30), true, "Semestr 2", 1, new DateOnly(2026, 2, 1) },
-                    { 3, new DateOnly(2026, 1, 31), true, "Semestr 1", 2, new DateOnly(2026, 9, 1) },
-                    { 4, new DateOnly(2026, 6, 30), true, "Semestr 2", 2, new DateOnly(2027, 2, 1) }
+                    { 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new DateOnly(2025, 1, 31), true, "Semestr 1", 1, new DateOnly(2025, 9, 1), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 2, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new DateOnly(2025, 6, 30), true, "Semestr 2", 1, new DateOnly(2026, 2, 1), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 3, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new DateOnly(2026, 1, 31), true, "Semestr 1", 2, new DateOnly(2026, 9, 1), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 4, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new DateOnly(2026, 6, 30), true, "Semestr 2", 2, new DateOnly(2027, 2, 1), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) }
                 });
 
             migrationBuilder.CreateIndex(

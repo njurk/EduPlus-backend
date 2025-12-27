@@ -117,7 +117,17 @@ namespace Data.Data
             var users = new List<User>();
             var password = "Test123!";
 
-            var admin = new User { FirstName = "Krzysztof", LastName = "Jarzyna", Email = "admin@szkola.edu.pl", Password = password, Phone = "111111111" };
+            var admin = new User
+            {
+                FirstName = "Krzysztof",
+                LastName = "Jarzyna",
+                Email = "admin@szkola.edu.pl",
+                Password = password,
+                Phone = "111111111",
+                IsActive = true,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+            };
             users.Add(admin);
 
             var teachersData = GetTeachersData();
@@ -129,7 +139,10 @@ namespace Data.Data
                     LastName = t.LastName,
                     Email = $"{t.EmailPrefix}@szkola.edu.pl",
                     Password = password,
-                    Phone = $"600100{t.SubjectId:000}"
+                    Phone = $"600100{t.SubjectId:000}",
+                    IsActive = true,
+                    CreatedAt = DateTime.UtcNow,
+                    UpdatedAt = DateTime.UtcNow
                 });
             }
 
@@ -142,9 +155,23 @@ namespace Data.Data
             foreach (var user in users)
             {
                 if (user.Email == "admin@szkola.edu.pl")
-                    staffRoles.Add(new UserRole { UserId = user.Id, RoleId = 1 });
+                    staffRoles.Add(new UserRole
+                    {
+                        UserId = user.Id,
+                        RoleId = 1,
+                        IsActive = true,
+                        CreatedAt = DateTime.UtcNow,
+                        UpdatedAt = DateTime.UtcNow
+                    });
                 else if (teacherEmails.Contains(user.Email))
-                    staffRoles.Add(new UserRole { UserId = user.Id, RoleId = 2 });
+                    staffRoles.Add(new UserRole
+                    {
+                        UserId = user.Id,
+                        RoleId = 2,
+                        IsActive = true,
+                        CreatedAt = DateTime.UtcNow,
+                        UpdatedAt = DateTime.UtcNow
+                    });
             }
             _context.UserRoles.AddRange(staffRoles);
             _context.SaveChanges();
@@ -161,7 +188,10 @@ namespace Data.Data
                     LastName = s.LastName,
                     Email = $"{s.StudentPrefix}@szkola.edu.pl",
                     Password = password,
-                    Phone = $"700{phoneCounter:00000}"
+                    Phone = $"700{phoneCounter:00000}",
+                    IsActive = true,
+                    CreatedAt = DateTime.UtcNow,
+                    UpdatedAt = DateTime.UtcNow
                 };
 
                 var parent = new User
@@ -170,7 +200,10 @@ namespace Data.Data
                     LastName = s.LastName,
                     Email = $"{s.ParentPrefix}@szkola.edu.pl",
                     Password = password,
-                    Phone = $"800{phoneCounter:00000}"
+                    Phone = $"800{phoneCounter:00000}",
+                    IsActive = true,
+                    CreatedAt = DateTime.UtcNow,
+                    UpdatedAt = DateTime.UtcNow
                 };
 
                 _context.Users.Add(student);
@@ -180,11 +213,28 @@ namespace Data.Data
                 _context.ParentStudents.Add(new ParentStudent
                 {
                     StudentId = student.Id,
-                    ParentId = parent.Id
+                    ParentId = parent.Id,
+                    IsActive = true,
+                    CreatedAt = DateTime.UtcNow,
+                    UpdatedAt = DateTime.UtcNow
                 });
 
-                _context.UserRoles.Add(new UserRole { UserId = student.Id, RoleId = 4 });
-                _context.UserRoles.Add(new UserRole { UserId = parent.Id, RoleId = 3 });
+                _context.UserRoles.Add(new UserRole
+                {
+                    UserId = student.Id,
+                    RoleId = 4,
+                    IsActive = true,
+                    CreatedAt = DateTime.UtcNow,
+                    UpdatedAt = DateTime.UtcNow
+                });
+                _context.UserRoles.Add(new UserRole
+                {
+                    UserId = parent.Id,
+                    RoleId = 3,
+                    IsActive = true,
+                    CreatedAt = DateTime.UtcNow,
+                    UpdatedAt = DateTime.UtcNow
+                });
 
                 phoneCounter++;
             }
@@ -200,7 +250,14 @@ namespace Data.Data
             var students1 = _context.Users.Where(u => class1Emails.Contains(u.Email)).ToList();
 
             foreach (var s in students1)
-                _context.ClassStudents.Add(new ClassStudent { ClassId = 1, StudentId = s.Id });
+                _context.ClassStudents.Add(new ClassStudent
+                {
+                    ClassId = 1,
+                    StudentId = s.Id,
+                    IsActive = true,
+                    CreatedAt = DateTime.UtcNow,
+                    UpdatedAt = DateTime.UtcNow
+                });
 
             // przypisanie uczniów do klasy 2
             var class2Data = GetClass2StudentsData();
@@ -208,7 +265,14 @@ namespace Data.Data
             var students2 = _context.Users.Where(u => class2Emails.Contains(u.Email)).ToList();
 
             foreach (var s in students2)
-                _context.ClassStudents.Add(new ClassStudent { ClassId = 2, StudentId = s.Id });
+                _context.ClassStudents.Add(new ClassStudent
+                {
+                    ClassId = 2,
+                    StudentId = s.Id,
+                    IsActive = true,
+                    CreatedAt = DateTime.UtcNow,
+                    UpdatedAt = DateTime.UtcNow
+                });
 
             // nauczyciele i przedmioty
             var teachersData = GetTeachersData();
@@ -230,8 +294,23 @@ namespace Data.Data
             {
                 if (teachersMap.ContainsKey(subjId))
                 {
-                    _context.ClassSubjects.Add(new ClassSubject { ClassId = 1, SubjectId = subjId });
-                    _context.TeacherClassSubjects.Add(new TeacherClassSubject { ClassId = 1, SubjectId = subjId, TeacherId = teachersMap[subjId] });
+                    _context.ClassSubjects.Add(new ClassSubject
+                    {
+                        ClassId = 1,
+                        SubjectId = subjId,
+                        IsActive = true,
+                        CreatedAt = DateTime.UtcNow,
+                        UpdatedAt = DateTime.UtcNow
+                    });
+                    _context.TeacherClassSubjects.Add(new TeacherClassSubject
+                    {
+                        ClassId = 1,
+                        SubjectId = subjId,
+                        TeacherId = teachersMap[subjId],
+                        IsActive = true,
+                        CreatedAt = DateTime.UtcNow,
+                        UpdatedAt = DateTime.UtcNow
+                    });
                 }
             }
 
@@ -241,8 +320,23 @@ namespace Data.Data
             {
                 if (teachersMap.ContainsKey(subjId))
                 {
-                    _context.ClassSubjects.Add(new ClassSubject { ClassId = 2, SubjectId = subjId });
-                    _context.TeacherClassSubjects.Add(new TeacherClassSubject { ClassId = 2, SubjectId = subjId, TeacherId = teachersMap[subjId] });
+                    _context.ClassSubjects.Add(new ClassSubject
+                    {
+                        ClassId = 2,
+                        SubjectId = subjId,
+                        IsActive = true,
+                        CreatedAt = DateTime.UtcNow,
+                        UpdatedAt = DateTime.UtcNow
+                    });
+                    _context.TeacherClassSubjects.Add(new TeacherClassSubject
+                    {
+                        ClassId = 2,
+                        SubjectId = subjId,
+                        TeacherId = teachersMap[subjId],
+                        IsActive = true,
+                        CreatedAt = DateTime.UtcNow,
+                        UpdatedAt = DateTime.UtcNow
+                    });
                 }
             }
 
@@ -265,69 +359,69 @@ namespace Data.Data
             }
 
             // klasa 1a
-            schedules.Add(new WeeklySchedule { ClassId = 1, DayOfWeek = 1, LessonHourId = 1, SubjectId = 1, TeacherId = GetTeacherId(1), ClassroomId = 1, SchoolYearId = 1, SemesterId = 1 });
-            schedules.Add(new WeeklySchedule { ClassId = 1, DayOfWeek = 1, LessonHourId = 2, SubjectId = 2, TeacherId = GetTeacherId(2), ClassroomId = 2, SchoolYearId = 1, SemesterId = 1 });
-            schedules.Add(new WeeklySchedule { ClassId = 1, DayOfWeek = 1, LessonHourId = 3, SubjectId = 5, TeacherId = GetTeacherId(5), ClassroomId = 16, SchoolYearId = 1, SemesterId = 1 });
-            schedules.Add(new WeeklySchedule { ClassId = 1, DayOfWeek = 1, LessonHourId = 4, SubjectId = 3, TeacherId = GetTeacherId(3), ClassroomId = 3, SchoolYearId = 1, SemesterId = 1 });
+            schedules.Add(new WeeklySchedule { ClassId = 1, DayOfWeek = 1, LessonHourId = 1, SubjectId = 1, TeacherId = GetTeacherId(1), ClassroomId = 1, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
+            schedules.Add(new WeeklySchedule { ClassId = 1, DayOfWeek = 1, LessonHourId = 2, SubjectId = 2, TeacherId = GetTeacherId(2), ClassroomId = 2, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
+            schedules.Add(new WeeklySchedule { ClassId = 1, DayOfWeek = 1, LessonHourId = 3, SubjectId = 5, TeacherId = GetTeacherId(5), ClassroomId = 16, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
+            schedules.Add(new WeeklySchedule { ClassId = 1, DayOfWeek = 1, LessonHourId = 4, SubjectId = 3, TeacherId = GetTeacherId(3), ClassroomId = 3, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
 
-            schedules.Add(new WeeklySchedule { ClassId = 1, DayOfWeek = 2, LessonHourId = 1, SubjectId = 3, TeacherId = GetTeacherId(3), ClassroomId = 3, SchoolYearId = 1, SemesterId = 1 });
-            schedules.Add(new WeeklySchedule { ClassId = 1, DayOfWeek = 2, LessonHourId = 2, SubjectId = 16, TeacherId = GetTeacherId(16), ClassroomId = 4, SchoolYearId = 1, SemesterId = 1 });
-            schedules.Add(new WeeklySchedule { ClassId = 1, DayOfWeek = 2, LessonHourId = 3, SubjectId = 14, TeacherId = GetTeacherId(14), ClassroomId = 5, SchoolYearId = 1, SemesterId = 1 });
-            schedules.Add(new WeeklySchedule { ClassId = 1, DayOfWeek = 2, LessonHourId = 4, SubjectId = 13, TeacherId = GetTeacherId(13), ClassroomId = 5, SchoolYearId = 1, SemesterId = 1 });
+            schedules.Add(new WeeklySchedule { ClassId = 1, DayOfWeek = 2, LessonHourId = 1, SubjectId = 3, TeacherId = GetTeacherId(3), ClassroomId = 3, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
+            schedules.Add(new WeeklySchedule { ClassId = 1, DayOfWeek = 2, LessonHourId = 2, SubjectId = 16, TeacherId = GetTeacherId(16), ClassroomId = 4, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
+            schedules.Add(new WeeklySchedule { ClassId = 1, DayOfWeek = 2, LessonHourId = 3, SubjectId = 14, TeacherId = GetTeacherId(14), ClassroomId = 5, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
+            schedules.Add(new WeeklySchedule { ClassId = 1, DayOfWeek = 2, LessonHourId = 4, SubjectId = 13, TeacherId = GetTeacherId(13), ClassroomId = 5, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
 
-            schedules.Add(new WeeklySchedule { ClassId = 1, DayOfWeek = 3, LessonHourId = 1, SubjectId = 2, TeacherId = GetTeacherId(2), ClassroomId = 2, SchoolYearId = 1, SemesterId = 1 });
-            schedules.Add(new WeeklySchedule { ClassId = 1, DayOfWeek = 3, LessonHourId = 2, SubjectId = 1, TeacherId = GetTeacherId(1), ClassroomId = 1, SchoolYearId = 1, SemesterId = 1 });
-            schedules.Add(new WeeklySchedule { ClassId = 1, DayOfWeek = 3, LessonHourId = 3, SubjectId = 4, TeacherId = GetTeacherId(4), ClassroomId = 15, SchoolYearId = 1, SemesterId = 1 });
-            schedules.Add(new WeeklySchedule { ClassId = 1, DayOfWeek = 3, LessonHourId = 4, SubjectId = 5, TeacherId = GetTeacherId(5), ClassroomId = 16, SchoolYearId = 1, SemesterId = 1 });
+            schedules.Add(new WeeklySchedule { ClassId = 1, DayOfWeek = 3, LessonHourId = 1, SubjectId = 2, TeacherId = GetTeacherId(2), ClassroomId = 2, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
+            schedules.Add(new WeeklySchedule { ClassId = 1, DayOfWeek = 3, LessonHourId = 2, SubjectId = 1, TeacherId = GetTeacherId(1), ClassroomId = 1, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
+            schedules.Add(new WeeklySchedule { ClassId = 1, DayOfWeek = 3, LessonHourId = 3, SubjectId = 4, TeacherId = GetTeacherId(4), ClassroomId = 15, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
+            schedules.Add(new WeeklySchedule { ClassId = 1, DayOfWeek = 3, LessonHourId = 4, SubjectId = 5, TeacherId = GetTeacherId(5), ClassroomId = 16, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
 
-            schedules.Add(new WeeklySchedule { ClassId = 1, DayOfWeek = 4, LessonHourId = 1, SubjectId = 2, TeacherId = GetTeacherId(2), ClassroomId = 2, SchoolYearId = 1, SemesterId = 1 });
-            schedules.Add(new WeeklySchedule { ClassId = 1, DayOfWeek = 4, LessonHourId = 2, SubjectId = 3, TeacherId = GetTeacherId(3), ClassroomId = 3, SchoolYearId = 1, SemesterId = 1 });
-            schedules.Add(new WeeklySchedule { ClassId = 1, DayOfWeek = 4, LessonHourId = 3, SubjectId = 1, TeacherId = GetTeacherId(1), ClassroomId = 1, SchoolYearId = 1, SemesterId = 1 });
-            schedules.Add(new WeeklySchedule { ClassId = 1, DayOfWeek = 4, LessonHourId = 4, SubjectId = 16, TeacherId = GetTeacherId(16), ClassroomId = 4, SchoolYearId = 1, SemesterId = 1 });
+            schedules.Add(new WeeklySchedule { ClassId = 1, DayOfWeek = 4, LessonHourId = 1, SubjectId = 2, TeacherId = GetTeacherId(2), ClassroomId = 2, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
+            schedules.Add(new WeeklySchedule { ClassId = 1, DayOfWeek = 4, LessonHourId = 2, SubjectId = 3, TeacherId = GetTeacherId(3), ClassroomId = 3, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
+            schedules.Add(new WeeklySchedule { ClassId = 1, DayOfWeek = 4, LessonHourId = 3, SubjectId = 1, TeacherId = GetTeacherId(1), ClassroomId = 1, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
+            schedules.Add(new WeeklySchedule { ClassId = 1, DayOfWeek = 4, LessonHourId = 4, SubjectId = 16, TeacherId = GetTeacherId(16), ClassroomId = 4, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
 
-            schedules.Add(new WeeklySchedule { ClassId = 1, DayOfWeek = 5, LessonHourId = 1, SubjectId = 1, TeacherId = GetTeacherId(1), ClassroomId = 1, SchoolYearId = 1, SemesterId = 1 });
-            schedules.Add(new WeeklySchedule { ClassId = 1, DayOfWeek = 5, LessonHourId = 2, SubjectId = 2, TeacherId = GetTeacherId(2), ClassroomId = 2, SchoolYearId = 1, SemesterId = 1 });
-            schedules.Add(new WeeklySchedule { ClassId = 1, DayOfWeek = 5, LessonHourId = 3, SubjectId = 15, TeacherId = GetTeacherId(15), ClassroomId = 5, SchoolYearId = 1, SemesterId = 1 });
-            schedules.Add(new WeeklySchedule { ClassId = 1, DayOfWeek = 5, LessonHourId = 4, SubjectId = 5, TeacherId = GetTeacherId(5), ClassroomId = 16, SchoolYearId = 1, SemesterId = 1 });
+            schedules.Add(new WeeklySchedule { ClassId = 1, DayOfWeek = 5, LessonHourId = 1, SubjectId = 1, TeacherId = GetTeacherId(1), ClassroomId = 1, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
+            schedules.Add(new WeeklySchedule { ClassId = 1, DayOfWeek = 5, LessonHourId = 2, SubjectId = 2, TeacherId = GetTeacherId(2), ClassroomId = 2, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
+            schedules.Add(new WeeklySchedule { ClassId = 1, DayOfWeek = 5, LessonHourId = 3, SubjectId = 15, TeacherId = GetTeacherId(15), ClassroomId = 5, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
+            schedules.Add(new WeeklySchedule { ClassId = 1, DayOfWeek = 5, LessonHourId = 4, SubjectId = 5, TeacherId = GetTeacherId(5), ClassroomId = 16, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
 
             // klasa 8c
-            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 1, LessonHourId = 1, SubjectId = 1, TeacherId = GetTeacherId(1), ClassroomId = 6, SchoolYearId = 1, SemesterId = 1 });
-            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 1, LessonHourId = 2, SubjectId = 10, TeacherId = GetTeacherId(10), ClassroomId = 7, SchoolYearId = 1, SemesterId = 1 });
-            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 1, LessonHourId = 3, SubjectId = 9, TeacherId = GetTeacherId(9), ClassroomId = 8, SchoolYearId = 1, SemesterId = 1 });
-            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 1, LessonHourId = 4, SubjectId = 2, TeacherId = GetTeacherId(2), ClassroomId = 9, SchoolYearId = 1, SemesterId = 1 });
-            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 1, LessonHourId = 5, SubjectId = 3, TeacherId = GetTeacherId(3), ClassroomId = 10, SchoolYearId = 1, SemesterId = 1 });
-            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 1, LessonHourId = 6, SubjectId = 5, TeacherId = GetTeacherId(5), ClassroomId = 17, SchoolYearId = 1, SemesterId = 1 });
-            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 1, LessonHourId = 7, SubjectId = 6, TeacherId = GetTeacherId(6), ClassroomId = 11, SchoolYearId = 1, SemesterId = 1 });
+            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 1, LessonHourId = 1, SubjectId = 1, TeacherId = GetTeacherId(1), ClassroomId = 6, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
+            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 1, LessonHourId = 2, SubjectId = 10, TeacherId = GetTeacherId(10), ClassroomId = 7, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
+            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 1, LessonHourId = 3, SubjectId = 9, TeacherId = GetTeacherId(9), ClassroomId = 8, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
+            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 1, LessonHourId = 4, SubjectId = 2, TeacherId = GetTeacherId(2), ClassroomId = 9, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
+            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 1, LessonHourId = 5, SubjectId = 3, TeacherId = GetTeacherId(3), ClassroomId = 10, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
+            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 1, LessonHourId = 6, SubjectId = 5, TeacherId = GetTeacherId(5), ClassroomId = 17, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
+            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 1, LessonHourId = 7, SubjectId = 6, TeacherId = GetTeacherId(6), ClassroomId = 11, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
 
-            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 2, LessonHourId = 1, SubjectId = 2, TeacherId = GetTeacherId(2), ClassroomId = 9, SchoolYearId = 1, SemesterId = 1 });
-            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 2, LessonHourId = 2, SubjectId = 6, TeacherId = GetTeacherId(6), ClassroomId = 11, SchoolYearId = 1, SemesterId = 1 });
-            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 2, LessonHourId = 3, SubjectId = 8, TeacherId = GetTeacherId(8), ClassroomId = 8, SchoolYearId = 1, SemesterId = 1 });
-            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 2, LessonHourId = 4, SubjectId = 1, TeacherId = GetTeacherId(1), ClassroomId = 6, SchoolYearId = 1, SemesterId = 1 });
-            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 2, LessonHourId = 5, SubjectId = 11, TeacherId = GetTeacherId(11), ClassroomId = 12, SchoolYearId = 1, SemesterId = 1 });
-            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 2, LessonHourId = 6, SubjectId = 4, TeacherId = GetTeacherId(4), ClassroomId = 15, SchoolYearId = 1, SemesterId = 1 });
-            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 2, LessonHourId = 7, SubjectId = 7, TeacherId = GetTeacherId(7), ClassroomId = 13, SchoolYearId = 1, SemesterId = 1 });
+            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 2, LessonHourId = 1, SubjectId = 2, TeacherId = GetTeacherId(2), ClassroomId = 9, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
+            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 2, LessonHourId = 2, SubjectId = 6, TeacherId = GetTeacherId(6), ClassroomId = 11, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
+            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 2, LessonHourId = 3, SubjectId = 8, TeacherId = GetTeacherId(8), ClassroomId = 8, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
+            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 2, LessonHourId = 4, SubjectId = 1, TeacherId = GetTeacherId(1), ClassroomId = 6, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
+            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 2, LessonHourId = 5, SubjectId = 11, TeacherId = GetTeacherId(11), ClassroomId = 12, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
+            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 2, LessonHourId = 6, SubjectId = 4, TeacherId = GetTeacherId(4), ClassroomId = 15, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
+            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 2, LessonHourId = 7, SubjectId = 7, TeacherId = GetTeacherId(7), ClassroomId = 13, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
 
-            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 3, LessonHourId = 2, SubjectId = 3, TeacherId = GetTeacherId(3), ClassroomId = 10, SchoolYearId = 1, SemesterId = 1 });
-            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 3, LessonHourId = 3, SubjectId = 1, TeacherId = GetTeacherId(1), ClassroomId = 6, SchoolYearId = 1, SemesterId = 1 });
-            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 3, LessonHourId = 4, SubjectId = 10, TeacherId = GetTeacherId(10), ClassroomId = 7, SchoolYearId = 1, SemesterId = 1 });
-            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 3, LessonHourId = 5, SubjectId = 2, TeacherId = GetTeacherId(2), ClassroomId = 9, SchoolYearId = 1, SemesterId = 1 });
-            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 3, LessonHourId = 6, SubjectId = 5, TeacherId = GetTeacherId(5), ClassroomId = 17, SchoolYearId = 1, SemesterId = 1 });
-            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 3, LessonHourId = 7, SubjectId = 20, TeacherId = GetTeacherId(20), ClassroomId = 14, SchoolYearId = 1, SemesterId = 1 });
+            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 3, LessonHourId = 2, SubjectId = 3, TeacherId = GetTeacherId(3), ClassroomId = 10, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
+            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 3, LessonHourId = 3, SubjectId = 1, TeacherId = GetTeacherId(1), ClassroomId = 6, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
+            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 3, LessonHourId = 4, SubjectId = 10, TeacherId = GetTeacherId(10), ClassroomId = 7, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
+            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 3, LessonHourId = 5, SubjectId = 2, TeacherId = GetTeacherId(2), ClassroomId = 9, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
+            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 3, LessonHourId = 6, SubjectId = 5, TeacherId = GetTeacherId(5), ClassroomId = 17, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
+            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 3, LessonHourId = 7, SubjectId = 20, TeacherId = GetTeacherId(20), ClassroomId = 14, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
 
-            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 4, LessonHourId = 1, SubjectId = 9, TeacherId = GetTeacherId(9), ClassroomId = 8, SchoolYearId = 1, SemesterId = 1 });
-            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 4, LessonHourId = 2, SubjectId = 8, TeacherId = GetTeacherId(8), ClassroomId = 8, SchoolYearId = 1, SemesterId = 1 });
-            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 4, LessonHourId = 3, SubjectId = 1, TeacherId = GetTeacherId(1), ClassroomId = 6, SchoolYearId = 1, SemesterId = 1 });
-            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 4, LessonHourId = 4, SubjectId = 2, TeacherId = GetTeacherId(2), ClassroomId = 9, SchoolYearId = 1, SemesterId = 1 });
-            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 4, LessonHourId = 5, SubjectId = 3, TeacherId = GetTeacherId(3), ClassroomId = 10, SchoolYearId = 1, SemesterId = 1 });
-            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 4, LessonHourId = 6, SubjectId = 11, TeacherId = GetTeacherId(11), ClassroomId = 12, SchoolYearId = 1, SemesterId = 1 });
-            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 4, LessonHourId = 7, SubjectId = 5, TeacherId = GetTeacherId(5), ClassroomId = 17, SchoolYearId = 1, SemesterId = 1 });
+            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 4, LessonHourId = 1, SubjectId = 9, TeacherId = GetTeacherId(9), ClassroomId = 8, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
+            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 4, LessonHourId = 2, SubjectId = 8, TeacherId = GetTeacherId(8), ClassroomId = 8, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
+            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 4, LessonHourId = 3, SubjectId = 1, TeacherId = GetTeacherId(1), ClassroomId = 6, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
+            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 4, LessonHourId = 4, SubjectId = 2, TeacherId = GetTeacherId(2), ClassroomId = 9, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
+            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 4, LessonHourId = 5, SubjectId = 3, TeacherId = GetTeacherId(3), ClassroomId = 10, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
+            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 4, LessonHourId = 6, SubjectId = 11, TeacherId = GetTeacherId(11), ClassroomId = 12, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
+            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 4, LessonHourId = 7, SubjectId = 5, TeacherId = GetTeacherId(5), ClassroomId = 17, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
 
-            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 5, LessonHourId = 1, SubjectId = 7, TeacherId = GetTeacherId(7), ClassroomId = 13, SchoolYearId = 1, SemesterId = 1 });
-            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 5, LessonHourId = 2, SubjectId = 6, TeacherId = GetTeacherId(6), ClassroomId = 11, SchoolYearId = 1, SemesterId = 1 });
-            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 5, LessonHourId = 3, SubjectId = 2, TeacherId = GetTeacherId(2), ClassroomId = 9, SchoolYearId = 1, SemesterId = 1 });
-            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 5, LessonHourId = 4, SubjectId = 1, TeacherId = GetTeacherId(1), ClassroomId = 6, SchoolYearId = 1, SemesterId = 1 });
-            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 5, LessonHourId = 5, SubjectId = 10, TeacherId = GetTeacherId(10), ClassroomId = 7, SchoolYearId = 1, SemesterId = 1 });
-            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 5, LessonHourId = 6, SubjectId = 3, TeacherId = GetTeacherId(3), ClassroomId = 10, SchoolYearId = 1, SemesterId = 1 });
+            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 5, LessonHourId = 1, SubjectId = 7, TeacherId = GetTeacherId(7), ClassroomId = 13, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
+            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 5, LessonHourId = 2, SubjectId = 6, TeacherId = GetTeacherId(6), ClassroomId = 11, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
+            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 5, LessonHourId = 3, SubjectId = 2, TeacherId = GetTeacherId(2), ClassroomId = 9, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
+            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 5, LessonHourId = 4, SubjectId = 1, TeacherId = GetTeacherId(1), ClassroomId = 6, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
+            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 5, LessonHourId = 5, SubjectId = 10, TeacherId = GetTeacherId(10), ClassroomId = 7, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
+            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 5, LessonHourId = 6, SubjectId = 3, TeacherId = GetTeacherId(3), ClassroomId = 10, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
 
             _context.WeeklySchedules.AddRange(schedules);
             _context.SaveChanges();
@@ -335,12 +429,9 @@ namespace Data.Data
 
         private void SeedOperationalData()
         {
-            // 1. Pobieramy dane nauczycieli, aby mapować SubjectId -> Email
             var teachersData = GetTeachersData();
-            // Tworzymy słownik: Klucz=SubjectId, Wartość=Email (np. 1 -> "akowalska@szkola.edu.pl")
             var subjectToEmail = teachersData.ToDictionary(t => t.SubjectId, t => $"{t.EmailPrefix}@szkola.edu.pl");
 
-            // Funkcja lokalna teraz korzysta ze słownika
             int GetTeacherId(int subjId)
             {
                 if (!subjectToEmail.ContainsKey(subjId))
@@ -353,22 +444,22 @@ namespace Data.Data
             // lekcje klasy 1
             var lessons1A = new List<Lesson>
             {
-                new Lesson { ClassId = 1, SubjectId = 1, TeacherId = GetTeacherId(1), ClassroomId = 1, LessonHourId = 1, Topic = "Liczby", StatusId = 2 },
-                new Lesson { ClassId = 1, SubjectId = 2, TeacherId = GetTeacherId(2), ClassroomId = 2, LessonHourId = 2, Topic = "Alfabet", StatusId = 2 },
-                new Lesson { ClassId = 1, SubjectId = 5, TeacherId = GetTeacherId(5), ClassroomId = 16, LessonHourId = 3, Topic = "Gimnastyka", StatusId = 2 },
-                new Lesson { ClassId = 1, SubjectId = 1, TeacherId = GetTeacherId(1), ClassroomId = 1, LessonHourId = 1, Topic = "Dodawanie i odejmowanie", StatusId = 2 },
-                new Lesson { ClassId = 1, SubjectId = 2, TeacherId = GetTeacherId(2), ClassroomId = 2, LessonHourId = 2, Topic = "Czytanie", StatusId = 2 }
+                new Lesson { ClassId = 1, SubjectId = 1, TeacherId = GetTeacherId(1), ClassroomId = 1, LessonHourId = 1, Topic = "Liczby", StatusId = 2, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Date = DateTime.UtcNow },
+                new Lesson { ClassId = 1, SubjectId = 2, TeacherId = GetTeacherId(2), ClassroomId = 2, LessonHourId = 2, Topic = "Alfabet", StatusId = 2, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Date = DateTime.UtcNow },
+                new Lesson { ClassId = 1, SubjectId = 5, TeacherId = GetTeacherId(5), ClassroomId = 16, LessonHourId = 3, Topic = "Gimnastyka", StatusId = 2, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Date = DateTime.UtcNow },
+                new Lesson { ClassId = 1, SubjectId = 1, TeacherId = GetTeacherId(1), ClassroomId = 1, LessonHourId = 1, Topic = "Dodawanie i odejmowanie", StatusId = 2, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Date = DateTime.UtcNow },
+                new Lesson { ClassId = 1, SubjectId = 2, TeacherId = GetTeacherId(2), ClassroomId = 2, LessonHourId = 2, Topic = "Czytanie", StatusId = 2, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Date = DateTime.UtcNow }
             };
             _context.Lessons.AddRange(lessons1A);
 
             // lekcje klasy 2
             var lessons8C = new List<Lesson>
             {
-                new Lesson { ClassId = 2, SubjectId = 1, TeacherId = GetTeacherId(1), ClassroomId = 6, LessonHourId = 1, Topic = "Funkcja liniowa", StatusId = 2 },
-                new Lesson { ClassId = 2, SubjectId = 10, TeacherId = GetTeacherId(10), ClassroomId = 7, LessonHourId = 2, Topic = "Ruch jednostajny", StatusId = 2 },
-                new Lesson { ClassId = 2, SubjectId = 9, TeacherId = GetTeacherId(9), ClassroomId = 8, LessonHourId = 3, Topic = "Kwasy i zasady", StatusId = 2 },
-                new Lesson { ClassId = 2, SubjectId = 1, TeacherId = GetTeacherId(1), ClassroomId = 6, LessonHourId = 1, Topic = "Układy równań", StatusId = 2 },
-                new Lesson { ClassId = 2, SubjectId = 2, TeacherId = GetTeacherId(2), ClassroomId = 9, LessonHourId = 2, Topic = "Omówienie lektury Pan Tadeusz", StatusId = 2 }
+                new Lesson { ClassId = 2, SubjectId = 1, TeacherId = GetTeacherId(1), ClassroomId = 6, LessonHourId = 1, Topic = "Funkcja liniowa", StatusId = 2, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Date = DateTime.UtcNow },
+                new Lesson { ClassId = 2, SubjectId = 10, TeacherId = GetTeacherId(10), ClassroomId = 7, LessonHourId = 2, Topic = "Ruch jednostajny", StatusId = 2, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Date = DateTime.UtcNow },
+                new Lesson { ClassId = 2, SubjectId = 9, TeacherId = GetTeacherId(9), ClassroomId = 8, LessonHourId = 3, Topic = "Kwasy i zasady", StatusId = 2, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Date = DateTime.UtcNow },
+                new Lesson { ClassId = 2, SubjectId = 1, TeacherId = GetTeacherId(1), ClassroomId = 6, LessonHourId = 1, Topic = "Układy równań", StatusId = 2, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Date = DateTime.UtcNow },
+                new Lesson { ClassId = 2, SubjectId = 2, TeacherId = GetTeacherId(2), ClassroomId = 9, LessonHourId = 2, Topic = "Omówienie lektury Pan Tadeusz", StatusId = 2, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Date = DateTime.UtcNow }
             };
             _context.Lessons.AddRange(lessons8C);
             _context.SaveChanges();
@@ -382,17 +473,17 @@ namespace Data.Data
                 foreach (var studId in studentIds)
                 {
                     // frekwencja
-                    _context.Attendances.Add(new Attendance { StudentId = studId, LessonId = lessons[0].Id, AttendanceTypeId = 2 });
-                    _context.Attendances.Add(new Attendance { StudentId = studId, LessonId = lessons[1].Id, AttendanceTypeId = 2 });
-                    _context.Attendances.Add(new Attendance { StudentId = studId, LessonId = lessons[2].Id, AttendanceTypeId = 3 });
-                    _context.Attendances.Add(new Attendance { StudentId = studId, LessonId = lessons[3].Id, AttendanceTypeId = 1 });
-                    _context.Attendances.Add(new Attendance { StudentId = studId, LessonId = lessons[4].Id, AttendanceTypeId = 1 });
+                    _context.Attendances.Add(new Attendance { StudentId = studId, LessonId = lessons[0].Id, AttendanceTypeId = 2, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
+                    _context.Attendances.Add(new Attendance { StudentId = studId, LessonId = lessons[1].Id, AttendanceTypeId = 2, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
+                    _context.Attendances.Add(new Attendance { StudentId = studId, LessonId = lessons[2].Id, AttendanceTypeId = 3, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
+                    _context.Attendances.Add(new Attendance { StudentId = studId, LessonId = lessons[3].Id, AttendanceTypeId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
+                    _context.Attendances.Add(new Attendance { StudentId = studId, LessonId = lessons[4].Id, AttendanceTypeId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
 
                     // oceny
-                    _context.Grades.Add(new Grade { StudentId = studId, TeacherId = lessons[0].TeacherId, SubjectId = lessons[0].SubjectId, GradeTypeId = 3, GradeCategoryId = 1, Comment = "" });
-                    _context.Grades.Add(new Grade { StudentId = studId, TeacherId = lessons[1].TeacherId, SubjectId = lessons[1].SubjectId, GradeTypeId = 4, GradeCategoryId = 2, Comment = "OK" });
-                    _context.Grades.Add(new Grade { StudentId = studId, TeacherId = lessons[2].TeacherId, SubjectId = lessons[2].SubjectId, GradeTypeId = 5, GradeCategoryId = 4, Comment = "Gratulacje" });
-                    _context.Grades.Add(new Grade { StudentId = studId, TeacherId = lessons[3].TeacherId, SubjectId = lessons[3].SubjectId, GradeTypeId = 2, GradeCategoryId = 5, Comment = "" });
+                    _context.Grades.Add(new Grade { StudentId = studId, TeacherId = lessons[0].TeacherId, SubjectId = lessons[0].SubjectId, GradeTypeId = 3, GradeCategoryId = 1, Comment = "", IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, DateTime = DateTime.UtcNow });
+                    _context.Grades.Add(new Grade { StudentId = studId, TeacherId = lessons[1].TeacherId, SubjectId = lessons[1].SubjectId, GradeTypeId = 4, GradeCategoryId = 2, Comment = "OK", IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, DateTime = DateTime.UtcNow });
+                    _context.Grades.Add(new Grade { StudentId = studId, TeacherId = lessons[2].TeacherId, SubjectId = lessons[2].SubjectId, GradeTypeId = 5, GradeCategoryId = 4, Comment = "Gratulacje", IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, DateTime = DateTime.UtcNow });
+                    _context.Grades.Add(new Grade { StudentId = studId, TeacherId = lessons[3].TeacherId, SubjectId = lessons[3].SubjectId, GradeTypeId = 2, GradeCategoryId = 5, Comment = "", IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, DateTime = DateTime.UtcNow });
 
                     // na przemian negatywna/pozytywna
                     bool isPositive = (noteCounter % 2 == 0);
@@ -403,7 +494,10 @@ namespace Data.Data
                         BehaviorNoteTypeId = isPositive ? 1 : 2,
                         SemesterId = 1,
                         Description = isPositive ? "Udział w konkursie" : "Używanie telefonu na lekcji",
-                        Points = isPositive ? 5 : -5
+                        Points = isPositive ? 5 : -5,
+                        IsActive = true,
+                        CreatedAt = DateTime.UtcNow,
+                        UpdatedAt = DateTime.UtcNow
                     });
                     noteCounter++;
                 }
@@ -428,17 +522,17 @@ namespace Data.Data
 
             events.Add(new CalendarEvent
             {
-                // informacja ogólnoszkolna
                 Title = "Pokaz talentów",
                 Description = "Klasy 1-3 w auli",
                 CalendarEventTypeId = 3,
                 StartDateTime = today.AddDays(10).AddHours(10),
-                ClassId = null, // null == wszystkie klasy
-                ClassSubjectId = null // w przypadku kiedy ClassId == null, tutaj również null
+                ClassId = null,
+                ClassSubjectId = null,
+                IsActive = true,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
             });
 
-            // klasa 1a
-            // sprawdzian
             events.Add(new CalendarEvent
             {
                 Title = "Dodawanie i odejmowanie",
@@ -446,10 +540,12 @@ namespace Data.Data
                 CalendarEventTypeId = 1,
                 ClassId = 1,
                 ClassSubjectId = GetClassSubjectId(1, 1),
-                StartDateTime = today.AddDays(2).AddHours(8)
+                StartDateTime = today.AddDays(2).AddHours(8),
+                IsActive = true,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
             });
 
-            // kartkówka
             events.Add(new CalendarEvent
             {
                 Title = "Spółgłoski i samogłoski",
@@ -457,10 +553,12 @@ namespace Data.Data
                 CalendarEventTypeId = 2,
                 ClassId = 1,
                 ClassSubjectId = GetClassSubjectId(1, 2),
-                StartDateTime = today.AddDays(3).AddHours(8).AddMinutes(55)
+                StartDateTime = today.AddDays(3).AddHours(8).AddMinutes(55),
+                IsActive = true,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
             });
 
-            // zadanie
             events.Add(new CalendarEvent
             {
                 Title = "Present Perfect",
@@ -468,10 +566,12 @@ namespace Data.Data
                 CalendarEventTypeId = 3,
                 ClassId = 1,
                 ClassSubjectId = GetClassSubjectId(1, 3),
-                StartDateTime = today.AddDays(5).AddHours(10)
+                StartDateTime = today.AddDays(5).AddHours(10),
+                IsActive = true,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
             });
 
-            // Informacja
             events.Add(new CalendarEvent
             {
                 Title = "Powtórzenie działu 4",
@@ -479,12 +579,12 @@ namespace Data.Data
                 CalendarEventTypeId = 4,
                 ClassId = 1,
                 ClassSubjectId = GetClassSubjectId(1, 13),
-                StartDateTime = today.AddDays(1).AddHours(10)
+                StartDateTime = today.AddDays(1).AddHours(10),
+                IsActive = true,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
             });
 
-
-            // klasa 8c
-            // Sprawdzian
             events.Add(new CalendarEvent
             {
                 Title = "Dział 3 Dynamika",
@@ -492,10 +592,12 @@ namespace Data.Data
                 CalendarEventTypeId = 1,
                 ClassId = 2,
                 ClassSubjectId = GetClassSubjectId(2, 10),
-                StartDateTime = today.AddDays(4).AddHours(8).AddMinutes(55)
+                StartDateTime = today.AddDays(4).AddHours(8).AddMinutes(55),
+                IsActive = true,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
             });
 
-            // kartkówka
             events.Add(new CalendarEvent
             {
                 Title = "Sole",
@@ -503,10 +605,12 @@ namespace Data.Data
                 CalendarEventTypeId = 2,
                 ClassId = 2,
                 ClassSubjectId = GetClassSubjectId(2, 9),
-                StartDateTime = today.AddDays(2).AddHours(11)
+                StartDateTime = today.AddDays(2).AddHours(11),
+                IsActive = true,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
             });
 
-            // zadanie
             events.Add(new CalendarEvent
             {
                 Title = "II Wojna Światowa",
@@ -514,18 +618,23 @@ namespace Data.Data
                 CalendarEventTypeId = 3,
                 ClassId = 2,
                 ClassSubjectId = GetClassSubjectId(2, 6),
-                StartDateTime = today.AddDays(6).AddHours(12)
+                StartDateTime = today.AddDays(6).AddHours(12),
+                IsActive = true,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
             });
 
-            // informacja
             events.Add(new CalendarEvent
             {
                 Title = "Powtórzenie działu 2",
-                Description = "Proszę przynieść podręcznik, obowiązkowo",
+                Description = "Obowiązkowo przynieść podręcznik",
                 CalendarEventTypeId = 4,
                 ClassId = 2,
                 ClassSubjectId = GetClassSubjectId(2, 1),
-                StartDateTime = today.AddDays(7).AddHours(8)
+                StartDateTime = today.AddDays(7).AddHours(8),
+                IsActive = true,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
             });
 
             _context.CalendarEvents.AddRange(events);
@@ -546,31 +655,39 @@ namespace Data.Data
             {
                 new Announcement
                 {
-                    Title = "Wpłaty na radę rodziców - przypomnienie",
-                    Description = "Szanowni Państwo, przypominamy o konieczności uiszczenia opłaty na Radę Rodziców do 18 października. Wpłaty można dokonywać na konto bankowe szkoły (PL08ALBPPLPW8327467812294561) lub w sekretariacie.",
+                    Title = "Wpłaty na radę rodziców",
+                    Description = "Szanowni Państwo, przypominamy o konieczności uiszczenia opłaty na Radę Rodziców do 18 października. Wpłaty można dokonywać na konto bankowe szkoły lub w sekretariacie",
                     CreatedAt = new DateTime(2025, 10, 12),
-                    AuthorId = adminId
+                    UpdatedAt = new DateTime(2025, 10, 12),
+                    AuthorId = adminId,
+                    IsActive = true
                 },
                 new Announcement
                 {
                     Title = "Dzień Nauczyciela - godziny rektorskie",
-                    Description = "W związku z obchodami Dnia Edukacji Narodowej, w dniu 14 października lekcje zostają skrócone. Świetlica szkolna pracuje bez zmian.",
+                    Description = "W związku z obchodami Dnia Edukacji Narodowej, w dniu 14 października lekcje zostają skrócone. Świetlica pracuje bez zmian",
                     CreatedAt = new DateTime(2025, 10, 7),
-                    AuthorId = teacherIds[0]
+                    UpdatedAt = new DateTime(2025, 10, 7),
+                    AuthorId = teacherIds[0],
+                    IsActive = true
                 },
                 new Announcement
                 {
                     Title = "Konkurs matematyczny 'Kangur'",
                     Description = "Zapraszamy wszystkich chętnych uczniów klas 4-8 do udziału w międzynarodowym konkursie matematycznym Kangur. Zapisy u nauczycieli matematyki do końca tygodnia.",
                     CreatedAt = DateTime.UtcNow.AddDays(-2),
-                    AuthorId = teacherIds[1]
+                    UpdatedAt = DateTime.UtcNow.AddDays(-2),
+                    AuthorId = teacherIds[1],
+                    IsActive = true
                 },
                 new Announcement
                 {
-                    Title = "Zebranie rodziców - klasy 1-3",
-                    Description = "Zapraszamy na zebranie rodziców klas 1-3, które odbędzie się w najbliższy wtorek o godzinie 17:00 w auli.",
+                    Title = "Zebranie rodziców klas 1-3",
+                    Description = "Zapraszamy na zebranie rodziców klas 1-3, odbędzie się w najbliższy wtorek o godzinie 17:00 w auli.",
                     CreatedAt = DateTime.UtcNow.AddDays(-1),
-                    AuthorId = teacherIds[2]
+                    UpdatedAt = DateTime.UtcNow.AddDays(-1),
+                    AuthorId = teacherIds[2],
+                    IsActive = true
                 }
             };
 

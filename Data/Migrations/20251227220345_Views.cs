@@ -1,0 +1,275 @@
+﻿using Microsoft.EntityFrameworkCore.Migrations;
+
+#nullable disable
+
+namespace Data.Migrations
+{
+    /// <inheritdoc />
+    public partial class Views : Migration
+    {
+        /// <inheritdoc />
+        protected override void Up(MigrationBuilder migrationBuilder)
+        {
+            // ViewLessonSchedule
+            migrationBuilder.Sql(@"
+                CREATE OR ALTER VIEW [dbo].[vw_LessonSchedule] AS
+                SELECT 
+                    ws.Id AS ScheduleId,
+                    ws.ClassId,
+                    (CAST(c.Level AS VARCHAR(10)) + c.Letter) AS ClassName,
+                    ws.DayOfWeek,
+                    lh.OrderNumber AS LessonNumber,
+                    lh.StartTime,
+                    lh.EndTime,
+                    ws.SubjectId,
+                    s.Name AS SubjectName,
+                    cr.Name AS ClassroomName,
+                    (u.FirstName + ' ' + u.LastName) AS TeacherName,
+                    ws.SchoolYearId,
+                    ws.SemesterId
+                FROM WeeklySchedules ws
+                JOIN Classes c ON ws.ClassId = c.Id
+                JOIN Subjects s ON ws.SubjectId = s.Id
+                JOIN Classrooms cr ON ws.ClassroomId = cr.Id
+                JOIN Users u ON ws.TeacherId = u.Id
+                JOIN LessonHours lh ON ws.LessonHourId = lh.Id
+                WHERE ws.IsActive = 1 AND c.IsActive = 1 AND u.IsActive = 1
+            ");
+
+            // ViewGradeDetails
+            migrationBuilder.Sql(@"
+                CREATE OR ALTER VIEW [dbo].[vw_GradeDetails] AS
+                SELECT 
+                    g.Id AS GradeId,
+                    g.StudentId,
+                    g.SubjectId,
+                    s.Name AS SubjectName,
+                    g.GradeTypeId,
+                    CAST(gt.Value AS decimal(4,2)) AS Value,
+                    gt.Name AS GradeTypeName,
+                    gc.Weight,
+                    gc.Name AS CategoryName,
+                    (t.FirstName + ' ' + t.LastName) AS TeacherName,
+                    g.DateTime AS Date,
+                    g.Comment,
+                    1 AS SemesterId 
+                FROM Grades g
+                JOIN Subjects s ON g.SubjectId = s.Id
+                JOIN GradeTypes gt ON g.GradeTypeId = gt.Id
+                JOIN GradeCategories gc ON g.GradeCategoryId = gc.Id
+                JOIN Users t ON g.TeacherId = t.Id
+                WHERE g.IsActive = 1 AND s.IsActive = 1 AND t.IsActive = 1
+            ");
+
+            // ViewAttendanceDetails
+            migrationBuilder.Sql(@"
+                CREATE OR ALTER VIEW [dbo].[vw_AttendanceDetails] AS
+                SELECT 
+                    a.Id AS AttendanceId,
+                    a.StudentId,
+                    lh.OrderNumber AS LessonNumber,
+                    s.Name AS SubjectName,
+                    a.LessonId,
+                    l.Date, 
+                    at.Name AS StatusName,
+                    at.ShortCode,
+                    CAST(CASE WHEN at.ShortCode = 'OB' THEN 1 ELSE 0 END AS BIT) AS IsPresent,
+                    CAST(CASE WHEN at.ShortCode = 'NB' THEN 1 ELSE 0 END AS BIT) AS IsAbsent,
+                    CAST(CASE WHEN at.ShortCode = 'SP' THEN 1 ELSE 0 END AS BIT) AS IsLate,
+                    CAST(CASE WHEN at.ShortCode = 'U' THEN 1 ELSE 0 END AS BIT) AS IsExcused,
+                    CAST(CASE WHEN at.ShortCode = 'NU' THEN 1 ELSE 0 END AS BIT) AS IsUnexcused
+                FROM Attendances a
+                JOIN Lessons l ON a.LessonId = l.Id
+                JOIN Subjects s ON l.SubjectId = s.Id
+                JOIN LessonHours lh ON l.LessonHourId = lh.Id
+                JOIN AttendanceTypes at ON a.AttendanceTypeId = at.Id
+                WHERE a.IsActive = 1 AND l.IsActive = 1
+            ");
+
+            // ViewBehaviorDetails
+            migrationBuilder.Sql(@"
+                CREATE OR ALTER VIEW [dbo].[vw_BehaviorDetails] AS
+                SELECT 
+                    bn.Id AS NoteId,
+                    bn.StudentId,
+                    bn.Points,
+                    bn.Description,
+                    bnt.IsPositive,
+                    bnt.Name AS CategoryName,
+                    (t.FirstName + ' ' + t.LastName) AS TeacherName,
+                    bn.CreatedAt AS Date,
+                    bn.SemesterId
+                FROM BehaviorNotes bn
+                JOIN BehaviorNoteTypes bnt ON bn.BehaviorNoteTypeId = bnt.Id
+                JOIN Users t ON bn.TeacherId = t.Id
+                WHERE bn.IsActive = 1 AND t.IsActive = 1
+            ");
+
+            // ViewUpcomingEvent
+            migrationBuilder.Sql(@"
+                CREATE OR ALTER VIEW [dbo].[vw_UpcomingEvents] AS
+                SELECT 
+                    ce.Id AS EventId,
+                    ce.Title,
+                    ce.Description,
+                    ce.StartDateTime,
+                    cet.Name AS TypeName,
+                    cc.Code AS ColorCode,
+                    ce.ClassId,
+                    ce.ClassSubjectId,
+                    s.Name AS SubjectName
+                FROM CalendarEvents ce
+                JOIN CalendarEventTypes cet ON ce.CalendarEventTypeId = cet.Id
+                JOIN CalendarColors cc ON cet.CalendarColorId = cc.Id
+                LEFT JOIN ClassSubjects cs ON ce.ClassSubjectId = cs.Id
+                LEFT JOIN Subjects s ON cs.SubjectId = s.Id
+                WHERE ce.IsActive = 1
+            ");
+
+            // ViewAnnouncementDetails
+            migrationBuilder.Sql(@"
+                CREATE OR ALTER VIEW [dbo].[vw_AnnouncementDetails] AS
+                SELECT 
+                    a.Id,
+                    a.Title,
+                    a.Description,
+                    a.CreatedAt AS Date,
+                    (u.FirstName + ' ' + u.LastName) AS AuthorName,
+                    r.Name AS AuthorRole
+                FROM Announcements a
+                JOIN Users u ON a.AuthorId = u.Id
+                OUTER APPLY (SELECT TOP 1 ro.Name FROM UserRoles ur JOIN Roles ro ON ur.RoleId = ro.Id WHERE ur.UserId = u.Id AND ur.IsActive = 1) r
+                WHERE a.IsActive = 1 AND u.IsActive = 1
+            ");
+
+            // ViewClassStudentDetails
+            migrationBuilder.Sql(@"
+                CREATE OR ALTER VIEW [dbo].[vw_ClassStudentDetails] AS
+                SELECT 
+                    cs.ClassId,
+                    u.Id AS StudentId,
+                    (u.FirstName + ' ' + u.LastName) AS FullName,
+                    u.Email,
+                    u.Phone,
+                    p.ParentName,
+                    p.ParentEmail,
+                    p.ParentPhone
+                FROM ClassStudents cs
+                JOIN Users u ON cs.StudentId = u.Id
+                OUTER APPLY (
+                    SELECT TOP 1 
+                        (par.FirstName + ' ' + par.LastName) AS ParentName,
+                        par.Email AS ParentEmail,
+                        par.Phone AS ParentPhone
+                    FROM ParentStudents ps
+                    JOIN Users par ON ps.ParentId = par.Id
+                    WHERE ps.StudentId = u.Id AND ps.IsActive = 1 AND par.IsActive = 1
+                ) p
+                WHERE cs.IsActive = 1 AND u.IsActive = 1
+            ");
+
+            // ViewStudentAttendance
+            migrationBuilder.Sql(@"
+                CREATE OR ALTER VIEW [dbo].[vw_StudentAttendanceSummary] AS
+                SELECT 
+                    u.Id AS StudentId,
+                    u.FirstName,
+                    u.LastName,
+                    cs.ClassId,
+                    COUNT(CASE WHEN at.ShortCode IN ('OB', 'SP') THEN 1 END) as PresentCount,
+                    COUNT(CASE WHEN at.ShortCode = 'NB' THEN 1 END) as AbsentCount,
+                    COUNT(CASE WHEN at.ShortCode = 'SP' THEN 1 END) as LateCount,
+                    COUNT(CASE WHEN at.ShortCode = 'U' THEN 1 END) as ExcusedCount
+                FROM Users u
+                JOIN ClassStudents cs ON u.Id = cs.StudentId
+                LEFT JOIN Attendances a ON u.Id = a.StudentId AND a.IsActive = 1
+                LEFT JOIN AttendanceTypes at ON a.AttendanceTypeId = at.Id
+                WHERE u.IsActive = 1 AND cs.IsActive = 1
+                GROUP BY u.Id, u.FirstName, u.LastName, cs.ClassId
+            ");
+
+            // ViewPendingExcuse
+            migrationBuilder.Sql(@"
+                CREATE OR ALTER VIEW [dbo].[vw_PendingExcuses] AS
+                SELECT 
+                    e.Id AS ExcuseId,
+                    s.Id AS StudentId,
+                    (s.FirstName + ' ' + s.LastName) AS StudentName,
+                    (CAST(c.Level AS VARCHAR) + c.Letter) AS ClassName,
+                    l.Date AS LessonDate,
+                    lh.OrderNumber AS LessonNumber,
+                    e.Reason,
+                    (p.FirstName + ' ' + p.LastName) AS ParentName,
+                    e.SubmittedAt,
+                    l.TeacherId
+                FROM Excuses e
+                JOIN Attendances a ON e.AttendanceId = a.Id
+                JOIN Lessons l ON a.LessonId = l.Id
+                JOIN LessonHours lh ON l.LessonHourId = lh.Id
+                JOIN Users s ON a.StudentId = s.Id
+                JOIN ClassStudents cs ON s.Id = cs.StudentId AND cs.ClassId = l.ClassId
+                JOIN Classes c ON l.ClassId = c.Id
+                JOIN Users p ON e.ParentId = p.Id
+                WHERE e.IsActive = 1 AND e.IsAccepted = 0 AND s.IsActive = 1 AND p.IsActive = 1
+            ");
+
+            // ViewBehaviorGradeSummary
+            migrationBuilder.Sql(@"
+                CREATE OR ALTER VIEW [dbo].[vw_BehaviorGradeSummary] AS
+                SELECT 
+                    bn.StudentId,
+                    (u.FirstName + ' ' + u.LastName) AS StudentName,
+                    bn.SemesterId,
+                    sem.Name AS SemesterName,
+                    sy.Name AS SchoolYearName,
+                    SUM(bn.Points) AS TotalPoints,
+                    (SELECT TOP 1 bgr.GradeName 
+                     FROM BehaviorGradeRanges bgr 
+                     WHERE bgr.SchoolYearId = sy.Id 
+                       AND SUM(bn.Points) BETWEEN bgr.MinPoints AND bgr.MaxPoints
+                       AND bgr.IsActive = 1
+                    ) AS CalculatedGradeName
+                FROM BehaviorNotes bn
+                JOIN Users u ON bn.StudentId = u.Id
+                JOIN Semesters sem ON bn.SemesterId = sem.Id
+                JOIN SchoolYears sy ON sem.SchoolYearId = sy.Id
+                WHERE bn.IsActive = 1 AND u.IsActive = 1
+                GROUP BY bn.StudentId, u.FirstName, u.LastName, bn.SemesterId, sem.Name, sy.Id, sy.Name
+            ");
+
+            // ViewTeacherClass
+            migrationBuilder.Sql(@"
+                CREATE OR ALTER VIEW [dbo].[vw_TeacherClasses] AS
+                SELECT DISTINCT
+                    tcs.TeacherId,
+                    c.Id AS ClassId,
+                    (CAST(c.Level AS VARCHAR(10)) + c.Letter) AS ClassName,
+                    sy.Id AS SchoolYearId,
+                    sy.Name AS SchoolYearName,
+                    (SELECT TOP 1 s.Name 
+                     FROM TeacherClassSubjects tcs2 
+                     JOIN Subjects s ON tcs2.SubjectId = s.Id 
+                     WHERE tcs2.ClassId = c.Id AND tcs2.TeacherId = tcs.TeacherId AND tcs2.IsActive = 1) AS MainSubjectName
+                FROM TeacherClassSubjects tcs
+                JOIN Classes c ON tcs.ClassId = c.Id
+                JOIN SchoolYears sy ON c.SchoolYearId = sy.Id
+                WHERE tcs.IsActive = 1 AND c.IsActive = 1
+            ");
+        }
+
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.Sql("DROP VIEW IF EXISTS [dbo].[vw_LessonSchedule]");
+            migrationBuilder.Sql("DROP VIEW IF EXISTS [dbo].[vw_GradeDetails]");
+            migrationBuilder.Sql("DROP VIEW IF EXISTS [dbo].[vw_AttendanceDetails]");
+            migrationBuilder.Sql("DROP VIEW IF EXISTS [dbo].[vw_BehaviorDetails]");
+            migrationBuilder.Sql("DROP VIEW IF EXISTS [dbo].[vw_UpcomingEvents]");
+            migrationBuilder.Sql("DROP VIEW IF EXISTS [dbo].[vw_AnnouncementDetails]");
+            migrationBuilder.Sql("DROP VIEW IF EXISTS [dbo].[vw_ClassStudentDetails]");
+            migrationBuilder.Sql("DROP VIEW IF EXISTS [dbo].[vw_StudentAttendanceSummary]");
+            migrationBuilder.Sql("DROP VIEW IF EXISTS [dbo].[vw_PendingExcuses]");
+            migrationBuilder.Sql("DROP VIEW IF EXISTS [dbo].[vw_BehaviorGradeSummary]");
+            migrationBuilder.Sql("DROP VIEW IF EXISTS [dbo].[vw_TeacherClasses]");
+        }
+    }
+}

@@ -17,5 +17,11 @@ namespace Data.Data.Entities
         public TimeOnly StartTime { get; set; }
         public TimeOnly EndTime { get; set; }
         public bool IsActive { get; set; } = true;
+
+        [Required]
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        [Required]
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     }
 }
