@@ -13,30 +13,19 @@ namespace Data.Data.Entities
     {
         [Key]
         public int Id { get; set; }
-
-        [Required, MaxLength(50)]
+        [MaxLength(50)]
         public required string FirstName { get; set; }
-
-        [Required, MaxLength(50)]
+        [MaxLength(50)]
         public required string LastName { get; set; }
-
-        [Required, MaxLength(100), EmailAddress]
+        [MaxLength(100), EmailAddress]
         public required string Email { get; set; }
-
-        [Required, MaxLength(100)]
+        [MaxLength(100)]
         public required string Password { get; set; }
-
         [MaxLength(20)]
         public string? Phone { get; set; }
-
         public bool IsActive { get; set; } = true;
-
-        [Required]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
-        [Required]
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
-
         public virtual ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
     }
 }

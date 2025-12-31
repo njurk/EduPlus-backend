@@ -17,6 +17,6 @@ namespace Data.Data.EntitiesForView
         public string Reason { get; set; } = string.Empty;
         public string ParentName { get; set; } = string.Empty;
         public DateTime SubmittedAt { get; set; }
-        public int TeacherId { get; set; } // do filtrowania dla wychowawcy/nauczyciela przedmiotu
+        public int TeacherId { get; set; }
     }
 }

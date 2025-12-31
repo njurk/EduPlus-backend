@@ -14,20 +14,16 @@ namespace Data.Data.Entities
         public int Id { get; set; }
         public int AttendanceId { get; set; }
         [ForeignKey(nameof(AttendanceId))]
-        public virtual Attendance Attendance { get; set; } = null!;
+        public virtual Attendance? Attendance { get; set; } = null!;
         public int ParentId { get; set; }
         [ForeignKey(nameof(ParentId))]
-        public virtual User Parent { get; set; } = null!;
+        public virtual User? Parent { get; set; } = null!;
         [Required, MaxLength(255)]
         public required string Reason { get; set; }
         public DateTime SubmittedAt { get; set; } = DateTime.UtcNow;
         public bool? IsAccepted { get; set; }
         public bool IsActive { get; set; } = true;
-
-        [Required]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
-        [Required]
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     }
 }

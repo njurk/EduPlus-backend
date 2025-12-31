@@ -17,13 +17,8 @@ namespace Data.Data.Entities
 
         [Required, MaxLength(5)]
         public required string ShortCode { get; set; }
-
         public bool IsActive { get; set; } = true;
-
-        [Required]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
-        [Required]
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     }
 }

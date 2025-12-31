@@ -54,31 +54,6 @@ namespace API.Controllers
             return Ok(summary);
         }
 
-        [HttpGet("behavior/student/{studentId}")]
-        public async Task<ActionResult<IEnumerable<ViewBehaviorDetails>>> GetStudentBehaviorNotes(int studentId)
-        {
-            return await _context.ViewBehaviorDetails
-                .Where(x => x.StudentId == studentId)
-                .OrderByDescending(x => x.Date)
-                .ToListAsync();
-        }
-
-        [HttpGet("upcoming-events")]
-        public async Task<ActionResult<IEnumerable<ViewUpcomingEvent>>> GetUpcomingEvents([FromQuery] int? classId)
-        {
-            var query = _context.ViewUpcomingEvents.AsQueryable();
-
-            if (classId.HasValue)
-            {
-                query = query.Where(x => x.ClassId == classId || x.ClassId == null);
-            }
-
-            return await query
-                .Where(x => x.StartDateTime >= DateTime.UtcNow)
-                .OrderBy(x => x.StartDateTime)
-                .ToListAsync();
-        }
-
         [HttpGet("announcements")]
         public async Task<ActionResult<IEnumerable<ViewAnnouncementDetails>>> GetAnnouncements()
         {

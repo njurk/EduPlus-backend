@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(SchoolDbContext))]
-    [Migration("20251227220345_Views")]
-    partial class Views
+    [Migration("20251231031043_Functions")]
+    partial class Functions
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,218 @@ namespace Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("Data.Data.CMS.Page", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Link")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Position")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TargetId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TargetId");
+
+                    b.ToTable("Pages");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Link = "/admin/dashboard",
+                            Position = 1,
+                            TargetId = 1,
+                            Title = "Pulpit"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Link = "/admin/announcements",
+                            Position = 2,
+                            TargetId = 1,
+                            Title = "Ogłoszenia"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Link = "/admin/attendance",
+                            Position = 3,
+                            TargetId = 1,
+                            Title = "Frekwencja"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Link = "/admin/grades",
+                            Position = 4,
+                            TargetId = 1,
+                            Title = "Oceny"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Link = "/admin/classes",
+                            Position = 5,
+                            TargetId = 1,
+                            Title = "Klasy"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Link = "/admin/school-years",
+                            Position = 6,
+                            TargetId = 1,
+                            Title = "Rok szkolny"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Link = "/admin/users",
+                            Position = 7,
+                            TargetId = 1,
+                            Title = "Użytkownicy"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Link = "/admin/roles",
+                            Position = 8,
+                            TargetId = 1,
+                            Title = "Role"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Link = "/admin/subjects",
+                            Position = 9,
+                            TargetId = 1,
+                            Title = "Przedmioty"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Link = "/admin/schedules",
+                            Position = 10,
+                            TargetId = 1,
+                            Title = "Plany zajęć"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Link = "/admin/cms",
+                            Position = 11,
+                            TargetId = 1,
+                            Title = "CMS"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Link = "/teacher/dashboard",
+                            Position = 1,
+                            TargetId = 2,
+                            Title = "Pulpit"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            Link = "/teacher/classes",
+                            Position = 2,
+                            TargetId = 2,
+                            Title = "Klasy"
+                        },
+                        new
+                        {
+                            Id = 14,
+                            Link = "/teacher/schedule",
+                            Position = 3,
+                            TargetId = 2,
+                            Title = "Plan zajęć"
+                        },
+                        new
+                        {
+                            Id = 15,
+                            Link = "/teacher/announcements",
+                            Position = 4,
+                            TargetId = 2,
+                            Title = "Ogłoszenia"
+                        });
+                });
+
+            modelBuilder.Entity("Data.Data.CMS.PageContent", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Label")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PageId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PageId");
+
+                    b.ToTable("PageContents");
+                });
+
+            modelBuilder.Entity("Data.Data.CMS.Target", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Label")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Target");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Label = "WebAdmin",
+                            Title = "Administrator - strona internetowa"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Label = "MobileTeacher",
+                            Title = "Nauczyciel - aplikacja mobilna"
+                        });
+                });
 
             modelBuilder.Entity("Data.Data.Entities.Announcement", b =>
                 {
@@ -224,429 +436,6 @@ namespace Data.Migrations
                             IsActive = true,
                             Name = "Zwolnienie",
                             ShortCode = "ZW",
-                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
-                        });
-                });
-
-            modelBuilder.Entity("Data.Data.Entities.BehaviorGradeRange", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
-
-                    b.Property<string>("GradeName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("MaxPoints")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MinPoints")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SchoolYearId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SchoolYearId");
-
-                    b.ToTable("BehaviorGradeRanges");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
-                            GradeName = "Wzorowe",
-                            IsActive = true,
-                            MaxPoints = 200,
-                            MinPoints = 51,
-                            SchoolYearId = 1,
-                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
-                            GradeName = "Bardzo dobre",
-                            IsActive = true,
-                            MaxPoints = 50,
-                            MinPoints = 41,
-                            SchoolYearId = 1,
-                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
-                            GradeName = "Dobre",
-                            IsActive = true,
-                            MaxPoints = 40,
-                            MinPoints = 31,
-                            SchoolYearId = 1,
-                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
-                            GradeName = "Poprawne",
-                            IsActive = true,
-                            MaxPoints = 30,
-                            MinPoints = 21,
-                            SchoolYearId = 1,
-                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
-                        },
-                        new
-                        {
-                            Id = 5,
-                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
-                            GradeName = "Nieodpowiednie",
-                            IsActive = true,
-                            MaxPoints = 20,
-                            MinPoints = 11,
-                            SchoolYearId = 1,
-                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
-                        },
-                        new
-                        {
-                            Id = 6,
-                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
-                            GradeName = "Naganne",
-                            IsActive = true,
-                            MaxPoints = 10,
-                            MinPoints = 0,
-                            SchoolYearId = 1,
-                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
-                        });
-                });
-
-            modelBuilder.Entity("Data.Data.Entities.BehaviorNote", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("BehaviorNoteTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("Points")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SemesterId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TeacherId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BehaviorNoteTypeId");
-
-                    b.HasIndex("SemesterId");
-
-                    b.HasIndex("StudentId");
-
-                    b.HasIndex("TeacherId");
-
-                    b.ToTable("BehaviorNotes");
-                });
-
-            modelBuilder.Entity("Data.Data.Entities.BehaviorNoteType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
-
-                    b.Property<int>("DefaultPoints")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsPositive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("BehaviorNoteTypes");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
-                            DefaultPoints = 5,
-                            IsActive = true,
-                            IsPositive = true,
-                            Name = "Pozytywna",
-                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
-                            DefaultPoints = -5,
-                            IsActive = true,
-                            IsPositive = false,
-                            Name = "Negatywna",
-                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
-                        });
-                });
-
-            modelBuilder.Entity("Data.Data.Entities.CalendarColor", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("CalendarColors");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Code = "#FF0000",
-                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
-                            IsActive = true,
-                            Name = "Czerwony",
-                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Code = "#00FF00",
-                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
-                            IsActive = true,
-                            Name = "Zielony",
-                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Code = "#0000FF",
-                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
-                            IsActive = true,
-                            Name = "Niebieski",
-                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Code = "#FFFF00",
-                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
-                            IsActive = true,
-                            Name = "Żółty",
-                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
-                        });
-                });
-
-            modelBuilder.Entity("Data.Data.Entities.CalendarEvent", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CalendarEventTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ClassId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ClassSubjectId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("StartDateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CalendarEventTypeId");
-
-                    b.HasIndex("ClassId");
-
-                    b.HasIndex("ClassSubjectId");
-
-                    b.ToTable("CalendarEvents");
-                });
-
-            modelBuilder.Entity("Data.Data.Entities.CalendarEventType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CalendarColorId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CalendarColorId");
-
-                    b.ToTable("CalendarEventTypes");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CalendarColorId = 1,
-                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
-                            IsActive = true,
-                            Name = "Sprawdzian",
-                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CalendarColorId = 2,
-                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
-                            IsActive = true,
-                            Name = "Kartkówka",
-                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CalendarColorId = 3,
-                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
-                            IsActive = true,
-                            Name = "Zadanie domowe",
-                            UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CalendarColorId = 4,
-                            CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
-                            IsActive = true,
-                            Name = "Inne",
                             UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         });
                 });
@@ -1570,7 +1359,7 @@ namespace Data.Migrations
                             Id = 1,
                             CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
-                            Name = "Admin",
+                            Name = "Administrator",
                             UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
@@ -2221,74 +2010,6 @@ namespace Data.Migrations
                     b.ToView("vw_AttendanceDetails", (string)null);
                 });
 
-            modelBuilder.Entity("Data.Data.EntitiesForView.ViewBehaviorDetails", b =>
-                {
-                    b.Property<string>("CategoryName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsPositive")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("NoteId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Points")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SemesterId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("TeacherName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.ToTable((string)null);
-
-                    b.ToView("vw_BehaviorDetails", (string)null);
-                });
-
-            modelBuilder.Entity("Data.Data.EntitiesForView.ViewBehaviorGradeSummary", b =>
-                {
-                    b.Property<string>("CalculatedGradeName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SchoolYearName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("SemesterId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SemesterName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("StudentName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("TotalPoints")
-                        .HasColumnType("int");
-
-                    b.ToTable((string)null);
-
-                    b.ToView("vw_BehaviorGradeSummary", (string)null);
-                });
-
             modelBuilder.Entity("Data.Data.EntitiesForView.ViewClassStudentDetails", b =>
                 {
                     b.Property<int>("ClassId")
@@ -2523,41 +2244,26 @@ namespace Data.Migrations
                     b.ToView("vw_TeacherClasses", (string)null);
                 });
 
-            modelBuilder.Entity("Data.Data.EntitiesForView.ViewUpcomingEvent", b =>
+            modelBuilder.Entity("Data.Data.CMS.Page", b =>
                 {
-                    b.Property<int?>("ClassId")
-                        .HasColumnType("int");
+                    b.HasOne("Data.Data.CMS.Target", "Target")
+                        .WithMany("Pages")
+                        .HasForeignKey("TargetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Property<int?>("ClassSubjectId")
-                        .HasColumnType("int");
+                    b.Navigation("Target");
+                });
 
-                    b.Property<string>("ColorCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+            modelBuilder.Entity("Data.Data.CMS.PageContent", b =>
+                {
+                    b.HasOne("Data.Data.CMS.Page", "Page")
+                        .WithMany("PageContents")
+                        .HasForeignKey("PageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("EventId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("StartDateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("SubjectName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TypeName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.ToTable((string)null);
-
-                    b.ToView("vw_UpcomingEvents", (string)null);
+                    b.Navigation("Page");
                 });
 
             modelBuilder.Entity("Data.Data.Entities.Announcement", b =>
@@ -2615,86 +2321,6 @@ namespace Data.Migrations
                     b.Navigation("Lesson");
 
                     b.Navigation("Student");
-                });
-
-            modelBuilder.Entity("Data.Data.Entities.BehaviorGradeRange", b =>
-                {
-                    b.HasOne("Data.Data.Entities.SchoolYear", "SchoolYear")
-                        .WithMany()
-                        .HasForeignKey("SchoolYearId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("SchoolYear");
-                });
-
-            modelBuilder.Entity("Data.Data.Entities.BehaviorNote", b =>
-                {
-                    b.HasOne("Data.Data.Entities.BehaviorNoteType", "BehaviorNoteType")
-                        .WithMany()
-                        .HasForeignKey("BehaviorNoteTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Data.Data.Entities.Semester", "Semester")
-                        .WithMany()
-                        .HasForeignKey("SemesterId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Data.Data.Entities.User", "Student")
-                        .WithMany()
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Data.Data.Entities.User", "Teacher")
-                        .WithMany()
-                        .HasForeignKey("TeacherId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("BehaviorNoteType");
-
-                    b.Navigation("Semester");
-
-                    b.Navigation("Student");
-
-                    b.Navigation("Teacher");
-                });
-
-            modelBuilder.Entity("Data.Data.Entities.CalendarEvent", b =>
-                {
-                    b.HasOne("Data.Data.Entities.CalendarEventType", "CalendarEventType")
-                        .WithMany()
-                        .HasForeignKey("CalendarEventTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Data.Data.Entities.Class", "Class")
-                        .WithMany()
-                        .HasForeignKey("ClassId");
-
-                    b.HasOne("Data.Data.Entities.ClassSubject", "ClassSubject")
-                        .WithMany()
-                        .HasForeignKey("ClassSubjectId");
-
-                    b.Navigation("CalendarEventType");
-
-                    b.Navigation("Class");
-
-                    b.Navigation("ClassSubject");
-                });
-
-            modelBuilder.Entity("Data.Data.Entities.CalendarEventType", b =>
-                {
-                    b.HasOne("Data.Data.Entities.CalendarColor", "CalendarColor")
-                        .WithMany()
-                        .HasForeignKey("CalendarColorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CalendarColor");
                 });
 
             modelBuilder.Entity("Data.Data.Entities.Class", b =>
@@ -2992,6 +2618,16 @@ namespace Data.Migrations
                     b.Navigation("Subject");
 
                     b.Navigation("Teacher");
+                });
+
+            modelBuilder.Entity("Data.Data.CMS.Page", b =>
+                {
+                    b.Navigation("PageContents");
+                });
+
+            modelBuilder.Entity("Data.Data.CMS.Target", b =>
+                {
+                    b.Navigation("Pages");
                 });
 
             modelBuilder.Entity("Data.Data.Entities.Class", b =>

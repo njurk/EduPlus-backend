@@ -1,7 +1,9 @@
 ﻿using Data.Data.Entities;
 using Microsoft.EntityFrameworkCore;
+using Data.Data;
+using BusinessLogic.Services;
 
-namespace Data.Data
+namespace BusinessLogic.Seeders
 {
     public class DataSeeder
     {
@@ -12,13 +14,13 @@ namespace Data.Data
             _context = context;
         }
 
-        public void Seed()
+        public void Seed(IPasswordHashService passwordHashService)
         {
             if (!_context.Database.CanConnect()) return;
 
             if (!_context.Users.Any())
             {
-                SeedUsers();
+                SeedUsers(passwordHashService);
             }
 
             if (!_context.ClassStudents.Any())
@@ -34,11 +36,6 @@ namespace Data.Data
             if (!_context.Lessons.Any())
             {
                 SeedOperationalData();
-            }
-
-            if (!_context.CalendarEvents.Any())
-            {
-                SeedCalendarEvents();
             }
 
             if (!_context.Announcements.Any())
@@ -112,7 +109,7 @@ namespace Data.Data
             };
         }
 
-        private void SeedUsers()
+        private void SeedUsers(IPasswordHashService passwordHashService)
         {
             var users = new List<User>();
             var password = "Test123!";
@@ -122,7 +119,7 @@ namespace Data.Data
                 FirstName = "Krzysztof",
                 LastName = "Jarzyna",
                 Email = "admin@szkola.edu.pl",
-                Password = password,
+                Password = passwordHashService.HashPassword(password),
                 Phone = "111111111",
                 IsActive = true,
                 CreatedAt = DateTime.UtcNow,
@@ -138,7 +135,7 @@ namespace Data.Data
                     FirstName = t.FirstName,
                     LastName = t.LastName,
                     Email = $"{t.EmailPrefix}@szkola.edu.pl",
-                    Password = password,
+                    Password = passwordHashService.HashPassword(password),
                     Phone = $"600100{t.SubjectId:000}",
                     IsActive = true,
                     CreatedAt = DateTime.UtcNow,
@@ -187,7 +184,7 @@ namespace Data.Data
                     FirstName = s.StudentFirstName,
                     LastName = s.LastName,
                     Email = $"{s.StudentPrefix}@szkola.edu.pl",
-                    Password = password,
+                    Password = passwordHashService.HashPassword(password),
                     Phone = $"700{phoneCounter:00000}",
                     IsActive = true,
                     CreatedAt = DateTime.UtcNow,
@@ -199,7 +196,7 @@ namespace Data.Data
                     FirstName = s.ParentFirstName,
                     LastName = s.LastName,
                     Email = $"{s.ParentPrefix}@szkola.edu.pl",
-                    Password = password,
+                    Password = passwordHashService.HashPassword(password),
                     Phone = $"800{phoneCounter:00000}",
                     IsActive = true,
                     CreatedAt = DateTime.UtcNow,
@@ -469,7 +466,6 @@ namespace Data.Data
 
             void FillStudentData(List<int> studentIds, List<Lesson> lessons)
             {
-                int noteCounter = 0;
                 foreach (var studId in studentIds)
                 {
                     // frekwencja
@@ -484,160 +480,12 @@ namespace Data.Data
                     _context.Grades.Add(new Grade { StudentId = studId, TeacherId = lessons[1].TeacherId, SubjectId = lessons[1].SubjectId, GradeTypeId = 4, GradeCategoryId = 2, Comment = "OK", IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, DateTime = DateTime.UtcNow });
                     _context.Grades.Add(new Grade { StudentId = studId, TeacherId = lessons[2].TeacherId, SubjectId = lessons[2].SubjectId, GradeTypeId = 5, GradeCategoryId = 4, Comment = "Gratulacje", IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, DateTime = DateTime.UtcNow });
                     _context.Grades.Add(new Grade { StudentId = studId, TeacherId = lessons[3].TeacherId, SubjectId = lessons[3].SubjectId, GradeTypeId = 2, GradeCategoryId = 5, Comment = "", IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, DateTime = DateTime.UtcNow });
-
-                    // na przemian negatywna/pozytywna
-                    bool isPositive = (noteCounter % 2 == 0);
-                    _context.BehaviorNotes.Add(new BehaviorNote
-                    {
-                        StudentId = studId,
-                        TeacherId = lessons[0].TeacherId,
-                        BehaviorNoteTypeId = isPositive ? 1 : 2,
-                        SemesterId = 1,
-                        Description = isPositive ? "Udział w konkursie" : "Używanie telefonu na lekcji",
-                        Points = isPositive ? 5 : -5,
-                        IsActive = true,
-                        CreatedAt = DateTime.UtcNow,
-                        UpdatedAt = DateTime.UtcNow
-                    });
-                    noteCounter++;
                 }
             }
 
             FillStudentData(students1A, lessons1A);
             FillStudentData(students8C, lessons8C);
 
-            _context.SaveChanges();
-        }
-
-        private void SeedCalendarEvents()
-        {
-            var events = new List<CalendarEvent>();
-            var today = DateTime.Today;
-
-            int? GetClassSubjectId(int classId, int subjectId)
-            {
-                return _context.ClassSubjects
-                    .FirstOrDefault(cs => cs.ClassId == classId && cs.SubjectId == subjectId)?.Id;
-            }
-
-            events.Add(new CalendarEvent
-            {
-                Title = "Pokaz talentów",
-                Description = "Klasy 1-3 w auli",
-                CalendarEventTypeId = 3,
-                StartDateTime = today.AddDays(10).AddHours(10),
-                ClassId = null,
-                ClassSubjectId = null,
-                IsActive = true,
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
-            });
-
-            events.Add(new CalendarEvent
-            {
-                Title = "Dodawanie i odejmowanie",
-                Description = "Liczby od 1 do 20",
-                CalendarEventTypeId = 1,
-                ClassId = 1,
-                ClassSubjectId = GetClassSubjectId(1, 1),
-                StartDateTime = today.AddDays(2).AddHours(8),
-                IsActive = true,
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
-            });
-
-            events.Add(new CalendarEvent
-            {
-                Title = "Spółgłoski i samogłoski",
-                Description = "Podręcznik s. 32-34",
-                CalendarEventTypeId = 2,
-                ClassId = 1,
-                ClassSubjectId = GetClassSubjectId(1, 2),
-                StartDateTime = today.AddDays(3).AddHours(8).AddMinutes(55),
-                IsActive = true,
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
-            });
-
-            events.Add(new CalendarEvent
-            {
-                Title = "Present Perfect",
-                Description = "ćwiczenia s.102/1,2,4",
-                CalendarEventTypeId = 3,
-                ClassId = 1,
-                ClassSubjectId = GetClassSubjectId(1, 3),
-                StartDateTime = today.AddDays(5).AddHours(10),
-                IsActive = true,
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
-            });
-
-            events.Add(new CalendarEvent
-            {
-                Title = "Powtórzenie działu 4",
-                Description = "",
-                CalendarEventTypeId = 4,
-                ClassId = 1,
-                ClassSubjectId = GetClassSubjectId(1, 13),
-                StartDateTime = today.AddDays(1).AddHours(10),
-                IsActive = true,
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
-            });
-
-            events.Add(new CalendarEvent
-            {
-                Title = "Dział 3 Dynamika",
-                Description = "Proszę przygotować się z całego działu w podręczniku oraz z notatek w zeszycie",
-                CalendarEventTypeId = 1,
-                ClassId = 2,
-                ClassSubjectId = GetClassSubjectId(2, 10),
-                StartDateTime = today.AddDays(4).AddHours(8).AddMinutes(55),
-                IsActive = true,
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
-            });
-
-            events.Add(new CalendarEvent
-            {
-                Title = "Sole",
-                Description = "Definicja, właściwości, przykłady, wzory ",
-                CalendarEventTypeId = 2,
-                ClassId = 2,
-                ClassSubjectId = GetClassSubjectId(2, 9),
-                StartDateTime = today.AddDays(2).AddHours(11),
-                IsActive = true,
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
-            });
-
-            events.Add(new CalendarEvent
-            {
-                Title = "II Wojna Światowa",
-                Description = "Przeczytać rozdział 2 w podręczniku (s.95-96) i odpowiedzieć na pytania pod tekstem",
-                CalendarEventTypeId = 3,
-                ClassId = 2,
-                ClassSubjectId = GetClassSubjectId(2, 6),
-                StartDateTime = today.AddDays(6).AddHours(12),
-                IsActive = true,
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
-            });
-
-            events.Add(new CalendarEvent
-            {
-                Title = "Powtórzenie działu 2",
-                Description = "Obowiązkowo przynieść podręcznik",
-                CalendarEventTypeId = 4,
-                ClassId = 2,
-                ClassSubjectId = GetClassSubjectId(2, 1),
-                StartDateTime = today.AddDays(7).AddHours(8),
-                IsActive = true,
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
-            });
-
-            _context.CalendarEvents.AddRange(events);
             _context.SaveChanges();
         }
 
@@ -664,7 +512,7 @@ namespace Data.Data
                 },
                 new Announcement
                 {
-                    Title = "Dzień Nauczyciela - godziny rektorskie",
+                    Title = "Dzień Nauczyciela",
                     Description = "W związku z obchodami Dnia Edukacji Narodowej, w dniu 14 października lekcje zostają skrócone. Świetlica pracuje bez zmian",
                     CreatedAt = new DateTime(2025, 10, 7),
                     UpdatedAt = new DateTime(2025, 10, 7),

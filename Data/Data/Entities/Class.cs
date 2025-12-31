@@ -9,24 +9,15 @@ namespace Data.Data.Entities
     {
         [Key]
         public int Id { get; set; }
-
         public required int Level { get; set; }
-
         [Required, MaxLength(10)]
         public required string Letter { get; set; }
-
         public int SchoolYearId { get; set; }
         [ForeignKey(nameof(SchoolYearId))]
-        public virtual SchoolYear SchoolYear { get; set; } = null!;
-
+        public virtual SchoolYear? SchoolYear { get; set; } = null!;
         public bool IsActive { get; set; } = true;
-
-        [Required]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
-        [Required]
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
-
         public virtual ICollection<ClassStudent> ClassStudents { get; set; } = new List<ClassStudent>();
     }
 }

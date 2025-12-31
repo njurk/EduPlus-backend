@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Data.Data;
+using BusinessLogic.Services;
 using System.Text.Json.Serialization;
+using BusinessLogic.Seeders;
 namespace API
 {
     public class Program
@@ -10,13 +12,24 @@ namespace API
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddDbContext<SchoolDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             builder.Services.AddControllers()
                 .AddJsonOptions(options => options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+            
+            builder.Services.AddScoped<IPasswordHashService, PasswordHashService>();
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("Allow",
+                    policy => policy
+                        .WithOrigins("http://localhost:5173", "http://localhost:3000")
+                        .AllowAnyMethod()
+                        .AllowAnyHeader());
+            });
 
             var app = builder.Build();
 
@@ -26,12 +39,13 @@ namespace API
                 try
                 {
                     var context = services.GetRequiredService<SchoolDbContext>();
+                    var passwordHashService = services.GetRequiredService<IPasswordHashService>();
 
                     context.Database.Migrate();
 
                     var seeder = new DataSeeder(context);
 
-                    seeder.Seed();
+                    seeder.Seed(passwordHashService);
                 }
                 catch (Exception ex)
                 {
@@ -48,6 +62,8 @@ namespace API
             }
 
             app.UseHttpsRedirection();
+
+            app.UseCors("Allow");
 
             app.UseAuthorization();
 

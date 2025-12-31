@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Data.Migrations
 {
     /// <inheritdoc />
-    public partial class InitDB : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -28,41 +28,6 @@ namespace Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AttendanceTypes", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "BehaviorNoteTypes",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    IsPositive = table.Column<bool>(type: "bit", nullable: false),
-                    DefaultPoints = table.Column<int>(type: "int", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BehaviorNoteTypes", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "CalendarColors",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CalendarColors", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -201,6 +166,20 @@ namespace Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Target",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Label = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Target", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -218,54 +197,6 @@ namespace Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "CalendarEventTypes",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    CalendarColorId = table.Column<int>(type: "int", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CalendarEventTypes", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_CalendarEventTypes_CalendarColors_CalendarColorId",
-                        column: x => x.CalendarColorId,
-                        principalTable: "CalendarColors",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "BehaviorGradeRanges",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    SchoolYearId = table.Column<int>(type: "int", nullable: false),
-                    GradeName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    MinPoints = table.Column<int>(type: "int", nullable: false),
-                    MaxPoints = table.Column<int>(type: "int", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BehaviorGradeRanges", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_BehaviorGradeRanges_SchoolYears_SchoolYearId",
-                        column: x => x.SchoolYearId,
-                        principalTable: "SchoolYears",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -313,6 +244,28 @@ namespace Data.Migrations
                         name: "FK_Semesters_SchoolYears_SchoolYearId",
                         column: x => x.SchoolYearId,
                         principalTable: "SchoolYears",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Pages",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Link = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Position = table.Column<int>(type: "int", nullable: false),
+                    TargetId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Pages", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Pages_Target_TargetId",
+                        column: x => x.TargetId,
+                        principalTable: "Target",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -605,51 +558,6 @@ namespace Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BehaviorNotes",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    StudentId = table.Column<int>(type: "int", nullable: false),
-                    TeacherId = table.Column<int>(type: "int", nullable: false),
-                    BehaviorNoteTypeId = table.Column<int>(type: "int", nullable: false),
-                    SemesterId = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    Points = table.Column<int>(type: "int", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BehaviorNotes", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_BehaviorNotes_BehaviorNoteTypes_BehaviorNoteTypeId",
-                        column: x => x.BehaviorNoteTypeId,
-                        principalTable: "BehaviorNoteTypes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_BehaviorNotes_Semesters_SemesterId",
-                        column: x => x.SemesterId,
-                        principalTable: "Semesters",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_BehaviorNotes_Users_StudentId",
-                        column: x => x.StudentId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_BehaviorNotes_Users_TeacherId",
-                        column: x => x.TeacherId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "WeeklySchedules",
                 columns: table => new
                 {
@@ -715,6 +623,27 @@ namespace Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "PageContents",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Label = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PageId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PageContents", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PageContents_Pages_PageId",
+                        column: x => x.PageId,
+                        principalTable: "Pages",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AnnouncementReads",
                 columns: table => new
                 {
@@ -741,43 +670,6 @@ namespace Data.Migrations
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "CalendarEvents",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
-                    StartDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CalendarEventTypeId = table.Column<int>(type: "int", nullable: false),
-                    ClassId = table.Column<int>(type: "int", nullable: true),
-                    ClassSubjectId = table.Column<int>(type: "int", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CalendarEvents", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_CalendarEvents_CalendarEventTypes_CalendarEventTypeId",
-                        column: x => x.CalendarEventTypeId,
-                        principalTable: "CalendarEventTypes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_CalendarEvents_ClassSubjects_ClassSubjectId",
-                        column: x => x.ClassSubjectId,
-                        principalTable: "ClassSubjects",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_CalendarEvents_Classes_ClassId",
-                        column: x => x.ClassId,
-                        principalTable: "Classes",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -861,26 +753,6 @@ namespace Data.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "BehaviorNoteTypes",
-                columns: new[] { "Id", "CreatedAt", "DefaultPoints", "IsActive", "IsPositive", "Name", "UpdatedAt" },
-                values: new object[,]
-                {
-                    { 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), 5, true, true, "Pozytywna", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 2, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), -5, true, false, "Negatywna", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) }
-                });
-
-            migrationBuilder.InsertData(
-                table: "CalendarColors",
-                columns: new[] { "Id", "Code", "CreatedAt", "IsActive", "Name", "UpdatedAt" },
-                values: new object[,]
-                {
-                    { 1, "#FF0000", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Czerwony", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 2, "#00FF00", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Zielony", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 3, "#0000FF", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Niebieski", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 4, "#FFFF00", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Żółty", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) }
-                });
-
-            migrationBuilder.InsertData(
                 table: "Classrooms",
                 columns: new[] { "Id", "CreatedAt", "IsActive", "Name", "UpdatedAt" },
                 values: new object[,]
@@ -961,7 +833,7 @@ namespace Data.Migrations
                 columns: new[] { "Id", "CreatedAt", "IsActive", "Name", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Admin", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Administrator", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
                     { 2, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Nauczyciel", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
                     { 3, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Rodzic", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
                     { 4, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Uczeń", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) }
@@ -1005,27 +877,12 @@ namespace Data.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "BehaviorGradeRanges",
-                columns: new[] { "Id", "CreatedAt", "GradeName", "IsActive", "MaxPoints", "MinPoints", "SchoolYearId", "UpdatedAt" },
+                table: "Target",
+                columns: new[] { "Id", "Label", "Title" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), "Wzorowe", true, 200, 51, 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 2, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), "Bardzo dobre", true, 50, 41, 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 3, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), "Dobre", true, 40, 31, 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 4, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), "Poprawne", true, 30, 21, 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 5, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), "Nieodpowiednie", true, 20, 11, 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 6, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), "Naganne", true, 10, 0, 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) }
-                });
-
-            migrationBuilder.InsertData(
-                table: "CalendarEventTypes",
-                columns: new[] { "Id", "CalendarColorId", "CreatedAt", "IsActive", "Name", "UpdatedAt" },
-                values: new object[,]
-                {
-                    { 1, 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Sprawdzian", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 2, 2, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Kartkówka", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 3, 3, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Zadanie domowe", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 4, 4, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Inne", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) }
+                    { 1, "WebAdmin", "Administrator - strona internetowa" },
+                    { 2, "MobileTeacher", "Nauczyciel - aplikacja mobilna" }
                 });
 
             migrationBuilder.InsertData(
@@ -1035,6 +892,28 @@ namespace Data.Migrations
                 {
                     { 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "A", 1, 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
                     { 2, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "C", 8, 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Pages",
+                columns: new[] { "Id", "Link", "Position", "TargetId", "Title" },
+                values: new object[,]
+                {
+                    { 1, "/admin/dashboard", 1, 1, "Pulpit" },
+                    { 2, "/admin/announcements", 2, 1, "Ogłoszenia" },
+                    { 3, "/admin/attendance", 3, 1, "Frekwencja" },
+                    { 4, "/admin/grades", 4, 1, "Oceny" },
+                    { 5, "/admin/classes", 5, 1, "Klasy" },
+                    { 6, "/admin/school-years", 6, 1, "Rok szkolny" },
+                    { 7, "/admin/users", 7, 1, "Użytkownicy" },
+                    { 8, "/admin/roles", 8, 1, "Role" },
+                    { 9, "/admin/subjects", 9, 1, "Przedmioty" },
+                    { 10, "/admin/schedules", 10, 1, "Plany zajęć" },
+                    { 11, "/admin/cms", 11, 1, "CMS" },
+                    { 12, "/teacher/dashboard", 1, 2, "Pulpit" },
+                    { 13, "/teacher/classes", 2, 2, "Klasy" },
+                    { 14, "/teacher/schedule", 3, 2, "Plan zajęć" },
+                    { 15, "/teacher/announcements", 4, 2, "Ogłoszenia" }
                 });
 
             migrationBuilder.InsertData(
@@ -1080,51 +959,6 @@ namespace Data.Migrations
                 name: "IX_Attendances_StudentId",
                 table: "Attendances",
                 column: "StudentId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_BehaviorGradeRanges_SchoolYearId",
-                table: "BehaviorGradeRanges",
-                column: "SchoolYearId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_BehaviorNotes_BehaviorNoteTypeId",
-                table: "BehaviorNotes",
-                column: "BehaviorNoteTypeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_BehaviorNotes_SemesterId",
-                table: "BehaviorNotes",
-                column: "SemesterId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_BehaviorNotes_StudentId",
-                table: "BehaviorNotes",
-                column: "StudentId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_BehaviorNotes_TeacherId",
-                table: "BehaviorNotes",
-                column: "TeacherId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CalendarEvents_CalendarEventTypeId",
-                table: "CalendarEvents",
-                column: "CalendarEventTypeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CalendarEvents_ClassId",
-                table: "CalendarEvents",
-                column: "ClassId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CalendarEvents_ClassSubjectId",
-                table: "CalendarEvents",
-                column: "ClassSubjectId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CalendarEventTypes_CalendarColorId",
-                table: "CalendarEventTypes",
-                column: "CalendarColorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Classes_SchoolYearId",
@@ -1219,6 +1053,16 @@ namespace Data.Migrations
                 column: "TeacherId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_PageContents_PageId",
+                table: "PageContents",
+                column: "PageId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Pages_TargetId",
+                table: "Pages",
+                column: "TargetId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ParentStudents_ParentId_StudentId",
                 table: "ParentStudents",
                 columns: new[] { "ParentId", "StudentId" },
@@ -1311,22 +1155,19 @@ namespace Data.Migrations
                 name: "AnnouncementReads");
 
             migrationBuilder.DropTable(
-                name: "BehaviorGradeRanges");
-
-            migrationBuilder.DropTable(
-                name: "BehaviorNotes");
-
-            migrationBuilder.DropTable(
-                name: "CalendarEvents");
-
-            migrationBuilder.DropTable(
                 name: "ClassStudents");
+
+            migrationBuilder.DropTable(
+                name: "ClassSubjects");
 
             migrationBuilder.DropTable(
                 name: "Excuses");
 
             migrationBuilder.DropTable(
                 name: "Grades");
+
+            migrationBuilder.DropTable(
+                name: "PageContents");
 
             migrationBuilder.DropTable(
                 name: "ParentStudents");
@@ -1344,15 +1185,6 @@ namespace Data.Migrations
                 name: "Announcements");
 
             migrationBuilder.DropTable(
-                name: "BehaviorNoteTypes");
-
-            migrationBuilder.DropTable(
-                name: "CalendarEventTypes");
-
-            migrationBuilder.DropTable(
-                name: "ClassSubjects");
-
-            migrationBuilder.DropTable(
                 name: "Attendances");
 
             migrationBuilder.DropTable(
@@ -1362,19 +1194,22 @@ namespace Data.Migrations
                 name: "GradeTypes");
 
             migrationBuilder.DropTable(
+                name: "Pages");
+
+            migrationBuilder.DropTable(
                 name: "Roles");
 
             migrationBuilder.DropTable(
                 name: "Semesters");
 
             migrationBuilder.DropTable(
-                name: "CalendarColors");
-
-            migrationBuilder.DropTable(
                 name: "AttendanceTypes");
 
             migrationBuilder.DropTable(
                 name: "Lessons");
+
+            migrationBuilder.DropTable(
+                name: "Target");
 
             migrationBuilder.DropTable(
                 name: "Classes");

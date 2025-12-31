@@ -191,22 +191,6 @@ namespace Data.Migrations
                     END
                 END
             ");
-
-            // wyliczanie oceny z zachowania
-            migrationBuilder.Sql(@"
-               CREATE OR ALTER FUNCTION [dbo].[fn_GetBehaviorGradeName] (@Points INT, @SchoolYearId INT)
-                RETURNS NVARCHAR(50)
-                AS
-                BEGIN
-                    DECLARE @GradeName NVARCHAR(50);
-                    SELECT TOP 1 @GradeName = GradeName
-                    FROM BehaviorGradeRanges
-                    WHERE SchoolYearId = @SchoolYearId 
-                      AND @Points BETWEEN MinPoints AND MaxPoints
-                      AND IsActive = 1;
-                    RETURN ISNULL(@GradeName, 'Nieklasyfikowany');
-                END
-            ");
         }
 
         /// <inheritdoc />
@@ -218,7 +202,6 @@ namespace Data.Migrations
             migrationBuilder.Sql("DROP PROCEDURE IF EXISTS [dbo].[sp_User_Teacher_SoftDelete]");
             migrationBuilder.Sql("DROP PROCEDURE IF EXISTS [dbo].[sp_InitializeLessonAttendance]");
             migrationBuilder.Sql("DROP PROCEDURE IF EXISTS [dbo].[sp_GenerateLessonsFromSchedule]");
-            migrationBuilder.Sql("DROP FUNCTION IF EXISTS [dbo].[fn_GetBehaviorGradeName]");
         }
     }
 }

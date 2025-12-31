@@ -17,16 +17,14 @@ namespace Data.Data.Entities
 
         public int AnnouncementId { get; set; }
         [ForeignKey(nameof(AnnouncementId))]
-        public virtual Announcement Announcement { get; set; } = null!;
+        public virtual Announcement? Announcement { get; set; } = null!;
 
         public int UserId { get; set; }
         [ForeignKey(nameof(UserId))]
-        public virtual User User { get; set; } = null!;
+        public virtual User? User { get; set; } = null!;
 
-        [Required]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        [Required]
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
         public bool IsActive { get; set; } = true;

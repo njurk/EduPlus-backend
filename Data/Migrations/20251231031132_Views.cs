@@ -86,46 +86,6 @@ namespace Data.Migrations
                 WHERE a.IsActive = 1 AND l.IsActive = 1
             ");
 
-            // ViewBehaviorDetails
-            migrationBuilder.Sql(@"
-                CREATE OR ALTER VIEW [dbo].[vw_BehaviorDetails] AS
-                SELECT 
-                    bn.Id AS NoteId,
-                    bn.StudentId,
-                    bn.Points,
-                    bn.Description,
-                    bnt.IsPositive,
-                    bnt.Name AS CategoryName,
-                    (t.FirstName + ' ' + t.LastName) AS TeacherName,
-                    bn.CreatedAt AS Date,
-                    bn.SemesterId
-                FROM BehaviorNotes bn
-                JOIN BehaviorNoteTypes bnt ON bn.BehaviorNoteTypeId = bnt.Id
-                JOIN Users t ON bn.TeacherId = t.Id
-                WHERE bn.IsActive = 1 AND t.IsActive = 1
-            ");
-
-            // ViewUpcomingEvent
-            migrationBuilder.Sql(@"
-                CREATE OR ALTER VIEW [dbo].[vw_UpcomingEvents] AS
-                SELECT 
-                    ce.Id AS EventId,
-                    ce.Title,
-                    ce.Description,
-                    ce.StartDateTime,
-                    cet.Name AS TypeName,
-                    cc.Code AS ColorCode,
-                    ce.ClassId,
-                    ce.ClassSubjectId,
-                    s.Name AS SubjectName
-                FROM CalendarEvents ce
-                JOIN CalendarEventTypes cet ON ce.CalendarEventTypeId = cet.Id
-                JOIN CalendarColors cc ON cet.CalendarColorId = cc.Id
-                LEFT JOIN ClassSubjects cs ON ce.ClassSubjectId = cs.Id
-                LEFT JOIN Subjects s ON cs.SubjectId = s.Id
-                WHERE ce.IsActive = 1
-            ");
-
             // ViewAnnouncementDetails
             migrationBuilder.Sql(@"
                 CREATE OR ALTER VIEW [dbo].[vw_AnnouncementDetails] AS
@@ -213,30 +173,6 @@ namespace Data.Migrations
                 WHERE e.IsActive = 1 AND e.IsAccepted = 0 AND s.IsActive = 1 AND p.IsActive = 1
             ");
 
-            // ViewBehaviorGradeSummary
-            migrationBuilder.Sql(@"
-                CREATE OR ALTER VIEW [dbo].[vw_BehaviorGradeSummary] AS
-                SELECT 
-                    bn.StudentId,
-                    (u.FirstName + ' ' + u.LastName) AS StudentName,
-                    bn.SemesterId,
-                    sem.Name AS SemesterName,
-                    sy.Name AS SchoolYearName,
-                    SUM(bn.Points) AS TotalPoints,
-                    (SELECT TOP 1 bgr.GradeName 
-                     FROM BehaviorGradeRanges bgr 
-                     WHERE bgr.SchoolYearId = sy.Id 
-                       AND SUM(bn.Points) BETWEEN bgr.MinPoints AND bgr.MaxPoints
-                       AND bgr.IsActive = 1
-                    ) AS CalculatedGradeName
-                FROM BehaviorNotes bn
-                JOIN Users u ON bn.StudentId = u.Id
-                JOIN Semesters sem ON bn.SemesterId = sem.Id
-                JOIN SchoolYears sy ON sem.SchoolYearId = sy.Id
-                WHERE bn.IsActive = 1 AND u.IsActive = 1
-                GROUP BY bn.StudentId, u.FirstName, u.LastName, bn.SemesterId, sem.Name, sy.Id, sy.Name
-            ");
-
             // ViewTeacherClass
             migrationBuilder.Sql(@"
                 CREATE OR ALTER VIEW [dbo].[vw_TeacherClasses] AS
@@ -262,13 +198,10 @@ namespace Data.Migrations
             migrationBuilder.Sql("DROP VIEW IF EXISTS [dbo].[vw_LessonSchedule]");
             migrationBuilder.Sql("DROP VIEW IF EXISTS [dbo].[vw_GradeDetails]");
             migrationBuilder.Sql("DROP VIEW IF EXISTS [dbo].[vw_AttendanceDetails]");
-            migrationBuilder.Sql("DROP VIEW IF EXISTS [dbo].[vw_BehaviorDetails]");
-            migrationBuilder.Sql("DROP VIEW IF EXISTS [dbo].[vw_UpcomingEvents]");
             migrationBuilder.Sql("DROP VIEW IF EXISTS [dbo].[vw_AnnouncementDetails]");
             migrationBuilder.Sql("DROP VIEW IF EXISTS [dbo].[vw_ClassStudentDetails]");
             migrationBuilder.Sql("DROP VIEW IF EXISTS [dbo].[vw_StudentAttendanceSummary]");
             migrationBuilder.Sql("DROP VIEW IF EXISTS [dbo].[vw_PendingExcuses]");
-            migrationBuilder.Sql("DROP VIEW IF EXISTS [dbo].[vw_BehaviorGradeSummary]");
             migrationBuilder.Sql("DROP VIEW IF EXISTS [dbo].[vw_TeacherClasses]");
         }
     }

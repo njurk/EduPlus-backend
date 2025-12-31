@@ -12,21 +12,14 @@ namespace Data.Data.Entities
     {
         [Key]
         public int Id { get; set; }
-
         public int ClassId { get; set; }
         [ForeignKey(nameof(ClassId))]
-        public virtual Class Class { get; set; } = null!;
-
+        public virtual Class? Class { get; set; } = null!;
         public int SubjectId { get; set; }
         [ForeignKey(nameof(SubjectId))]
-        public virtual Subject Subject { get; set; } = null!;
-
+        public virtual Subject? Subject { get; set; } = null!;
         public bool IsActive { get; set; } = true;
-
-        [Required]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
-        [Required]
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     }
 }

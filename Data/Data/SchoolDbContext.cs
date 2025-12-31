@@ -1,4 +1,5 @@
-﻿using Data.Data.Entities;
+﻿using Data.Data.CMS;
+using Data.Data.Entities;
 using Data.Data.EntitiesForView;
 using Microsoft.EntityFrameworkCore;
 using System.Drawing;
@@ -16,9 +17,6 @@ namespace Data.Data
         public DbSet<AnnouncementRead> AnnouncementReads { get; set; } = null!;
         public DbSet<Attendance> Attendances { get; set; } = null!;
         public DbSet<AttendanceType> AttendanceTypes { get; set; } = null!;
-        public DbSet<BehaviorGradeRange> BehaviorGradeRanges { get; set; } = null!;
-        public DbSet<BehaviorNote> BehaviorNotes { get; set; } = null!;
-        public DbSet<BehaviorNoteType> BehaviorNoteTypes { get; set; } = null!;
         public DbSet<Class> Classes { get; set; } = null!;
         public DbSet<Classroom> Classrooms { get; set; } = null!;
         public DbSet<ClassStudent> ClassStudents { get; set; } = null!;
@@ -38,9 +36,6 @@ namespace Data.Data
         public DbSet<User> Users { get; set; } = null!;
         public DbSet<UserRole> UserRoles { get; set; } = null!;
         public DbSet<WeeklySchedule> WeeklySchedules { get; set; } = null!;
-        public DbSet<CalendarColor> CalendarColors { get; set; } = null!;
-        public DbSet<CalendarEventType> CalendarEventTypes { get; set; } = null!;
-        public DbSet<CalendarEvent> CalendarEvents { get; set; } = null!;
         public DbSet<ParentStudent> ParentStudents { get; set; } = null!;
 
         // widoki
@@ -48,13 +43,12 @@ namespace Data.Data
         public DbSet<ViewLessonSchedule> ViewLessonSchedules { get; set; } = null!;
         public DbSet<ViewGradeDetails> ViewGradeDetails { get; set; } = null!;
         public DbSet<ViewAttendanceDetails> ViewAttendanceDetails { get; set; } = null!;
-        public DbSet<ViewBehaviorDetails> ViewBehaviorDetails { get; set; } = null!;
-        public DbSet<ViewUpcomingEvent> ViewUpcomingEvents { get; set; } = null!;
         public DbSet<ViewAnnouncementDetails> ViewAnnouncementDetails { get; set; } = null!;
-        public DbSet<ViewBehaviorGradeSummary> ViewBehaviorGradeSummaries { get; set; } = null!;
         public DbSet<ViewTeacherClass> ViewTeacherClasses { get; set; } = null!;
         public DbSet<ViewClassStudentDetails> ViewClassStudentDetails { get; set; } = null!;
         public DbSet<ViewPendingExcuse> ViewPendingExcuses { get; set; } = null!;
+        public DbSet<Page> Pages { get; set; } = null!;
+        public DbSet<PageContent> PageContents { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -142,12 +136,6 @@ namespace Data.Data
                 e.HasOne(g => g.Teacher).WithMany().OnDelete(DeleteBehavior.Restrict);
             });
 
-            modelBuilder.Entity<BehaviorNote>(e =>
-            {
-                e.HasOne(n => n.Student).WithMany().OnDelete(DeleteBehavior.Restrict);
-                e.HasOne(n => n.Teacher).WithMany().OnDelete(DeleteBehavior.Restrict);
-            });
-
             modelBuilder.Entity<Announcement>(e =>
             {
                 e.HasOne(a => a.Author).WithMany().OnDelete(DeleteBehavior.Restrict);
@@ -195,16 +183,36 @@ namespace Data.Data
             modelBuilder.Entity<ViewAnnouncementDetails>().HasNoKey().ToView("vw_AnnouncementDetails");
             modelBuilder.Entity<ViewLessonSchedule>().HasNoKey().ToView("vw_LessonSchedule");
             modelBuilder.Entity<ViewAttendanceDetails>().HasNoKey().ToView("vw_AttendanceDetails");
-            modelBuilder.Entity<ViewBehaviorDetails>().HasNoKey().ToView("vw_BehaviorDetails");
-            modelBuilder.Entity<ViewUpcomingEvent>().HasNoKey().ToView("vw_UpcomingEvents");
-            modelBuilder.Entity<ViewBehaviorGradeSummary>().HasNoKey().ToView("vw_BehaviorGradeSummary");
             modelBuilder.Entity<ViewTeacherClass>().HasNoKey().ToView("vw_TeacherClasses");
             modelBuilder.Entity<ViewClassStudentDetails>().HasNoKey().ToView("vw_ClassStudentDetails");
             modelBuilder.Entity<ViewPendingExcuse>().HasNoKey().ToView("vw_PendingExcuses");
 
-            // seedowanie tabel słownikowych (reszta w DataSeeder)
+            // seedowanie tabel (reszta w DataSeeder)
+            modelBuilder.Entity<Target>().HasData(
+                new Target { Id = 1, Label = "WebAdmin", Title = "Administrator - strona internetowa" },
+                new Target { Id = 2, Label = "MobileTeacher", Title = "Nauczyciel - aplikacja mobilna" }
+            );
+
+            modelBuilder.Entity<Page>().HasData(
+                new Page { Id = 1, TargetId = 1, Position = 1, Title = "Pulpit", Link = "/admin/dashboard" },
+                new Page { Id = 2, TargetId = 1, Position = 2, Title = "Ogłoszenia", Link = "/admin/announcements" },
+                new Page { Id = 3, TargetId = 1, Position = 3, Title = "Frekwencja", Link = "/admin/attendance" },
+                new Page { Id = 4, TargetId = 1, Position = 4, Title = "Oceny", Link = "/admin/grades" },
+                new Page { Id = 5, TargetId = 1, Position = 5, Title = "Klasy", Link = "/admin/classes" },
+                new Page { Id = 6, TargetId = 1, Position = 6, Title = "Rok szkolny", Link = "/admin/school-years" },
+                new Page { Id = 7, TargetId = 1, Position = 7, Title = "Użytkownicy", Link = "/admin/users" },
+                new Page { Id = 8, TargetId = 1, Position = 8, Title = "Role", Link = "/admin/roles" },
+                new Page { Id = 9, TargetId = 1, Position = 9, Title = "Przedmioty", Link = "/admin/subjects" },
+                new Page { Id = 10, TargetId = 1, Position = 10, Title = "Plany zajęć", Link = "/admin/schedules" },
+                new Page { Id = 11, TargetId = 1, Position = 11, Title = "CMS", Link = "/admin/cms" },
+                new Page { Id = 12, TargetId = 2, Position = 1, Title = "Pulpit", Link = "/teacher/dashboard" },
+                new Page { Id = 13, TargetId = 2, Position = 2, Title = "Klasy", Link = "/teacher/classes" },
+                new Page { Id = 14, TargetId = 2, Position = 3, Title = "Plan zajęć", Link = "/teacher/schedule" },
+                new Page { Id = 15, TargetId = 2, Position = 4, Title = "Ogłoszenia", Link = "/teacher/announcements" }
+            );
+
             modelBuilder.Entity<Role>().HasData(
-                new Role { Id = 1, Name = "Admin", IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
+                new Role { Id = 1, Name = "Administrator", IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
                 new Role { Id = 2, Name = "Nauczyciel", IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
                 new Role { Id = 3, Name = "Rodzic", IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
                 new Role { Id = 4, Name = "Uczeń", IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime }
@@ -238,20 +246,6 @@ namespace Data.Data
                 new GradeCategory { Id = 3, Name = "Odpowiedź ustna", Weight = 1, IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
                 new GradeCategory { Id = 4, Name = "Aktywność", Weight = 1, IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
                 new GradeCategory { Id = 5, Name = "Zadanie domowe", Weight = 1, IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime }
-            );
-
-            modelBuilder.Entity<BehaviorNoteType>().HasData(
-                new BehaviorNoteType { Id = 1, Name = "Pozytywna", IsPositive = true, DefaultPoints = 5, IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
-                new BehaviorNoteType { Id = 2, Name = "Negatywna", IsPositive = false, DefaultPoints = -5, IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime }
-            );
-
-            modelBuilder.Entity<BehaviorGradeRange>().HasData(
-                new BehaviorGradeRange { Id = 1, SchoolYearId = 1, GradeName = "Wzorowe", MinPoints = 51, MaxPoints = 200, IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
-                new BehaviorGradeRange { Id = 2, SchoolYearId = 1, GradeName = "Bardzo dobre", MinPoints = 41, MaxPoints = 50, IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
-                new BehaviorGradeRange { Id = 3, SchoolYearId = 1, GradeName = "Dobre", MinPoints = 31, MaxPoints = 40, IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
-                new BehaviorGradeRange { Id = 4, SchoolYearId = 1, GradeName = "Poprawne", MinPoints = 21, MaxPoints = 30, IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
-                new BehaviorGradeRange { Id = 5, SchoolYearId = 1, GradeName = "Nieodpowiednie", MinPoints = 11, MaxPoints = 20, IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
-                new BehaviorGradeRange { Id = 6, SchoolYearId = 1, GradeName = "Naganne", MinPoints = 0, MaxPoints = 10, IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime }
             );
 
             modelBuilder.Entity<LessonStatus>().HasData(
@@ -327,20 +321,6 @@ namespace Data.Data
             modelBuilder.Entity<Class>().HasData(
                 new Class { Id = 1, Level = 1, Letter = "A", SchoolYearId = 1, IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
                 new Class { Id = 2, Level = 8, Letter = "C", SchoolYearId = 1, IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime }
-            );
-
-            modelBuilder.Entity<CalendarColor>().HasData(
-                new CalendarColor { Id = 1, Name = "Czerwony", Code = "#FF0000", IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
-                new CalendarColor { Id = 2, Name = "Zielony", Code = "#00FF00", IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
-                new CalendarColor { Id = 3, Name = "Niebieski", Code = "#0000FF", IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
-                new CalendarColor { Id = 4, Name = "Żółty", Code = "#FFFF00", IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime }
-            );
-
-            modelBuilder.Entity<CalendarEventType>().HasData(
-                new CalendarEventType { Id = 1, Name = "Sprawdzian", CalendarColorId = 1, IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
-                new CalendarEventType { Id = 2, Name = "Kartkówka", CalendarColorId = 2, IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
-                new CalendarEventType { Id = 3, Name = "Zadanie domowe", CalendarColorId = 3, IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
-                new CalendarEventType { Id = 4, Name = "Inne", CalendarColorId = 4, IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime }
             );
         }
     }

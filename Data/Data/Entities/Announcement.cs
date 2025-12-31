@@ -23,12 +23,10 @@ namespace Data.Data.Entities
 
         public int AuthorId { get; set; }
         [ForeignKey(nameof(AuthorId))]
-        public virtual User Author { get; set; } = null!;
+        public virtual User? Author { get; set; } = null!;
 
-        [Required]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        [Required]
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     }
 }

@@ -12,43 +12,30 @@ namespace Data.Data.Entities
     {
         [Key]
         public int Id { get; set; }
-
         public int SchoolYearId { get; set; }
         [ForeignKey(nameof(SchoolYearId))]
-        public virtual SchoolYear SchoolYear { get; set; } = null!;
-
+        public virtual SchoolYear? SchoolYear { get; set; } = null!;
         public int SemesterId { get; set; }
         [ForeignKey(nameof(SemesterId))]
-        public virtual Semester Semester { get; set; } = null!;
-
+        public virtual Semester? Semester { get; set; } = null!;
         public int ClassId { get; set; }
         [ForeignKey(nameof(ClassId))]
-        public virtual Class Class { get; set; } = null!;
-
+        public virtual Class? Class { get; set; } = null!;
         public int SubjectId { get; set; }
         [ForeignKey(nameof(SubjectId))]
-        public virtual Subject Subject { get; set; } = null!;
-
+        public virtual Subject? Subject { get; set; } = null!;
         public int TeacherId { get; set; }
         [ForeignKey(nameof(TeacherId))]
-        public virtual User Teacher { get; set; } = null!;
-
+        public virtual User? Teacher { get; set; } = null!;
         public int ClassroomId { get; set; }
         [ForeignKey(nameof(ClassroomId))]
-        public virtual Classroom Classroom { get; set; } = null!;
-
+        public virtual Classroom? Classroom { get; set; } = null!;
         public int DayOfWeek { get; set; }
-
         public int LessonHourId { get; set; }
         [ForeignKey(nameof(LessonHourId))]
-        public virtual LessonHour LessonHour { get; set; } = null!;
-
+        public virtual LessonHour? LessonHour { get; set; } = null!;
         public bool IsActive { get; set; } = true;
-
-        [Required]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
-        [Required]
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     }
 }
