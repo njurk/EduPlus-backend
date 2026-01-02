@@ -121,6 +121,9 @@ namespace BusinessLogic.Seeders
                 Email = "admin@szkola.edu.pl",
                 Password = passwordHashService.HashPassword(password),
                 Phone = "111111111",
+                Street = "Szkolna 1",
+                City = "Warszawa",
+                PostalCode = "00-001",
                 IsActive = true,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
@@ -136,7 +139,10 @@ namespace BusinessLogic.Seeders
                     LastName = t.LastName,
                     Email = $"{t.EmailPrefix}@szkola.edu.pl",
                     Password = passwordHashService.HashPassword(password),
-                    Phone = $"600100{t.SubjectId:000}",
+                    Phone = $"600100{t.SubjectId:00}",
+                    Street = $"Nauczycielska {t.SubjectId}",
+                    City = "Warszawa",
+                    PostalCode = "00-002",
                     IsActive = true,
                     CreatedAt = DateTime.UtcNow,
                     UpdatedAt = DateTime.UtcNow
@@ -173,19 +179,26 @@ namespace BusinessLogic.Seeders
             _context.UserRoles.AddRange(staffRoles);
             _context.SaveChanges();
 
-            // dodanie rodziców i uczniów obydwu klas
             var allStudentsData = GetClass1StudentsData().Concat(GetClass2StudentsData()).ToList();
             int phoneCounter = 0;
+            int addressCounter = 1;
 
             foreach (var s in allStudentsData)
             {
+                var street = $"Kwiatowa {addressCounter}";
+                var city = "Warszawa";
+                var postalCode = $"00-{100 + addressCounter}";
+
                 var student = new User
                 {
                     FirstName = s.StudentFirstName,
                     LastName = s.LastName,
                     Email = $"{s.StudentPrefix}@szkola.edu.pl",
                     Password = passwordHashService.HashPassword(password),
-                    Phone = $"700{phoneCounter:00000}",
+                    Phone = $"700{phoneCounter:0000}",
+                    Street = street,
+                    City = city,
+                    PostalCode = postalCode,
                     IsActive = true,
                     CreatedAt = DateTime.UtcNow,
                     UpdatedAt = DateTime.UtcNow
@@ -197,7 +210,10 @@ namespace BusinessLogic.Seeders
                     LastName = s.LastName,
                     Email = $"{s.ParentPrefix}@szkola.edu.pl",
                     Password = passwordHashService.HashPassword(password),
-                    Phone = $"800{phoneCounter:00000}",
+                    Phone = $"800{phoneCounter:0000}",
+                    Street = street,
+                    City = city,
+                    PostalCode = postalCode,
                     IsActive = true,
                     CreatedAt = DateTime.UtcNow,
                     UpdatedAt = DateTime.UtcNow
@@ -234,6 +250,7 @@ namespace BusinessLogic.Seeders
                 });
 
                 phoneCounter++;
+                addressCounter++;
             }
 
             _context.SaveChanges();
@@ -241,7 +258,7 @@ namespace BusinessLogic.Seeders
 
         private void SeedClasses()
         {
-            // przypisanie uczniów do klasy 1
+            // klasa 1
             var class1Data = GetClass1StudentsData();
             var class1Emails = class1Data.Select(s => $"{s.StudentPrefix}@szkola.edu.pl").ToList();
             var students1 = _context.Users.Where(u => class1Emails.Contains(u.Email)).ToList();
@@ -256,7 +273,7 @@ namespace BusinessLogic.Seeders
                     UpdatedAt = DateTime.UtcNow
                 });
 
-            // przypisanie uczniów do klasy 2
+            // klasa 2
             var class2Data = GetClass2StudentsData();
             var class2Emails = class2Data.Select(s => $"{s.StudentPrefix}@szkola.edu.pl").ToList();
             var students2 = _context.Users.Where(u => class2Emails.Contains(u.Email)).ToList();
@@ -285,7 +302,7 @@ namespace BusinessLogic.Seeders
                 }
             }
 
-            // przedmioty klasy 1
+            // przedmioty 1
             var subjectsClass1 = new[] { 1, 2, 3, 4, 5, 13, 14, 16 };
             foreach (var subjId in subjectsClass1)
             {
@@ -311,7 +328,7 @@ namespace BusinessLogic.Seeders
                 }
             }
 
-            // przedmioty klasy 2
+            // przedmioty 2
             var subjectsClass2 = new[] { 1, 2, 3, 5, 6, 8, 9, 10, 11, 20 };
             foreach (var subjId in subjectsClass2)
             {

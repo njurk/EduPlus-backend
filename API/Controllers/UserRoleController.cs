@@ -36,7 +36,6 @@ public class UserRoleController : ControllerBase
     public async Task<IActionResult> Create(UserRole entity)
     {
         var exists = await _context.UserRoles
-            .IgnoreQueryFilters()
             .FirstOrDefaultAsync(x => x.UserId == entity.UserId && x.RoleId == entity.RoleId);
 
         if (exists != null)
@@ -59,14 +58,24 @@ public class UserRoleController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
-        var item = await _context.UserRoles.FindAsync(id);
-        if (item == null) return NotFound();
+        var roleToDelete = await _context.UserRoles
+            .IgnoreQueryFilters()
+            .FirstOrDefaultAsync(x => x.Id == id);
 
-        item.IsActive = false;
-        item.UpdatedAt = DateTime.UtcNow;
+        if (roleToDelete == null || !roleToDelete.IsActive) return NotFound();
+
+        var activeRolesCount = await _context.UserRoles
+            .CountAsync(ur => ur.UserId == roleToDelete.UserId && ur.IsActive && ur.Id != id);
+
+        if (activeRolesCount == 0)
+        {
+            return BadRequest("Użytkownik musi posiadać rolę");
+        }
+
+        roleToDelete.IsActive = false;
+        roleToDelete.UpdatedAt = DateTime.UtcNow;
 
         await _context.SaveChangesAsync();
-
         return NoContent();
     }
 }

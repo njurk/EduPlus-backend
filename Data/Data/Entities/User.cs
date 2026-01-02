@@ -23,6 +23,9 @@ namespace Data.Data.Entities
         public required string Password { get; set; }
         [MaxLength(20)]
         public string? Phone { get; set; }
+        public string? Street { get; set; }
+        public string? City { get; set; }
+        public string? PostalCode { get; set; }
         public bool IsActive { get; set; } = true;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;

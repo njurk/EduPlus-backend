@@ -58,19 +58,6 @@ namespace Data.Data
 
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
-                // query filter na soft delete
-                var isActiveProperty = entityType.FindProperty("IsActive");
-                if (isActiveProperty != null && isActiveProperty.ClrType == typeof(bool))
-                {
-                    var parameter = Expression.Parameter(entityType.ClrType, "e");
-                    var propertyAccess = Expression.Property(parameter, isActiveProperty.PropertyInfo!);
-                    var trueConstant = Expression.Constant(true);
-                    var equality = Expression.Equal(propertyAccess, trueConstant);
-                    var lambda = Expression.Lambda(equality, parameter);
-
-                    modelBuilder.Entity(entityType.ClrType).HasQueryFilter(lambda);
-                }
-
                 // automatyczne timestampy
                 var createdAt = entityType.FindProperty("CreatedAt");
                 if (createdAt != null)
