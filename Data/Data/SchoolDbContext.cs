@@ -49,6 +49,7 @@ namespace Data.Data
         public DbSet<ViewPendingExcuse> ViewPendingExcuses { get; set; } = null!;
         public DbSet<Page> Pages { get; set; } = null!;
         public DbSet<PageContent> PageContents { get; set; } = null!;
+        public DbSet<DashboardStats> DashboardStats { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -173,6 +174,7 @@ namespace Data.Data
             modelBuilder.Entity<ViewTeacherClass>().HasNoKey().ToView("vw_TeacherClasses");
             modelBuilder.Entity<ViewClassStudentDetails>().HasNoKey().ToView("vw_ClassStudentDetails");
             modelBuilder.Entity<ViewPendingExcuse>().HasNoKey().ToView("vw_PendingExcuses");
+            modelBuilder.Entity<DashboardStats>().HasNoKey().ToView("vw_DashboardStats");
 
             // seedowanie tabel (reszta w DataSeeder)
             modelBuilder.Entity<Target>().HasData(

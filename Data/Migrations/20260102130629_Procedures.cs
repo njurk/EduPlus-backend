@@ -58,14 +58,11 @@ namespace Data.Migrations
                 BEGIN
                     SET NOCOUNT ON;
                     DECLARE @Now DATETIME = GETUTCDATE();
-
                     MERGE Attendances AS target
                     USING (SELECT @LessonId AS LessonId, @StudentId AS StudentId) AS source
                     ON (target.LessonId = source.LessonId AND target.StudentId = source.StudentId AND target.IsActive = 1)
-                    
                     WHEN MATCHED THEN
                         UPDATE SET AttendanceTypeId = @AttendanceTypeId, UpdatedAt = @Now
-                        
                     WHEN NOT MATCHED THEN
                         INSERT (LessonId, StudentId, AttendanceTypeId, IsActive, CreatedAt, UpdatedAt)
                         VALUES (@LessonId, @StudentId, @AttendanceTypeId, 1, @Now, @Now);
@@ -86,11 +83,9 @@ namespace Data.Migrations
                         UPDATE Announcements
                         SET IsActive = 0, UpdatedAt = GETUTCDATE()
                         WHERE Id = @AnnouncementId;
-
                         UPDATE AnnouncementReads
                         SET IsActive = 0, UpdatedAt = GETUTCDATE()
                         WHERE AnnouncementId = @AnnouncementId;
-
                         COMMIT TRANSACTION;
                     END TRY
                     BEGIN CATCH
@@ -115,7 +110,6 @@ namespace Data.Migrations
                         UPDATE Users SET IsActive = 0, UpdatedAt = @Now WHERE Id = @TeacherId;
                         UPDATE TeacherClassSubjects SET IsActive = 0, UpdatedAt = @Now WHERE TeacherId = @TeacherId;
                         UPDATE WeeklySchedules SET IsActive = 0, UpdatedAt = @Now WHERE TeacherId = @TeacherId;
-
                         COMMIT TRANSACTION;
                     END TRY
                     BEGIN CATCH
@@ -137,12 +131,7 @@ namespace Data.Migrations
                     BEGIN
                         INSERT INTO Attendances (LessonId, StudentId, AttendanceTypeId, IsActive, CreatedAt, UpdatedAt)
                         SELECT 
-                            l.Id,
-                            cs.StudentId,
-                            1, 
-                            1,
-                            @Now,
-                            @Now
+                            l.Id, cs.StudentId, 1, 1, @Now, @Now
                         FROM Lessons l
                         JOIN ClassStudents cs ON l.ClassId = cs.ClassId
                         WHERE l.Id = @LessonId 
@@ -169,7 +158,6 @@ namespace Data.Migrations
                     BEGIN
                         DECLARE @DayOfWeek INT;
                         SET @DayOfWeek = (DATEPART(dw, @CurrentDate) + @@DATEFIRST - 2) % 7 + 1;
-
                         INSERT INTO Lessons 
                         (SubjectId, TeacherId, ClassId, ClassroomId, LessonHourId, Topic, StatusId, IsActive, [Date], CreatedAt, UpdatedAt)
                         SELECT 

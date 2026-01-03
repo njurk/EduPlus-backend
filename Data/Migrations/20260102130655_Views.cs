@@ -10,6 +10,42 @@ namespace Data.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            // statystyki dla dashboardu
+            migrationBuilder.Sql(@"
+                CREATE OR ALTER VIEW [dbo].[vw_DashboardStats] AS
+                SELECT
+                    (SELECT COUNT(*) FROM Users WHERE IsActive = 1) AS TotalUsers,
+                    (SELECT COUNT(*) FROM UserRoles WHERE RoleId = 4 AND IsActive = 1) AS TotalStudents,
+                    (SELECT COUNT(*) FROM UserRoles WHERE RoleId = 2 AND IsActive = 1) AS TotalTeachers,
+                    (SELECT COUNT(*) FROM Classes WHERE IsActive = 1) AS TotalClasses,
+                    COALESCE(
+                        CAST(
+                            (SELECT COUNT(*) FROM Attendances a 
+                             JOIN Lessons l ON a.LessonId = l.Id 
+                             WHERE a.IsActive = 1 
+                             AND CAST(l.Date AS DATE) = CAST(GETDATE() AS DATE) 
+                             AND a.AttendanceTypeId = 1)
+                        AS FLOAT) 
+                        / NULLIF(
+                            (SELECT COUNT(*) FROM Attendances a 
+                             JOIN Lessons l ON a.LessonId = l.Id 
+                             WHERE a.IsActive = 1 
+                             AND CAST(l.Date AS DATE) = CAST(GETDATE() AS DATE))
+                        , 0) 
+                        * 100
+                    , 0) AS AvgAttendanceToday,
+                    COALESCE(
+                        (SELECT AVG(CAST(g.GradeTypeId AS FLOAT))
+                         FROM Grades g
+                         INNER JOIN Semesters s ON g.Date >= s.StartDate AND g.Date <= s.EndDate
+                         WHERE g.IsActive = 1
+                           AND s.IsActive = 1
+                           AND CAST(GETDATE() AS DATE) >= s.StartDate 
+                           AND CAST(GETDATE() AS DATE) <= s.EndDate
+                        )
+                    , 0) AS AvgGradeGlobal
+            ");
+
             // ViewLessonSchedule
             migrationBuilder.Sql(@"
                 CREATE OR ALTER VIEW [dbo].[vw_LessonSchedule] AS
