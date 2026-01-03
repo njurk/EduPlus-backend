@@ -26,7 +26,6 @@ public class TeacherClassSubjectController : ControllerBase
     {
         var item = await _context.TeacherClassSubjects.FindAsync(id);
         if (item == null) return NotFound();
-        item.IsActive = false;
         item.UpdatedAt = DateTime.UtcNow;
         await _context.SaveChangesAsync();
         return NoContent();

@@ -6,7 +6,6 @@
         public int TotalStudents { get; set; }
         public int TotalTeachers { get; set; }
         public int TotalClasses { get; set; }
-        public double AvgAttendanceToday { get; set; }
         public double AvgGradeGlobal { get; set; }
     }
 }

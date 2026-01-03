@@ -11,13 +11,9 @@ namespace Data.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            // funkcja obliczająca średnią ważoną z przedmiotu
             migrationBuilder.Sql(@"
                 CREATE OR ALTER FUNCTION [dbo].[fn_CalculateWeightedAverage]
-                (
-                    @StudentId INT,
-                    @SubjectId INT
-                )
+                (@StudentId INT, @SubjectId INT)
                 RETURNS DECIMAL(4, 2)
                 AS
                 BEGIN
@@ -37,22 +33,16 @@ namespace Data.Migrations
                       AND gt.IsActive = 1
                       AND gc.IsActive = 1;
 
-                    IF @SumWeights IS NULL OR @SumWeights = 0
-                        RETURN 0.00;
-
+                    IF @SumWeights IS NULL OR @SumWeights = 0 RETURN 0.00;
+                    
                     SET @Result = @SumProducts / @SumWeights;
-
                     RETURN CAST(@Result AS DECIMAL(4, 2));
                 END;
             ");
 
-            // funkcja obliczania procentu frekwencji
             migrationBuilder.Sql(@"
                 CREATE OR ALTER FUNCTION [dbo].[fn_CalculateAttendancePercentage]
-                (
-                    @StudentId INT,
-                    @SubjectId INT
-                )
+                (@StudentId INT, @SubjectId INT)
                 RETURNS DECIMAL(5, 2)
                 AS
                 BEGIN

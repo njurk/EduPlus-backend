@@ -10,49 +10,28 @@ namespace Data.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            // statystyki dla dashboardu
             migrationBuilder.Sql(@"
                 CREATE OR ALTER VIEW [dbo].[vw_DashboardStats] AS
                 SELECT
                     (SELECT COUNT(*) FROM Users WHERE IsActive = 1) AS TotalUsers,
-                    (SELECT COUNT(*) FROM UserRoles WHERE RoleId = 4 AND IsActive = 1) AS TotalStudents,
-                    (SELECT COUNT(*) FROM UserRoles WHERE RoleId = 2 AND IsActive = 1) AS TotalTeachers,
+                    (SELECT COUNT(*) FROM UserRoles WHERE RoleId = 4) AS TotalStudents,
+                    (SELECT COUNT(*) FROM UserRoles WHERE RoleId = 2) AS TotalTeachers,
                     (SELECT COUNT(*) FROM Classes WHERE IsActive = 1) AS TotalClasses,
-                    COALESCE(
-                        CAST(
-                            (SELECT COUNT(*) FROM Attendances a 
-                             JOIN Lessons l ON a.LessonId = l.Id 
-                             WHERE a.IsActive = 1 
-                             AND CAST(l.Date AS DATE) = CAST(GETDATE() AS DATE) 
-                             AND a.AttendanceTypeId = 1)
-                        AS FLOAT) 
-                        / NULLIF(
-                            (SELECT COUNT(*) FROM Attendances a 
-                             JOIN Lessons l ON a.LessonId = l.Id 
-                             WHERE a.IsActive = 1 
-                             AND CAST(l.Date AS DATE) = CAST(GETDATE() AS DATE))
-                        , 0) 
-                        * 100
-                    , 0) AS AvgAttendanceToday,
-                    COALESCE(
-                        (SELECT AVG(CAST(g.GradeTypeId AS FLOAT))
-                         FROM Grades g
-                         INNER JOIN Semesters s ON g.Date >= s.StartDate AND g.Date <= s.EndDate
-                         WHERE g.IsActive = 1
-                           AND s.IsActive = 1
-                           AND CAST(GETDATE() AS DATE) >= s.StartDate 
-                           AND CAST(GETDATE() AS DATE) <= s.EndDate
-                        )
-                    , 0) AS AvgGradeGlobal
+                    ISNULL((
+                        SELECT AVG(CAST(g.GradeTypeId AS FLOAT))
+                        FROM Grades g
+                        INNER JOIN Semesters s ON g.DateTime BETWEEN s.StartDate AND s.EndDate
+                        WHERE g.IsActive = 1 AND s.IsActive = 1
+                        AND CAST(GETDATE() AS DATE) BETWEEN s.StartDate AND s.EndDate
+                    ), 0) AS AvgGradeGlobal
             ");
 
-            // ViewLessonSchedule
             migrationBuilder.Sql(@"
                 CREATE OR ALTER VIEW [dbo].[vw_LessonSchedule] AS
                 SELECT 
                     ws.Id AS ScheduleId,
                     ws.ClassId,
-                    (CAST(c.Level AS VARCHAR(10)) + c.Letter) AS ClassName,
+                    CONCAT(c.Level, c.Letter) AS ClassName,
                     ws.DayOfWeek,
                     lh.OrderNumber AS LessonNumber,
                     lh.StartTime,
@@ -60,7 +39,7 @@ namespace Data.Migrations
                     ws.SubjectId,
                     s.Name AS SubjectName,
                     cr.Name AS ClassroomName,
-                    (u.FirstName + ' ' + u.LastName) AS TeacherName,
+                    CONCAT(u.FirstName, ' ', u.LastName) AS TeacherName,
                     ws.SchoolYearId,
                     ws.SemesterId
                 FROM WeeklySchedules ws
@@ -72,7 +51,6 @@ namespace Data.Migrations
                 WHERE ws.IsActive = 1 AND c.IsActive = 1 AND u.IsActive = 1
             ");
 
-            // ViewGradeDetails
             migrationBuilder.Sql(@"
                 CREATE OR ALTER VIEW [dbo].[vw_GradeDetails] AS
                 SELECT 
@@ -85,7 +63,7 @@ namespace Data.Migrations
                     gt.Name AS GradeTypeName,
                     gc.Weight,
                     gc.Name AS CategoryName,
-                    (t.FirstName + ' ' + t.LastName) AS TeacherName,
+                    CONCAT(t.FirstName, ' ', t.LastName) AS TeacherName,
                     g.DateTime AS Date,
                     g.Comment,
                     1 AS SemesterId 
@@ -97,7 +75,6 @@ namespace Data.Migrations
                 WHERE g.IsActive = 1 AND s.IsActive = 1 AND t.IsActive = 1
             ");
 
-            // ViewAttendanceDetails
             migrationBuilder.Sql(@"
                 CREATE OR ALTER VIEW [dbo].[vw_AttendanceDetails] AS
                 SELECT 
@@ -109,11 +86,11 @@ namespace Data.Migrations
                     l.Date, 
                     at.Name AS StatusName,
                     at.ShortCode,
-                    CAST(CASE WHEN at.ShortCode = 'OB' THEN 1 ELSE 0 END AS BIT) AS IsPresent,
-                    CAST(CASE WHEN at.ShortCode = 'NB' THEN 1 ELSE 0 END AS BIT) AS IsAbsent,
-                    CAST(CASE WHEN at.ShortCode = 'SP' THEN 1 ELSE 0 END AS BIT) AS IsLate,
-                    CAST(CASE WHEN at.ShortCode = 'U' THEN 1 ELSE 0 END AS BIT) AS IsExcused,
-                    CAST(CASE WHEN at.ShortCode = 'NU' THEN 1 ELSE 0 END AS BIT) AS IsUnexcused
+                    CAST(IIF(at.ShortCode = 'OB', 1, 0) AS BIT) AS IsPresent,
+                    CAST(IIF(at.ShortCode = 'NB', 1, 0) AS BIT) AS IsAbsent,
+                    CAST(IIF(at.ShortCode = 'SP', 1, 0) AS BIT) AS IsLate,
+                    CAST(IIF(at.ShortCode = 'U', 1, 0) AS BIT) AS IsExcused,
+                    CAST(IIF(at.ShortCode = 'NU', 1, 0) AS BIT) AS IsUnexcused
                 FROM Attendances a
                 JOIN Lessons l ON a.LessonId = l.Id
                 JOIN Subjects s ON l.SubjectId = s.Id
@@ -122,7 +99,6 @@ namespace Data.Migrations
                 WHERE a.IsActive = 1 AND l.IsActive = 1
             ");
 
-            // ViewAnnouncementDetails
             migrationBuilder.Sql(@"
                 CREATE OR ALTER VIEW [dbo].[vw_AnnouncementDetails] AS
                 SELECT 
@@ -130,21 +106,20 @@ namespace Data.Migrations
                     a.Title,
                     a.Description,
                     a.CreatedAt AS Date,
-                    (u.FirstName + ' ' + u.LastName) AS AuthorName,
+                    CONCAT(u.FirstName, ' ', u.LastName) AS AuthorName,
                     r.Name AS AuthorRole
                 FROM Announcements a
                 JOIN Users u ON a.AuthorId = u.Id
-                OUTER APPLY (SELECT TOP 1 ro.Name FROM UserRoles ur JOIN Roles ro ON ur.RoleId = ro.Id WHERE ur.UserId = u.Id AND ur.IsActive = 1) r
+                OUTER APPLY (SELECT TOP 1 ro.Name FROM UserRoles ur JOIN Roles ro ON ur.RoleId = ro.Id WHERE ur.UserId = u.Id) r
                 WHERE a.IsActive = 1 AND u.IsActive = 1
             ");
 
-            // ViewClassStudentDetails
             migrationBuilder.Sql(@"
                 CREATE OR ALTER VIEW [dbo].[vw_ClassStudentDetails] AS
                 SELECT 
                     cs.ClassId,
                     u.Id AS StudentId,
-                    (u.FirstName + ' ' + u.LastName) AS FullName,
+                    CONCAT(u.FirstName, ' ', u.LastName) AS FullName,
                     u.Email,
                     u.Phone,
                     p.ParentName,
@@ -154,17 +129,16 @@ namespace Data.Migrations
                 JOIN Users u ON cs.StudentId = u.Id
                 OUTER APPLY (
                     SELECT TOP 1 
-                        (par.FirstName + ' ' + par.LastName) AS ParentName,
+                        CONCAT(par.FirstName, ' ', par.LastName) AS ParentName,
                         par.Email AS ParentEmail,
                         par.Phone AS ParentPhone
                     FROM ParentStudents ps
                     JOIN Users par ON ps.ParentId = par.Id
-                    WHERE ps.StudentId = u.Id AND ps.IsActive = 1 AND par.IsActive = 1
+                    WHERE ps.StudentId = u.Id AND par.IsActive = 1
                 ) p
-                WHERE cs.IsActive = 1 AND u.IsActive = 1
+                WHERE u.IsActive = 1 
             ");
 
-            // ViewStudentAttendance
             migrationBuilder.Sql(@"
                 CREATE OR ALTER VIEW [dbo].[vw_StudentAttendanceSummary] AS
                 SELECT 
@@ -180,22 +154,21 @@ namespace Data.Migrations
                 JOIN ClassStudents cs ON u.Id = cs.StudentId
                 LEFT JOIN Attendances a ON u.Id = a.StudentId AND a.IsActive = 1
                 LEFT JOIN AttendanceTypes at ON a.AttendanceTypeId = at.Id
-                WHERE u.IsActive = 1 AND cs.IsActive = 1
+                WHERE u.IsActive = 1 
                 GROUP BY u.Id, u.FirstName, u.LastName, cs.ClassId
             ");
 
-            // ViewPendingExcuse
             migrationBuilder.Sql(@"
                 CREATE OR ALTER VIEW [dbo].[vw_PendingExcuses] AS
                 SELECT 
                     e.Id AS ExcuseId,
                     s.Id AS StudentId,
-                    (s.FirstName + ' ' + s.LastName) AS StudentName,
-                    (CAST(c.Level AS VARCHAR) + c.Letter) AS ClassName,
+                    CONCAT(s.FirstName, ' ', s.LastName) AS StudentName,
+                    CONCAT(c.Level, c.Letter) AS ClassName,
                     l.Date AS LessonDate,
                     lh.OrderNumber AS LessonNumber,
                     e.Reason,
-                    (p.FirstName + ' ' + p.LastName) AS ParentName,
+                    CONCAT(p.FirstName, ' ', p.LastName) AS ParentName,
                     e.SubmittedAt,
                     l.TeacherId
                 FROM Excuses e
@@ -209,26 +182,26 @@ namespace Data.Migrations
                 WHERE e.IsActive = 1 AND e.IsAccepted = 0 AND s.IsActive = 1 AND p.IsActive = 1
             ");
 
-            // ViewTeacherClass
             migrationBuilder.Sql(@"
                 CREATE OR ALTER VIEW [dbo].[vw_TeacherClasses] AS
                 SELECT DISTINCT
                     tcs.TeacherId,
                     c.Id AS ClassId,
-                    (CAST(c.Level AS VARCHAR(10)) + c.Letter) AS ClassName,
+                    CONCAT(c.Level, c.Letter) AS ClassName,
                     sy.Id AS SchoolYearId,
                     sy.Name AS SchoolYearName,
                     (SELECT TOP 1 s.Name 
                      FROM TeacherClassSubjects tcs2 
                      JOIN Subjects s ON tcs2.SubjectId = s.Id 
-                     WHERE tcs2.ClassId = c.Id AND tcs2.TeacherId = tcs.TeacherId AND tcs2.IsActive = 1) AS MainSubjectName
+                     WHERE tcs2.ClassId = c.Id AND tcs2.TeacherId = tcs.TeacherId) AS MainSubjectName
                 FROM TeacherClassSubjects tcs
                 JOIN Classes c ON tcs.ClassId = c.Id
                 JOIN SchoolYears sy ON c.SchoolYearId = sy.Id
-                WHERE tcs.IsActive = 1 AND c.IsActive = 1
+                WHERE c.IsActive = 1 
             ");
         }
 
+        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.Sql("DROP VIEW IF EXISTS [dbo].[vw_LessonSchedule]");
@@ -239,6 +212,7 @@ namespace Data.Migrations
             migrationBuilder.Sql("DROP VIEW IF EXISTS [dbo].[vw_StudentAttendanceSummary]");
             migrationBuilder.Sql("DROP VIEW IF EXISTS [dbo].[vw_PendingExcuses]");
             migrationBuilder.Sql("DROP VIEW IF EXISTS [dbo].[vw_TeacherClasses]");
+            migrationBuilder.Sql("DROP VIEW IF EXISTS [dbo].[vw_DashboardStats]");
         }
     }
 }

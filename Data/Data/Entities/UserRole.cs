@@ -18,7 +18,6 @@ namespace Data.Data.Entities
         public int RoleId { get; set; }
         [ForeignKey(nameof(RoleId))]
         public virtual Role? Role { get; set; } = null!;
-        public bool IsActive { get; set; } = true;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     }

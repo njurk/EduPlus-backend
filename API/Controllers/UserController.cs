@@ -3,27 +3,28 @@ using Data.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using API.DTOs;
+using BCrypt.Net;
+using BusinessLogic.Services;
 
 [ApiController]
 [Route("api/[controller]")]
 public class UserController : ControllerBase
 {
     private readonly SchoolDbContext _context;
-    public UserController(SchoolDbContext context) => _context = context;
+    private readonly IPasswordHashService _passwordHashService;
+
+    public UserController(SchoolDbContext context, IPasswordHashService passwordHashService)
+    {
+        _context = context;
+        _passwordHashService = passwordHashService;
+    }
 
     [HttpGet]
     public async Task<IActionResult> GetAll([FromQuery] UserQueryDto query)
     {
         var dbQuery = _context.Users.AsNoTracking().AsQueryable();
 
-        if (query.ShowInactive)
-        {
-            dbQuery = dbQuery.Where(u => !u.IsActive);
-        }
-        else
-        {
-            dbQuery = dbQuery.Where(u => u.IsActive);
-        }
+        dbQuery = query.ShowInactive ? dbQuery.Where(u => !u.IsActive) : dbQuery.Where(u => u.IsActive);
 
         if (!string.IsNullOrWhiteSpace(query.Search))
         {
@@ -39,6 +40,9 @@ public class UserController : ControllerBase
             "role" => query.SortDesc
                 ? dbQuery.OrderByDescending(u => u.UserRoles.Select(ur => ur.Role.Name).FirstOrDefault())
                 : dbQuery.OrderBy(u => u.UserRoles.Select(ur => ur.Role.Name).FirstOrDefault()),
+            "lastname" => query.SortDesc
+                ? dbQuery.OrderByDescending(u => u.LastName).ThenByDescending(u => u.FirstName)
+                : dbQuery.OrderBy(u => u.LastName).ThenBy(u => u.FirstName),
             _ => query.SortDesc ? dbQuery.OrderByDescending(u => u.UpdatedAt) : dbQuery.OrderBy(u => u.UpdatedAt)
         };
 
@@ -88,7 +92,6 @@ public class UserController : ControllerBase
                 u.CreatedAt,
                 u.UpdatedAt,
                 UserRoles = u.UserRoles
-                    .Where(ur => ur.IsActive)
                     .Select(ur => new {
                         ur.Id,
                         ur.UserId,
@@ -119,18 +122,31 @@ public class UserController : ControllerBase
             Street = dto.Street,
             City = dto.City,
             PostalCode = dto.PostalCode,
-            IsActive = dto.IsActive,
-            Password = dto.Password,
+            IsActive = true,
+            Password = _passwordHashService.HashPassword(dto.Password),
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
             UserRoles = dto.RoleIds.Select(roleId => new UserRole
             {
                 RoleId = roleId,
-                IsActive = true,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
             }).ToList()
         };
+
+        if (dto.ChildIds != null && dto.ChildIds.Any())
+        {
+            foreach (var studentId in dto.ChildIds.Distinct())
+            {
+                _context.ParentStudents.Add(new ParentStudent
+                {
+                    Parent = entity,
+                    StudentId = studentId,
+                    CreatedAt = DateTime.UtcNow,
+                    UpdatedAt = DateTime.UtcNow
+                });
+            }
+        }
 
         _context.Users.Add(entity);
         await _context.SaveChangesAsync();
@@ -141,8 +157,6 @@ public class UserController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, UserUpdateDto dto)
     {
-        if (id != dto.Id) return BadRequest("Niezgodność ID");
-
         var dbUser = await _context.Users
             .Include(u => u.UserRoles)
             .IgnoreQueryFilters()
@@ -151,7 +165,7 @@ public class UserController : ControllerBase
         if (dbUser == null) return NotFound();
 
         dbUser.FirstName = dto.FirstName;
-        dbUser.LastName = dto.LastName.Replace(" (nieaktywny)", "").Trim();
+        dbUser.LastName = dto.LastName;
         dbUser.Email = dto.Email;
         dbUser.Phone = dto.Phone;
         dbUser.Street = dto.Street;
@@ -160,31 +174,59 @@ public class UserController : ControllerBase
         dbUser.IsActive = dto.IsActive;
 
         if (!string.IsNullOrEmpty(dto.Password))
-            dbUser.Password = dto.Password;
+            dbUser.Password = _passwordHashService.HashPassword(dto.Password);
 
         dbUser.UpdatedAt = DateTime.UtcNow;
 
         var rolesToRemove = dbUser.UserRoles
-            .Where(ur => ur.IsActive && !dto.RoleIds.Contains(ur.RoleId))
+            .Where(ur => !dto.RoleIds.Contains(ur.RoleId))
             .ToList();
 
-        foreach (var role in rolesToRemove)
+        if (rolesToRemove.Any())
         {
-            role.IsActive = false;
-            role.UpdatedAt = DateTime.UtcNow;
+            _context.UserRoles.RemoveRange(rolesToRemove);
         }
 
         foreach (var roleId in dto.RoleIds)
         {
-            var existingRole = dbUser.UserRoles.FirstOrDefault(ur => ur.RoleId == roleId);
-            if (existingRole == null)
+            if (!dbUser.UserRoles.Any(ur => ur.RoleId == roleId))
             {
-                dbUser.UserRoles.Add(new UserRole { RoleId = roleId, IsActive = true });
+                dbUser.UserRoles.Add(new UserRole
+                {
+                    RoleId = roleId,
+                    CreatedAt = DateTime.UtcNow,
+                    UpdatedAt = DateTime.UtcNow
+                });
             }
-            else if (!existingRole.IsActive)
+        }
+
+        if (dto.ChildIds != null)
+        {
+            var currentRelations = await _context.ParentStudents
+                .Where(ps => ps.ParentId == id)
+                .ToListAsync();
+
+            var relationsToDelete = currentRelations
+                .Where(r => !dto.ChildIds.Contains(r.StudentId))
+                .ToList();
+
+            if (relationsToDelete.Any())
             {
-                existingRole.IsActive = true;
-                existingRole.UpdatedAt = DateTime.UtcNow;
+                _context.ParentStudents.RemoveRange(relationsToDelete);
+            }
+
+            var existingStudentIds = currentRelations.Select(r => r.StudentId).ToList();
+            var newStudentIds = dto.ChildIds.Where(id => !existingStudentIds.Contains(id)).Distinct();
+
+            foreach (var studentId in newStudentIds)
+            {
+                _context.ParentStudents.Add(new ParentStudent
+                {
+                    ParentId = id,
+                    StudentId = studentId,
+                    CreatedAt = DateTime.UtcNow,
+                    UpdatedAt = DateTime.UtcNow
+                });
             }
         }
 

@@ -26,7 +26,6 @@ public class ClassSubjectController : ControllerBase
     {
         var item = await _context.ClassSubjects.FindAsync(id);
         if (item == null) return NotFound();
-        item.IsActive = false;
         item.UpdatedAt = DateTime.UtcNow;
         await _context.SaveChangesAsync();
         return NoContent();

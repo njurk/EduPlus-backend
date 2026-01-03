@@ -3,6 +3,12 @@ using Data.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
+public class CreateUserRoleDto
+{
+    public int UserId { get; set; }
+    public int RoleId { get; set; }
+}
+
 [ApiController]
 [Route("api/[controller]")]
 public class UserRoleController : ControllerBase
@@ -22,7 +28,6 @@ public class UserRoleController : ControllerBase
                 ur.Id,
                 ur.UserId,
                 ur.RoleId,
-                ur.IsActive,
                 UserFirstName = ur.User.FirstName,
                 UserLastName = ur.User.LastName,
                 RoleName = ur.Role.Name
@@ -33,23 +38,25 @@ public class UserRoleController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(UserRole entity)
+    public async Task<IActionResult> Create(CreateUserRoleDto dto)
     {
         var exists = await _context.UserRoles
-            .FirstOrDefaultAsync(x => x.UserId == entity.UserId && x.RoleId == entity.RoleId);
+            .AnyAsync(x => x.UserId == dto.UserId && x.RoleId == dto.RoleId);
 
-        if (exists != null)
+        if (exists)
         {
-            if (exists.IsActive) return BadRequest("Rola jest już przypisana dla tego użytkownika");
-
-            exists.IsActive = true;
-            exists.UpdatedAt = DateTime.UtcNow;
-            await _context.SaveChangesAsync();
-            return Ok(exists);
+            return BadRequest("Użytkownik już posiada tę rolę");
         }
 
-        _context.UserRoles.Add(entity);
+        var entity = new UserRole
+        {
+            UserId = dto.UserId,
+            RoleId = dto.RoleId,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow
+        };
 
+        _context.UserRoles.Add(entity);
         await _context.SaveChangesAsync();
 
         return Ok(entity);
@@ -59,21 +66,19 @@ public class UserRoleController : ControllerBase
     public async Task<IActionResult> Delete(int id)
     {
         var roleToDelete = await _context.UserRoles
-            .IgnoreQueryFilters()
             .FirstOrDefaultAsync(x => x.Id == id);
 
-        if (roleToDelete == null || !roleToDelete.IsActive) return NotFound();
+        if (roleToDelete == null) return NotFound();
 
         var activeRolesCount = await _context.UserRoles
-            .CountAsync(ur => ur.UserId == roleToDelete.UserId && ur.IsActive && ur.Id != id);
+            .CountAsync(ur => ur.UserId == roleToDelete.UserId && ur.Id != id);
 
         if (activeRolesCount == 0)
         {
-            return BadRequest("Użytkownik musi posiadać rolę");
+            return BadRequest("Użytkownik musi posiadać przynajmniej jedną rolę");
         }
 
-        roleToDelete.IsActive = false;
-        roleToDelete.UpdatedAt = DateTime.UtcNow;
+        _context.UserRoles.Remove(roleToDelete);
 
         await _context.SaveChangesAsync();
         return NoContent();

@@ -90,31 +90,25 @@ namespace Data.Data
                 e.HasIndex(ps => new { ps.ParentId, ps.StudentId }).IsUnique();
                 e.HasOne(ps => ps.Parent).WithMany().OnDelete(DeleteBehavior.Restrict);
                 e.HasOne(ps => ps.Student).WithMany().OnDelete(DeleteBehavior.Restrict);
-                e.HasQueryFilter(x => x.IsActive);
             });
 
             modelBuilder.Entity<ClassStudent>(e =>
             {
                 e.HasIndex(cs => new { cs.ClassId, cs.StudentId })
-                 .IsUnique()
-                 .HasFilter("[IsActive] = 1");
+                 .IsUnique();
             });
 
             modelBuilder.Entity<TeacherClassSubject>(e =>
             {
                 e.HasIndex(tcs => new { tcs.TeacherId, tcs.ClassId, tcs.SubjectId })
-                 .IsUnique()
-                 .HasFilter("[IsActive] = 1");
-
+                 .IsUnique();
                 e.HasOne(x => x.Teacher).WithMany().OnDelete(DeleteBehavior.Restrict);
             });
 
             modelBuilder.Entity<Attendance>(e =>
             {
                 e.HasIndex(a => new { a.LessonId, a.StudentId })
-                 .IsUnique()
-                 .HasFilter("[IsActive] = 1");
-
+                 .IsUnique();
                 e.HasOne(x => x.Student).WithMany().OnDelete(DeleteBehavior.Restrict);
             });
 

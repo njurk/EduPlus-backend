@@ -290,9 +290,6 @@ namespace Data.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GETUTCDATE()");
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
@@ -348,8 +345,7 @@ namespace Data.Migrations
                     b.HasIndex("StudentId");
 
                     b.HasIndex("LessonId", "StudentId")
-                        .IsUnique()
-                        .HasFilter("[IsActive] = 1");
+                        .IsUnique();
 
                     b.ToTable("Attendances");
                 });
@@ -514,9 +510,6 @@ namespace Data.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GETUTCDATE()");
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
                     b.Property<int>("StudentId")
                         .HasColumnType("int");
 
@@ -530,8 +523,7 @@ namespace Data.Migrations
                     b.HasIndex("StudentId");
 
                     b.HasIndex("ClassId", "StudentId")
-                        .IsUnique()
-                        .HasFilter("[IsActive] = 1");
+                        .IsUnique();
 
                     b.ToTable("ClassStudents");
                 });
@@ -551,9 +543,6 @@ namespace Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GETUTCDATE()");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
 
                     b.Property<int>("SubjectId")
                         .HasColumnType("int");
@@ -1296,9 +1285,6 @@ namespace Data.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GETUTCDATE()");
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
                     b.Property<int>("ParentId")
                         .HasColumnType("int");
 
@@ -1749,9 +1735,6 @@ namespace Data.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GETUTCDATE()");
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
                     b.Property<int>("SubjectId")
                         .HasColumnType("int");
 
@@ -1770,8 +1753,7 @@ namespace Data.Migrations
                     b.HasIndex("SubjectId");
 
                     b.HasIndex("TeacherId", "ClassId", "SubjectId")
-                        .IsUnique()
-                        .HasFilter("[IsActive] = 1");
+                        .IsUnique();
 
                     b.ToTable("TeacherClassSubjects");
                 });
@@ -1850,9 +1832,6 @@ namespace Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GETUTCDATE()");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
 
                     b.Property<int>("RoleId")
                         .HasColumnType("int");
@@ -1937,6 +1916,28 @@ namespace Data.Migrations
                     b.HasIndex("TeacherId");
 
                     b.ToTable("WeeklySchedules");
+                });
+
+            modelBuilder.Entity("Data.Data.EntitiesForView.DashboardStats", b =>
+                {
+                    b.Property<double>("AvgGradeGlobal")
+                        .HasColumnType("float");
+
+                    b.Property<int>("TotalClasses")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalStudents")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalTeachers")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalUsers")
+                        .HasColumnType("int");
+
+                    b.ToTable((string)null);
+
+                    b.ToView("vw_DashboardStats", (string)null);
                 });
 
             modelBuilder.Entity("Data.Data.EntitiesForView.ViewAnnouncementDetails", b =>

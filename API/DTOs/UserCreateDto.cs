@@ -31,5 +31,6 @@ namespace API.DTOs
         [Required]
         [MinLength(1, ErrorMessage = "Użytkownik musi mieć rolę")]
         public List<int> RoleIds { get; set; } = new();
+        public List<int> ChildIds { get; set; } = new List<int>();
     }
 }

@@ -8,10 +8,16 @@ namespace BusinessLogic.Seeders
     public class DataSeeder
     {
         private readonly SchoolDbContext _context;
+        private readonly Random _random = new Random();
 
         public DataSeeder(SchoolDbContext context)
         {
             _context = context;
+        }
+
+        private string GeneratePhoneNumber()
+        {
+            return _random.Next(500000000, 899999999).ToString();
         }
 
         public void Seed(IPasswordHashService passwordHashService)
@@ -44,68 +50,65 @@ namespace BusinessLogic.Seeders
             }
         }
 
-        // dane nauczycieli
-        private List<(int SubjectId, string FirstName, string LastName, string EmailPrefix)> GetTeachersData()
+        private List<(int SubjectId, string FirstName, string LastName, string Email, string Street, string City, string PostalCode)> GetTeachersData()
         {
-            return new List<(int, string, string, string)>
+            return new List<(int, string, string, string, string, string, string)>
             {
-                (1, "Anna", "Kowalska", "akowalska"),
-                (2, "Jan", "Nowak", "jnowak"),
-                (3, "Ewa", "Wiśniewska", "ewisniewska"),
-                (4, "Piotr", "Kamiński", "pkaminski"),
-                (5, "Marek", "Lewandowski", "mlewandowski"),
-                (6, "Katarzyna", "Zielińska", "kzielinska"),
-                (7, "Michał", "Szymański", "mszymanski"),
-                (8, "Agnieszka", "Woźniak", "awozniak"),
-                (9, "Tomasz", "Dąbrowski", "tdabrowski"),
-                (10, "Paweł", "Kozłowski", "pkozlowski"),
-                (11, "Małgorzata", "Jankowska", "mjankowska"),
-                (12, "Joanna", "Mazur", "jmazur"),
-                (13, "Grzegorz", "Wojciechowski", "gwojciechowski"),
-                (14, "Barbara", "Kwiatkowska", "bkwiatkowska"),
-                (15, "Łukasz", "Krawczyk", "lkrawczyk"),
-                (16, "Dorota", "Piotrowska", "dpiotrowska"),
-                (17, "Marcin", "Grabowski", "mgrabowski"),
-                (18, "Elżbieta", "Pawłowska", "epawlowska"),
-                (19, "Rafał", "Michalski", "rmichalski"),
-                (20, "Karolina", "Król", "kkrol"),
-                (21, "Krzysztof", "Wieczorek", "kwieczorek")
+                (1, "Anna", "Kowalska", "akowalska@szkola.edu.pl", "Złota 44/12", "Warszawa", "00-120"),
+                (2, "Jan", "Nowak", "jnowak@szkola.edu.pl", "Marszałkowska 85/3", "Warszawa", "00-683"),
+                (3, "Ewa", "Wiśniewska", "ewisniewska@szkola.edu.pl", "Aleje Jerozolimskie 100", "Warszawa", "00-807"),
+                (4, "Piotr", "Kamiński", "pkaminski@szkola.edu.pl", "Chmielna 5", "Warszawa", "00-021"),
+                (5, "Marek", "Lewandowski", "mlewandowski@szkola.edu.pl", "Nowy Świat 22", "Warszawa", "00-373"),
+                (6, "Katarzyna", "Zielińska", "kzielinska@szkola.edu.pl", "Puławska 15", "Warszawa", "02-515"),
+                (7, "Michał", "Szymański", "mszymanski@szkola.edu.pl", "Wilanowska 200", "Warszawa", "02-765"),
+                (8, "Agnieszka", "Woźniak", "awozniak@szkola.edu.pl", "Francuska 12", "Warszawa", "03-906"),
+                (9, "Tomasz", "Dąbrowski", "tdabrowski@szkola.edu.pl", "Targowa 67", "Warszawa", "03-729"),
+                (10, "Paweł", "Kozłowski", "pkozlowski@szkola.edu.pl", "Grójecka 45", "Warszawa", "02-031"),
+                (11, "Małgorzata", "Jankowska", "mjankowska@szkola.edu.pl", "Wojska Polskiego 10", "Pruszków", "05-800"),
+                (12, "Joanna", "Mazur", "jmazur@szkola.edu.pl", "Kościuszki 5", "Piaseczno", "05-500"),
+                (13, "Grzegorz", "Wojciechowski", "gwojciechowski@szkola.edu.pl", "Piłsudskiego 99", "Marki", "05-270"),
+                (14, "Barbara", "Kwiatkowska", "bkwiatkowska@szkola.edu.pl", "3 Maja 14", "Legionowo", "05-120"),
+                (15, "Łukasz", "Krawczyk", "lkrawczyk@szkola.edu.pl", "Sienkiewicza 7", "Otwock", "05-400"),
+                (16, "Dorota", "Piotrowska", "dpiotrowska@szkola.edu.pl", "Mickiewicza 2", "Ząbki", "05-091"),
+                (17, "Marcin", "Grabowski", "mgrabowski@szkola.edu.pl", "Leśna 18", "Łomianki", "05-092"),
+                (18, "Elżbieta", "Pawłowska", "epawlowska@szkola.edu.pl", "Polna 33", "Wołomin", "05-200"),
+                (19, "Rafał", "Michalski", "rmichalski@szkola.edu.pl", "Ogrodowa 11", "Sulejówek", "05-070"),
+                (20, "Karolina", "Król", "kkrol@szkola.edu.pl", "Słoneczna 4", "Konstancin-Jeziorna", "05-520"),
+                (21, "Krzysztof", "Wieczorek", "kwieczorek@szkola.edu.pl", "Kwiatowa 8", "Józefów", "05-420")
             };
         }
 
-        // dane klasy 1
-        private List<(string StudentFirstName, string LastName, string StudentPrefix, string ParentFirstName, string ParentPrefix)> GetClass1StudentsData()
+        private List<(string S_Name, string S_Last, string S_Email, string P_Name, string P_Email, string Street, string City, string PostalCode)> GetClass1StudentsData()
         {
-            return new List<(string, string, string, string, string)>
+            return new List<(string, string, string, string, string, string, string, string)>
             {
-                ("Leon", "Urbaniak", "lurbaniak", "Marek", "murbaniak"),
-                ("Pola", "Sikora", "psikora", "Ewa", "esikora"),
-                ("Oliwier", "Baran", "obaran", "Adam", "abaran"),
-                ("Laura", "Krajewska", "lkrajewska", "Monika", "mkrajewska"),
-                ("Nikodem", "Mróz", "nmroz", "Piotr", "pmroz"),
-                ("Iga", "Wróblewska", "iwroblewska", "Anna", "awroblewska"),
-                ("Tymon", "Głowacki", "tglowacki", "Krzysztof", "kglowacki"),
-                ("Marcelina", "Zakrzewska", "mzakrzewska", "Maria", "mazakrzewska"),
-                ("Ignacy", "Laskowski", "ilaskowski", "Paweł", "plaskowski"),
-                ("Klara", "Makowska", "kmakowska", "Zofia", "zmakowska")
+                ("Leon", "Urbaniak", "lurbaniak@szkola.edu.pl", "Marek", "murbaniak@szkola.edu.pl", "Długa 55", "Grodzisk Mazowiecki", "05-825"),
+                ("Pola", "Sikora", "psikora@szkola.edu.pl", "Ewa", "esikora@szkola.edu.pl", "Krótka 1", "Mińsk Mazowiecki", "05-300"),
+                ("Oliwier", "Baran", "obaran@szkola.edu.pl", "Adam", "abaran@szkola.edu.pl", "Spacerowa 9", "Milanówek", "05-822"),
+                ("Laura", "Krajewska", "lkrajewska@szkola.edu.pl", "Monika", "mkrajewska@szkola.edu.pl", "Wspólna 12", "Brwinów", "05-840"),
+                ("Nikodem", "Mróz", "nmroz@szkola.edu.pl", "Piotr", "pmroz@szkola.edu.pl", "Lipowa 6", "Błonie", "05-870"),
+                ("Iga", "Wróblewska", "iwroblewska@szkola.edu.pl", "Anna", "awroblewska@szkola.edu.pl", "Akacjowa 3", "Nadarzyn", "05-830"),
+                ("Tymon", "Głowacki", "tglowacki@szkola.edu.pl", "Krzysztof", "kglowacki@szkola.edu.pl", "Brzozowa 21", "Raszyn", "05-090"),
+                ("Marcelina", "Zakrzewska", "mzakrzewska@szkola.edu.pl", "Maria", "mazakrzewska@szkola.edu.pl", "Topolowa 15", "Zielonka", "05-220"),
+                ("Ignacy", "Laskowski", "ilaskowski@szkola.edu.pl", "Paweł", "plaskowski@szkola.edu.pl", "Klonowa 7", "Kobyłka", "05-230"),
+                ("Klara", "Makowska", "kmakowska@szkola.edu.pl", "Zofia", "zmakowska@szkola.edu.pl", "Dębowa 2", "Ożarów Mazowiecki", "05-850")
             };
         }
 
-        // dane klasy 2
-        private List<(string StudentFirstName, string LastName, string StudentPrefix, string ParentFirstName, string ParentPrefix)> GetClass2StudentsData()
+        private List<(string S_Name, string S_Last, string S_Email, string P_Name, string P_Email, string Street, string City, string PostalCode)> GetClass2StudentsData()
         {
-            return new List<(string, string, string, string, string)>
+            return new List<(string, string, string, string, string, string, string, string)>
             {
-                ("Kacper", "Dudek", "kdudek", "Tomasz", "tdudek"),
-                ("Natalia", "Adamczyk", "nadamczyk", "Magdalena", "madamczyk"),
-                ("Mateusz", "Wieczorek", "mwieczorek", "Andrzej", "awieczorek"),
-                ("Karolina", "Stępień", "kstepien", "Joanna", "jstepien"),
-                ("Bartosz", "Pawlak", "bpawlak", "Grzegorz", "gpawlak"),
-                ("Weronika", "Walczak", "wwalczak", "Barbara", "bwalczak"),
-                ("Dawid", "Sikorski", "dsikorski", "Robert", "rsikorski"),
-                ("Martyna", "Sobczak", "msobczak", "Agnieszka", "asobczak"),
-                ("Kamil", "Drzewiecki", "kdrzewiecki", "Dariusz", "ddrzewiecki"),
-                ("Patrycja", "Malinowska", "pmalinowska", "Katarzyna", "kmalinowska")
+                ("Kacper", "Dudek", "kdudek@szkola.edu.pl", "Tomasz", "tdudek@szkola.edu.pl", "Sosnowa 19", "Karczew", "05-480"),
+                ("Natalia", "Adamczyk", "nadamczyk@szkola.edu.pl", "Magdalena", "madamczyk@szkola.edu.pl", "Świerkowa 14", "Radzymin", "05-250"),
+                ("Mateusz", "Wieczorek", "mwieczorek@szkola.edu.pl", "Andrzej", "awieczorek@szkola.edu.pl", "Jarzębinowa 5", "Tłuszcz", "05-240"),
+                ("Karolina", "Stępień", "kstepien@szkola.edu.pl", "Joanna", "jstepien@szkola.edu.pl", "Wrzosowa 8", "Góra Kalwaria", "05-530"),
+                ("Bartosz", "Pawlak", "bpawlak@szkola.edu.pl", "Grzegorz", "gpawlak@szkola.edu.pl", "Różana 10", "Wesoła", "05-077"),
+                ("Weronika", "Walczak", "wwalczak@szkola.edu.pl", "Barbara", "bwalczak@szkola.edu.pl", "Błękitna 3", "Wawer", "04-645"),
+                ("Dawid", "Sikorski", "dsikorski@szkola.edu.pl", "Robert", "rsikorski@szkola.edu.pl", "Cicha 6", "Rembertów", "04-406"),
+                ("Martyna", "Sobczak", "msobczak@szkola.edu.pl", "Agnieszka", "asobczak@szkola.edu.pl", "Spokojna 11", "Ursus", "02-495"),
+                ("Kamil", "Drzewiecki", "kdrzewiecki@szkola.edu.pl", "Dariusz", "ddrzewiecki@szkola.edu.pl", "Wesoła 22", "Włochy", "02-400"),
+                ("Patrycja", "Malinowska", "pmalinowska@szkola.edu.pl", "Katarzyna", "kmalinowska@szkola.edu.pl", "Prosta 40", "Bemowo", "01-310")
             };
         }
 
@@ -120,7 +123,7 @@ namespace BusinessLogic.Seeders
                 LastName = "Jarzyna",
                 Email = "admin@szkola.edu.pl",
                 Password = passwordHashService.HashPassword(password),
-                Phone = "111111111",
+                Phone = GeneratePhoneNumber(),
                 Street = "Szkolna 1",
                 City = "Warszawa",
                 PostalCode = "00-001",
@@ -137,12 +140,12 @@ namespace BusinessLogic.Seeders
                 {
                     FirstName = t.FirstName,
                     LastName = t.LastName,
-                    Email = $"{t.EmailPrefix}@szkola.edu.pl",
+                    Email = t.Email,
                     Password = passwordHashService.HashPassword(password),
-                    Phone = $"600100{t.SubjectId:00}",
-                    Street = $"Nauczycielska {t.SubjectId}",
-                    City = "Warszawa",
-                    PostalCode = "00-002",
+                    Phone = GeneratePhoneNumber(),
+                    Street = t.Street,
+                    City = t.City,
+                    PostalCode = t.PostalCode,
                     IsActive = true,
                     CreatedAt = DateTime.UtcNow,
                     UpdatedAt = DateTime.UtcNow
@@ -153,7 +156,7 @@ namespace BusinessLogic.Seeders
             _context.SaveChanges();
 
             var staffRoles = new List<UserRole>();
-            var teacherEmails = teachersData.Select(t => $"{t.EmailPrefix}@szkola.edu.pl").ToHashSet();
+            var teacherEmails = teachersData.Select(t => t.Email).ToHashSet();
 
             foreach (var user in users)
             {
@@ -162,7 +165,6 @@ namespace BusinessLogic.Seeders
                     {
                         UserId = user.Id,
                         RoleId = 1,
-                        IsActive = true,
                         CreatedAt = DateTime.UtcNow,
                         UpdatedAt = DateTime.UtcNow
                     });
@@ -171,7 +173,6 @@ namespace BusinessLogic.Seeders
                     {
                         UserId = user.Id,
                         RoleId = 2,
-                        IsActive = true,
                         CreatedAt = DateTime.UtcNow,
                         UpdatedAt = DateTime.UtcNow
                     });
@@ -180,25 +181,19 @@ namespace BusinessLogic.Seeders
             _context.SaveChanges();
 
             var allStudentsData = GetClass1StudentsData().Concat(GetClass2StudentsData()).ToList();
-            int phoneCounter = 0;
-            int addressCounter = 1;
 
             foreach (var s in allStudentsData)
             {
-                var street = $"Kwiatowa {addressCounter}";
-                var city = "Warszawa";
-                var postalCode = $"00-{100 + addressCounter}";
-
                 var student = new User
                 {
-                    FirstName = s.StudentFirstName,
-                    LastName = s.LastName,
-                    Email = $"{s.StudentPrefix}@szkola.edu.pl",
+                    FirstName = s.S_Name,
+                    LastName = s.S_Last,
+                    Email = s.S_Email,
                     Password = passwordHashService.HashPassword(password),
-                    Phone = $"700{phoneCounter:0000}",
-                    Street = street,
-                    City = city,
-                    PostalCode = postalCode,
+                    Phone = GeneratePhoneNumber(),
+                    Street = s.Street,
+                    City = s.City,
+                    PostalCode = s.PostalCode,
                     IsActive = true,
                     CreatedAt = DateTime.UtcNow,
                     UpdatedAt = DateTime.UtcNow
@@ -206,14 +201,14 @@ namespace BusinessLogic.Seeders
 
                 var parent = new User
                 {
-                    FirstName = s.ParentFirstName,
-                    LastName = s.LastName,
-                    Email = $"{s.ParentPrefix}@szkola.edu.pl",
+                    FirstName = s.P_Name,
+                    LastName = s.S_Last,
+                    Email = s.P_Email,
                     Password = passwordHashService.HashPassword(password),
-                    Phone = $"800{phoneCounter:0000}",
-                    Street = street,
-                    City = city,
-                    PostalCode = postalCode,
+                    Phone = GeneratePhoneNumber(),
+                    Street = s.Street,
+                    City = s.City,
+                    PostalCode = s.PostalCode,
                     IsActive = true,
                     CreatedAt = DateTime.UtcNow,
                     UpdatedAt = DateTime.UtcNow
@@ -227,7 +222,6 @@ namespace BusinessLogic.Seeders
                 {
                     StudentId = student.Id,
                     ParentId = parent.Id,
-                    IsActive = true,
                     CreatedAt = DateTime.UtcNow,
                     UpdatedAt = DateTime.UtcNow
                 });
@@ -236,7 +230,6 @@ namespace BusinessLogic.Seeders
                 {
                     UserId = student.Id,
                     RoleId = 4,
-                    IsActive = true,
                     CreatedAt = DateTime.UtcNow,
                     UpdatedAt = DateTime.UtcNow
                 });
@@ -244,13 +237,9 @@ namespace BusinessLogic.Seeders
                 {
                     UserId = parent.Id,
                     RoleId = 3,
-                    IsActive = true,
                     CreatedAt = DateTime.UtcNow,
                     UpdatedAt = DateTime.UtcNow
                 });
-
-                phoneCounter++;
-                addressCounter++;
             }
 
             _context.SaveChanges();
@@ -258,9 +247,8 @@ namespace BusinessLogic.Seeders
 
         private void SeedClasses()
         {
-            // klasa 1
             var class1Data = GetClass1StudentsData();
-            var class1Emails = class1Data.Select(s => $"{s.StudentPrefix}@szkola.edu.pl").ToList();
+            var class1Emails = class1Data.Select(s => s.S_Email).ToList();
             var students1 = _context.Users.Where(u => class1Emails.Contains(u.Email)).ToList();
 
             foreach (var s in students1)
@@ -268,14 +256,12 @@ namespace BusinessLogic.Seeders
                 {
                     ClassId = 1,
                     StudentId = s.Id,
-                    IsActive = true,
                     CreatedAt = DateTime.UtcNow,
                     UpdatedAt = DateTime.UtcNow
                 });
 
-            // klasa 2
             var class2Data = GetClass2StudentsData();
-            var class2Emails = class2Data.Select(s => $"{s.StudentPrefix}@szkola.edu.pl").ToList();
+            var class2Emails = class2Data.Select(s => s.S_Email).ToList();
             var students2 = _context.Users.Where(u => class2Emails.Contains(u.Email)).ToList();
 
             foreach (var s in students2)
@@ -283,26 +269,22 @@ namespace BusinessLogic.Seeders
                 {
                     ClassId = 2,
                     StudentId = s.Id,
-                    IsActive = true,
                     CreatedAt = DateTime.UtcNow,
                     UpdatedAt = DateTime.UtcNow
                 });
 
-            // nauczyciele i przedmioty
             var teachersData = GetTeachersData();
             var teachersMap = new Dictionary<int, int>();
 
             foreach (var t in teachersData)
             {
-                var email = $"{t.EmailPrefix}@szkola.edu.pl";
-                var user = _context.Users.FirstOrDefault(u => u.Email == email);
+                var user = _context.Users.FirstOrDefault(u => u.Email == t.Email);
                 if (user != null)
                 {
                     teachersMap[t.SubjectId] = user.Id;
                 }
             }
 
-            // przedmioty 1
             var subjectsClass1 = new[] { 1, 2, 3, 4, 5, 13, 14, 16 };
             foreach (var subjId in subjectsClass1)
             {
@@ -312,7 +294,6 @@ namespace BusinessLogic.Seeders
                     {
                         ClassId = 1,
                         SubjectId = subjId,
-                        IsActive = true,
                         CreatedAt = DateTime.UtcNow,
                         UpdatedAt = DateTime.UtcNow
                     });
@@ -321,14 +302,12 @@ namespace BusinessLogic.Seeders
                         ClassId = 1,
                         SubjectId = subjId,
                         TeacherId = teachersMap[subjId],
-                        IsActive = true,
                         CreatedAt = DateTime.UtcNow,
                         UpdatedAt = DateTime.UtcNow
                     });
                 }
             }
 
-            // przedmioty 2
             var subjectsClass2 = new[] { 1, 2, 3, 5, 6, 8, 9, 10, 11, 20 };
             foreach (var subjId in subjectsClass2)
             {
@@ -338,7 +317,6 @@ namespace BusinessLogic.Seeders
                     {
                         ClassId = 2,
                         SubjectId = subjId,
-                        IsActive = true,
                         CreatedAt = DateTime.UtcNow,
                         UpdatedAt = DateTime.UtcNow
                     });
@@ -347,7 +325,6 @@ namespace BusinessLogic.Seeders
                         ClassId = 2,
                         SubjectId = subjId,
                         TeacherId = teachersMap[subjId],
-                        IsActive = true,
                         CreatedAt = DateTime.UtcNow,
                         UpdatedAt = DateTime.UtcNow
                     });
@@ -361,7 +338,7 @@ namespace BusinessLogic.Seeders
         {
             var schedules = new List<WeeklySchedule>();
             var teachersData = GetTeachersData();
-            var subjectToEmail = teachersData.ToDictionary(t => t.SubjectId, t => $"{t.EmailPrefix}@szkola.edu.pl");
+            var subjectToEmail = teachersData.ToDictionary(t => t.SubjectId, t => t.Email);
 
             int GetTeacherId(int subjId)
             {
@@ -372,7 +349,6 @@ namespace BusinessLogic.Seeders
                 return _context.Users.First(u => u.Email == email).Id;
             }
 
-            // klasa 1a
             schedules.Add(new WeeklySchedule { ClassId = 1, DayOfWeek = 1, LessonHourId = 1, SubjectId = 1, TeacherId = GetTeacherId(1), ClassroomId = 1, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
             schedules.Add(new WeeklySchedule { ClassId = 1, DayOfWeek = 1, LessonHourId = 2, SubjectId = 2, TeacherId = GetTeacherId(2), ClassroomId = 2, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
             schedules.Add(new WeeklySchedule { ClassId = 1, DayOfWeek = 1, LessonHourId = 3, SubjectId = 5, TeacherId = GetTeacherId(5), ClassroomId = 16, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
@@ -398,7 +374,6 @@ namespace BusinessLogic.Seeders
             schedules.Add(new WeeklySchedule { ClassId = 1, DayOfWeek = 5, LessonHourId = 3, SubjectId = 15, TeacherId = GetTeacherId(15), ClassroomId = 5, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
             schedules.Add(new WeeklySchedule { ClassId = 1, DayOfWeek = 5, LessonHourId = 4, SubjectId = 5, TeacherId = GetTeacherId(5), ClassroomId = 16, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
 
-            // klasa 8c
             schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 1, LessonHourId = 1, SubjectId = 1, TeacherId = GetTeacherId(1), ClassroomId = 6, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
             schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 1, LessonHourId = 2, SubjectId = 10, TeacherId = GetTeacherId(10), ClassroomId = 7, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
             schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 1, LessonHourId = 3, SubjectId = 9, TeacherId = GetTeacherId(9), ClassroomId = 8, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
@@ -444,7 +419,7 @@ namespace BusinessLogic.Seeders
         private void SeedOperationalData()
         {
             var teachersData = GetTeachersData();
-            var subjectToEmail = teachersData.ToDictionary(t => t.SubjectId, t => $"{t.EmailPrefix}@szkola.edu.pl");
+            var subjectToEmail = teachersData.ToDictionary(t => t.SubjectId, t => t.Email);
 
             int GetTeacherId(int subjId)
             {
@@ -455,7 +430,6 @@ namespace BusinessLogic.Seeders
                 return _context.Users.First(u => u.Email == email).Id;
             }
 
-            // lekcje klasy 1
             var lessons1A = new List<Lesson>
             {
                 new Lesson { ClassId = 1, SubjectId = 1, TeacherId = GetTeacherId(1), ClassroomId = 1, LessonHourId = 1, Topic = "Liczby", StatusId = 2, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Date = DateTime.UtcNow },
@@ -466,7 +440,6 @@ namespace BusinessLogic.Seeders
             };
             _context.Lessons.AddRange(lessons1A);
 
-            // lekcje klasy 2
             var lessons8C = new List<Lesson>
             {
                 new Lesson { ClassId = 2, SubjectId = 1, TeacherId = GetTeacherId(1), ClassroomId = 6, LessonHourId = 1, Topic = "Funkcja liniowa", StatusId = 2, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Date = DateTime.UtcNow },
@@ -485,14 +458,12 @@ namespace BusinessLogic.Seeders
             {
                 foreach (var studId in studentIds)
                 {
-                    // frekwencja
                     _context.Attendances.Add(new Attendance { StudentId = studId, LessonId = lessons[0].Id, AttendanceTypeId = 2, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
                     _context.Attendances.Add(new Attendance { StudentId = studId, LessonId = lessons[1].Id, AttendanceTypeId = 2, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
                     _context.Attendances.Add(new Attendance { StudentId = studId, LessonId = lessons[2].Id, AttendanceTypeId = 3, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
                     _context.Attendances.Add(new Attendance { StudentId = studId, LessonId = lessons[3].Id, AttendanceTypeId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
                     _context.Attendances.Add(new Attendance { StudentId = studId, LessonId = lessons[4].Id, AttendanceTypeId = 1, IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
 
-                    // oceny
                     _context.Grades.Add(new Grade { StudentId = studId, TeacherId = lessons[0].TeacherId, SubjectId = lessons[0].SubjectId, GradeTypeId = 3, GradeCategoryId = 1, Comment = "", IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, DateTime = DateTime.UtcNow });
                     _context.Grades.Add(new Grade { StudentId = studId, TeacherId = lessons[1].TeacherId, SubjectId = lessons[1].SubjectId, GradeTypeId = 4, GradeCategoryId = 2, Comment = "OK", IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, DateTime = DateTime.UtcNow });
                     _context.Grades.Add(new Grade { StudentId = studId, TeacherId = lessons[2].TeacherId, SubjectId = lessons[2].SubjectId, GradeTypeId = 5, GradeCategoryId = 4, Comment = "Gratulacje", IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, DateTime = DateTime.UtcNow });

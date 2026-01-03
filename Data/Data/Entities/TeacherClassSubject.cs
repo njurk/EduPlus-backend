@@ -21,7 +21,6 @@ namespace Data.Data.Entities
         public int SubjectId { get; set; }
         [ForeignKey(nameof(SubjectId))]
         public virtual Subject? Subject { get; set; } = null!;
-        public bool IsActive { get; set; } = true;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     }
