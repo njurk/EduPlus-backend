@@ -8,5 +8,7 @@
         public string ParentEmail { get; set; } = string.Empty;
         public int StudentId { get; set; }
         public string StudentName { get; set; } = string.Empty;
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
     }
 }

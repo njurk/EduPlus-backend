@@ -23,13 +23,19 @@ public class UserController : ControllerBase
     public async Task<IActionResult> GetAll([FromQuery] UserQueryDto query)
     {
         var dbQuery = _context.Users.AsNoTracking().AsQueryable();
-
         dbQuery = query.ShowInactive ? dbQuery.Where(u => !u.IsActive) : dbQuery.Where(u => u.IsActive);
 
         if (!string.IsNullOrWhiteSpace(query.Search))
         {
             var s = query.Search.Trim();
             dbQuery = dbQuery.Where(u => u.LastName.Contains(s) || u.FirstName.Contains(s) || u.Email.Contains(s));
+        }
+
+        if (query.OnlyUnassignedParents)
+        {
+            dbQuery = dbQuery.Where(u =>
+                u.UserRoles.Any(ur => ur.Role.Name == "Rodzic") &&
+                !_context.ParentStudents.Any(ps => ps.ParentId == u.Id));
         }
 
         dbQuery = query.SortBy?.ToLower() switch

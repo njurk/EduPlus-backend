@@ -31,7 +31,9 @@ namespace API.Controllers
                     ParentName = $"{ps.Parent.FirstName} {ps.Parent.LastName}",
                     ParentEmail = ps.Parent.Email,
                     StudentId = ps.StudentId,
-                    StudentName = $"{ps.Student.FirstName} {ps.Student.LastName}"
+                    StudentName = $"{ps.Student.FirstName} {ps.Student.LastName}",
+                    CreatedAt = ps.CreatedAt,
+                    UpdatedAt = ps.UpdatedAt
                 })
                 .ToListAsync();
 
