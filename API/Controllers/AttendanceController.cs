@@ -27,7 +27,7 @@ public class AttendanceController : ControllerBase
         var item = await _context.Attendances.FindAsync(id);
         if (item == null) return NotFound();
         item.IsActive = false;
-        item.UpdatedAt = DateTime.UtcNow;
+        item.UpdatedAt = DateTime.Now;
         await _context.SaveChangesAsync();
         return NoContent();
     }

@@ -26,7 +26,7 @@ public class ClassStudentController : ControllerBase
     {
         var item = await _context.ClassStudents.FindAsync(id);
         if (item == null) return NotFound();
-        item.UpdatedAt = DateTime.UtcNow;
+        item.UpdatedAt = DateTime.Now;
         await _context.SaveChangesAsync();
         return NoContent();
     }

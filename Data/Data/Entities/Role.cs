@@ -11,8 +11,9 @@ namespace Data.Data.Entities
     {
         [Key]
         public int Id { get; set; }
-        [Required, MaxLength(50)]
         public required string Name { get; set; }
+        public string? Description { get; set; }
+        public required int Level { get; set; }
         public bool IsActive { get; set; } = true;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;

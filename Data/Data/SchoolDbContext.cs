@@ -37,6 +37,9 @@ namespace Data.Data
         public DbSet<UserRole> UserRoles { get; set; } = null!;
         public DbSet<WeeklySchedule> WeeklySchedules { get; set; } = null!;
         public DbSet<ParentStudent> ParentStudents { get; set; } = null!;
+        public DbSet<Ticket> Tickets { get; set; }
+        public DbSet<TicketMessage> TicketMessages { get; set; }
+        public DbSet<PasswordResetToken> PasswordResetTokens { get; set; }
 
         // widoki
         public DbSet<ViewStudentAttendance> ViewStudentAttendances { get; set; } = null!;
@@ -157,6 +160,24 @@ namespace Data.Data
                  .OnDelete(DeleteBehavior.Restrict);
             });
 
+            modelBuilder.Entity<Ticket>()
+                .HasOne(t => t.User)
+                .WithMany()
+                .HasForeignKey(t => t.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<TicketMessage>()
+                .HasOne(m => m.Sender)
+                .WithMany()
+                .HasForeignKey(m => m.SenderId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<TicketMessage>()
+                .HasOne(m => m.Ticket)
+                .WithMany(t => t.Messages)
+                .HasForeignKey(m => m.TicketId)
+                .OnDelete(DeleteBehavior.Cascade);
+
             modelBuilder.Entity<GradeType>().Property(p => p.Value).HasColumnType("decimal(2,1)");
 
             // widoki
@@ -195,10 +216,10 @@ namespace Data.Data
             );
 
             modelBuilder.Entity<Role>().HasData(
-                new Role { Id = 1, Name = "Administrator", IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
-                new Role { Id = 2, Name = "Nauczyciel", IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
-                new Role { Id = 3, Name = "Rodzic", IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
-                new Role { Id = 4, Name = "Uczeń", IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime }
+                new Role { Id = 1, Name = "Administrator", IsActive = true, Description = "Najwyższy poziom uprawnień, dostęp do wszystkiego", Level = 1, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
+                new Role { Id = 2, Name = "Nauczyciel", IsActive = true, Description = "Zarządzanie przydzielonymi zasobami", Level = 2, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
+                new Role {Id = 3, Name = "Rodzic", IsActive = true, Description = "Przeglądanie danych przypisanego użytkownika, możliwość usprawiedliwienia", Level = 3, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
+                new Role {Id = 4, Name = "Uczeń", IsActive = true, Description = "Przeglądanie własnych danych", Level = 4, CreatedAt = initialDateTime, UpdatedAt = initialDateTime }
             );
 
             modelBuilder.Entity<SchoolYear>().HasData(

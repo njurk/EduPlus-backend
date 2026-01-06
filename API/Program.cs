@@ -3,6 +3,7 @@ using Data.Data;
 using BusinessLogic.Services;
 using System.Text.Json.Serialization;
 using BusinessLogic.Seeders;
+using BusinessLogic.Converters;
 namespace API
 {
     public class Program
@@ -15,7 +16,12 @@ namespace API
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             builder.Services.AddControllers()
-                .AddJsonOptions(options => options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+            .AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+                options.JsonSerializerOptions.Converters.Add(new TimeOnlyJsonConverter());
+            });
+                
             
             builder.Services.AddScoped<IPasswordHashService, PasswordHashService>();
 

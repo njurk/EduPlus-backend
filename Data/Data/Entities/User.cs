@@ -13,9 +13,9 @@ namespace Data.Data.Entities
     {
         [Key]
         public int Id { get; set; }
-        [MaxLength(50)]
+        [MaxLength(100)]
         public required string FirstName { get; set; }
-        [MaxLength(50)]
+        [MaxLength(100)]
         public required string LastName { get; set; }
         [MaxLength(100), EmailAddress]
         public required string Email { get; set; }

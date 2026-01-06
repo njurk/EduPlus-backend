@@ -27,7 +27,7 @@ namespace API.Controllers
                 statsView = new DashboardStats();
             }
 
-            var today = DateOnly.FromDateTime(DateTime.UtcNow.Date);
+            var today = DateOnly.FromDateTime(DateTime.Now.Date);
 
             var currentSemester = await _context.Semesters
                 .Include(s => s.SchoolYear)
@@ -54,7 +54,7 @@ namespace API.Controllers
                     Id = a.Id,
                     Title = a.Title,
                     Date = a.CreatedAt.ToString("yyyy-MM-dd"),
-                    Author = a.Author != null ? $"{a.Author.FirstName} {a.Author.LastName}" : "System"
+                    Author = a.Author != null ? $"{a.Author.FirstName} {a.Author.LastName}" : "Brak danych"
                 })
                 .ToListAsync();
 
@@ -72,7 +72,6 @@ namespace API.Controllers
                 {
                     SchoolYear = currentSemester?.SchoolYear?.Name ?? "Brak danych",
                     Semester = currentSemester?.Name ?? "-",
-                    AvgGrade = statsView.AvgGradeGlobal.ToString("0.00")
                 },
 
                 Announcements = announcements
@@ -84,7 +83,7 @@ namespace API.Controllers
         [HttpGet("attendance-chart")]
         public async Task<ActionResult<IEnumerable<AttendanceChartDto>>> GetAttendanceChart()
         {
-            var todayDateTime = DateTime.UtcNow.Date;
+            var todayDateTime = DateTime.Now.Date;
             var todayDateOnly = DateOnly.FromDateTime(todayDateTime);
             var sevenDaysAgo = todayDateOnly.AddDays(-6);
 

@@ -11,7 +11,6 @@ namespace Data.Data.Entities
     {
         [Key]
         public int Id { get; set; }
-        [Required, MaxLength(20)]
         public required string Name { get; set; }
         public DateOnly StartDate { get; set; }
         public DateOnly EndDate { get; set; }

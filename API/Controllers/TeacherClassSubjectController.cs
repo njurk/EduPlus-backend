@@ -7,27 +7,5 @@ using Microsoft.EntityFrameworkCore;
 [Route("api/[controller]")]
 public class TeacherClassSubjectController : ControllerBase
 {
-    private readonly SchoolDbContext _context;
-    public TeacherClassSubjectController(SchoolDbContext context) => _context = context;
-
-    [HttpGet]
-    public async Task<IActionResult> GetAll() => Ok(await _context.TeacherClassSubjects.ToListAsync());
-
-    [HttpPost]
-    public async Task<IActionResult> Create(TeacherClassSubject entity)
-    {
-        _context.TeacherClassSubjects.Add(entity);
-        await _context.SaveChangesAsync();
-        return Ok(entity);
-    }
-
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(int id)
-    {
-        var item = await _context.TeacherClassSubjects.FindAsync(id);
-        if (item == null) return NotFound();
-        item.UpdatedAt = DateTime.UtcNow;
-        await _context.SaveChangesAsync();
-        return NoContent();
-    }
+   
 }

@@ -52,8 +52,8 @@ public class UserRoleController : ControllerBase
         {
             UserId = dto.UserId,
             RoleId = dto.RoleId,
-            CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow
+            CreatedAt = DateTime.Now,
+            UpdatedAt = DateTime.Now
         };
 
         _context.UserRoles.Add(entity);
@@ -75,7 +75,7 @@ public class UserRoleController : ControllerBase
 
         if (activeRolesCount == 0)
         {
-            return BadRequest("Użytkownik musi posiadać przynajmniej jedną rolę");
+            return BadRequest("Użytkownik musi mieć rolę");
         }
 
         _context.UserRoles.Remove(roleToDelete);

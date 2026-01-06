@@ -16,8 +16,6 @@ namespace Data.Data.Entities
 
         [Column(TypeName = "decimal(2, 1)")]
         public required decimal Value { get; set; }
-
-        [Required, MaxLength(20)]
         public required string Name { get; set; }
         public bool IsActive { get; set; } = true;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

@@ -11,11 +11,7 @@ namespace Data.Data.Entities
     {
         [Key]
         public int Id { get; set; }
-
-        [Required, MaxLength(20)]
         public required string Name { get; set; }
-
-        [Required, MaxLength(5)]
         public required string ShortCode { get; set; }
         public bool IsActive { get; set; } = true;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

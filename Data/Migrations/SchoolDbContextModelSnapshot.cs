@@ -368,13 +368,11 @@ namespace Data.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ShortCode")
                         .IsRequired()
-                        .HasMaxLength(5)
-                        .HasColumnType("nvarchar(5)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAdd()
@@ -451,8 +449,8 @@ namespace Data.Migrations
 
                     b.Property<string>("Letter")
                         .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<int>("Level")
                         .HasColumnType("int");
@@ -765,8 +763,7 @@ namespace Data.Migrations
 
                     b.Property<string>("Reason")
                         .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("SubmittedAt")
                         .HasColumnType("datetime2");
@@ -861,8 +858,7 @@ namespace Data.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAdd()
@@ -942,8 +938,7 @@ namespace Data.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Numeric")
                         .IsRequired()
@@ -1233,8 +1228,7 @@ namespace Data.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAdd()
@@ -1306,6 +1300,31 @@ namespace Data.Migrations
                     b.ToTable("ParentStudents");
                 });
 
+            modelBuilder.Entity("Data.Data.Entities.PasswordResetToken", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("ExpirationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("PasswordResetTokens");
+                });
+
             modelBuilder.Entity("Data.Data.Entities.Role", b =>
                 {
                     b.Property<int>("Id")
@@ -1319,13 +1338,18 @@ namespace Data.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GETUTCDATE()");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
+                    b.Property<int>("Level")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAdd()
@@ -1341,7 +1365,9 @@ namespace Data.Migrations
                         {
                             Id = 1,
                             CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Najwyższy poziom uprawnień, dostęp do wszystkiego",
                             IsActive = true,
+                            Level = 1,
                             Name = "Administrator",
                             UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
@@ -1349,7 +1375,9 @@ namespace Data.Migrations
                         {
                             Id = 2,
                             CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Zarządzanie przydzielonymi zasobami",
                             IsActive = true,
+                            Level = 2,
                             Name = "Nauczyciel",
                             UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
@@ -1357,7 +1385,9 @@ namespace Data.Migrations
                         {
                             Id = 3,
                             CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Przeglądanie danych przypisanego użytkownika, możliwość usprawiedliwienia",
                             IsActive = true,
+                            Level = 3,
                             Name = "Rodzic",
                             UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         },
@@ -1365,7 +1395,9 @@ namespace Data.Migrations
                         {
                             Id = 4,
                             CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Przeglądanie własnych danych",
                             IsActive = true,
+                            Level = 4,
                             Name = "Uczeń",
                             UpdatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc)
                         });
@@ -1392,8 +1424,7 @@ namespace Data.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateOnly>("StartDate")
                         .HasColumnType("date");
@@ -1451,8 +1482,7 @@ namespace Data.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("SchoolYearId")
                         .HasColumnType("int");
@@ -1536,8 +1566,7 @@ namespace Data.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAdd()
@@ -1756,6 +1785,74 @@ namespace Data.Migrations
                         .IsUnique();
 
                     b.ToTable("TeacherClassSubjects");
+                });
+
+            modelBuilder.Entity("Data.Data.Entities.Ticket", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Subject")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Tickets");
+                });
+
+            modelBuilder.Entity("Data.Data.Entities.TicketMessage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<int>("SenderId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TicketId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SenderId");
+
+                    b.HasIndex("TicketId");
+
+                    b.ToTable("TicketMessages");
                 });
 
             modelBuilder.Entity("Data.Data.Entities.User", b =>
@@ -2511,6 +2608,17 @@ namespace Data.Migrations
                     b.Navigation("Student");
                 });
 
+            modelBuilder.Entity("Data.Data.Entities.PasswordResetToken", b =>
+                {
+                    b.HasOne("Data.Data.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Data.Data.Entities.Semester", b =>
                 {
                     b.HasOne("Data.Data.Entities.SchoolYear", "SchoolYear")
@@ -2547,6 +2655,36 @@ namespace Data.Migrations
                     b.Navigation("Subject");
 
                     b.Navigation("Teacher");
+                });
+
+            modelBuilder.Entity("Data.Data.Entities.Ticket", b =>
+                {
+                    b.HasOne("Data.Data.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Data.Data.Entities.TicketMessage", b =>
+                {
+                    b.HasOne("Data.Data.Entities.User", "Sender")
+                        .WithMany()
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Data.Data.Entities.Ticket", "Ticket")
+                        .WithMany("Messages")
+                        .HasForeignKey("TicketId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Sender");
+
+                    b.Navigation("Ticket");
                 });
 
             modelBuilder.Entity("Data.Data.Entities.UserRole", b =>
@@ -2652,6 +2790,11 @@ namespace Data.Migrations
                     b.Navigation("Classes");
 
                     b.Navigation("Semesters");
+                });
+
+            modelBuilder.Entity("Data.Data.Entities.Ticket", b =>
+                {
+                    b.Navigation("Messages");
                 });
 
             modelBuilder.Entity("Data.Data.Entities.User", b =>

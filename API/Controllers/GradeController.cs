@@ -16,7 +16,7 @@ public class GradeController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create(Grade entity)
     {
-        entity.DateTime = DateTime.UtcNow;
+        entity.DateTime = DateTime.Now;
         _context.Grades.Add(entity);
         await _context.SaveChangesAsync();
         return Ok(entity);
@@ -28,7 +28,7 @@ public class GradeController : ControllerBase
         var item = await _context.Grades.FindAsync(id);
         if (item == null) return NotFound();
         item.IsActive = false;
-        item.UpdatedAt = DateTime.UtcNow;
+        item.UpdatedAt = DateTime.Now;
         await _context.SaveChangesAsync();
         return NoContent();
     }

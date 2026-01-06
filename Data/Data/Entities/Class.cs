@@ -10,7 +10,7 @@ namespace Data.Data.Entities
         [Key]
         public int Id { get; set; }
         public required int Level { get; set; }
-        [Required, MaxLength(10)]
+        [MaxLength(30)]
         public required string Letter { get; set; }
         public int SchoolYearId { get; set; }
         [ForeignKey(nameof(SchoolYearId))]

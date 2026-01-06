@@ -7,5 +7,6 @@
         public bool SortDesc { get; set; }
         public bool ShowInactive { get; set; }
         public bool OnlyUnassignedParents { get; set; }
+        public string? RoleName { get; set; }
     }
 }

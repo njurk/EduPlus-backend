@@ -26,7 +26,7 @@ public class AnnouncementReadController : ControllerBase
     {
         var item = await _context.AnnouncementReads.FindAsync(id);
         if (item == null) return NotFound();
-        item.UpdatedAt = DateTime.UtcNow;
+        item.UpdatedAt = DateTime.Now;
         await _context.SaveChangesAsync();
         return NoContent();
     }
