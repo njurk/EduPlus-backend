@@ -15,13 +15,35 @@ public class GradeCategoryController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAll([FromQuery] string? search, [FromQuery] string? sortBy, [FromQuery] bool sortDesc = false, [FromQuery] bool showInactive = false)
     {
-        var items = await _context.GradeCategories
-            .AsNoTracking()
-            .OrderByDescending(x => x.Weight)
-            .ToListAsync();
-        return Ok(items);
+        var query = _context.GradeCategories.AsNoTracking().AsQueryable();
+
+        if (showInactive)
+        {
+            query = query.Where(r => !r.IsActive);
+        }
+        else
+        {
+            query = query.Where(r => r.IsActive);
+        }
+
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            var s = search.Trim();
+            query = query.Where(x => x.Name.Contains(s));
+        }
+
+        query = sortBy?.ToLower() switch
+        {
+            "weight" => sortDesc ? query.OrderByDescending(x => x.Weight) : query.OrderBy(x => x.Weight),
+            "name" => sortDesc ? query.OrderByDescending(x => x.Name) : query.OrderBy(x => x.Name),
+            "created" => sortDesc ? query.OrderByDescending(x => x.CreatedAt) : query.OrderBy(x => x.CreatedAt),
+            "updated" => sortDesc ? query.OrderByDescending(x => x.UpdatedAt) : query.OrderBy(x => x.UpdatedAt),
+            _ => sortDesc ? query.OrderByDescending(x => x.Name) : query.OrderBy(x => x.Name)
+        };
+
+        return Ok(await query.ToListAsync());
     }
 
     [HttpPost]

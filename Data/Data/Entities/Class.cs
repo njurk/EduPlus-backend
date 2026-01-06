@@ -16,8 +16,8 @@ namespace Data.Data.Entities
         [ForeignKey(nameof(SchoolYearId))]
         public virtual SchoolYear? SchoolYear { get; set; } = null!;
         public bool IsActive { get; set; } = true;
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public DateTime UpdatedAt { get; set; } = DateTime.Now;
         public virtual ICollection<ClassStudent> ClassStudents { get; set; } = new List<ClassStudent>();
     }
 }

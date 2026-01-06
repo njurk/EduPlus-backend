@@ -77,7 +77,6 @@ namespace BusinessLogic.Seeders
                 (21, "Krzysztof", "Wieczorek", "kwieczorek@szkola.edu.pl", "Kwiatowa 8", "Józefów", "05-420")
             };
         }
-
         private List<(string S_Name, string S_Last, string S_Email, string P_Name, string P_Email, string Street, string City, string PostalCode)> GetClass1StudentsData()
         {
             return new List<(string, string, string, string, string, string, string, string)>

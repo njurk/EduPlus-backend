@@ -953,7 +953,9 @@ namespace Data.Migrations
                 values: new object[,]
                 {
                     { 1, "WebAdmin", "Administrator - strona internetowa" },
-                    { 2, "MobileTeacher", "Nauczyciel - aplikacja mobilna" }
+                    { 2, "WebTeacher", "Nauczyciel - strona internetowa" },
+                    { 3, "MobileParent", "Rodzic - aplikacja mobilna" },
+                    { 4, "MobileStudent", "Uczeń - aplikacja mobilna" }
                 });
 
             migrationBuilder.InsertData(
@@ -966,36 +968,14 @@ namespace Data.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Pages",
-                columns: new[] { "Id", "Link", "Position", "TargetId", "Title" },
-                values: new object[,]
-                {
-                    { 1, "/admin/dashboard", 1, 1, "Pulpit" },
-                    { 2, "/admin/announcements", 2, 1, "Ogłoszenia" },
-                    { 3, "/admin/attendance", 3, 1, "Frekwencja" },
-                    { 4, "/admin/grades", 4, 1, "Oceny" },
-                    { 5, "/admin/classes", 5, 1, "Klasy" },
-                    { 6, "/admin/school-years", 6, 1, "Rok szkolny" },
-                    { 7, "/admin/users", 7, 1, "Użytkownicy" },
-                    { 8, "/admin/roles", 8, 1, "Role" },
-                    { 9, "/admin/subjects", 9, 1, "Przedmioty" },
-                    { 10, "/admin/schedules", 10, 1, "Plany zajęć" },
-                    { 11, "/admin/cms", 11, 1, "CMS" },
-                    { 12, "/teacher/dashboard", 1, 2, "Pulpit" },
-                    { 13, "/teacher/classes", 2, 2, "Klasy" },
-                    { 14, "/teacher/schedule", 3, 2, "Plan zajęć" },
-                    { 15, "/teacher/announcements", 4, 2, "Ogłoszenia" }
-                });
-
-            migrationBuilder.InsertData(
                 table: "Semesters",
                 columns: new[] { "Id", "CreatedAt", "EndDate", "IsActive", "Name", "SchoolYearId", "StartDate", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new DateOnly(2025, 1, 31), true, "Semestr 1", 1, new DateOnly(2025, 9, 1), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 2, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new DateOnly(2025, 6, 30), true, "Semestr 2", 1, new DateOnly(2026, 2, 1), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 3, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new DateOnly(2026, 1, 31), true, "Semestr 1", 2, new DateOnly(2026, 9, 1), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 4, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new DateOnly(2026, 6, 30), true, "Semestr 2", 2, new DateOnly(2027, 2, 1), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) }
+                    { 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new DateOnly(2026, 1, 31), true, "Semestr 1", 1, new DateOnly(2025, 9, 1), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 2, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new DateOnly(2026, 6, 30), true, "Semestr 2", 1, new DateOnly(2026, 2, 1), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 3, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new DateOnly(2027, 1, 31), true, "Semestr 1", 2, new DateOnly(2026, 9, 1), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 4, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new DateOnly(2027, 6, 30), true, "Semestr 2", 2, new DateOnly(2027, 2, 1), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) }
                 });
 
             migrationBuilder.CreateIndex(

@@ -3,7 +3,9 @@ using Data.Data;
 using BusinessLogic.Services;
 using System.Text.Json.Serialization;
 using BusinessLogic.Seeders;
-using BusinessLogic.Converters;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 namespace API
 {
     public class Program
@@ -19,7 +21,6 @@ namespace API
             .AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-                options.JsonSerializerOptions.Converters.Add(new TimeOnlyJsonConverter());
             });
                 
             
@@ -35,6 +36,28 @@ namespace API
                         .WithOrigins("http://localhost:5173", "http://localhost:3000")
                         .AllowAnyMethod()
                         .AllowAnyHeader());
+            });
+
+            var jwtSettings = builder.Configuration.GetSection("Jwt");
+            var key = Encoding.ASCII.GetBytes(jwtSettings["Key"]!);
+
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = jwtSettings["Issuer"],
+                    ValidAudience = jwtSettings["Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(key)
+                };
             });
 
             var app = builder.Build();
@@ -71,8 +94,8 @@ namespace API
 
             app.UseCors("Allow");
 
+            app.UseAuthentication();
             app.UseAuthorization();
-
 
             app.MapControllers();
 

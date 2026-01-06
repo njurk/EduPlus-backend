@@ -19,10 +19,10 @@ namespace Data.Data.Entities
         [ForeignKey(nameof(ParentId))]
         public virtual User? Parent { get; set; } = null!;
         public required string Reason { get; set; }
-        public DateTime SubmittedAt { get; set; } = DateTime.UtcNow;
+        public DateTime SubmittedAt { get; set; } = DateTime.Now;
         public bool? IsAccepted { get; set; }
         public bool IsActive { get; set; } = true;
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public DateTime UpdatedAt { get; set; } = DateTime.Now;
     }
 }

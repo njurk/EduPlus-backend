@@ -15,8 +15,8 @@ namespace Data.Data.Entities
         public string? Description { get; set; }
         public required int Level { get; set; }
         public bool IsActive { get; set; } = true;
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public DateTime UpdatedAt { get; set; } = DateTime.Now;
         public virtual ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
     }
 }

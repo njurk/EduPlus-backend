@@ -27,11 +27,11 @@ namespace Data.Data.Entities
         public int GradeCategoryId { get; set; }
         [ForeignKey(nameof(GradeCategoryId))]
         public virtual GradeCategory? GradeCategory { get; set; } = null!;
-        public DateTime DateTime { get; set; } = DateTime.UtcNow;
+        public DateTime DateTime { get; set; } = DateTime.Now;
         [MaxLength(255)]
         public string? Comment { get; set; }
         public bool IsActive { get; set; } = true;
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public DateTime UpdatedAt { get; set; } = DateTime.Now;
     }
 }

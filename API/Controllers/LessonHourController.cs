@@ -15,13 +15,34 @@ public class LessonHourController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAll([FromQuery] string? search, [FromQuery] string? sortBy, [FromQuery] bool sortDesc = false, [FromQuery] bool showInactive = false)
     {
-        var items = await _context.LessonHours
-            .AsNoTracking()
-            .OrderBy(x => x.OrderNumber)
-            .ToListAsync();
-        return Ok(items);
+        var query = _context.LessonHours.AsNoTracking().AsQueryable();
+
+        if (showInactive)
+        {
+            query = query.Where(r => !r.IsActive);
+        }
+        else
+        {
+            query = query.Where(r => r.IsActive);
+        }
+
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            var s = search.Trim();
+            query = query.Where(x => x.OrderNumber.ToString().Contains(s) || x.StartTime.ToString("HH:mm").Contains(s) || x.EndTime.ToString("HH:mm").Contains(s));
+        }
+
+        query = sortBy?.ToLower() switch
+        {
+            "ordernumber" => sortDesc ? query.OrderByDescending(x => x.OrderNumber) : query.OrderBy(x => x.OrderNumber),
+            "created" => sortDesc ? query.OrderByDescending(x => x.CreatedAt) : query.OrderBy(x => x.CreatedAt),
+            "updated" => sortDesc ? query.OrderByDescending(x => x.UpdatedAt) : query.OrderBy(x => x.UpdatedAt),
+            _ => sortDesc ? query.OrderByDescending(x => x.OrderNumber) : query.OrderBy(x => x.OrderNumber)
+        };
+
+        return Ok(await query.ToListAsync());
     }
 
     [HttpPost]

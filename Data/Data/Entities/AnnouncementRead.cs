@@ -20,7 +20,7 @@ namespace Data.Data.Entities
         public int UserId { get; set; }
         [ForeignKey(nameof(UserId))]
         public virtual User? User { get; set; } = null!;
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public DateTime UpdatedAt { get; set; } = DateTime.Now;
     }
 }

@@ -194,25 +194,9 @@ namespace Data.Data
             // seedowanie tabel (reszta w DataSeeder)
             modelBuilder.Entity<Target>().HasData(
                 new Target { Id = 1, Label = "WebAdmin", Title = "Administrator - strona internetowa" },
-                new Target { Id = 2, Label = "MobileTeacher", Title = "Nauczyciel - aplikacja mobilna" }
-            );
-
-            modelBuilder.Entity<Page>().HasData(
-                new Page { Id = 1, TargetId = 1, Position = 1, Title = "Pulpit", Link = "/admin/dashboard" },
-                new Page { Id = 2, TargetId = 1, Position = 2, Title = "Ogłoszenia", Link = "/admin/announcements" },
-                new Page { Id = 3, TargetId = 1, Position = 3, Title = "Frekwencja", Link = "/admin/attendance" },
-                new Page { Id = 4, TargetId = 1, Position = 4, Title = "Oceny", Link = "/admin/grades" },
-                new Page { Id = 5, TargetId = 1, Position = 5, Title = "Klasy", Link = "/admin/classes" },
-                new Page { Id = 6, TargetId = 1, Position = 6, Title = "Rok szkolny", Link = "/admin/school-years" },
-                new Page { Id = 7, TargetId = 1, Position = 7, Title = "Użytkownicy", Link = "/admin/users" },
-                new Page { Id = 8, TargetId = 1, Position = 8, Title = "Role", Link = "/admin/roles" },
-                new Page { Id = 9, TargetId = 1, Position = 9, Title = "Przedmioty", Link = "/admin/subjects" },
-                new Page { Id = 10, TargetId = 1, Position = 10, Title = "Plany zajęć", Link = "/admin/schedules" },
-                new Page { Id = 11, TargetId = 1, Position = 11, Title = "CMS", Link = "/admin/cms" },
-                new Page { Id = 12, TargetId = 2, Position = 1, Title = "Pulpit", Link = "/teacher/dashboard" },
-                new Page { Id = 13, TargetId = 2, Position = 2, Title = "Klasy", Link = "/teacher/classes" },
-                new Page { Id = 14, TargetId = 2, Position = 3, Title = "Plan zajęć", Link = "/teacher/schedule" },
-                new Page { Id = 15, TargetId = 2, Position = 4, Title = "Ogłoszenia", Link = "/teacher/announcements" }
+                new Target { Id = 2, Label = "WebTeacher", Title = "Nauczyciel - strona internetowa" },
+                new Target { Id = 3, Label = "MobileParent", Title = "Rodzic - aplikacja mobilna" },
+                new Target { Id = 4, Label = "MobileStudent", Title = "Uczeń - aplikacja mobilna" }
             );
 
             modelBuilder.Entity<Role>().HasData(
@@ -316,10 +300,10 @@ namespace Data.Data
             );
 
             modelBuilder.Entity<Semester>().HasData(
-                new Semester { Id = 1, SchoolYearId = 1, Name = "Semestr 1", StartDate = new DateOnly(2025, 09, 01), EndDate = new DateOnly(2025, 01, 31), IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
-                new Semester { Id = 2, SchoolYearId = 1, Name = "Semestr 2", StartDate = new DateOnly(2026, 02, 01), EndDate = new DateOnly(2025, 06, 30), IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
-                new Semester { Id = 3, SchoolYearId = 2, Name = "Semestr 1", StartDate = new DateOnly(2026, 09, 01), EndDate = new DateOnly(2026, 01, 31), IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
-                new Semester { Id = 4, SchoolYearId = 2, Name = "Semestr 2", StartDate = new DateOnly(2027, 02, 01), EndDate = new DateOnly(2026, 06, 30), IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime }
+                new Semester { Id = 1, SchoolYearId = 1, Name = "Semestr 1", StartDate = new DateOnly(2025, 09, 01), EndDate = new DateOnly(2026, 01, 31), IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
+                new Semester { Id = 2, SchoolYearId = 1, Name = "Semestr 2", StartDate = new DateOnly(2026, 02, 01), EndDate = new DateOnly(2026, 06, 30), IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
+                new Semester { Id = 3, SchoolYearId = 2, Name = "Semestr 1", StartDate = new DateOnly(2026, 09, 01), EndDate = new DateOnly(2027, 01, 31), IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
+                new Semester { Id = 4, SchoolYearId = 2, Name = "Semestr 2", StartDate = new DateOnly(2027, 02, 01), EndDate = new DateOnly(2027, 06, 30), IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime }
             );
 
             modelBuilder.Entity<Class>().HasData(

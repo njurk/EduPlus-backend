@@ -215,6 +215,25 @@ public class UserController : ControllerBase
         return Ok(dbUser);
     }
 
+    [HttpPatch("{id}/change-password")]
+    public async Task<IActionResult> ChangePassword(int id, [FromBody] ChangePasswordDto dto)
+    {
+        var dbUser = await _context.Users.FindAsync(id);
+        if (dbUser == null) return NotFound();
+
+        if (!_passwordHashService.VerifyPassword(dto.CurrentPassword, dbUser.Password))
+        {
+            return BadRequest("Aktualne hasło jest nieprawidłowe.");
+        }
+
+        dbUser.Password = _passwordHashService.HashPassword(dto.NewPassword);
+        dbUser.UpdatedAt = DateTime.Now;
+
+        await _context.SaveChangesAsync();
+
+        return Ok(new { message = "Hasło zostało zmienione pomyślnie." });
+    }
+
     [HttpPatch("{id}/restore")]
     public async Task<IActionResult> Restore(int id)
     {

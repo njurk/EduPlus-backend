@@ -49,128 +49,6 @@ namespace Data.Migrations
                     b.HasIndex("TargetId");
 
                     b.ToTable("Pages");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Link = "/admin/dashboard",
-                            Position = 1,
-                            TargetId = 1,
-                            Title = "Pulpit"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Link = "/admin/announcements",
-                            Position = 2,
-                            TargetId = 1,
-                            Title = "Ogłoszenia"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Link = "/admin/attendance",
-                            Position = 3,
-                            TargetId = 1,
-                            Title = "Frekwencja"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Link = "/admin/grades",
-                            Position = 4,
-                            TargetId = 1,
-                            Title = "Oceny"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Link = "/admin/classes",
-                            Position = 5,
-                            TargetId = 1,
-                            Title = "Klasy"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Link = "/admin/school-years",
-                            Position = 6,
-                            TargetId = 1,
-                            Title = "Rok szkolny"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Link = "/admin/users",
-                            Position = 7,
-                            TargetId = 1,
-                            Title = "Użytkownicy"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Link = "/admin/roles",
-                            Position = 8,
-                            TargetId = 1,
-                            Title = "Role"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Link = "/admin/subjects",
-                            Position = 9,
-                            TargetId = 1,
-                            Title = "Przedmioty"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            Link = "/admin/schedules",
-                            Position = 10,
-                            TargetId = 1,
-                            Title = "Plany zajęć"
-                        },
-                        new
-                        {
-                            Id = 11,
-                            Link = "/admin/cms",
-                            Position = 11,
-                            TargetId = 1,
-                            Title = "CMS"
-                        },
-                        new
-                        {
-                            Id = 12,
-                            Link = "/teacher/dashboard",
-                            Position = 1,
-                            TargetId = 2,
-                            Title = "Pulpit"
-                        },
-                        new
-                        {
-                            Id = 13,
-                            Link = "/teacher/classes",
-                            Position = 2,
-                            TargetId = 2,
-                            Title = "Klasy"
-                        },
-                        new
-                        {
-                            Id = 14,
-                            Link = "/teacher/schedule",
-                            Position = 3,
-                            TargetId = 2,
-                            Title = "Plan zajęć"
-                        },
-                        new
-                        {
-                            Id = 15,
-                            Link = "/teacher/announcements",
-                            Position = 4,
-                            TargetId = 2,
-                            Title = "Ogłoszenia"
-                        });
                 });
 
             modelBuilder.Entity("Data.Data.CMS.PageContent", b =>
@@ -229,8 +107,20 @@ namespace Data.Migrations
                         new
                         {
                             Id = 2,
-                            Label = "MobileTeacher",
-                            Title = "Nauczyciel - aplikacja mobilna"
+                            Label = "WebTeacher",
+                            Title = "Nauczyciel - strona internetowa"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Label = "MobileParent",
+                            Title = "Rodzic - aplikacja mobilna"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Label = "MobileStudent",
+                            Title = "Uczeń - aplikacja mobilna"
                         });
                 });
 
@@ -1506,7 +1396,7 @@ namespace Data.Migrations
                         {
                             Id = 1,
                             CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
-                            EndDate = new DateOnly(2025, 1, 31),
+                            EndDate = new DateOnly(2026, 1, 31),
                             IsActive = true,
                             Name = "Semestr 1",
                             SchoolYearId = 1,
@@ -1517,7 +1407,7 @@ namespace Data.Migrations
                         {
                             Id = 2,
                             CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
-                            EndDate = new DateOnly(2025, 6, 30),
+                            EndDate = new DateOnly(2026, 6, 30),
                             IsActive = true,
                             Name = "Semestr 2",
                             SchoolYearId = 1,
@@ -1528,7 +1418,7 @@ namespace Data.Migrations
                         {
                             Id = 3,
                             CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
-                            EndDate = new DateOnly(2026, 1, 31),
+                            EndDate = new DateOnly(2027, 1, 31),
                             IsActive = true,
                             Name = "Semestr 1",
                             SchoolYearId = 2,
@@ -1539,7 +1429,7 @@ namespace Data.Migrations
                         {
                             Id = 4,
                             CreatedAt = new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc),
-                            EndDate = new DateOnly(2026, 6, 30),
+                            EndDate = new DateOnly(2027, 6, 30),
                             IsActive = true,
                             Name = "Semestr 2",
                             SchoolYearId = 2,
