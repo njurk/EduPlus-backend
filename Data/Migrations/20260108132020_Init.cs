@@ -360,7 +360,8 @@ namespace Data.Migrations
                     ParentId = table.Column<int>(type: "int", nullable: false),
                     StudentId = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    UserId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -377,6 +378,11 @@ namespace Data.Migrations
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ParentStudents_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -459,6 +465,7 @@ namespace Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ClassId = table.Column<int>(type: "int", nullable: false),
                     StudentId = table.Column<int>(type: "int", nullable: false),
+                    OrderNumber = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
                 },
@@ -576,7 +583,8 @@ namespace Data.Migrations
                     ClassId = table.Column<int>(type: "int", nullable: false),
                     SubjectId = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    UserId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -599,6 +607,11 @@ namespace Data.Migrations
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_TeacherClassSubjects_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -1011,9 +1024,10 @@ namespace Data.Migrations
                 column: "StudentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Classes_SchoolYearId",
+                name: "IX_Classes_SchoolYearId_Level_Letter",
                 table: "Classes",
-                column: "SchoolYearId");
+                columns: new[] { "SchoolYearId", "Level", "Letter" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_ClassStudents_ClassId_StudentId",
@@ -1123,6 +1137,11 @@ namespace Data.Migrations
                 column: "StudentId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ParentStudents_UserId",
+                table: "ParentStudents",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PasswordResetTokens_UserId",
                 table: "PasswordResetTokens",
                 column: "UserId");
@@ -1147,6 +1166,11 @@ namespace Data.Migrations
                 table: "TeacherClassSubjects",
                 columns: new[] { "TeacherId", "ClassId", "SubjectId" },
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TeacherClassSubjects_UserId",
+                table: "TeacherClassSubjects",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TicketMessages_SenderId",

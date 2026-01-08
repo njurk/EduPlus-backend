@@ -30,5 +30,8 @@ namespace Data.Data.Entities
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
         public virtual ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
+        public virtual ICollection<ClassStudent> ClassStudents { get; set; } = new List<ClassStudent>();
+        public virtual ICollection<TeacherClassSubject> TeacherClassSubjects { get; set; } = new List<TeacherClassSubject>();
+        public virtual ICollection<ParentStudent> ParentStudents { get; set; } = new List<ParentStudent>();
     }
 }

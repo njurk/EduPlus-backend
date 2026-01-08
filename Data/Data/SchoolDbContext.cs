@@ -40,19 +40,21 @@ namespace Data.Data
         public DbSet<Ticket> Tickets { get; set; }
         public DbSet<TicketMessage> TicketMessages { get; set; }
         public DbSet<PasswordResetToken> PasswordResetTokens { get; set; }
-
-        // widoki
-        public DbSet<ViewStudentAttendance> ViewStudentAttendances { get; set; } = null!;
-        public DbSet<ViewLessonSchedule> ViewLessonSchedules { get; set; } = null!;
-        public DbSet<ViewGradeDetails> ViewGradeDetails { get; set; } = null!;
-        public DbSet<ViewAttendanceDetails> ViewAttendanceDetails { get; set; } = null!;
-        public DbSet<ViewAnnouncementDetails> ViewAnnouncementDetails { get; set; } = null!;
-        public DbSet<ViewTeacherClass> ViewTeacherClasses { get; set; } = null!;
-        public DbSet<ViewClassStudentDetails> ViewClassStudentDetails { get; set; } = null!;
-        public DbSet<ViewPendingExcuse> ViewPendingExcuses { get; set; } = null!;
         public DbSet<Page> Pages { get; set; } = null!;
         public DbSet<PageContent> PageContents { get; set; } = null!;
-        public DbSet<DashboardStats> DashboardStats { get; set; }
+
+        //for view
+        public DbSet<DashboardStatsView> DashboardStats { get; set; }
+        public DbSet<UserListView> UserList { get; set; }
+        public DbSet<ParentStudentView> ParentStudentList { get; set; }
+
+        //functions
+
+        [DbFunction("fn_CalculateWeightedAverage", "dbo")]
+        public static decimal CalculateWeightedAverage(int studentId, int subjectId, DateTime startDate, DateTime endDate)
+        {
+            throw new NotSupportedException();
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -94,6 +96,10 @@ namespace Data.Data
                 e.HasOne(ps => ps.Parent).WithMany().OnDelete(DeleteBehavior.Restrict);
                 e.HasOne(ps => ps.Student).WithMany().OnDelete(DeleteBehavior.Restrict);
             });
+
+            modelBuilder.Entity<Class>()
+                .HasIndex(c => new { c.SchoolYearId, c.Level, c.Letter })
+                .IsUnique();
 
             modelBuilder.Entity<ClassStudent>(e =>
             {
@@ -180,16 +186,15 @@ namespace Data.Data
 
             modelBuilder.Entity<GradeType>().Property(p => p.Value).HasColumnType("decimal(2,1)");
 
-            // widoki
-            modelBuilder.Entity<ViewStudentAttendance>().HasNoKey().ToView("vw_StudentAttendanceSummary");
-            modelBuilder.Entity<ViewGradeDetails>().HasNoKey().ToView("vw_GradeDetails");
-            modelBuilder.Entity<ViewAnnouncementDetails>().HasNoKey().ToView("vw_AnnouncementDetails");
-            modelBuilder.Entity<ViewLessonSchedule>().HasNoKey().ToView("vw_LessonSchedule");
-            modelBuilder.Entity<ViewAttendanceDetails>().HasNoKey().ToView("vw_AttendanceDetails");
-            modelBuilder.Entity<ViewTeacherClass>().HasNoKey().ToView("vw_TeacherClasses");
-            modelBuilder.Entity<ViewClassStudentDetails>().HasNoKey().ToView("vw_ClassStudentDetails");
-            modelBuilder.Entity<ViewPendingExcuse>().HasNoKey().ToView("vw_PendingExcuses");
-            modelBuilder.Entity<DashboardStats>().HasNoKey().ToView("vw_DashboardStats");
+            // functions
+            modelBuilder.HasDbFunction(typeof(SchoolDbContext).GetMethod(nameof(CalculateWeightedAverage))!)
+                .HasName("fn_CalculateWeightedAverage")
+                .HasSchema("dbo");
+
+            // for view
+            modelBuilder.Entity<DashboardStatsView>().HasNoKey().ToView("vw_DashboardStatsView");
+            modelBuilder.Entity<UserListView>().HasNoKey().ToView("vw_UserListView");
+            modelBuilder.Entity<ParentStudentView>().HasNoKey().ToView("vw_ParentStudentView");
 
             // seedowanie tabel (reszta w DataSeeder)
             modelBuilder.Entity<Target>().HasData(

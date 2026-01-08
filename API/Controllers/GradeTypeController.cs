@@ -37,9 +37,10 @@ public class GradeTypeController : ControllerBase
         query = sortBy?.ToLower() switch
         {
             "name" => sortDesc ? query.OrderByDescending(x => x.Name) : query.OrderBy(x => x.Name),
+            "value" => sortDesc ? query.OrderByDescending(x => x.Numeric) : query.OrderBy(x => x.Numeric),
             "created" => sortDesc ? query.OrderByDescending(x => x.CreatedAt) : query.OrderBy(x => x.CreatedAt),
             "updated" => sortDesc ? query.OrderByDescending(x => x.UpdatedAt) : query.OrderBy(x => x.UpdatedAt),
-            _ => sortDesc ? query.OrderByDescending(x => x.Name) : query.OrderBy(x => x.Name)
+            _ => sortDesc ? query.OrderByDescending(x => x.Numeric) : query.OrderBy(x => x.Numeric)
         };
 
         return Ok(await query.ToListAsync());

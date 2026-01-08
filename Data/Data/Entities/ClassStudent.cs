@@ -18,6 +18,7 @@ namespace Data.Data.Entities
         public int StudentId { get; set; }
         [ForeignKey(nameof(StudentId))]
         public virtual User? Student { get; set; } = null!;
+        public int OrderNumber { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
     }

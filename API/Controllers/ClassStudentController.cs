@@ -2,31 +2,46 @@
 using Data.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using API.DTOs;
 
 [ApiController]
 [Route("api/[controller]")]
 public class ClassStudentController : ControllerBase
 {
     private readonly SchoolDbContext _context;
-    public ClassStudentController(SchoolDbContext context) => _context = context;
 
-    [HttpGet]
-    public async Task<IActionResult> GetAll() => Ok(await _context.ClassStudents.ToListAsync());
+    public ClassStudentController(SchoolDbContext context)
+    {
+        _context = context;
+    }
 
     [HttpPost]
-    public async Task<IActionResult> Create(ClassStudent entity)
+    public async Task<IActionResult> AddStudent([FromBody] AddStudentDto dto)
     {
-        _context.ClassStudents.Add(entity);
+        var exists = await _context.ClassStudents
+            .AnyAsync(cs => cs.ClassId == dto.ClassId && cs.StudentId == dto.StudentId);
+
+        if (exists) return BadRequest("Uczeń jest już przypisany do tej klasy");
+
+        var cs = new ClassStudent
+        {
+            ClassId = dto.ClassId,
+            StudentId = dto.StudentId,
+            CreatedAt = DateTime.Now,
+            UpdatedAt = DateTime.Now
+        };
+
+        _context.ClassStudents.Add(cs);
         await _context.SaveChangesAsync();
-        return Ok(entity);
+        return Ok(cs);
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(int id)
+    public async Task<IActionResult> RemoveStudent(int id)
     {
-        var item = await _context.ClassStudents.FindAsync(id);
-        if (item == null) return NotFound();
-        item.UpdatedAt = DateTime.Now;
+        var cs = await _context.ClassStudents.FindAsync(id);
+        if (cs == null) return NotFound();
+        _context.ClassStudents.Remove(cs);
         await _context.SaveChangesAsync();
         return NoContent();
     }

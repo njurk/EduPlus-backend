@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(SchoolDbContext))]
-    [Migration("20260106153554_Functions")]
-    partial class Functions
+    [Migration("20260108132020_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -358,7 +358,8 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SchoolYearId");
+                    b.HasIndex("SchoolYearId", "Level", "Letter")
+                        .IsUnique();
 
                     b.ToTable("Classes");
 
@@ -400,6 +401,9 @@ namespace Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<int>("OrderNumber")
+                        .HasColumnType("int");
 
                     b.Property<int>("StudentId")
                         .HasColumnType("int");
@@ -1183,9 +1187,14 @@ namespace Data.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GETUTCDATE()");
 
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("StudentId");
+
+                    b.HasIndex("UserId");
 
                     b.HasIndex("ParentId", "StudentId")
                         .IsUnique();
@@ -1668,11 +1677,16 @@ namespace Data.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GETUTCDATE()");
 
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ClassId");
 
                     b.HasIndex("SubjectId");
+
+                    b.HasIndex("UserId");
 
                     b.HasIndex("TeacherId", "ClassId", "SubjectId")
                         .IsUnique();
@@ -1908,11 +1922,8 @@ namespace Data.Migrations
                     b.ToTable("WeeklySchedules");
                 });
 
-            modelBuilder.Entity("Data.Data.EntitiesForView.DashboardStats", b =>
+            modelBuilder.Entity("Data.Data.EntitiesForView.DashboardStatsView", b =>
                 {
-                    b.Property<double>("AvgGradeGlobal")
-                        .HasColumnType("float");
-
                     b.Property<int>("TotalClasses")
                         .HasColumnType("int");
 
@@ -1930,235 +1941,23 @@ namespace Data.Migrations
                     b.ToView("vw_DashboardStats", (string)null);
                 });
 
-            modelBuilder.Entity("Data.Data.EntitiesForView.ViewAnnouncementDetails", b =>
+            modelBuilder.Entity("Data.Data.EntitiesForView.ParentStudentView", b =>
                 {
-                    b.Property<string>("AuthorName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("AuthorRole")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.Property<int>("Id")
                         .HasColumnType("int");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.ToTable((string)null);
-
-                    b.ToView("vw_AnnouncementDetails", (string)null);
-                });
-
-            modelBuilder.Entity("Data.Data.EntitiesForView.ViewAttendanceDetails", b =>
-                {
-                    b.Property<int>("AttendanceId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsAbsent")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsExcused")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsLate")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsPresent")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsUnexcused")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("LessonId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("LessonNumber")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ShortCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("StatusName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SubjectName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.ToTable((string)null);
-
-                    b.ToView("vw_AttendanceDetails", (string)null);
-                });
-
-            modelBuilder.Entity("Data.Data.EntitiesForView.ViewClassStudentDetails", b =>
-                {
-                    b.Property<int>("ClassId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FullName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ParentEmail")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ParentName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ParentPhone")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Phone")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int");
-
-                    b.ToTable((string)null);
-
-                    b.ToView("vw_ClassStudentDetails", (string)null);
-                });
-
-            modelBuilder.Entity("Data.Data.EntitiesForView.ViewGradeDetails", b =>
-                {
-                    b.Property<string>("CategoryName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Comment")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("GradeId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("GradeTypeName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("SemesterId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SubjectId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SubjectName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TeacherName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("Value")
-                        .HasColumnType("decimal(4,2)");
-
-                    b.Property<int>("Weight")
-                        .HasColumnType("int");
-
-                    b.ToTable((string)null);
-
-                    b.ToView("vw_GradeDetails", (string)null);
-                });
-
-            modelBuilder.Entity("Data.Data.EntitiesForView.ViewLessonSchedule", b =>
-                {
-                    b.Property<int>("ClassId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ClassName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ClassroomName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("DayOfWeek")
-                        .HasColumnType("int");
-
-                    b.Property<TimeOnly>("EndTime")
-                        .HasColumnType("time");
-
-                    b.Property<int>("LessonNumber")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ScheduleId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SchoolYearId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SemesterId")
-                        .HasColumnType("int");
-
-                    b.Property<TimeOnly>("StartTime")
-                        .HasColumnType("time");
-
-                    b.Property<int>("SubjectId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SubjectName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TeacherName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.ToTable((string)null);
-
-                    b.ToView("vw_LessonSchedule", (string)null);
-                });
-
-            modelBuilder.Entity("Data.Data.EntitiesForView.ViewPendingExcuse", b =>
-                {
-                    b.Property<string>("ClassName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ExcuseId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("LessonDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("LessonNumber")
+                    b.Property<int>("ParentId")
                         .HasColumnType("int");
 
                     b.Property<string>("ParentName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Reason")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -2169,76 +1968,55 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("SubmittedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("TeacherId")
-                        .HasColumnType("int");
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.ToTable((string)null);
 
-                    b.ToView("vw_PendingExcuses", (string)null);
+                    b.ToView("vw_ParentStudentView", (string)null);
                 });
 
-            modelBuilder.Entity("Data.Data.EntitiesForView.ViewStudentAttendance", b =>
+            modelBuilder.Entity("Data.Data.EntitiesForView.UserListView", b =>
                 {
-                    b.Property<int>("AbsentCount")
-                        .HasColumnType("int");
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
-                    b.Property<int>("ClassId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ExcusedCount")
-                        .HasColumnType("int");
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsUnassignedParent")
+                        .HasColumnType("bit");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("LateCount")
-                        .HasColumnType("int");
+                    b.Property<string>("Phone")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PresentCount")
-                        .HasColumnType("int");
+                    b.Property<string>("RoleNames")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int");
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.ToTable((string)null);
 
-                    b.ToView("vw_StudentAttendanceSummary", (string)null);
-                });
-
-            modelBuilder.Entity("Data.Data.EntitiesForView.ViewTeacherClass", b =>
-                {
-                    b.Property<int>("ClassId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ClassName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("MainSubjectName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("SchoolYearId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SchoolYearName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("TeacherId")
-                        .HasColumnType("int");
-
-                    b.ToTable((string)null);
-
-                    b.ToView("vw_TeacherClasses", (string)null);
+                    b.ToView("vw_UserListView", (string)null);
                 });
 
             modelBuilder.Entity("Data.Data.CMS.Page", b =>
@@ -2340,7 +2118,7 @@ namespace Data.Migrations
                         .IsRequired();
 
                     b.HasOne("Data.Data.Entities.User", "Student")
-                        .WithMany()
+                        .WithMany("ClassStudents")
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -2496,6 +2274,10 @@ namespace Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("Data.Data.Entities.User", null)
+                        .WithMany("ParentStudents")
+                        .HasForeignKey("UserId");
+
                     b.Navigation("Parent");
 
                     b.Navigation("Student");
@@ -2542,6 +2324,10 @@ namespace Data.Migrations
                         .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("Data.Data.Entities.User", null)
+                        .WithMany("TeacherClassSubjects")
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Class");
 
@@ -2692,6 +2478,12 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Data.Data.Entities.User", b =>
                 {
+                    b.Navigation("ClassStudents");
+
+                    b.Navigation("ParentStudents");
+
+                    b.Navigation("TeacherClassSubjects");
+
                     b.Navigation("UserRoles");
                 });
 #pragma warning restore 612, 618
