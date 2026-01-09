@@ -1,10 +1,12 @@
 ﻿using Data.Data;
 using Data.Data.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class SubjectController : ControllerBase
 {
     private readonly SchoolDbContext _context;
@@ -47,7 +49,7 @@ public class SubjectController : ControllerBase
 
     [HttpPost]
     public async Task<IActionResult> Create(Subject entity)
-    { 
+    {
         entity.CreatedAt = DateTime.Now;
         entity.UpdatedAt = DateTime.Now;
         entity.IsActive = true;

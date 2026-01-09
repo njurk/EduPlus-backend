@@ -1,6 +1,4 @@
-﻿using BCrypt.Net;
-
-namespace BusinessLogic.Services
+﻿namespace BusinessLogic.Services
 {
     public interface IPasswordHashService
     {

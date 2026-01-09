@@ -1,13 +1,14 @@
-﻿using Data.Data.Entities;
-using Microsoft.EntityFrameworkCore;
-using Data.Data;
-using BusinessLogic.Services;
-
-namespace BusinessLogic.Seeders
+﻿namespace BusinessLogic.Seeders
 {
+    using BusinessLogic.Services;
+    using Data.Data;
+    using Data.Data.Entities;
+    using Microsoft.EntityFrameworkCore;
+
     public class DataSeeder
     {
         private readonly SchoolDbContext _context;
+
         private readonly Random _random = new Random();
 
         public DataSeeder(SchoolDbContext context)
@@ -77,6 +78,7 @@ namespace BusinessLogic.Seeders
                 (21, "Krzysztof", "Wieczorek", "kwieczorek@szkola.edu.pl", "Kwiatowa 8", "Józefów", "05-420")
             };
         }
+
         private List<(string S_Name, string S_Last, string S_Email, string P_Name, string P_Email, string Street, string City, string PostalCode)> GetClass1StudentsData()
         {
             return new List<(string, string, string, string, string, string, string, string)>
@@ -437,112 +439,192 @@ namespace BusinessLogic.Seeders
         {
             var teachersData = GetTeachersData();
             var subjectToEmail = teachersData.ToDictionary(t => t.SubjectId, t => t.Email);
+            var gradeTypeIds = _context.GradeTypes.Select(x => x.Id).ToList();
+            var gradeCategoryIds = _context.GradeCategories.Select(x => x.Id).ToList();
 
-            int GetTeacherId(int subjId)
+            if (!gradeTypeIds.Any() || !gradeCategoryIds.Any())
+                throw new Exception("Brak typów lub kategorii ocen");
+
+            var weeklySchedules = _context.WeeklySchedules.ToList();
+            if (!weeklySchedules.Any()) return;
+
+            var today = DateTime.Now.Date;
+            var startDate = today.AddDays(-60);
+            var generatedLessons = new List<Lesson>();
+
+            for (var date = startDate; date <= today; date = date.AddDays(1))
             {
-                if (!subjectToEmail.ContainsKey(subjId))
-                    throw new Exception($"Nie znaleziono nauczyciela dla przedmiotu ID: {subjId}");
+                int dayOfWeek = (int)date.DayOfWeek;
+                if (dayOfWeek == 0 || dayOfWeek == 6) continue;
 
-                var email = subjectToEmail[subjId];
-                return _context.Users.First(u => u.Email == email).Id;
-            }
-
-            var lessons1A = new List<Lesson>
-            {
-                new Lesson { ClassId = 1, SubjectId = 1, TeacherId = GetTeacherId(1), ClassroomId = 1, LessonHourId = 1, Topic = "Liczby", StatusId = 2, IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now, Date = DateTime.Now },
-                new Lesson { ClassId = 1, SubjectId = 2, TeacherId = GetTeacherId(2), ClassroomId = 2, LessonHourId = 2, Topic = "Alfabet", StatusId = 2, IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now, Date = DateTime.Now },
-                new Lesson { ClassId = 1, SubjectId = 5, TeacherId = GetTeacherId(5), ClassroomId = 16, LessonHourId = 3, Topic = "Gimnastyka", StatusId = 2, IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now, Date = DateTime.Now },
-                new Lesson { ClassId = 1, SubjectId = 1, TeacherId = GetTeacherId(1), ClassroomId = 1, LessonHourId = 1, Topic = "Dodawanie i odejmowanie", StatusId = 2, IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now, Date = DateTime.Now },
-                new Lesson { ClassId = 1, SubjectId = 2, TeacherId = GetTeacherId(2), ClassroomId = 2, LessonHourId = 2, Topic = "Czytanie", StatusId = 2, IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now, Date = DateTime.Now }
-            };
-            _context.Lessons.AddRange(lessons1A);
-
-            var lessons8C = new List<Lesson>
-            {
-                new Lesson { ClassId = 2, SubjectId = 1, TeacherId = GetTeacherId(1), ClassroomId = 6, LessonHourId = 1, Topic = "Funkcja liniowa", StatusId = 2, IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now, Date = DateTime.Now },
-                new Lesson { ClassId = 2, SubjectId = 10, TeacherId = GetTeacherId(10), ClassroomId = 7, LessonHourId = 2, Topic = "Ruch jednostajny", StatusId = 2, IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now, Date = DateTime.Now },
-                new Lesson { ClassId = 2, SubjectId = 9, TeacherId = GetTeacherId(9), ClassroomId = 8, LessonHourId = 3, Topic = "Kwasy i zasady", StatusId = 2, IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now, Date = DateTime.Now },
-                new Lesson { ClassId = 2, SubjectId = 1, TeacherId = GetTeacherId(1), ClassroomId = 6, LessonHourId = 1, Topic = "Układy równań", StatusId = 2, IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now, Date = DateTime.Now },
-                new Lesson { ClassId = 2, SubjectId = 2, TeacherId = GetTeacherId(2), ClassroomId = 9, LessonHourId = 2, Topic = "Omówienie lektury Pan Tadeusz", StatusId = 2, IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now, Date = DateTime.Now }
-            };
-            _context.Lessons.AddRange(lessons8C);
-            _context.SaveChanges();
-
-            var students1A = _context.ClassStudents.Where(cs => cs.ClassId == 1).Select(cs => cs.StudentId).ToList();
-            var students8C = _context.ClassStudents.Where(cs => cs.ClassId == 2).Select(cs => cs.StudentId).ToList();
-
-            void FillStudentData(List<int> studentIds, List<Lesson> lessons)
-            {
-                foreach (var studId in studentIds)
+                var dailySchedules = weeklySchedules.Where(ws => ws.DayOfWeek == dayOfWeek).ToList();
+                foreach (var slot in dailySchedules)
                 {
-                    _context.Attendances.Add(new Attendance { StudentId = studId, LessonId = lessons[0].Id, AttendanceTypeId = 2, IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now });
-                    _context.Attendances.Add(new Attendance { StudentId = studId, LessonId = lessons[1].Id, AttendanceTypeId = 2, IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now });
-                    _context.Attendances.Add(new Attendance { StudentId = studId, LessonId = lessons[2].Id, AttendanceTypeId = 3, IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now });
-                    _context.Attendances.Add(new Attendance { StudentId = studId, LessonId = lessons[3].Id, AttendanceTypeId = 1, IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now });
-                    _context.Attendances.Add(new Attendance { StudentId = studId, LessonId = lessons[4].Id, AttendanceTypeId = 1, IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now });
-
-                    _context.Grades.Add(new Grade { StudentId = studId, TeacherId = lessons[0].TeacherId, SubjectId = lessons[0].SubjectId, GradeTypeId = 3, GradeCategoryId = 1, Comment = "", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now, DateTime = DateTime.Now });
-                    _context.Grades.Add(new Grade { StudentId = studId, TeacherId = lessons[1].TeacherId, SubjectId = lessons[1].SubjectId, GradeTypeId = 4, GradeCategoryId = 2, Comment = "OK", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now, DateTime = DateTime.Now });
-                    _context.Grades.Add(new Grade { StudentId = studId, TeacherId = lessons[2].TeacherId, SubjectId = lessons[2].SubjectId, GradeTypeId = 5, GradeCategoryId = 4, Comment = "Gratulacje", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now, DateTime = DateTime.Now });
-                    _context.Grades.Add(new Grade { StudentId = studId, TeacherId = lessons[3].TeacherId, SubjectId = lessons[3].SubjectId, GradeTypeId = 2, GradeCategoryId = 5, Comment = "", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now, DateTime = DateTime.Now });
+                    generatedLessons.Add(new Lesson
+                    {
+                        ClassId = slot.ClassId,
+                        SubjectId = slot.SubjectId,
+                        TeacherId = slot.TeacherId,
+                        ClassroomId = slot.ClassroomId,
+                        LessonHourId = slot.LessonHourId,
+                        Topic = $"Temat z dnia {date:dd.MM}",
+                        StatusId = 2,
+                        IsActive = true,
+                        Date = date,
+                        CreatedAt = DateTime.Now,
+                        UpdatedAt = DateTime.Now
+                    });
                 }
             }
 
-            FillStudentData(students1A, lessons1A);
-            FillStudentData(students8C, lessons8C);
+            _context.Lessons.AddRange(generatedLessons);
+            _context.SaveChanges();
 
+            var attendances = new List<Attendance>();
+            var grades = new List<Grade>();
+            var attendanceCheck = new HashSet<(int StudentId, int LessonId)>();
+            var classIds = new[] { 1, 2 };
+
+            foreach (var classId in classIds)
+            {
+                var studentIds = _context.ClassStudents
+                    .Where(cs => cs.ClassId == classId)
+                    .Select(cs => cs.StudentId)
+                    .ToList();
+
+                var lessonsBySubject = generatedLessons
+                    .Where(l => l.ClassId == classId)
+                    .GroupBy(l => l.SubjectId)
+                    .ToDictionary(g => g.Key, g => g.ToList());
+
+                foreach (var studentId in studentIds)
+                {
+                    foreach (var subjectEntry in lessonsBySubject)
+                    {
+                        var subjectId = subjectEntry.Key;
+                        var subjectLessons = subjectEntry.Value;
+                        int targetCount = _random.Next(4, 7);
+                        int countToTake = Math.Min(targetCount, subjectLessons.Count);
+
+                        var selectedForGrades = subjectLessons
+                            .OrderBy(x => _random.Next())
+                            .Take(countToTake)
+                            .ToList();
+
+                        foreach (var lesson in selectedForGrades)
+                        {
+                            grades.Add(new Grade
+                            {
+                                StudentId = studentId,
+                                TeacherId = lesson.TeacherId,
+                                SubjectId = subjectId,
+                                GradeTypeId = gradeTypeIds[_random.Next(gradeTypeIds.Count)],
+                                GradeCategoryId = gradeCategoryIds[_random.Next(gradeCategoryIds.Count)],
+                                Comment = null,
+                                IsActive = true,
+                                CreatedAt = lesson.Date,
+                                UpdatedAt = lesson.Date,
+                                DateTime = lesson.Date
+                            });
+
+                            attendances.Add(new Attendance
+                            {
+                                StudentId = studentId,
+                                LessonId = lesson.Id,
+                                AttendanceTypeId = 1,
+                                IsActive = true,
+                                CreatedAt = lesson.Date,
+                                UpdatedAt = lesson.Date
+                            });
+
+                            attendanceCheck.Add((studentId, lesson.Id));
+                        }
+                    }
+
+                    var allClassLessons = generatedLessons.Where(l => l.ClassId == classId);
+
+                    foreach (var lesson in allClassLessons)
+                    {
+                        if (attendanceCheck.Contains((studentId, lesson.Id))) continue;
+
+                        int roll = _random.Next(0, 100);
+                        int typeId;
+
+                        if (roll < 85) typeId = 1;
+                        else if (roll < 95) typeId = 3;
+                        else typeId = 2;
+
+                        attendances.Add(new Attendance
+                        {
+                            StudentId = studentId,
+                            LessonId = lesson.Id,
+                            AttendanceTypeId = typeId,
+                            IsActive = true,
+                            CreatedAt = lesson.Date,
+                            UpdatedAt = lesson.Date
+                        });
+                    }
+                }
+            }
+
+            _context.Attendances.AddRange(attendances);
+            _context.Grades.AddRange(grades);
             _context.SaveChanges();
         }
 
         private void SeedAnnouncements()
         {
-            var adminId = _context.UserRoles.First(ur => ur.RoleId == 1).UserId;
-
             var teacherIds = _context.UserRoles
-                .Where(ur => ur.RoleId == 2)
+                .Include(ur => ur.Role)
+                .Where(ur => ur.Role.Level == 2)
                 .Select(ur => ur.UserId)
-                .Take(3)
                 .ToList();
 
-            var announcements = new List<Announcement>
+            if (!teacherIds.Any()) return;
+
+            var titles = new[]
             {
-                new Announcement
-                {
-                    Title = "Wpłaty na radę rodziców",
-                    Description = "Szanowni Państwo, przypominamy o konieczności uiszczenia opłaty na Radę Rodziców do 18 października. Wpłaty można dokonywać na konto bankowe szkoły lub w sekretariacie",
-                    CreatedAt = new DateTime(2025, 10, 12),
-                    UpdatedAt = new DateTime(2025, 10, 12),
-                    AuthorId = adminId,
-                    IsActive = true
-                },
-                new Announcement
-                {
-                    Title = "Dzień Nauczyciela",
-                    Description = "W związku z obchodami Dnia Edukacji Narodowej, w dniu 14 października lekcje zostają skrócone. Świetlica pracuje bez zmian",
-                    CreatedAt = new DateTime(2025, 10, 7),
-                    UpdatedAt = new DateTime(2025, 10, 7),
-                    AuthorId = teacherIds[0],
-                    IsActive = true
-                },
-                new Announcement
-                {
-                    Title = "Konkurs matematyczny 'Kangur'",
-                    Description = "Zapraszamy wszystkich chętnych uczniów klas 4-8 do udziału w międzynarodowym konkursie matematycznym Kangur. Zapisy u nauczycieli matematyki do końca tygodnia.",
-                    CreatedAt = DateTime.Now.AddDays(-2),
-                    UpdatedAt = DateTime.Now.AddDays(-2),
-                    AuthorId = teacherIds[1],
-                    IsActive = true
-                },
-                new Announcement
-                {
-                    Title = "Zebranie rodziców klas 1-3",
-                    Description = "Zapraszamy na zebranie rodziców klas 1-3, odbędzie się w najbliższy wtorek o godzinie 17:00 w auli.",
-                    CreatedAt = DateTime.Now.AddDays(-1),
-                    UpdatedAt = DateTime.Now.AddDays(-1),
-                    AuthorId = teacherIds[2],
-                    IsActive = true
-                }
+                "Zebranie rodziców",
+                "Ważna informacja",
+                "Zmiana w planie lekcji",
+                "Głosowanie na przewodniczącego",
+                "Zbliżające się konkursy szkolne",
+                "Wycieczka do Londynu",
+                "Zbiórka makulatury",
+                "Ważne: wpłaty na Radę Rodziców",
+                "Najbliższe dni wolne od zajęć",
+                "Zajęcia dodatkowe z przedmiotów",
             };
+
+            var loremIpsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Curabitur pretium tincidunt lacus. Nulla gravida orci a odio. Nullam varius, turpis et commodo pharetra, est eros bibendum elit, nec luctus magna felis sollicitudin mauris.";
+
+            var announcements = new List<Announcement>();
+            int quantityToGenerate = 10;
+
+            for (int i = 0; i < quantityToGenerate; i++)
+            {
+                var daysBack = _random.Next(0, 30);
+                var hoursBack = _random.Next(0, 24);
+                var minutesBack = _random.Next(0, 60);
+                var date = DateTime.Now.AddDays(-daysBack).AddHours(-hoursBack).AddMinutes(-minutesBack);
+                var authorId = teacherIds[_random.Next(teacherIds.Count)];
+                var title = titles[_random.Next(titles.Length)];
+                int descLength = _random.Next(50, loremIpsum.Length);
+                var description = loremIpsum.Substring(0, descLength).Trim();
+                if (!description.EndsWith(".")) description += "...";
+
+                announcements.Add(new Announcement
+                {
+                    Title = title,
+                    Description = description,
+                    CreatedAt = date,
+                    UpdatedAt = date,
+                    AuthorId = authorId,
+                    IsActive = true
+                });
+            }
+
+            announcements = announcements.OrderBy(a => a.CreatedAt).ToList();
 
             _context.Announcements.AddRange(announcements);
             _context.SaveChanges();

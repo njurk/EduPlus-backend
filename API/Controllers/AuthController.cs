@@ -1,6 +1,7 @@
 ﻿using API.DTOs;
 using BusinessLogic.Services;
 using Data.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -10,10 +11,13 @@ using System.Text;
 
 [ApiController]
 [Route("api/[controller]")]
+[AllowAnonymous]
 public class AuthController : ControllerBase
 {
     private readonly SchoolDbContext _context;
+
     private readonly IPasswordHashService _passwordHashService;
+
     private readonly IConfiguration _configuration;
 
     public AuthController(SchoolDbContext context, IPasswordHashService passwordHashService, IConfiguration configuration)
@@ -32,10 +36,13 @@ public class AuthController : ControllerBase
             .FirstOrDefaultAsync(u => u.Email == dto.Email);
 
         if (user == null || !user.IsActive)
-            return Unauthorized("Błędny email lub hasło.");
+            return Unauthorized("Błędny email lub hasło");
 
         if (!_passwordHashService.VerifyPassword(dto.Password, user.Password))
-            return Unauthorized("Błędny email lub hasło.");
+            return Unauthorized("Błędny email lub hasło");
+
+        if (!user.UserRoles.Any(ur => ur.Role.Level == 1))
+            return Unauthorized("Nie posiadasz odpowiednich uprawnień");
 
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]!);

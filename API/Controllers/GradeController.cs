@@ -1,101 +1,88 @@
-﻿using Data.Data.Entities;
-using Data.Data;
+﻿using Data.Data;
+using Data.Data.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class GradeController : ControllerBase
 {
     private readonly SchoolDbContext _context;
+
     public GradeController(SchoolDbContext context) => _context = context;
 
-    [HttpGet]
-    public async Task<IActionResult> GetAll() => Ok(await _context.Grades.ToListAsync());
+    [HttpGet("current-semester/{schoolYearId}")]
+    public async Task<IActionResult> GetCurrentSemester(int schoolYearId)
+    {
+        var today = DateOnly.FromDateTime(DateTime.Now);
+        var semesters = await _context.Semesters
+            .AsNoTracking()
+            .Where(s => s.SchoolYearId == schoolYearId)
+            .OrderBy(s => s.StartDate)
+            .ToListAsync();
+
+        var current = semesters.FirstOrDefault(s => s.StartDate <= today && s.EndDate >= today);
+
+        return Ok(current != null ? semesters.IndexOf(current) + 1 : 1);
+    }
 
     [HttpGet("class-grades/{classId}/{subjectId}")]
-    public async Task<IActionResult> GetClassGrades(
-        int classId,
-        int subjectId,
-        [FromQuery] int semester = 1,
-        [FromQuery] int? schoolYearId = null,
-        [FromQuery] string sortBy = "orderNumber",
-        [FromQuery] bool sortDesc = false
-    )
+    public async Task<IActionResult> GetClassGrades(int classId, int subjectId, [FromQuery] int semester = 1, [FromQuery] int? schoolYearId = null)
     {
-        var yearQuery = _context.SchoolYears
-            .Include(y => y.Semesters)
-            .AsNoTracking();
+        var yearId = schoolYearId ?? await _context.SchoolYears
+            .Where(y => y.IsActive)
+            .Select(y => y.Id)
+            .FirstOrDefaultAsync();
 
-        var year = schoolYearId.HasValue
-            ? await yearQuery.FirstOrDefaultAsync(y => y.Id == schoolYearId)
-            : await yearQuery.FirstOrDefaultAsync(y => y.IsActive);
+        if (yearId == 0) return NotFound("Brak aktywnego roku");
 
-        if (year == null) return NotFound("Nie znaleziono roku szkolnego");
-
-        var targetSemester = year.Semesters
-            .OrderBy(s => s.StartDate)
-            .ElementAtOrDefault(semester - 1);
-
-        if (targetSemester == null) return BadRequest("Nie znaleziono wybranego semestru dla tego roku");
-
-        var semStart = targetSemester.StartDate.ToDateTime(TimeOnly.MinValue);
-        var semEnd = targetSemester.EndDate.ToDateTime(TimeOnly.MaxValue);
-
-        var query = _context.ClassStudents
+        var semesters = await _context.Semesters
             .AsNoTracking()
-            .Where(cs => cs.ClassId == classId);
+            .Where(s => s.SchoolYearId == yearId)
+            .OrderBy(s => s.StartDate)
+            .ToListAsync();
 
-        var rawData = query.Select(cs => new
-        {
-            cs.StudentId,
-            cs.Student.FirstName,
-            cs.Student.LastName,
-            cs.Student.Email,
-            cs.OrderNumber,
-            Average = SchoolDbContext.CalculateWeightedAverage(cs.StudentId, subjectId, semStart, semEnd),
-            Grades = _context.Grades
-                .Where(g => g.StudentId == cs.StudentId &&
-                            g.SubjectId == subjectId &&
-                            g.IsActive &&
-                            g.CreatedAt >= semStart &&
-                            g.CreatedAt <= semEnd)
-                .OrderBy(g => g.CreatedAt)
-                .Select(g => new
-                {
-                    g.Id,
-                    g.StudentId,
-                    g.SubjectId,
-                    g.GradeTypeId,
-                    g.GradeCategoryId,
-                    g.Comment,
-                    g.CreatedAt,
-                    GradeType = new
+        var targetSem = semesters.ElementAtOrDefault(semester - 1);
+        if (targetSem == null) return BadRequest("Nieprawidłowy numer semestru");
+
+        var start = targetSem.StartDate.ToDateTime(TimeOnly.MinValue);
+        var end = targetSem.EndDate.ToDateTime(TimeOnly.MaxValue);
+
+        var data = await _context.ClassStudents
+            .AsNoTracking()
+            .Where(cs => cs.ClassId == classId)
+            .Select(cs => new
+            {
+                cs.StudentId,
+                cs.Student.FirstName,
+                cs.Student.LastName,
+                cs.OrderNumber,
+                Average = SchoolDbContext.CalculateWeightedAverage(cs.StudentId, subjectId, start, end),
+                Grades = _context.Grades
+                    .Where(g => g.StudentId == cs.StudentId &&
+                                g.SubjectId == subjectId &&
+                                g.IsActive &&
+                                g.CreatedAt >= start &&
+                                g.CreatedAt <= end)
+                    .OrderBy(g => g.CreatedAt)
+                    .Select(g => new
                     {
-                        g.GradeType.Id,
-                        g.GradeType.Numeric,
-                        g.GradeType.Name,
-                        g.GradeType.Value
-                    },
-                    GradeCategory = new
-                    {
-                        g.GradeCategory.Id,
-                        g.GradeCategory.Name
-                    }
-                })
-                .ToList()
-        });
+                        g.Id,
+                        g.GradeTypeId,
+                        g.GradeCategoryId,
+                        g.Comment,
+                        g.CreatedAt,
+                        GradeType = new { g.GradeType.Numeric, g.GradeType.Name, g.GradeType.Value },
+                        GradeCategory = new { g.GradeCategory.Name }
+                    })
+                    .ToList()
+            })
+            .OrderBy(x => x.OrderNumber)
+            .ToListAsync();
 
-        if (sortBy.ToLower() == "average")
-        {
-            rawData = sortDesc ? rawData.OrderByDescending(x => x.Average) : rawData.OrderBy(x => x.Average);
-        }
-        else
-        {
-            rawData = sortDesc ? rawData.OrderByDescending(x => x.OrderNumber) : rawData.OrderBy(x => x.OrderNumber);
-        }
-
-        return Ok(await rawData.ToListAsync());
+        return Ok(data);
     }
 
     [HttpPost]
@@ -104,10 +91,22 @@ public class GradeController : ControllerBase
         entity.CreatedAt = DateTime.Now;
         entity.UpdatedAt = DateTime.Now;
         if (entity.DateTime == default) entity.DateTime = DateTime.Now;
-
         _context.Grades.Add(entity);
         await _context.SaveChangesAsync();
         return Ok(entity);
+    }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update(int id, Grade entity)
+    {
+        var existing = await _context.Grades.FindAsync(id);
+        if (existing == null) return NotFound();
+        existing.GradeTypeId = entity.GradeTypeId;
+        existing.GradeCategoryId = entity.GradeCategoryId;
+        existing.Comment = entity.Comment;
+        existing.UpdatedAt = DateTime.Now;
+        await _context.SaveChangesAsync();
+        return Ok(existing);
     }
 
     [HttpDelete("{id}")]

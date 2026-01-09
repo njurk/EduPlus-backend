@@ -1,9 +1,11 @@
 ﻿using Data.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class RoleController : ControllerBase
 {
     private readonly SchoolDbContext _context;
@@ -24,7 +26,7 @@ public class RoleController : ControllerBase
             query = query.Where(r => r.Name.Contains(s) || (r.Description != null && r.Description.Contains(s)));
         }
 
-        query = query.OrderByDescending(r => r.Level).ThenBy(r => r.Name);
+        query = query.OrderBy(r => r.Level).ThenBy(r => r.Name);
 
         return Ok(await query.ToListAsync());
     }

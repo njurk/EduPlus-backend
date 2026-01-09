@@ -1,10 +1,12 @@
-﻿using Data.Data.Entities;
-using Data.Data;
+﻿using Data.Data;
+using Data.Data.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class SemesterController : ControllerBase
 {
     private readonly SchoolDbContext _context;

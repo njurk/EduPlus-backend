@@ -1,10 +1,12 @@
-﻿using Data.Data.Entities;
-using Data.Data;
+﻿using Data.Data;
+using Data.Data.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class SchoolYearController : ControllerBase
 {
     private readonly SchoolDbContext _context;
@@ -29,6 +31,26 @@ public class SchoolYearController : ControllerBase
 
         if (year == null) return NotFound();
         return Ok(year);
+    }
+
+    [HttpGet("{id}/semesters")]
+    public async Task<IActionResult> GetSemestersByYear(int id)
+    {
+        var semesters = await _context.Semesters
+            .AsNoTracking()
+            .Where(s => s.SchoolYearId == id)
+            .OrderBy(s => s.StartDate)
+            .Select(s => new
+            {
+                s.Id,
+                s.Name,
+                Order = _context.Semesters
+                            .Where(x => x.SchoolYearId == id && x.StartDate < s.StartDate)
+                            .Count() + 1
+            })
+            .ToListAsync();
+
+        return Ok(semesters);
     }
 
     [HttpPost]

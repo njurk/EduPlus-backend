@@ -1,13 +1,14 @@
-using Microsoft.EntityFrameworkCore;
-using Data.Data;
-using BusinessLogic.Services;
-using System.Text.Json.Serialization;
-using BusinessLogic.Seeders;
-using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 namespace API
 {
+    using BusinessLogic.Seeders;
+    using BusinessLogic.Services;
+    using Data.Data;
+    using Microsoft.AspNetCore.Authentication.JwtBearer;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.IdentityModel.Tokens;
+    using System.Text;
+    using System.Text.Json.Serialization;
+
     public class Program
     {
         public static void Main(string[] args)
@@ -22,8 +23,7 @@ namespace API
             {
                 options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
             });
-                
-            
+
             builder.Services.AddScoped<IPasswordHashService, PasswordHashService>();
 
             builder.Services.AddEndpointsApiExplorer();

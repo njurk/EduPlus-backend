@@ -1,11 +1,13 @@
-﻿using Data.Data.Entities;
+﻿using API.DTOs;
 using Data.Data;
+using Data.Data.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using API.DTOs;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class TeacherClassSubjectController : ControllerBase
 {
     private readonly SchoolDbContext _context;

@@ -2,8 +2,6 @@
 using Data.Data.Entities;
 using Data.Data.EntitiesForView;
 using Microsoft.EntityFrameworkCore;
-using System.Drawing;
-using System.Linq.Expressions;
 
 namespace Data.Data
 {
@@ -207,8 +205,8 @@ namespace Data.Data
             modelBuilder.Entity<Role>().HasData(
                 new Role { Id = 1, Name = "Administrator", IsActive = true, Description = "Najwyższy poziom uprawnień, dostęp do wszystkiego", Level = 1, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
                 new Role { Id = 2, Name = "Nauczyciel", IsActive = true, Description = "Zarządzanie przydzielonymi zasobami", Level = 2, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
-                new Role {Id = 3, Name = "Rodzic", IsActive = true, Description = "Przeglądanie danych przypisanego użytkownika, możliwość usprawiedliwienia", Level = 3, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
-                new Role {Id = 4, Name = "Uczeń", IsActive = true, Description = "Przeglądanie własnych danych", Level = 4, CreatedAt = initialDateTime, UpdatedAt = initialDateTime }
+                new Role { Id = 3, Name = "Rodzic", IsActive = true, Description = "Przeglądanie danych przypisanego użytkownika, możliwość usprawiedliwienia", Level = 3, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
+                new Role { Id = 4, Name = "Uczeń", IsActive = true, Description = "Przeglądanie własnych danych", Level = 4, CreatedAt = initialDateTime, UpdatedAt = initialDateTime }
             );
 
             modelBuilder.Entity<SchoolYear>().HasData(

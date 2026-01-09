@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
-namespace API.Controllers
+﻿namespace API.Controllers
 {
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
+
+    [ApiController]
+    [Route("api/[controller]")]
+    [Authorize]
     public class TargetController : ControllerBase
     {
-
     }
 }

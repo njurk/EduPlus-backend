@@ -1,10 +1,12 @@
-﻿using Data.Data.Entities;
-using Data.Data;
+﻿using Data.Data;
+using Data.Data.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class ClassController : ControllerBase
 {
     private readonly SchoolDbContext _context;
@@ -44,14 +46,14 @@ public class ClassController : ControllerBase
 
     [HttpGet("{id}/details")]
     public async Task<IActionResult> GetDetails(
-        int id,
-        [FromQuery] string sortBy = "lastName",
-        [FromQuery] bool sortDesc = false,
-        [FromQuery] string studentSearch = "",
-        [FromQuery] string subjectSearch = "",
-        [FromQuery] string subjectSortBy = "subjectName",
-        [FromQuery] bool subjectSortDesc = false
-        )
+    int id,
+    [FromQuery] string sortBy = "lastName",
+    [FromQuery] bool sortDesc = false,
+    [FromQuery] string studentSearch = "",
+    [FromQuery] string subjectSearch = "",
+    [FromQuery] string subjectSortBy = "subjectName",
+    [FromQuery] bool subjectSortDesc = false
+    )
     {
         var classEntity = await _context.Classes.AsNoTracking().FirstOrDefaultAsync(c => c.Id == id);
         if (classEntity == null) return NotFound();

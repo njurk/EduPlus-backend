@@ -1,14 +1,16 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc;
-using Data.Data;
-using API.DTOs;
-using Data.Data.EntitiesForView;
-using System.Globalization;
-
-namespace API.Controllers
+﻿namespace API.Controllers
 {
+    using API.DTOs;
+    using Data.Data;
+    using Data.Data.EntitiesForView;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.EntityFrameworkCore;
+    using System.Globalization;
+
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class DashboardController : ControllerBase
     {
         private readonly SchoolDbContext _context;

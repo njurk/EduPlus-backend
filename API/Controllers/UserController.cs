@@ -1,16 +1,18 @@
-﻿using Data.Data.Entities;
+﻿using API.DTOs;
+using BusinessLogic.Services;
 using Data.Data;
+using Data.Data.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using API.DTOs;
-using BCrypt.Net;
-using BusinessLogic.Services;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class UserController : ControllerBase
 {
     private readonly SchoolDbContext _context;
+
     private readonly IPasswordHashService _passwordHashService;
 
     public UserController(SchoolDbContext context, IPasswordHashService passwordHashService)
@@ -183,7 +185,7 @@ public class UserController : ControllerBase
             var newStudentIds = dto.ChildIds.Where(id => !existingStudentIds.Contains(id)).Distinct();
 
             foreach (var studentId in newStudentIds)
-            {   
+            {
                 dbUser.ParentStudents.Add(new ParentStudent
                 {
                     ParentId = id,

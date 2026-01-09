@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Data.Data.EntitiesForView
+﻿namespace Data.Data.EntitiesForView
 {
     public class UserListView
     {
@@ -16,7 +10,7 @@ namespace Data.Data.EntitiesForView
         public bool IsActive { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
-        public string? RoleNames { get; set; } 
+        public string? RoleNames { get; set; }
         public bool IsUnassignedParent { get; set; }
     }
 }

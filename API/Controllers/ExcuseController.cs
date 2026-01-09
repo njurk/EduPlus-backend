@@ -1,13 +1,16 @@
-﻿using Data.Data.Entities;
-using Data.Data;
+﻿using Data.Data;
+using Data.Data.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class ExcuseController : ControllerBase
 {
     private readonly SchoolDbContext _context;
+
     public ExcuseController(SchoolDbContext context) => _context = context;
 
     [HttpGet]

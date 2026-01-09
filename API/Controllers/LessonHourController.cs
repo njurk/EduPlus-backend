@@ -1,10 +1,12 @@
 ﻿using Data.Data;
 using Data.Data.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class LessonHourController : ControllerBase
 {
     private readonly SchoolDbContext _context;
@@ -31,7 +33,9 @@ public class LessonHourController : ControllerBase
         if (!string.IsNullOrWhiteSpace(search))
         {
             var s = search.Trim();
-            query = query.Where(x => x.OrderNumber.ToString().Contains(s) || x.StartTime.ToString("HH:mm").Contains(s) || x.EndTime.ToString("HH:mm").Contains(s));
+            query = query.Where(x => x.OrderNumber.ToString().Contains(s)
+                                  || x.StartTime.ToString().Contains(s)
+                                  || x.EndTime.ToString().Contains(s));
         }
 
         query = sortBy?.ToLower() switch
@@ -46,8 +50,10 @@ public class LessonHourController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(LessonHour entity)
+    public async Task<IActionResult> Create([FromBody] LessonHour entity)
     {
+        if (!ModelState.IsValid) return BadRequest(ModelState);
+
         entity.CreatedAt = DateTime.Now;
         entity.UpdatedAt = DateTime.Now;
         entity.IsActive = true;
@@ -58,13 +64,18 @@ public class LessonHourController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, LessonHour entity)
+    public async Task<IActionResult> Update(int id, [FromBody] LessonHour entity)
     {
-        if (id != entity.Id) return BadRequest();
+        if (id != entity.Id) return BadRequest("ID elementu nie jest zgodne.");
 
-        entity.UpdatedAt = DateTime.Now;
-        _context.Entry(entity).State = EntityState.Modified;
-        _context.Entry(entity).Property(x => x.CreatedAt).IsModified = false;
+        var existingItem = await _context.LessonHours.FindAsync(id);
+        if (existingItem == null) return NotFound();
+
+        existingItem.OrderNumber = entity.OrderNumber;
+        existingItem.StartTime = entity.StartTime;
+        existingItem.EndTime = entity.EndTime;
+        existingItem.IsActive = entity.IsActive;
+        existingItem.UpdatedAt = DateTime.Now;
 
         try
         {
@@ -72,11 +83,10 @@ public class LessonHourController : ControllerBase
         }
         catch (DbUpdateConcurrencyException)
         {
-            if (!await _context.LessonHours.AnyAsync(e => e.Id == id)) return NotFound();
-            throw;
+            return StatusCode(500, "Błąd zapisu danych");
         }
 
-        return Ok(entity);
+        return Ok(existingItem);
     }
 
     [HttpDelete("{id}")]
@@ -85,17 +95,17 @@ public class LessonHourController : ControllerBase
         var item = await _context.LessonHours.FindAsync(id);
         if (item == null) return NotFound();
 
-        if (item.IsActive)
+        _context.LessonHours.Remove(item);
+
+        try
         {
-            item.IsActive = false;
-            item.UpdatedAt = DateTime.Now;
+            await _context.SaveChangesAsync();
         }
-        else
+        catch (DbUpdateException)
         {
-            _context.LessonHours.Remove(item);
+            return BadRequest("Nie można usunąć tej godziny ponieważ jest ona używana w planie lekcji lub frekwencji");
         }
 
-        await _context.SaveChangesAsync();
         return NoContent();
     }
 }

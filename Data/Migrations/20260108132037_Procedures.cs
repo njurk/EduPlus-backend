@@ -1,7 +1,4 @@
-﻿using Data.Data.Entities;
-using Microsoft.EntityFrameworkCore.Migrations;
-using System.Diagnostics.Metrics;
-using System;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 

@@ -1,7 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace API.DTOs
+﻿namespace API.DTOs
 {
+    using System.ComponentModel.DataAnnotations;
+
     public class ChangePasswordDto
     {
         [Required]

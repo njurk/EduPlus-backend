@@ -1,19 +1,17 @@
-﻿using Data.Data.Entities;
+﻿using API.DTOs;
 using Data.Data;
+using Data.Data.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-public class CreateUserRoleDto
-{
-    public int UserId { get; set; }
-    public int RoleId { get; set; }
-}
-
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class UserRoleController : ControllerBase
 {
     private readonly SchoolDbContext _context;
+
     public UserRoleController(SchoolDbContext context) => _context = context;
 
     [HttpGet]
