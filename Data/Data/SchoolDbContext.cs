@@ -31,6 +31,7 @@ namespace Data.Data
         public DbSet<Semester> Semesters { get; set; } = null!;
         public DbSet<Subject> Subjects { get; set; } = null!;
         public DbSet<TeacherClassSubject> TeacherClassSubjects { get; set; } = null!;
+        public DbSet<SubjectTeacher> SubjectTeachers { get; set; }
         public DbSet<User> Users { get; set; } = null!;
         public DbSet<UserRole> UserRoles { get; set; } = null!;
         public DbSet<WeeklySchedule> WeeklySchedules { get; set; } = null!;
@@ -41,12 +42,10 @@ namespace Data.Data
         public DbSet<Page> Pages { get; set; } = null!;
         public DbSet<PageContent> PageContents { get; set; } = null!;
 
-        //for view
         public DbSet<DashboardStatsView> DashboardStats { get; set; }
         public DbSet<UserListView> UserList { get; set; }
         public DbSet<ParentStudentView> ParentStudentList { get; set; }
 
-        //functions
 
         [DbFunction("fn_CalculateWeightedAverage", "dbo")]
         public static decimal CalculateWeightedAverage(int studentId, int subjectId, DateTime startDate, DateTime endDate)
@@ -62,7 +61,6 @@ namespace Data.Data
 
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
-                // automatyczne timestampy
                 var createdAt = entityType.FindProperty("CreatedAt");
                 if (createdAt != null)
                 {
@@ -111,6 +109,20 @@ namespace Data.Data
                  .IsUnique();
                 e.HasOne(x => x.Teacher).WithMany().OnDelete(DeleteBehavior.Restrict);
             });
+
+            modelBuilder.Entity<SubjectTeacher>()
+                .HasKey(st => new { st.SubjectId, st.TeacherId });
+
+            modelBuilder.Entity<SubjectTeacher>()
+                .HasOne(st => st.Subject)
+                .WithMany()
+                .HasForeignKey(st => st.SubjectId);
+
+            modelBuilder.Entity<SubjectTeacher>()
+                .HasOne(st => st.Teacher)
+                .WithMany()
+                .HasForeignKey(st => st.TeacherId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Attendance>(e =>
             {
@@ -184,17 +196,14 @@ namespace Data.Data
 
             modelBuilder.Entity<GradeType>().Property(p => p.Value).HasColumnType("decimal(2,1)");
 
-            // functions
             modelBuilder.HasDbFunction(typeof(SchoolDbContext).GetMethod(nameof(CalculateWeightedAverage))!)
                 .HasName("fn_CalculateWeightedAverage")
                 .HasSchema("dbo");
 
-            // for view
             modelBuilder.Entity<DashboardStatsView>().HasNoKey().ToView("vw_DashboardStatsView");
             modelBuilder.Entity<UserListView>().HasNoKey().ToView("vw_UserListView");
             modelBuilder.Entity<ParentStudentView>().HasNoKey().ToView("vw_ParentStudentView");
 
-            // seedowanie tabel (reszta w DataSeeder)
             modelBuilder.Entity<Target>().HasData(
                 new Target { Id = 1, Label = "WebAdmin", Title = "Administrator - strona internetowa" },
                 new Target { Id = 2, Label = "WebTeacher", Title = "Nauczyciel - strona internetowa" },

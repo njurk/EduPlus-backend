@@ -30,6 +30,11 @@
                 SeedUsers(passwordHashService);
             }
 
+            if (!_context.SubjectTeachers.Any())
+            {
+                SeedSubjectTeachers();
+            }
+
             if (!_context.ClassStudents.Any())
             {
                 SeedClasses();
@@ -92,7 +97,23 @@
                 ("Tymon", "Głowacki", "tglowacki@szkola.edu.pl", "Krzysztof", "kglowacki@szkola.edu.pl", "Brzozowa 21", "Raszyn", "05-090"),
                 ("Marcelina", "Zakrzewska", "mzakrzewska@szkola.edu.pl", "Maria", "mazakrzewska@szkola.edu.pl", "Topolowa 15", "Zielonka", "05-220"),
                 ("Ignacy", "Laskowski", "ilaskowski@szkola.edu.pl", "Paweł", "plaskowski@szkola.edu.pl", "Klonowa 7", "Kobyłka", "05-230"),
-                ("Klara", "Makowska", "kmakowska@szkola.edu.pl", "Zofia", "zmakowska@szkola.edu.pl", "Dębowa 2", "Ożarów Mazowiecki", "05-850")
+                ("Klara", "Makowska", "kmakowska@szkola.edu.pl", "Zofia", "zmakowska@szkola.edu.pl", "Dębowa 2", "Ożarów Mazowiecki", "05-850"),
+
+                ("Antoni", "Czerwiński", "aczerwinski@szkola.edu.pl", "Robert", "rczerwinski@szkola.edu.pl", "Polna 5", "Grodzisk Mazowiecki", "05-825"),
+                ("Maja", "Szymczak", "mszymczak@szkola.edu.pl", "Agnieszka", "aszymczak@szkola.edu.pl", "Szkolna 12", "Milanówek", "05-822"),
+                ("Filip", "Bąk", "fbak@szkola.edu.pl", "Tomasz", "tbak@szkola.edu.pl", "Leśna 3", "Podkowa Leśna", "05-807"),
+                ("Julia", "Włodarczyk", "jwlodarczyk@szkola.edu.pl", "Katarzyna", "kwlodarczyk@szkola.edu.pl", "Kwiatowa 8", "Brwinów", "05-840"),
+                ("Szymon", "Dudziński", "sdudzinski@szkola.edu.pl", "Marcin", "mdudzinski@szkola.edu.pl", "Ogrodowa 20", "Błonie", "05-870"),
+                ("Zuzanna", "Kaczmarek", "zkaczmarek@szkola.edu.pl", "Michał", "mikaczmarek@szkola.edu.pl", "Słoneczna 15", "Raszyn", "05-090"),
+                ("Franciszek", "Kołodziej", "fkolodziej@szkola.edu.pl", "Wojciech", "wkolodziej@szkola.edu.pl", "Lipowa 2", "Nadarzyn", "05-830"),
+                ("Lena", "Sobolewska", "lsobolewska@szkola.edu.pl", "Marta", "msobolewska@szkola.edu.pl", "Wiśniowa 9", "Ożarów Mazowiecki", "05-850"),
+                ("Mikołaj", "Rogowski", "mrogowski@szkola.edu.pl", "Kamil", "krogowski@szkola.edu.pl", "Brzozowa 11", "Stare Babice", "05-082"),
+                ("Alicja", "Witkowska", "awitkowska@szkola.edu.pl", "Piotr", "pwitkowski@szkola.edu.pl", "Zielona 4", "Leszno", "05-084"),
+                ("Stanisław", "Lis", "slis@szkola.edu.pl", "Jacek", "jlis@szkola.edu.pl", "Miodowa 7", "Izabelin", "05-080"),
+                ("Amelia", "Nawrocka", "anawrocka@szkola.edu.pl", "Ewelina", "enawrocka@szkola.edu.pl", "Parkowa 10", "Łomianki", "05-092"),
+                ("Jakub", "Bednarek", "jbednarek@szkola.edu.pl", "Grzegorz", "gbednarek@szkola.edu.pl", "Wrzosowa 5", "Czosnów", "05-152"),
+                ("Hanna", "Olejniczak", "holejniczak@szkola.edu.pl", "Dominika", "dolejniczak@szkola.edu.pl", "Sosnowa 14", "Leoncin", "05-155"),
+                ("Wojciech", "Pietrzak", "wpietrzak@szkola.edu.pl", "Sławomir", "spietrzak@szkola.edu.pl", "Klonowa 33", "Nowy Dwór Mazowiecki", "05-100")
             };
         }
 
@@ -109,7 +130,23 @@
                 ("Dawid", "Sikorski", "dsikorski@szkola.edu.pl", "Robert", "rsikorski@szkola.edu.pl", "Cicha 6", "Rembertów", "04-406"),
                 ("Martyna", "Sobczak", "msobczak@szkola.edu.pl", "Agnieszka", "asobczak@szkola.edu.pl", "Spokojna 11", "Ursus", "02-495"),
                 ("Kamil", "Drzewiecki", "kdrzewiecki@szkola.edu.pl", "Dariusz", "ddrzewiecki@szkola.edu.pl", "Wesoła 22", "Włochy", "02-400"),
-                ("Patrycja", "Malinowska", "pmalinowska@szkola.edu.pl", "Katarzyna", "kmalinowska@szkola.edu.pl", "Prosta 40", "Bemowo", "01-310")
+                ("Patrycja", "Malinowska", "pmalinowska@szkola.edu.pl", "Katarzyna", "kmalinowska@szkola.edu.pl", "Prosta 40", "Bemowo", "01-310"),
+
+                ("Oskar", "Jasiński", "ojasinski@szkola.edu.pl", "Mariusz", "mjasinski@szkola.edu.pl", "Dębowa 7", "Sulejówek", "05-070"),
+                ("Wiktoria", "Górska", "wgorska@szkola.edu.pl", "Iwona", "igorska@szkola.edu.pl", "Kasztanowa 12", "Halinów", "05-074"),
+                ("Miłosz", "Sawicki", "msawicki@szkola.edu.pl", "Rafał", "rsawicki@szkola.edu.pl", "Jodłowa 3", "Józefów", "05-420"),
+                ("Gabriela", "Kruk", "gkruk@szkola.edu.pl", "Dorota", "dkruk@szkola.edu.pl", "Topolowa 9", "Otwock", "05-400"),
+                ("Hubert", "Szczepański", "hszczepanski@szkola.edu.pl", "Marek", "mszczepanski@szkola.edu.pl", "Wspólna 21", "Karczew", "05-480"),
+                ("Zofia", "Kaźmierczak", "zkazmierczak@szkola.edu.pl", "Aneta", "akazmierczak@szkola.edu.pl", "Leśna 55", "Wiązowna", "05-462"),
+                ("Maciej", "Skowroński", "mskowronski@szkola.edu.pl", "Krzysztof", "kskowronski@szkola.edu.pl", "Polna 8", "Kołbiel", "05-340"),
+                ("Aleksandra", "Konieczna", "akonieczna@szkola.edu.pl", "Małgorzata", "makonieczna@szkola.edu.pl", "Warszawska 100", "Mińsk Mazowiecki", "05-300"),
+                ("Adam", "Domagała", "adomagala@szkola.edu.pl", "Jan", "jdomagala@szkola.edu.pl", "Siedlecka 12", "Dębe Wielkie", "05-311"),
+                ("Magdalena", "Wróbel", "mwrobel@szkola.edu.pl", "Bożena", "bwrobel@szkola.edu.pl", "Miła 2", "Stanisławów", "05-304"),
+                ("Dominik", "Mazurek", "dmazurek@szkola.edu.pl", "Adam", "admazurek@szkola.edu.pl", "Cicha 15", "Wołomin", "05-200"),
+                ("Emilia", "Zaręba", "ezareba@szkola.edu.pl", "Monika", "mzareba@szkola.edu.pl", "Piaskowa 7", "Kobyłka", "05-230"),
+                ("Borys", "Piątek", "bpiatek@szkola.edu.pl", "Artur", "apiatek@szkola.edu.pl", "Słoneczna 19", "Marki", "05-270"),
+                ("Blanka", "Grzelak", "bgrzelak@szkola.edu.pl", "Sylwia", "sgrzelak@szkola.edu.pl", "Graniczna 4", "Ząbki", "05-091"),
+                ("Ksawery", "Łuczak", "kluczak@szkola.edu.pl", "Damian", "dluczak@szkola.edu.pl", "Mickiewicza 11", "Zielonka", "05-220")
             };
         }
 
@@ -246,6 +283,31 @@
             _context.SaveChanges();
         }
 
+        private void SeedSubjectTeachers()
+        {
+            var teachersData = GetTeachersData();
+            var teacherEmails = teachersData.Select(t => t.Email).ToList();
+            var dbTeachers = _context.Users.Where(u => teacherEmails.Contains(u.Email)).ToList();
+
+            var subjectTeachers = new List<SubjectTeacher>();
+
+            foreach (var t in teachersData)
+            {
+                var teacher = dbTeachers.FirstOrDefault(u => u.Email == t.Email);
+                if (teacher != null)
+                {
+                    subjectTeachers.Add(new SubjectTeacher
+                    {
+                        TeacherId = teacher.Id,
+                        SubjectId = t.SubjectId
+                    });
+                }
+            }
+
+            _context.SubjectTeachers.AddRange(subjectTeachers);
+            _context.SaveChanges();
+        }
+
         private void SeedClasses()
         {
             var class1Data = GetClass1StudentsData();
@@ -357,15 +419,21 @@
         {
             var schedules = new List<WeeklySchedule>();
             var teachersData = GetTeachersData();
-            var subjectToEmail = teachersData.ToDictionary(t => t.SubjectId, t => t.Email);
+
+            var teacherEmails = teachersData.Select(t => t.Email).Distinct().ToList();
+
+            var teachersMap = _context.Users
+                .Where(u => teacherEmails.Contains(u.Email))
+                .ToDictionary(u => u.Email, u => u.Id);
+
+            var subjectToTeacherId = teachersData.ToDictionary(
+                t => t.SubjectId,
+                t => teachersMap[t.Email]
+            );
 
             int GetTeacherId(int subjId)
             {
-                if (!subjectToEmail.ContainsKey(subjId))
-                    throw new Exception($"Brak nauczyciela dla przedmiotu: {subjId}");
-
-                var email = subjectToEmail[subjId];
-                return _context.Users.First(u => u.Email == email).Id;
+                return subjectToTeacherId[subjId];
             }
 
             schedules.Add(new WeeklySchedule { ClassId = 1, DayOfWeek = 1, LessonHourId = 1, SubjectId = 1, TeacherId = GetTeacherId(1), ClassroomId = 1, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now });
@@ -393,8 +461,8 @@
             schedules.Add(new WeeklySchedule { ClassId = 1, DayOfWeek = 5, LessonHourId = 3, SubjectId = 15, TeacherId = GetTeacherId(15), ClassroomId = 5, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now });
             schedules.Add(new WeeklySchedule { ClassId = 1, DayOfWeek = 5, LessonHourId = 4, SubjectId = 5, TeacherId = GetTeacherId(5), ClassroomId = 16, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now });
 
-            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 1, LessonHourId = 1, SubjectId = 1, TeacherId = GetTeacherId(1), ClassroomId = 6, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now });
-            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 1, LessonHourId = 2, SubjectId = 10, TeacherId = GetTeacherId(10), ClassroomId = 7, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now });
+            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 1, LessonHourId = 1, SubjectId = 10, TeacherId = GetTeacherId(10), ClassroomId = 7, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now });
+            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 1, LessonHourId = 2, SubjectId = 1, TeacherId = GetTeacherId(1), ClassroomId = 6, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now });
             schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 1, LessonHourId = 3, SubjectId = 9, TeacherId = GetTeacherId(9), ClassroomId = 8, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now });
             schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 1, LessonHourId = 4, SubjectId = 2, TeacherId = GetTeacherId(2), ClassroomId = 9, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now });
             schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 1, LessonHourId = 5, SubjectId = 3, TeacherId = GetTeacherId(3), ClassroomId = 10, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now });
@@ -416,9 +484,9 @@
             schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 3, LessonHourId = 6, SubjectId = 5, TeacherId = GetTeacherId(5), ClassroomId = 17, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now });
             schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 3, LessonHourId = 7, SubjectId = 20, TeacherId = GetTeacherId(20), ClassroomId = 14, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now });
 
-            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 4, LessonHourId = 1, SubjectId = 9, TeacherId = GetTeacherId(9), ClassroomId = 8, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now });
+            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 4, LessonHourId = 1, SubjectId = 1, TeacherId = GetTeacherId(1), ClassroomId = 6, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now });
             schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 4, LessonHourId = 2, SubjectId = 8, TeacherId = GetTeacherId(8), ClassroomId = 8, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now });
-            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 4, LessonHourId = 3, SubjectId = 1, TeacherId = GetTeacherId(1), ClassroomId = 6, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now });
+            schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 4, LessonHourId = 3, SubjectId = 9, TeacherId = GetTeacherId(9), ClassroomId = 8, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now });
             schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 4, LessonHourId = 4, SubjectId = 2, TeacherId = GetTeacherId(2), ClassroomId = 9, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now });
             schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 4, LessonHourId = 5, SubjectId = 3, TeacherId = GetTeacherId(3), ClassroomId = 10, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now });
             schedules.Add(new WeeklySchedule { ClassId = 2, DayOfWeek = 4, LessonHourId = 6, SubjectId = 11, TeacherId = GetTeacherId(11), ClassroomId = 12, SchoolYearId = 1, SemesterId = 1, IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now });
@@ -449,7 +517,7 @@
             if (!weeklySchedules.Any()) return;
 
             var today = DateTime.Now.Date;
-            var startDate = today.AddDays(-60);
+            var startDate = today.AddDays(-30);
             var generatedLessons = new List<Lesson>();
 
             for (var date = startDate; date <= today; date = date.AddDays(1))
@@ -503,7 +571,7 @@
                     {
                         var subjectId = subjectEntry.Key;
                         var subjectLessons = subjectEntry.Value;
-                        int targetCount = _random.Next(4, 7);
+                        int targetCount = _random.Next(2, 4);
                         int countToTake = Math.Min(targetCount, subjectLessons.Count);
 
                         var selectedForGrades = subjectLessons

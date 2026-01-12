@@ -47,6 +47,25 @@ public class SubjectController : ControllerBase
         return Ok(await query.ToListAsync());
     }
 
+    [HttpGet("{id}/teachers")]
+    public async Task<IActionResult> GetTeachersBySubject(int id)
+    {
+        var teachers = await _context.SubjectTeachers
+            .AsNoTracking()
+            .Where(st => st.SubjectId == id && st.Teacher.IsActive)
+            .Select(st => new
+            {
+                st.Teacher.Id,
+                st.Teacher.FirstName,
+                st.Teacher.LastName,
+                st.Teacher.Email
+            })
+            .OrderBy(t => t.LastName)
+            .ToListAsync();
+
+        return Ok(teachers);
+    }
+
     [HttpPost]
     public async Task<IActionResult> Create(Subject entity)
     {

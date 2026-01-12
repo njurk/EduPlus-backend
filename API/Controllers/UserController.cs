@@ -1,4 +1,4 @@
-﻿using API.DTOs;
+﻿using Shared.DTOs;
 using BusinessLogic.Services;
 using Data.Data;
 using Data.Data.Entities;

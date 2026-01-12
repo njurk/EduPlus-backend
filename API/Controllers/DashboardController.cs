@@ -1,13 +1,13 @@
-﻿namespace API.Controllers
-{
-    using API.DTOs;
-    using Data.Data;
-    using Data.Data.EntitiesForView;
-    using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.EntityFrameworkCore;
-    using System.Globalization;
+﻿using Shared.DTOs;
+using Data.Data;
+using Data.Data.EntitiesForView;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
+namespace API.Controllers
+{
     [ApiController]
     [Route("api/[controller]")]
     [Authorize]

@@ -1,4 +1,4 @@
-﻿using API.DTOs;
+﻿using Shared.DTOs;
 using Data.Data;
 using Data.Data.Entities;
 using Microsoft.AspNetCore.Authorization;

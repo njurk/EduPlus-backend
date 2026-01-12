@@ -1647,6 +1647,21 @@ namespace Data.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Data.Data.Entities.SubjectTeacher", b =>
+                {
+                    b.Property<int>("SubjectId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TeacherId")
+                        .HasColumnType("int");
+
+                    b.HasKey("SubjectId", "TeacherId");
+
+                    b.HasIndex("TeacherId");
+
+                    b.ToTable("SubjectTeachers");
+                });
+
             modelBuilder.Entity("Data.Data.Entities.TeacherClassSubject", b =>
                 {
                     b.Property<int>("Id")
@@ -1935,7 +1950,7 @@ namespace Data.Migrations
 
                     b.ToTable((string)null);
 
-                    b.ToView("vw_DashboardStats", (string)null);
+                    b.ToView("vw_DashboardStatsView", (string)null);
                 });
 
             modelBuilder.Entity("Data.Data.EntitiesForView.ParentStudentView", b =>
@@ -2300,6 +2315,25 @@ namespace Data.Migrations
                         .IsRequired();
 
                     b.Navigation("SchoolYear");
+                });
+
+            modelBuilder.Entity("Data.Data.Entities.SubjectTeacher", b =>
+                {
+                    b.HasOne("Data.Data.Entities.Subject", "Subject")
+                        .WithMany()
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Data.Data.Entities.User", "Teacher")
+                        .WithMany()
+                        .HasForeignKey("TeacherId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Subject");
+
+                    b.Navigation("Teacher");
                 });
 
             modelBuilder.Entity("Data.Data.Entities.TeacherClassSubject", b =>

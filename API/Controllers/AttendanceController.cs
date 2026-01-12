@@ -1,37 +1,53 @@
-﻿using Data.Data;
+﻿using BusinessLogic.Services;
 using Data.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
 public class AttendanceController : ControllerBase
 {
-    private readonly SchoolDbContext _context;
+    private readonly IAttendanceService _service;
 
-    public AttendanceController(SchoolDbContext context) => _context = context;
+    public AttendanceController(IAttendanceService service)
+    {
+        _service = service;
+    }
+
+    [HttpGet("admin")]
+    public async Task<IActionResult> GetAllForAdmin([FromQuery] bool includeInactive = false)
+    {
+        var result = await _service.GetAllForAdminAsync(includeInactive);
+        return Ok(result);
+    }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll() => Ok(await _context.Attendances.ToListAsync());
+    public async Task<IActionResult> GetAll()
+    {
+        return Ok(await _service.GetAllAsync());
+    }
 
     [HttpPost]
     public async Task<IActionResult> Create(Attendance entity)
     {
-        _context.Attendances.Add(entity);
-        await _context.SaveChangesAsync();
-        return Ok(entity);
+        var result = await _service.CreateAsync(entity);
+        return Ok(result);
+    }
+
+    [HttpPut("{id}/restore")]
+    public async Task<IActionResult> Restore(int id)
+    {
+        var success = await _service.RestoreAsync(id);
+        if (!success) return NotFound();
+        return NoContent();
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
-        var item = await _context.Attendances.FindAsync(id);
-        if (item == null) return NotFound();
-        item.IsActive = false;
-        item.UpdatedAt = DateTime.Now;
-        await _context.SaveChangesAsync();
+        var success = await _service.DeleteAsync(id);
+        if (!success) return NotFound();
         return NoContent();
     }
 }

@@ -45,8 +45,8 @@ public class SchoolYearController : ControllerBase
                 s.Id,
                 s.Name,
                 Order = _context.Semesters
-                            .Where(x => x.SchoolYearId == id && x.StartDate < s.StartDate)
-                            .Count() + 1
+                    .Where(x => x.SchoolYearId == id && x.StartDate < s.StartDate)
+                    .Count() + 1
             })
             .ToListAsync();
 

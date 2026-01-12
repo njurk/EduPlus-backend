@@ -1,112 +1,51 @@
-﻿using Data.Data;
+﻿using BusinessLogic.Services;
 using Data.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
 public class AttendanceTypeController : ControllerBase
 {
-    private readonly SchoolDbContext _context;
+    private readonly IAttendanceTypeService _service;
 
-    public AttendanceTypeController(SchoolDbContext context)
+    public AttendanceTypeController(IAttendanceTypeService service)
     {
-        _context = context;
+        _service = service;
     }
 
     [HttpGet]
     public async Task<IActionResult> GetAll([FromQuery] string? search, [FromQuery] string? sortBy, [FromQuery] bool sortDesc = false, [FromQuery] bool showInactive = false)
     {
-        var query = _context.AttendanceTypes.AsNoTracking().AsQueryable();
-
-        if (showInactive)
-        {
-            query = query.Where(r => !r.IsActive);
-        }
-        else
-        {
-            query = query.Where(r => r.IsActive);
-        }
-
-        if (!string.IsNullOrWhiteSpace(search))
-        {
-            var s = search.Trim();
-            query = query.Where(x => x.Name.Contains(s));
-        }
-
-        query = sortBy?.ToLower() switch
-        {
-            "name" => sortDesc ? query.OrderByDescending(x => x.Name) : query.OrderBy(x => x.Name),
-            "created" => sortDesc ? query.OrderByDescending(x => x.CreatedAt) : query.OrderBy(x => x.CreatedAt),
-            "updated" => sortDesc ? query.OrderByDescending(x => x.UpdatedAt) : query.OrderBy(x => x.UpdatedAt),
-            _ => sortDesc ? query.OrderByDescending(x => x.Name) : query.OrderBy(x => x.Name)
-        };
-
-        return Ok(await query.ToListAsync());
+        var result = await _service.GetAllAsync(search, sortBy, sortDesc, showInactive);
+        return Ok(result);
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(AttendanceType entity)
+    public async Task<IActionResult> Create([FromBody] AttendanceType entity)
     {
-        entity.CreatedAt = DateTime.Now;
-        entity.UpdatedAt = DateTime.Now;
-        entity.IsActive = true;
-
-        _context.AttendanceTypes.Add(entity);
-        await _context.SaveChangesAsync();
-        return Ok(entity);
+        var result = await _service.CreateAsync(entity);
+        return Ok(result);
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, AttendanceType entity)
+    public async Task<IActionResult> Update(int id, [FromBody] AttendanceType entity)
     {
-        if (id != entity.Id) return BadRequest();
+        if (id != entity.Id) return BadRequest("ID mismatch");
 
-        if (entity.IsActive && entity.Name.EndsWith(" (nieaktywny)"))
-        {
-            entity.Name = entity.Name.Replace(" (nieaktywny)", "");
-        }
+        var result = await _service.UpdateAsync(id, entity);
+        if (result == null) return NotFound();
 
-        entity.UpdatedAt = DateTime.Now;
-        _context.Entry(entity).State = EntityState.Modified;
-        _context.Entry(entity).Property(x => x.CreatedAt).IsModified = false;
-
-        try
-        {
-            await _context.SaveChangesAsync();
-        }
-        catch (DbUpdateConcurrencyException)
-        {
-            if (!await _context.AttendanceTypes.AnyAsync(e => e.Id == id)) return NotFound();
-            throw;
-        }
-
-        return Ok(entity);
+        return Ok(result);
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
-        var item = await _context.AttendanceTypes.FindAsync(id);
-        if (item == null) return NotFound();
+        var success = await _service.DeleteAsync(id);
+        if (!success) return NotFound();
 
-        if (item.IsActive)
-        {
-            item.IsActive = false;
-            if (!item.Name.EndsWith(" (nieaktywny)"))
-            {
-                item.Name += " (nieaktywny)";
-            }
-            item.UpdatedAt = DateTime.Now;
-        }
-        else
-        {
-            _context.AttendanceTypes.Remove(item);
-        }
-
-        await _context.SaveChangesAsync();
         return NoContent();
     }
 }

@@ -25,6 +25,13 @@ namespace API
             });
 
             builder.Services.AddScoped<IPasswordHashService, PasswordHashService>();
+            builder.Services.AddScoped<IAttendanceTypeService, AttendanceTypeService>();
+            builder.Services.AddScoped<IClassService, ClassService>();
+            builder.Services.AddScoped<IClassroomService, ClassroomService>();
+            builder.Services.AddScoped<IAnnouncementService, AnnouncementService>();
+            builder.Services.AddScoped<IAnnouncementReadService, AnnouncementReadService>();
+            builder.Services.AddScoped<IAttendanceService, AttendanceService>();
+            builder.Services.AddScoped<IAuthService, AuthService>();
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
