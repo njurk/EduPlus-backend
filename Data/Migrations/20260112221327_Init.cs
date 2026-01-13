@@ -438,7 +438,9 @@ namespace Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(type: "int", nullable: false),
                     Subject = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsClosed = table.Column<bool>(type: "bit", nullable: false),
+                    ClosedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    AdminResponse = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
                 },
@@ -709,8 +711,8 @@ namespace Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Label = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Key = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PageId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -747,34 +749,6 @@ namespace Data.Migrations
                     table.ForeignKey(
                         name: "FK_AnnouncementReads_Users_UserId",
                         column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "TicketMessages",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    TicketId = table.Column<int>(type: "int", nullable: false),
-                    SenderId = table.Column<int>(type: "int", nullable: false),
-                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TicketMessages", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_TicketMessages_Tickets_TicketId",
-                        column: x => x.TicketId,
-                        principalTable: "Tickets",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_TicketMessages_Users_SenderId",
-                        column: x => x.SenderId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -1032,6 +1006,11 @@ namespace Data.Migrations
                 column: "AuthorId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Announcements_CreatedAt_AuthorId",
+                table: "Announcements",
+                columns: new[] { "CreatedAt", "AuthorId" });
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Attendances_AttendanceTypeId",
                 table: "Attendances",
                 column: "AttendanceTypeId");
@@ -1095,9 +1074,9 @@ namespace Data.Migrations
                 column: "GradeTypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Grades_StudentId",
+                name: "IX_Grades_StudentId_SubjectId_DateTime",
                 table: "Grades",
-                column: "StudentId");
+                columns: new[] { "StudentId", "SubjectId", "DateTime" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Grades_SubjectId",
@@ -1118,6 +1097,11 @@ namespace Data.Migrations
                 name: "IX_Lessons_ClassroomId",
                 table: "Lessons",
                 column: "ClassroomId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Lessons_Date_ClassId_SubjectId",
+                table: "Lessons",
+                columns: new[] { "Date", "ClassId", "SubjectId" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Lessons_LessonHourId",
@@ -1202,16 +1186,6 @@ namespace Data.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TicketMessages_SenderId",
-                table: "TicketMessages",
-                column: "SenderId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TicketMessages_TicketId",
-                table: "TicketMessages",
-                column: "TicketId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Tickets_UserId",
                 table: "Tickets",
                 column: "UserId");
@@ -1232,6 +1206,11 @@ namespace Data.Migrations
                 table: "Users",
                 column: "Email",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_LastName_FirstName",
+                table: "Users",
+                columns: new[] { "LastName", "FirstName" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_WeeklySchedules_ClassId",
@@ -1303,7 +1282,7 @@ namespace Data.Migrations
                 name: "TeacherClassSubjects");
 
             migrationBuilder.DropTable(
-                name: "TicketMessages");
+                name: "Tickets");
 
             migrationBuilder.DropTable(
                 name: "UserRoles");
@@ -1325,9 +1304,6 @@ namespace Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Pages");
-
-            migrationBuilder.DropTable(
-                name: "Tickets");
 
             migrationBuilder.DropTable(
                 name: "Roles");

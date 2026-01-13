@@ -11,9 +11,9 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Data.Migrations
 {
-    [DbContext(typeof(SchoolDbContext))]
-    [Migration("20260112092936_Procedures")]
-    partial class Procedures
+    [DbContext(typeof(EduPlusDbContext))]
+    [Migration("20260112221850_AddFunctions")]
+    partial class AddFunctions
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -62,16 +62,16 @@ namespace Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Label")
+                    b.Property<string>("Key")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("PageId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -163,6 +163,8 @@ namespace Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AuthorId");
+
+                    b.HasIndex("CreatedAt", "AuthorId");
 
                     b.ToTable("Announcements");
                 });
@@ -728,11 +730,11 @@ namespace Data.Migrations
 
                     b.HasIndex("GradeTypeId");
 
-                    b.HasIndex("StudentId");
-
                     b.HasIndex("SubjectId");
 
                     b.HasIndex("TeacherId");
+
+                    b.HasIndex("StudentId", "SubjectId", "DateTime");
 
                     b.ToTable("Grades");
                 });
@@ -976,6 +978,8 @@ namespace Data.Migrations
                     b.HasIndex("SubjectId");
 
                     b.HasIndex("TeacherId");
+
+                    b.HasIndex("Date", "ClassId", "SubjectId");
 
                     b.ToTable("Lessons");
                 });
@@ -1717,14 +1721,19 @@ namespace Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("AdminResponse")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ClosedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GETUTCDATE()");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("IsClosed")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Subject")
                         .IsRequired()
@@ -1743,38 +1752,6 @@ namespace Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Tickets");
-                });
-
-            modelBuilder.Entity("Data.Data.Entities.TicketMessage", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
-
-                    b.Property<int>("SenderId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TicketId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SenderId");
-
-                    b.HasIndex("TicketId");
-
-                    b.ToTable("TicketMessages");
                 });
 
             modelBuilder.Entity("Data.Data.Entities.User", b =>
@@ -1835,6 +1812,8 @@ namespace Data.Migrations
 
                     b.HasIndex("Email")
                         .IsUnique();
+
+                    b.HasIndex("LastName", "FirstName");
 
                     b.ToTable("Users");
                 });
@@ -2381,25 +2360,6 @@ namespace Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Data.Data.Entities.TicketMessage", b =>
-                {
-                    b.HasOne("Data.Data.Entities.User", "Sender")
-                        .WithMany()
-                        .HasForeignKey("SenderId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Data.Data.Entities.Ticket", "Ticket")
-                        .WithMany("Messages")
-                        .HasForeignKey("TicketId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Sender");
-
-                    b.Navigation("Ticket");
-                });
-
             modelBuilder.Entity("Data.Data.Entities.UserRole", b =>
                 {
                     b.HasOne("Data.Data.Entities.Role", "Role")
@@ -2503,11 +2463,6 @@ namespace Data.Migrations
                     b.Navigation("Classes");
 
                     b.Navigation("Semesters");
-                });
-
-            modelBuilder.Entity("Data.Data.Entities.Ticket", b =>
-                {
-                    b.Navigation("Messages");
                 });
 
             modelBuilder.Entity("Data.Data.Entities.User", b =>

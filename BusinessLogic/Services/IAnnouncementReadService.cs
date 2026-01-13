@@ -1,4 +1,4 @@
-﻿using Data.Data;
+using Data.Data;
 using Data.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -18,9 +18,9 @@ namespace BusinessLogic.Services
 
     public class AnnouncementReadService : IAnnouncementReadService
     {
-        private readonly SchoolDbContext _context;
+        private readonly EduPlusDbContext _context;
 
-        public AnnouncementReadService(SchoolDbContext context)
+        public AnnouncementReadService(EduPlusDbContext context)
         {
             _context = context;
         }

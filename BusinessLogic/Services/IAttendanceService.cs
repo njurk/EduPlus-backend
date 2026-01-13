@@ -1,4 +1,4 @@
-﻿using Data.Data;
+using Data.Data;
 using Data.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Shared.DTOs.API.DTOs;
@@ -21,9 +21,9 @@ namespace BusinessLogic.Services
 
     public class AttendanceService : IAttendanceService
     {
-        private readonly SchoolDbContext _context;
+        private readonly EduPlusDbContext _context;
 
-        public AttendanceService(SchoolDbContext context)
+        public AttendanceService(EduPlusDbContext context)
         {
             _context = context;
         }

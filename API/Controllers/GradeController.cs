@@ -1,4 +1,4 @@
-﻿using Shared.DTOs;
+using Shared.DTOs;
 using Data.Data;
 using Data.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
@@ -11,9 +11,9 @@ using System.Security.Claims;
 [Authorize]
 public class GradeController : ControllerBase
 {
-    private readonly SchoolDbContext _context;
+    private readonly EduPlusDbContext _context;
 
-    public GradeController(SchoolDbContext context) => _context = context;
+    public GradeController(EduPlusDbContext context) => _context = context;
 
     [HttpGet("current-semester/{schoolYearId}")]
     public async Task<IActionResult> GetCurrentSemester(int schoolYearId)
@@ -34,7 +34,7 @@ public class GradeController : ControllerBase
         var semesters = await _context.Semesters.AsNoTracking()
             .Where(s => s.SchoolYearId == yearId).OrderBy(s => s.StartDate).ToListAsync();
         var targetSem = semesters.ElementAtOrDefault(semester - 1);
-        if (targetSem == null) return BadRequest("Nieprawidłowy numer semestru");
+        if (targetSem == null) return BadRequest("Nieprawid�owy numer semestru");
 
         var start = targetSem.StartDate.ToDateTime(TimeOnly.MinValue);
         var end = targetSem.EndDate.ToDateTime(TimeOnly.MaxValue);
@@ -48,7 +48,7 @@ public class GradeController : ControllerBase
                 cs.Student.FirstName,
                 cs.Student.LastName,
                 cs.OrderNumber,
-                Average = SchoolDbContext.CalculateWeightedAverage(cs.StudentId, subjectId, start, end),
+                Average = EduPlusDbContext.CalculateWeightedAverage(cs.StudentId, subjectId, start, end),
                 Grades = _context.Grades
                     .Where(g => g.StudentId == cs.StudentId && g.SubjectId == subjectId && g.IsActive && g.CreatedAt >= start && g.CreatedAt <= end)
                     .OrderBy(g => g.CreatedAt)

@@ -1,4 +1,4 @@
-ï»¿using Data.Data;
+using Data.Data;
 using Data.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,9 +9,9 @@ using Microsoft.EntityFrameworkCore;
 [Authorize]
 public class LessonHourController : ControllerBase
 {
-    private readonly SchoolDbContext _context;
+    private readonly EduPlusDbContext _context;
 
-    public LessonHourController(SchoolDbContext context)
+    public LessonHourController(EduPlusDbContext context)
     {
         _context = context;
     }
@@ -83,7 +83,7 @@ public class LessonHourController : ControllerBase
         }
         catch (DbUpdateConcurrencyException)
         {
-            return StatusCode(500, "BÅ‚Ä…d zapisu danych");
+            return StatusCode(500, "B³¹d zapisu danych");
         }
 
         return Ok(existingItem);
@@ -103,7 +103,7 @@ public class LessonHourController : ControllerBase
         }
         catch (DbUpdateException)
         {
-            return BadRequest("Nie moÅ¼na usunÄ…Ä‡ tej godziny poniewaÅ¼ jest ona uÅ¼ywana w planie lekcji lub frekwencji");
+            return BadRequest("Nie mo¿na usun¹æ tej godziny poniewa¿ jest ona u¿ywana w planie lekcji lub frekwencji");
         }
 
         return NoContent();

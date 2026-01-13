@@ -1,4 +1,4 @@
-﻿using BusinessLogic.Services;
+using BusinessLogic.Services;
 using Data.Data.Entities;
 using Shared.DTOs;
 using Microsoft.AspNetCore.Authorization;
@@ -81,7 +81,7 @@ public class ClassController : ControllerBase
         }
         catch (ArgumentException)
         {
-            return BadRequest("Nieprawidłowe ID");
+            return BadRequest("Nieprawid�owe ID");
         }
         catch (InvalidOperationException ex)
         {

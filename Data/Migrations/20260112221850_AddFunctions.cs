@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.EntityFrameworkCore.Migrations;
 using System.Reflection;
 
 #nullable disable
@@ -6,7 +6,7 @@ using System.Reflection;
 namespace Data.Migrations
 {
     /// <inheritdoc />
-    public partial class Functions : Migration
+    public partial class AddFunctions : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

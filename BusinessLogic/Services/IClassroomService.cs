@@ -1,4 +1,4 @@
-﻿using Data.Data;
+using Data.Data;
 using Data.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -19,9 +19,9 @@ namespace BusinessLogic.Services
 
     public class ClassroomService : IClassroomService
     {
-        private readonly SchoolDbContext _context;
+        private readonly EduPlusDbContext _context;
 
-        public ClassroomService(SchoolDbContext context)
+        public ClassroomService(EduPlusDbContext context)
         {
             _context = context;
         }

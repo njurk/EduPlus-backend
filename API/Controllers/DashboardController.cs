@@ -1,4 +1,4 @@
-﻿using Shared.DTOs;
+using Shared.DTOs;
 using Data.Data;
 using Data.Data.EntitiesForView;
 using Microsoft.AspNetCore.Authorization;
@@ -13,9 +13,9 @@ namespace API.Controllers
     [Authorize]
     public class DashboardController : ControllerBase
     {
-        private readonly SchoolDbContext _context;
+        private readonly EduPlusDbContext _context;
 
-        public DashboardController(SchoolDbContext context)
+        public DashboardController(EduPlusDbContext context)
         {
             _context = context;
         }

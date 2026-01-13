@@ -1,4 +1,4 @@
-﻿using Data.Data;
+using Data.Data;
 using Data.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,9 +9,9 @@ using Microsoft.EntityFrameworkCore;
 [Authorize]
 public class LessonController : ControllerBase
 {
-    private readonly SchoolDbContext _context;
+    private readonly EduPlusDbContext _context;
 
-    public LessonController(SchoolDbContext context) => _context = context;
+    public LessonController(EduPlusDbContext context) => _context = context;
 
     [HttpGet]
     public async Task<IActionResult> GetAll() => Ok(await _context.Lessons.ToListAsync());

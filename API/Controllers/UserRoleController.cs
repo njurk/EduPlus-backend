@@ -1,4 +1,4 @@
-ï»¿using Shared.DTOs;
+using Shared.DTOs;
 using Data.Data;
 using Data.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
@@ -10,9 +10,9 @@ using Microsoft.EntityFrameworkCore;
 [Authorize]
 public class UserRoleController : ControllerBase
 {
-    private readonly SchoolDbContext _context;
+    private readonly EduPlusDbContext _context;
 
-    public UserRoleController(SchoolDbContext context) => _context = context;
+    public UserRoleController(EduPlusDbContext context) => _context = context;
 
     [HttpGet]
     public async Task<IActionResult> GetAll()
@@ -43,7 +43,7 @@ public class UserRoleController : ControllerBase
 
         if (exists)
         {
-            return BadRequest("UÅ¼ytkownik juÅ¼ posiada tÄ™ rolÄ™");
+            return BadRequest("U¿ytkownik ju¿ posiada tê rolê");
         }
 
         var entity = new UserRole
@@ -73,7 +73,7 @@ public class UserRoleController : ControllerBase
 
         if (activeRolesCount == 0)
         {
-            return BadRequest("UÅ¼ytkownik musi mieÄ‡ rolÄ™");
+            return BadRequest("U¿ytkownik musi mieæ rolê");
         }
 
         _context.UserRoles.Remove(roleToDelete);

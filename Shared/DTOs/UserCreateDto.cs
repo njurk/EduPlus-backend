@@ -1,10 +1,10 @@
-ï»¿namespace Shared.DTOs
+namespace Shared.DTOs
 {
     using System.ComponentModel.DataAnnotations;
 
     public class UserCreateDto
     {
-        [Required(ErrorMessage = "ImiÄ™ jest wymagane")]
+        [Required(ErrorMessage = "Imiê jest wymagane")]
         public string FirstName { get; set; }
 
         [Required(ErrorMessage = "Nazwisko jest wymagane")]
@@ -14,7 +14,7 @@
         [EmailAddress(ErrorMessage = "Niepoprawny email")]
         public string Email { get; set; }
 
-        [RegularExpression(@"^[0-9+\- ]*$", ErrorMessage = "ProszÄ™ podaÄ‡ poprawny numer telefonu")]
+        [RegularExpression(@"^[0-9+\- ]*$", ErrorMessage = "Proszê podaæ poprawny numer telefonu")]
         public string? Phone { get; set; }
 
         [MaxLength(100)]
@@ -28,13 +28,13 @@
 
         public bool IsActive { get; set; } = true;
 
-        [Required(ErrorMessage = "HasÅ‚o jest wymagane")]
-        [MinLength(8, ErrorMessage = "HasÅ‚o musi mieÄ‡ minimum 8 znakÃ³w")]
-        [RegularExpression(@"^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?""{}|<>]).*$", ErrorMessage = "HasÅ‚o musi zawieraÄ‡ 1 duÅ¼Ä… literÄ™, 1 cyfrÄ™ i 1 znak specjalny")]
+        [Required(ErrorMessage = "Has³o jest wymagane")]
+        [MinLength(8, ErrorMessage = "Has³o musi mieæ minimum 8 znaków")]
+        [RegularExpression(@"^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?""{}|<>]).*$", ErrorMessage = "Has³o musi zawieraæ 1 du¿¹ literê, 1 cyfrê i 1 znak specjalny")]
         public string Password { get; set; }
 
         [Required]
-        [MinLength(1, ErrorMessage = "UÅ¼ytkownik musi mieÄ‡ rolÄ™")]
+        [MinLength(1, ErrorMessage = "U¿ytkownik musi mieæ rolê")]
         public List<int> RoleIds { get; set; } = new();
 
         public List<int> ChildIds { get; set; } = new List<int>();

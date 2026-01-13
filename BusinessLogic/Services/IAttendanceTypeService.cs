@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,9 +19,9 @@ namespace BusinessLogic.Services
 
     public class AttendanceTypeService : IAttendanceTypeService
     {
-        private readonly SchoolDbContext _context;
+        private readonly EduPlusDbContext _context;
 
-        public AttendanceTypeService(SchoolDbContext context)
+        public AttendanceTypeService(EduPlusDbContext context)
         {
             _context = context;
         }

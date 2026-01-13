@@ -1,4 +1,4 @@
-Ôªøusing System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,9 +23,9 @@ namespace BusinessLogic.Services
 
     public class ClassService : IClassService
     {
-        private readonly SchoolDbContext _context;
+        private readonly EduPlusDbContext _context;
 
-        public ClassService(SchoolDbContext context)
+        public ClassService(EduPlusDbContext context)
         {
             _context = context;
         }
@@ -146,7 +146,7 @@ namespace BusinessLogic.Services
         public async Task<IEnumerable<object>> GetCandidatesAsync(int classId, string search)
         {
             var query = _context.Users.AsNoTracking()
-                .Where(u => u.IsActive && u.UserRoles.Any(ur => ur.Role.Name == "Ucze≈Ñ"))
+                .Where(u => u.IsActive && u.UserRoles.Any(ur => ur.Role.Name == "UczeÒ"))
                 .Where(u => !u.ClassStudents.Any(cs => cs.ClassId == classId));
 
             if (!string.IsNullOrWhiteSpace(search))
@@ -173,7 +173,7 @@ namespace BusinessLogic.Services
                 c.Letter == entity.Letter
             );
 
-            if (exists) throw new InvalidOperationException($"Klasa {entity.Level}{entity.Letter} ju≈º istnieje w tym roku.");
+            if (exists) throw new InvalidOperationException($"Klasa {entity.Level}{entity.Letter} juø istnieje w tym roku.");
 
             entity.CreatedAt = DateTime.Now;
             entity.UpdatedAt = DateTime.Now;
@@ -222,7 +222,7 @@ namespace BusinessLogic.Services
 
             if (!isAuthorized)
             {
-                throw new InvalidOperationException("Wybrany nauczyciel nie ma uprawnie≈Ñ do nauczania tego przedmiotu.");
+                throw new InvalidOperationException("Wybrany nauczyciel nie ma uprawnieÒ do nauczania tego przedmiotu.");
             }
 
             var exists = await _context.ClassSubjects
@@ -230,7 +230,7 @@ namespace BusinessLogic.Services
 
             if (exists)
             {
-                throw new InvalidOperationException("Ten przedmiot jest ju≈º przypisany do tej klasy.");
+                throw new InvalidOperationException("Ten przedmiot jest juø przypisany do tej klasy.");
             }
 
             var classSubject = new ClassSubject
@@ -266,7 +266,7 @@ namespace BusinessLogic.Services
                 c.Id != id
             );
 
-            if (exists) throw new InvalidOperationException($"Klasa {entity.Level}{entity.Letter} ju≈º istnieje w tym roku.");
+            if (exists) throw new InvalidOperationException($"Klasa {entity.Level}{entity.Letter} juø istnieje w tym roku.");
 
             var dbClass = await _context.Classes.FindAsync(id);
             if (dbClass == null) throw new KeyNotFoundException("Klasa nie znaleziona");

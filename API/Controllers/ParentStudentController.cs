@@ -1,4 +1,4 @@
-ï»¿using Data.Data;
+using Data.Data;
 using Data.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,9 +12,9 @@ namespace API.Controllers
     [Authorize]
     public class ParentStudentController : ControllerBase
     {
-        private readonly SchoolDbContext _context;
+        private readonly EduPlusDbContext _context;
 
-        public ParentStudentController(SchoolDbContext context)
+        public ParentStudentController(EduPlusDbContext context)
         {
             _context = context;
         }
@@ -71,7 +71,7 @@ namespace API.Controllers
             var exists = await _context.ParentStudents
                 .AnyAsync(x => x.ParentId == dto.ParentId && x.StudentId == dto.StudentId);
 
-            if (exists) return Conflict("To powiÄ…zanie juÅ¼ istnieje");
+            if (exists) return Conflict("To powi¹zanie ju¿ istnieje");
 
             var entity = new ParentStudent
             {

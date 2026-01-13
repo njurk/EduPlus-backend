@@ -15,7 +15,7 @@ namespace API
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddDbContext<SchoolDbContext>(options =>
+            builder.Services.AddDbContext<EduPlusDbContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             builder.Services.AddControllers()
@@ -32,6 +32,11 @@ namespace API
             builder.Services.AddScoped<IAnnouncementReadService, AnnouncementReadService>();
             builder.Services.AddScoped<IAttendanceService, AttendanceService>();
             builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<ITicketService, TicketService>();
+            builder.Services.AddScoped<IEmailService, EmailService>();
+            builder.Services.AddScoped<IPasswordResetService, PasswordResetService>();
+            builder.Services.AddScoped<IPageContentService, PageContentService>();
+            builder.Services.AddScoped<IWeeklyScheduleService, WeeklyScheduleService>();
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -40,9 +45,15 @@ namespace API
             {
                 options.AddPolicy("Allow",
                     policy => policy
-                        .WithOrigins("http://localhost:5173", "http://localhost:3000")
+                        .WithOrigins(
+                            "http://localhost:5173", 
+                            "http://localhost:3000", 
+                            "http://localhost:5174",
+                            "https://localhost:5173",
+                            "http://127.0.0.1:5173")
                         .AllowAnyMethod()
-                        .AllowAnyHeader());
+                        .AllowAnyHeader()
+                        .AllowCredentials());
             });
 
             var jwtSettings = builder.Configuration.GetSection("Jwt");
@@ -74,7 +85,7 @@ namespace API
                 var services = scope.ServiceProvider;
                 try
                 {
-                    var context = services.GetRequiredService<SchoolDbContext>();
+                    var context = services.GetRequiredService<EduPlusDbContext>();
                     var passwordHashService = services.GetRequiredService<IPasswordHashService>();
 
                     context.Database.Migrate();

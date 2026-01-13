@@ -1,4 +1,4 @@
-﻿using Data.Data;
+using Data.Data;
 using Data.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,9 +9,9 @@ using Microsoft.EntityFrameworkCore;
 [Authorize]
 public class SubjectController : ControllerBase
 {
-    private readonly SchoolDbContext _context;
+    private readonly EduPlusDbContext _context;
 
-    public SubjectController(SchoolDbContext context)
+    public SubjectController(EduPlusDbContext context)
     {
         _context = context;
     }

@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace Data.Data.CMS
 {
@@ -6,8 +6,8 @@ namespace Data.Data.CMS
     {
         [Key]
         public int Id { get; set; }
-        public required string Label { get; set; }
-        public required string Content { get; set; }
+        public required string Key { get; set; }
+        public required string Value { get; set; }
         public required int PageId { get; set; }
         public Page Page { get; set; }
     }

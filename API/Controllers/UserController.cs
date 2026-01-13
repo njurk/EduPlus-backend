@@ -1,4 +1,4 @@
-﻿using Shared.DTOs;
+using Shared.DTOs;
 using BusinessLogic.Services;
 using Data.Data;
 using Data.Data.Entities;
@@ -11,11 +11,11 @@ using Microsoft.EntityFrameworkCore;
 [Authorize]
 public class UserController : ControllerBase
 {
-    private readonly SchoolDbContext _context;
+    private readonly EduPlusDbContext _context;
 
     private readonly IPasswordHashService _passwordHashService;
 
-    public UserController(SchoolDbContext context, IPasswordHashService passwordHashService)
+    public UserController(EduPlusDbContext context, IPasswordHashService passwordHashService)
     {
         _context = context;
         _passwordHashService = passwordHashService;
@@ -66,10 +66,16 @@ public class UserController : ControllerBase
             .AsNoTracking()
             .Where(x => x.Id == id)
             .Include(u => u.UserRoles).ThenInclude(ur => ur.Role)
-            .Include(u => u.ParentStudents)
             .FirstOrDefaultAsync();
 
         if (user == null) return NotFound();
+
+        var relations = await _context.ParentStudents
+            .AsNoTracking()
+            .Where(ps => ps.ParentId == id || ps.StudentId == id)
+            .Include(ps => ps.Parent)
+            .Include(ps => ps.Student)
+            .ToListAsync();
 
         return Ok(new
         {
@@ -85,10 +91,16 @@ public class UserController : ControllerBase
             user.CreatedAt,
             user.UpdatedAt,
             UserRoles = user.UserRoles.Select(ur => new { ur.RoleId, Role = new { ur.Role.Id, ur.Role.Name } }),
-            ChildIds = user.ParentStudents.Select(pr => pr.StudentId).ToList()
+            ChildIds = relations.Where(ps => ps.ParentId == id).Select(ps => ps.StudentId).ToList(),
+            ParentIds = relations.Where(ps => ps.StudentId == id).Select(ps => ps.ParentId).ToList(),
+            Relations = relations.Select(ps => 
+                ps.ParentId == id 
+                    ? $"{ps.Student.LastName} {ps.Student.FirstName} (Uczeń)" 
+                    : $"{ps.Parent.LastName} {ps.Parent.FirstName} (Rodzic)"
+            ).ToList()
         });
     }
-
+    
     [HttpPost]
     public async Task<IActionResult> Create(UserCreateDto dto)
     {
@@ -176,10 +188,7 @@ public class UserController : ControllerBase
                 .Where(pr => !dto.ChildIds.Contains(pr.StudentId))
                 .ToList();
 
-            foreach (var rel in relationsToDelete)
-            {
-                dbUser.ParentStudents.Remove(rel);
-            }
+            foreach (var rel in relationsToDelete) dbUser.ParentStudents.Remove(rel);
 
             var existingStudentIds = dbUser.ParentStudents.Select(pr => pr.StudentId).ToList();
             var newStudentIds = dto.ChildIds.Where(id => !existingStudentIds.Contains(id)).Distinct();
@@ -190,6 +199,33 @@ public class UserController : ControllerBase
                 {
                     ParentId = id,
                     StudentId = studentId,
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now
+                });
+            }
+        }
+
+        if (dto.ParentIds != null)
+        {
+            var relationsByStudent = await _context.ParentStudents
+                .Where(ps => ps.StudentId == id)
+                .ToListAsync();
+
+            var relationsToRemove = relationsByStudent
+                .Where(ps => !dto.ParentIds.Contains(ps.ParentId))
+                .ToList();
+
+            foreach (var rel in relationsToRemove) _context.ParentStudents.Remove(rel);
+
+            var existingParentIds = relationsByStudent.Select(ps => ps.ParentId).ToList();
+            var newParentIds = dto.ParentIds.Where(pId => !existingParentIds.Contains(pId)).Distinct();
+
+            foreach (var parentId in newParentIds)
+            {
+                _context.ParentStudents.Add(new ParentStudent
+                {
+                    ParentId = parentId,
+                    StudentId = id,
                     CreatedAt = DateTime.Now,
                     UpdatedAt = DateTime.Now
                 });
@@ -207,13 +243,13 @@ public class UserController : ControllerBase
         if (dbUser == null) return NotFound();
 
         if (!_passwordHashService.VerifyPassword(dto.CurrentPassword, dbUser.Password))
-            return BadRequest("Aktualne hasło jest nieprawidłowe.");
+            return BadRequest("Aktualne has�o jest nieprawid�owe.");
 
         dbUser.Password = _passwordHashService.HashPassword(dto.NewPassword);
         dbUser.UpdatedAt = DateTime.Now;
         await _context.SaveChangesAsync();
 
-        return Ok(new { message = "Hasło zostało zmienione pomyślnie." });
+        return Ok(new { message = "Has�o zosta�o zmienione pomy�lnie." });
     }
 
     [HttpPatch("{id}/restore")]
@@ -229,7 +265,7 @@ public class UserController : ControllerBase
         user.UpdatedAt = DateTime.Now;
         await _context.SaveChangesAsync();
 
-        return Ok(new { message = "Użytkownik przywrócony", id = user.Id });
+        return Ok(new { message = "U�ytkownik przywr�cony", id = user.Id });
     }
 
     [HttpDelete("{id}")]

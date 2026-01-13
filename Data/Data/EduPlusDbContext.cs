@@ -1,13 +1,13 @@
-ï»¿using Data.Data.CMS;
+using Data.Data.CMS;
 using Data.Data.Entities;
 using Data.Data.EntitiesForView;
 using Microsoft.EntityFrameworkCore;
 
 namespace Data.Data
 {
-    public class SchoolDbContext : DbContext
+    public class EduPlusDbContext : DbContext
     {
-        public SchoolDbContext(DbContextOptions<SchoolDbContext> options) : base(options)
+        public EduPlusDbContext(DbContextOptions<EduPlusDbContext> options) : base(options)
         {
         }
 
@@ -37,7 +37,6 @@ namespace Data.Data
         public DbSet<WeeklySchedule> WeeklySchedules { get; set; } = null!;
         public DbSet<ParentStudent> ParentStudents { get; set; } = null!;
         public DbSet<Ticket> Tickets { get; set; }
-        public DbSet<TicketMessage> TicketMessages { get; set; }
         public DbSet<PasswordResetToken> PasswordResetTokens { get; set; }
         public DbSet<Page> Pages { get; set; } = null!;
         public DbSet<PageContent> PageContents { get; set; } = null!;
@@ -77,6 +76,7 @@ namespace Data.Data
             modelBuilder.Entity<User>(e =>
             {
                 e.HasIndex(u => u.Email).IsUnique();
+                e.HasIndex(u => new { u.LastName, u.FirstName });
                 e.Property(u => u.FirstName).IsRequired().HasMaxLength(50);
                 e.Property(u => u.LastName).IsRequired().HasMaxLength(50);
             });
@@ -133,12 +133,14 @@ namespace Data.Data
 
             modelBuilder.Entity<Grade>(e =>
             {
+                e.HasIndex(g => new { g.StudentId, g.SubjectId, g.DateTime });
                 e.HasOne(g => g.Student).WithMany().OnDelete(DeleteBehavior.Restrict);
                 e.HasOne(g => g.Teacher).WithMany().OnDelete(DeleteBehavior.Restrict);
             });
 
             modelBuilder.Entity<Announcement>(e =>
             {
+                e.HasIndex(a => new { a.CreatedAt, a.AuthorId });
                 e.HasOne(a => a.Author).WithMany().OnDelete(DeleteBehavior.Restrict);
             });
 
@@ -150,6 +152,7 @@ namespace Data.Data
 
             modelBuilder.Entity<Lesson>(e =>
             {
+                e.HasIndex(l => new { l.Date, l.ClassId, l.SubjectId });
                 e.HasOne(l => l.Teacher).WithMany().OnDelete(DeleteBehavior.Restrict);
             });
 
@@ -182,21 +185,9 @@ namespace Data.Data
                 .HasForeignKey(t => t.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<TicketMessage>()
-                .HasOne(m => m.Sender)
-                .WithMany()
-                .HasForeignKey(m => m.SenderId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<TicketMessage>()
-                .HasOne(m => m.Ticket)
-                .WithMany(t => t.Messages)
-                .HasForeignKey(m => m.TicketId)
-                .OnDelete(DeleteBehavior.Cascade);
-
             modelBuilder.Entity<GradeType>().Property(p => p.Value).HasColumnType("decimal(2,1)");
 
-            modelBuilder.HasDbFunction(typeof(SchoolDbContext).GetMethod(nameof(CalculateWeightedAverage))!)
+            modelBuilder.HasDbFunction(typeof(EduPlusDbContext).GetMethod(nameof(CalculateWeightedAverage))!)
                 .HasName("fn_CalculateWeightedAverage")
                 .HasSchema("dbo");
 
@@ -208,14 +199,14 @@ namespace Data.Data
                 new Target { Id = 1, Label = "WebAdmin", Title = "Administrator - strona internetowa" },
                 new Target { Id = 2, Label = "WebTeacher", Title = "Nauczyciel - strona internetowa" },
                 new Target { Id = 3, Label = "MobileParent", Title = "Rodzic - aplikacja mobilna" },
-                new Target { Id = 4, Label = "MobileStudent", Title = "UczeÅ„ - aplikacja mobilna" }
+                new Target { Id = 4, Label = "MobileStudent", Title = "Uczeñ - aplikacja mobilna" }
             );
 
             modelBuilder.Entity<Role>().HasData(
-                new Role { Id = 1, Name = "Administrator", IsActive = true, Description = "NajwyÅ¼szy poziom uprawnieÅ„, dostÄ™p do wszystkiego", Level = 1, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
-                new Role { Id = 2, Name = "Nauczyciel", IsActive = true, Description = "ZarzÄ…dzanie przydzielonymi zasobami", Level = 2, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
-                new Role { Id = 3, Name = "Rodzic", IsActive = true, Description = "PrzeglÄ…danie danych przypisanego uÅ¼ytkownika, moÅ¼liwoÅ›Ä‡ usprawiedliwienia", Level = 3, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
-                new Role { Id = 4, Name = "UczeÅ„", IsActive = true, Description = "PrzeglÄ…danie wÅ‚asnych danych", Level = 4, CreatedAt = initialDateTime, UpdatedAt = initialDateTime }
+                new Role { Id = 1, Name = "Administrator", IsActive = true, Description = "Najwy¿szy poziom uprawnieñ, dostêp do wszystkiego", Level = 1, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
+                new Role { Id = 2, Name = "Nauczyciel", IsActive = true, Description = "Zarz¹dzanie przydzielonymi zasobami", Level = 2, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
+                new Role { Id = 3, Name = "Rodzic", IsActive = true, Description = "Przegl¹danie danych przypisanego u¿ytkownika, mo¿liwoœæ usprawiedliwienia", Level = 3, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
+                new Role { Id = 4, Name = "Uczeñ", IsActive = true, Description = "Przegl¹danie w³asnych danych", Level = 4, CreatedAt = initialDateTime, UpdatedAt = initialDateTime }
             );
 
             modelBuilder.Entity<SchoolYear>().HasData(
@@ -224,34 +215,34 @@ namespace Data.Data
             );
 
             modelBuilder.Entity<AttendanceType>().HasData(
-                new AttendanceType { Id = 1, Name = "ObecnoÅ›Ä‡", ShortCode = "OB", IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
-                new AttendanceType { Id = 2, Name = "NieobecnoÅ›Ä‡", ShortCode = "NB", IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
-                new AttendanceType { Id = 3, Name = "SpÃ³Åºnienie", ShortCode = "SP", IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
+                new AttendanceType { Id = 1, Name = "Obecnoœæ", ShortCode = "OB", IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
+                new AttendanceType { Id = 2, Name = "Nieobecnoœæ", ShortCode = "NB", IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
+                new AttendanceType { Id = 3, Name = "SpóŸnienie", ShortCode = "SP", IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
                 new AttendanceType { Id = 4, Name = "Usprawiedliwione", ShortCode = "U", IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
                 new AttendanceType { Id = 5, Name = "Zwolnienie", ShortCode = "ZW", IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime }
             );
 
             modelBuilder.Entity<GradeType>().HasData(
                 new GradeType { Id = 1, Numeric = "1", Name = "Niedostateczny", Value = 1.0m, IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
-                new GradeType { Id = 2, Numeric = "2", Name = "DopuszczajÄ…cy", Value = 2.0m, IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
+                new GradeType { Id = 2, Numeric = "2", Name = "Dopuszczaj¹cy", Value = 2.0m, IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
                 new GradeType { Id = 3, Numeric = "3", Name = "Dostateczny", Value = 3.0m, IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
                 new GradeType { Id = 4, Numeric = "4", Name = "Dobry", Value = 4.0m, IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
                 new GradeType { Id = 5, Numeric = "5", Name = "Bardzo dobry", Value = 5.0m, IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
-                new GradeType { Id = 6, Numeric = "6", Name = "CelujÄ…cy", Value = 6.0m, IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime }
+                new GradeType { Id = 6, Numeric = "6", Name = "Celuj¹cy", Value = 6.0m, IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime }
             );
 
             modelBuilder.Entity<GradeCategory>().HasData(
                 new GradeCategory { Id = 1, Name = "Sprawdzian", Weight = 3, IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
-                new GradeCategory { Id = 2, Name = "KartkÃ³wka", Weight = 2, IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
-                new GradeCategory { Id = 3, Name = "OdpowiedÅº ustna", Weight = 1, IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
-                new GradeCategory { Id = 4, Name = "AktywnoÅ›Ä‡", Weight = 1, IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
+                new GradeCategory { Id = 2, Name = "Kartkówka", Weight = 2, IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
+                new GradeCategory { Id = 3, Name = "OdpowiedŸ ustna", Weight = 1, IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
+                new GradeCategory { Id = 4, Name = "Aktywnoœæ", Weight = 1, IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
                 new GradeCategory { Id = 5, Name = "Zadanie domowe", Weight = 1, IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime }
             );
 
             modelBuilder.Entity<LessonStatus>().HasData(
                 new LessonStatus { Id = 1, Name = "Zaplanowana", IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
                 new LessonStatus { Id = 2, Name = "Zrealizowana", IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
-                new LessonStatus { Id = 3, Name = "OdwoÅ‚ana", IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime }
+                new LessonStatus { Id = 3, Name = "Odwo³ana", IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime }
             );
 
             modelBuilder.Entity<LessonHour>().HasData(
@@ -289,9 +280,9 @@ namespace Data.Data
 
             modelBuilder.Entity<Subject>().HasData(
                 new Subject { Id = 1, Name = "matematyka", IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
-                new Subject { Id = 2, Name = "jÄ™zyk polski", IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
-                new Subject { Id = 3, Name = "jÄ™zyk angielski", IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
-                new Subject { Id = 4, Name = "jÄ™zyk niemiecki", IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
+                new Subject { Id = 2, Name = "jêzyk polski", IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
+                new Subject { Id = 3, Name = "jêzyk angielski", IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
+                new Subject { Id = 4, Name = "jêzyk niemiecki", IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
                 new Subject { Id = 5, Name = "informatyka", IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
                 new Subject { Id = 6, Name = "wychowanie fizyczne", IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
                 new Subject { Id = 7, Name = "historia", IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
@@ -303,10 +294,10 @@ namespace Data.Data
                 new Subject { Id = 13, Name = "przyroda", IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
                 new Subject { Id = 14, Name = "plastyka", IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
                 new Subject { Id = 15, Name = "muzyka", IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
-                new Subject { Id = 16, Name = "zajÄ™cia artystyczne", IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
+                new Subject { Id = 16, Name = "zajêcia artystyczne", IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
                 new Subject { Id = 17, Name = "religia", IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
                 new Subject { Id = 18, Name = "etyka", IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
-                new Subject { Id = 19, Name = "WDÅ»", IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
+                new Subject { Id = 19, Name = "WD¯", IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
                 new Subject { Id = 20, Name = "technika", IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
                 new Subject { Id = 21, Name = "EDB", IsActive = true, CreatedAt = initialDateTime, UpdatedAt = initialDateTime }
             );

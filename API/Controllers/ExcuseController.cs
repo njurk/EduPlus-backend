@@ -1,4 +1,4 @@
-﻿using Data.Data;
+using Data.Data;
 using Data.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,9 +9,9 @@ using Microsoft.EntityFrameworkCore;
 [Authorize]
 public class ExcuseController : ControllerBase
 {
-    private readonly SchoolDbContext _context;
+    private readonly EduPlusDbContext _context;
 
-    public ExcuseController(SchoolDbContext context) => _context = context;
+    public ExcuseController(EduPlusDbContext context) => _context = context;
 
     [HttpGet]
     public async Task<IActionResult> GetAll() => Ok(await _context.Excuses.ToListAsync());

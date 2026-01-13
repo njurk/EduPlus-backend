@@ -8,7 +8,7 @@ using System;
 namespace Data.Migrations
 {
     /// <inheritdoc />
-    public partial class Procedures : Migration
+    public partial class AddProcedures : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

@@ -1,4 +1,4 @@
-ï»¿using Data.Data;
+using Data.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -20,11 +20,11 @@ namespace BusinessLogic.Services
 
     public class AuthService : IAuthService
     {
-        private readonly SchoolDbContext _context;
+        private readonly EduPlusDbContext _context;
         private readonly IPasswordHashService _passwordHashService;
         private readonly IConfiguration _configuration;
 
-        public AuthService(SchoolDbContext context, IPasswordHashService passwordHashService, IConfiguration configuration)
+        public AuthService(EduPlusDbContext context, IPasswordHashService passwordHashService, IConfiguration configuration)
         {
             _context = context;
             _passwordHashService = passwordHashService;
@@ -40,12 +40,12 @@ namespace BusinessLogic.Services
 
             if (user == null || !user.IsActive || !_passwordHashService.VerifyPassword(dto.Password, user.Password))
             {
-                throw new UnauthorizedAccessException("BÅ‚Ä™dny email lub hasÅ‚o");
+                throw new UnauthorizedAccessException("B³êdny email lub has³o");
             }
 
             if (!user.UserRoles.Any(ur => ur.Role.Level == 1))
             {
-                throw new UnauthorizedAccessException("Nie posiadasz odpowiednich uprawnieÅ„");
+                throw new UnauthorizedAccessException("Nie posiadasz odpowiednich uprawnieñ");
             }
 
             var tokenString = GenerateJwtToken(user);
