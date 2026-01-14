@@ -1,4 +1,6 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Data.Data.Entities;
 
 namespace Data.Data.CMS
 {
@@ -8,6 +10,12 @@ namespace Data.Data.CMS
         public int Id { get; set; }
         public required string Label { get; set; }
         public required string Title { get; set; }
-        public ICollection<Page> Pages { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public DateTime UpdatedAt { get; set; } = DateTime.Now;
+        public int? ModifiedByUserId { get; set; }
+        [ForeignKey(nameof(ModifiedByUserId))]
+        public virtual User? ModifiedByUser { get; set; }
+        public ICollection<Page> Pages { get; set; } = new List<Page>();
     }
 }
+

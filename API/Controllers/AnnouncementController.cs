@@ -24,18 +24,7 @@ public class AnnouncementController : ControllerBase
         [FromQuery] bool showInactive = false)
     {
         var items = await _service.GetAllAsync(search, sortBy, sortDesc, showInactive);
-        var result = items.Select(a => new AnnouncementDto
-        {
-            Id = a.Id,
-            Title = a.Title,
-            Description = a.Description,
-            AuthorId = a.AuthorId,
-            AuthorName = a.Author != null ? $"{a.Author.FirstName} {a.Author.LastName}" : string.Empty,
-            IsActive = a.IsActive,
-            CreatedAt = a.CreatedAt,
-            UpdatedAt = a.UpdatedAt
-        });
-        return Ok(result);
+        return Ok(items);
     }
 
     [HttpGet("{id}")]

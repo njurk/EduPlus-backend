@@ -15,5 +15,6 @@ namespace Data.Data.Entities
         public virtual User? Student { get; set; } = null!;
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
+        public int? ModifiedByUserId { get; set; }
     }
 }

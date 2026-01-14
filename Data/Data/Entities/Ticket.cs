@@ -14,5 +14,6 @@ namespace Data.Data.Entities
         public string? AdminResponse { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
+        public int? ModifiedByUserId { get; set; }
     }
 }

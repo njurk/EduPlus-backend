@@ -11,10 +11,11 @@ namespace BusinessLogic.Services
 {
     public interface IAttendanceTypeService
     {
-        Task<IEnumerable<AttendanceType>> GetAllAsync(string? search, string? sortBy, bool sortDesc, bool showInactive);
+        Task<IEnumerable<object>> GetAllAsync(string? search, string? sortBy, bool sortDesc, bool showInactive);
         Task<AttendanceType> CreateAsync(AttendanceType entity);
         Task<AttendanceType?> UpdateAsync(int id, AttendanceType entity);
         Task<bool> DeleteAsync(int id);
+        Task<bool> RestoreAsync(int id);
     }
 
     public class AttendanceTypeService : IAttendanceTypeService
@@ -26,14 +27,11 @@ namespace BusinessLogic.Services
             _context = context;
         }
 
-        public async Task<IEnumerable<AttendanceType>> GetAllAsync(string? search, string? sortBy, bool sortDesc, bool showInactive)
+        public async Task<IEnumerable<object>> GetAllAsync(string? search, string? sortBy, bool sortDesc, bool showInactive)
         {
             var query = _context.AttendanceTypes.AsNoTracking().AsQueryable();
 
-            if (showInactive)
-                query = query.Where(r => !r.IsActive);
-            else
-                query = query.Where(r => r.IsActive);
+            query = showInactive ? query.Where(r => !r.IsActive) : query.Where(r => r.IsActive);
 
             if (!string.IsNullOrWhiteSpace(search))
             {
@@ -49,15 +47,23 @@ namespace BusinessLogic.Services
                 _ => sortDesc ? query.OrderByDescending(x => x.Name) : query.OrderBy(x => x.Name)
             };
 
-            return await query.ToListAsync();
+            return await query
+                .Select(x => new
+                {
+                    x.Id,
+                    x.Name,
+                    x.ShortCode,
+                    x.IsActive,
+                    x.CreatedAt,
+                    x.UpdatedAt,
+                    ModifiedByName = _context.Users.Where(u => u.Id == x.ModifiedByUserId).Select(u => u.FirstName + " " + u.LastName).FirstOrDefault() ?? "System"
+                })
+                .ToListAsync();
         }
 
         public async Task<AttendanceType> CreateAsync(AttendanceType entity)
         {
-            entity.CreatedAt = DateTime.Now;
-            entity.UpdatedAt = DateTime.Now;
             entity.IsActive = true;
-
             _context.AttendanceTypes.Add(entity);
             await _context.SaveChangesAsync();
             return entity;
@@ -68,11 +74,7 @@ namespace BusinessLogic.Services
             if (id != entity.Id) return null;
 
             if (entity.IsActive && entity.Name.EndsWith(" (nieaktywny)"))
-            {
                 entity.Name = entity.Name.Replace(" (nieaktywny)", "");
-            }
-
-            entity.UpdatedAt = DateTime.Now;
 
             _context.Entry(entity).State = EntityState.Modified;
             _context.Entry(entity).Property(x => x.CreatedAt).IsModified = false;
@@ -98,10 +100,7 @@ namespace BusinessLogic.Services
             {
                 item.IsActive = false;
                 if (!item.Name.EndsWith(" (nieaktywny)"))
-                {
                     item.Name += " (nieaktywny)";
-                }
-                item.UpdatedAt = DateTime.Now;
             }
             else
             {
@@ -111,5 +110,19 @@ namespace BusinessLogic.Services
             await _context.SaveChangesAsync();
             return true;
         }
+
+        public async Task<bool> RestoreAsync(int id)
+        {
+            var item = await _context.AttendanceTypes.IgnoreQueryFilters().FirstOrDefaultAsync(x => x.Id == id);
+            if (item == null) return false;
+
+            item.IsActive = true;
+            if (item.Name.EndsWith(" (nieaktywny)"))
+                item.Name = item.Name.Replace(" (nieaktywny)", "").Trim();
+
+            await _context.SaveChangesAsync();
+            return true;
+        }
     }
 }
+

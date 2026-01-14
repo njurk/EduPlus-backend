@@ -11,7 +11,7 @@ namespace BusinessLogic.Services
 {
     public interface IAnnouncementService
     {
-        Task<IEnumerable<Announcement>> GetAllAsync(string? search = null, string? sortBy = null, bool sortDesc = true, bool showInactive = false);
+        Task<IEnumerable<object>> GetAllAsync(string? search = null, string? sortBy = null, bool sortDesc = true, bool showInactive = false);
         Task<Announcement?> GetByIdAsync(int id);
         Task<Announcement> CreateAsync(Announcement entity);
         Task<Announcement?> UpdateAsync(int id, string title, string description);
@@ -28,7 +28,7 @@ namespace BusinessLogic.Services
             _context = context;
         }
 
-        public async Task<IEnumerable<Announcement>> GetAllAsync(string? search = null, string? sortBy = null, bool sortDesc = true, bool showInactive = false)
+        public async Task<IEnumerable<object>> GetAllAsync(string? search = null, string? sortBy = null, bool sortDesc = true, bool showInactive = false)
         {
             var query = _context.Announcements
                 .Include(a => a.Author)
@@ -44,12 +44,25 @@ namespace BusinessLogic.Services
             query = sortBy?.ToLower() switch
             {
                 "title" => sortDesc ? query.OrderByDescending(a => a.Title) : query.OrderBy(a => a.Title),
-                "author" => sortDesc ? query.OrderByDescending(a => a.Author.LastName) : query.OrderBy(a => a.Author.LastName),
+                "author" => sortDesc ? query.OrderByDescending(a => a.Author!.LastName) : query.OrderBy(a => a.Author!.LastName),
                 "updatedat" => sortDesc ? query.OrderByDescending(a => a.UpdatedAt) : query.OrderBy(a => a.UpdatedAt),
                 _ => sortDesc ? query.OrderByDescending(a => a.CreatedAt) : query.OrderBy(a => a.CreatedAt)
             };
 
-            return await query.ToListAsync();
+            return await query
+                .Select(a => new
+                {
+                    a.Id,
+                    a.Title,
+                    a.Description,
+                    a.AuthorId,
+                    AuthorName = a.Author != null ? a.Author.FirstName + " " + a.Author.LastName : null,
+                    a.IsActive,
+                    a.CreatedAt,
+                    a.UpdatedAt,
+                    ModifiedByName = _context.Users.Where(u => u.Id == a.ModifiedByUserId).Select(u => u.FirstName + " " + u.LastName).FirstOrDefault() ?? "System"
+                })
+                .ToListAsync();
         }
 
         public async Task<Announcement?> GetByIdAsync(int id)
@@ -62,10 +75,7 @@ namespace BusinessLogic.Services
 
         public async Task<Announcement> CreateAsync(Announcement entity)
         {
-            entity.CreatedAt = DateTime.Now;
-            entity.UpdatedAt = DateTime.Now;
             entity.IsActive = true;
-
             _context.Announcements.Add(entity);
             await _context.SaveChangesAsync();
             return entity;
@@ -78,7 +88,6 @@ namespace BusinessLogic.Services
 
             item.Title = title;
             item.Description = description;
-            item.UpdatedAt = DateTime.Now;
 
             await _context.SaveChangesAsync();
             return item;
@@ -89,8 +98,16 @@ namespace BusinessLogic.Services
             var item = await _context.Announcements.FindAsync(id);
             if (item == null) return false;
 
-            item.IsActive = false;
-            item.UpdatedAt = DateTime.Now;
+            if (item.IsActive)
+            {
+                if (!item.Title.EndsWith(" (nieaktywny)"))
+                    item.Title = $"{item.Title} (nieaktywny)";
+                item.IsActive = false;
+            }
+            else
+            {
+                _context.Announcements.Remove(item);
+            }
 
             await _context.SaveChangesAsync();
             return true;
@@ -98,11 +115,12 @@ namespace BusinessLogic.Services
 
         public async Task<bool> RestoreAsync(int id)
         {
-            var item = await _context.Announcements.FindAsync(id);
+            var item = await _context.Announcements.IgnoreQueryFilters().FirstOrDefaultAsync(a => a.Id == id);
             if (item == null) return false;
 
             item.IsActive = true;
-            item.UpdatedAt = DateTime.Now;
+            if (item.Title.EndsWith(" (nieaktywny)"))
+                item.Title = item.Title.Replace(" (nieaktywny)", "").Trim();
 
             await _context.SaveChangesAsync();
             return true;

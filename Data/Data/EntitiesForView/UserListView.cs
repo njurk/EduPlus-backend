@@ -12,5 +12,6 @@ namespace Data.Data.EntitiesForView
         public DateTime UpdatedAt { get; set; }
         public string? RoleNames { get; set; }
         public bool IsUnassignedParent { get; set; }
+        public string ModifiedByName { get; set; } = "System";
     }
 }

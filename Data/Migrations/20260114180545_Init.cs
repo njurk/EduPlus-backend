@@ -23,7 +23,8 @@ namespace Data.Migrations
                     ShortCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    ModifiedByUserId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -39,7 +40,8 @@ namespace Data.Migrations
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    ModifiedByUserId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -56,7 +58,8 @@ namespace Data.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    ModifiedByUserId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -74,7 +77,8 @@ namespace Data.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    ModifiedByUserId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -92,7 +96,8 @@ namespace Data.Migrations
                     EndTime = table.Column<TimeOnly>(type: "time", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    ModifiedByUserId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -108,7 +113,8 @@ namespace Data.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    ModifiedByUserId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -126,7 +132,8 @@ namespace Data.Migrations
                     Level = table.Column<int>(type: "int", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    ModifiedByUserId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -144,7 +151,8 @@ namespace Data.Migrations
                     EndDate = table.Column<DateOnly>(type: "date", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    ModifiedByUserId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -160,25 +168,12 @@ namespace Data.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    ModifiedByUserId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Subjects", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Target",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Label = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Target", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -197,7 +192,8 @@ namespace Data.Migrations
                     PostalCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    ModifiedByUserId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -215,7 +211,8 @@ namespace Data.Migrations
                     SchoolYearId = table.Column<int>(type: "int", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    ModifiedByUserId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -240,6 +237,7 @@ namespace Data.Migrations
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    ModifiedByUserId = table.Column<int>(type: "int", nullable: true),
                     SchoolYearId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -249,28 +247,6 @@ namespace Data.Migrations
                         name: "FK_Semesters_SchoolYears_SchoolYearId",
                         column: x => x.SchoolYearId,
                         principalTable: "SchoolYears",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Pages",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Link = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Position = table.Column<int>(type: "int", nullable: false),
-                    TargetId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Pages", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Pages_Target_TargetId",
-                        column: x => x.TargetId,
-                        principalTable: "Target",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -286,7 +262,8 @@ namespace Data.Migrations
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     AuthorId = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    ModifiedByUserId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -314,7 +291,8 @@ namespace Data.Migrations
                     Comment = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    ModifiedByUserId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -361,6 +339,7 @@ namespace Data.Migrations
                     StudentId = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    ModifiedByUserId = table.Column<int>(type: "int", nullable: true),
                     UserId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -431,6 +410,28 @@ namespace Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Target",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Label = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    ModifiedByUserId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Target", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Target_Users_ModifiedByUserId",
+                        column: x => x.ModifiedByUserId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Tickets",
                 columns: table => new
                 {
@@ -442,7 +443,8 @@ namespace Data.Migrations
                     ClosedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     AdminResponse = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    ModifiedByUserId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -493,7 +495,8 @@ namespace Data.Migrations
                     StudentId = table.Column<int>(type: "int", nullable: false),
                     OrderNumber = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    ModifiedByUserId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -521,7 +524,8 @@ namespace Data.Migrations
                     ClassId = table.Column<int>(type: "int", nullable: false),
                     SubjectId = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    ModifiedByUserId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -556,7 +560,8 @@ namespace Data.Migrations
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    ModifiedByUserId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -610,6 +615,7 @@ namespace Data.Migrations
                     SubjectId = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    ModifiedByUserId = table.Column<int>(type: "int", nullable: true),
                     UserId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -656,7 +662,8 @@ namespace Data.Migrations
                     LessonHourId = table.Column<int>(type: "int", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    ModifiedByUserId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -706,27 +713,6 @@ namespace Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PageContents",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Key = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Value = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PageId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PageContents", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_PageContents_Pages_PageId",
-                        column: x => x.PageId,
-                        principalTable: "Pages",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AnnouncementReads",
                 columns: table => new
                 {
@@ -735,7 +721,8 @@ namespace Data.Migrations
                     AnnouncementId = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    ModifiedByUserId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -755,6 +742,36 @@ namespace Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Pages",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Link = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Position = table.Column<int>(type: "int", nullable: false),
+                    TargetId = table.Column<int>(type: "int", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    ModifiedByUserId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Pages", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Pages_Target_TargetId",
+                        column: x => x.TargetId,
+                        principalTable: "Target",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Pages_Users_ModifiedByUserId",
+                        column: x => x.ModifiedByUserId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Attendances",
                 columns: table => new
                 {
@@ -765,7 +782,8 @@ namespace Data.Migrations
                     AttendanceTypeId = table.Column<int>(type: "int", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    ModifiedByUserId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -791,6 +809,35 @@ namespace Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "PageContents",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Key = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PageId = table.Column<int>(type: "int", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    ModifiedByUserId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PageContents", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PageContents_Pages_PageId",
+                        column: x => x.PageId,
+                        principalTable: "Pages",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PageContents_Users_ModifiedByUserId",
+                        column: x => x.ModifiedByUserId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Excuses",
                 columns: table => new
                 {
@@ -803,7 +850,8 @@ namespace Data.Migrations
                     IsAccepted = table.Column<bool>(type: "bit", nullable: true),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    ModifiedByUserId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -824,169 +872,169 @@ namespace Data.Migrations
 
             migrationBuilder.InsertData(
                 table: "AttendanceTypes",
-                columns: new[] { "Id", "CreatedAt", "IsActive", "Name", "ShortCode", "UpdatedAt" },
+                columns: new[] { "Id", "CreatedAt", "IsActive", "ModifiedByUserId", "Name", "ShortCode", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Obecność", "OB", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 2, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Nieobecność", "NB", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 3, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Spóźnienie", "SP", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 4, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Usprawiedliwione", "U", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 5, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Zwolnienie", "ZW", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) }
+                    { 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "Obecność", "OB", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 2, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "Nieobecność", "NB", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 3, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "Spóźnienie", "SP", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 4, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "Usprawiedliwione", "U", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 5, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "Zwolnienie", "ZW", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) }
                 });
 
             migrationBuilder.InsertData(
                 table: "Classrooms",
-                columns: new[] { "Id", "CreatedAt", "IsActive", "Name", "UpdatedAt" },
+                columns: new[] { "Id", "CreatedAt", "IsActive", "ModifiedByUserId", "Name", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "101", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 2, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "102", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 3, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "103", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 4, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "104", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 5, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "105", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 6, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "201", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 7, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "202", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 8, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "203", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 9, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "204", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 10, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "205", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 11, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "301", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 12, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "302", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 13, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "303", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 14, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "304", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 15, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "305", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 16, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "gimnastyczna 1", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 17, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "gimnastyczna 2", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 18, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "aula", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) }
+                    { 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "101", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 2, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "102", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 3, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "103", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 4, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "104", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 5, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "105", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 6, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "201", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 7, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "202", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 8, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "203", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 9, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "204", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 10, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "205", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 11, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "301", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 12, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "302", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 13, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "303", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 14, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "304", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 15, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "305", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 16, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "gimnastyczna 1", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 17, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "gimnastyczna 2", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 18, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "aula", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) }
                 });
 
             migrationBuilder.InsertData(
                 table: "GradeCategories",
-                columns: new[] { "Id", "CreatedAt", "IsActive", "Name", "UpdatedAt", "Weight" },
+                columns: new[] { "Id", "CreatedAt", "IsActive", "ModifiedByUserId", "Name", "UpdatedAt", "Weight" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Sprawdzian", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), 3 },
-                    { 2, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Kartkówka", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), 2 },
-                    { 3, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Odpowiedź ustna", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), 1 },
-                    { 4, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Aktywność", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), 1 },
-                    { 5, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Zadanie domowe", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), 1 }
+                    { 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "Sprawdzian", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), 3 },
+                    { 2, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "Kartkówka", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), 2 },
+                    { 3, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "Odpowiedź ustna", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), 1 },
+                    { 4, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "Aktywność", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), 1 },
+                    { 5, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "Zadanie domowe", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), 1 }
                 });
 
             migrationBuilder.InsertData(
                 table: "GradeTypes",
-                columns: new[] { "Id", "CreatedAt", "IsActive", "Name", "Numeric", "UpdatedAt", "Value" },
+                columns: new[] { "Id", "CreatedAt", "IsActive", "ModifiedByUserId", "Name", "Numeric", "UpdatedAt", "Value" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Niedostateczny", "1", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), 1.0m },
-                    { 2, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Dopuszczający", "2", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), 2.0m },
-                    { 3, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Dostateczny", "3", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), 3.0m },
-                    { 4, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Dobry", "4", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), 4.0m },
-                    { 5, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Bardzo dobry", "5", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), 5.0m },
-                    { 6, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Celujący", "6", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), 6.0m }
+                    { 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "Niedostateczny", "1", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), 1.0m },
+                    { 2, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "Dopuszczający", "2", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), 2.0m },
+                    { 3, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "Dostateczny", "3", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), 3.0m },
+                    { 4, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "Dobry", "4", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), 4.0m },
+                    { 5, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "Bardzo dobry", "5", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), 5.0m },
+                    { 6, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "Celujący", "6", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), 6.0m }
                 });
 
             migrationBuilder.InsertData(
                 table: "LessonHours",
-                columns: new[] { "Id", "CreatedAt", "EndTime", "IsActive", "OrderNumber", "StartTime", "UpdatedAt" },
+                columns: new[] { "Id", "CreatedAt", "EndTime", "IsActive", "ModifiedByUserId", "OrderNumber", "StartTime", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new TimeOnly(8, 45, 0), true, 1, new TimeOnly(8, 0, 0), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 2, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new TimeOnly(9, 40, 0), true, 2, new TimeOnly(8, 55, 0), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 3, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new TimeOnly(10, 35, 0), true, 3, new TimeOnly(9, 50, 0), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 4, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new TimeOnly(11, 30, 0), true, 4, new TimeOnly(10, 45, 0), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 5, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new TimeOnly(12, 30, 0), true, 5, new TimeOnly(11, 45, 0), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 6, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new TimeOnly(13, 35, 0), true, 6, new TimeOnly(12, 50, 0), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 7, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new TimeOnly(14, 30, 0), true, 7, new TimeOnly(13, 45, 0), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 8, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new TimeOnly(15, 25, 0), true, 8, new TimeOnly(14, 40, 0), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 9, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new TimeOnly(16, 15, 0), true, 9, new TimeOnly(15, 30, 0), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) }
+                    { 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new TimeOnly(8, 45, 0), true, null, 1, new TimeOnly(8, 0, 0), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 2, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new TimeOnly(9, 40, 0), true, null, 2, new TimeOnly(8, 55, 0), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 3, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new TimeOnly(10, 35, 0), true, null, 3, new TimeOnly(9, 50, 0), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 4, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new TimeOnly(11, 30, 0), true, null, 4, new TimeOnly(10, 45, 0), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 5, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new TimeOnly(12, 30, 0), true, null, 5, new TimeOnly(11, 45, 0), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 6, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new TimeOnly(13, 35, 0), true, null, 6, new TimeOnly(12, 50, 0), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 7, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new TimeOnly(14, 30, 0), true, null, 7, new TimeOnly(13, 45, 0), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 8, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new TimeOnly(15, 25, 0), true, null, 8, new TimeOnly(14, 40, 0), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 9, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new TimeOnly(16, 15, 0), true, null, 9, new TimeOnly(15, 30, 0), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) }
                 });
 
             migrationBuilder.InsertData(
                 table: "LessonStatuses",
-                columns: new[] { "Id", "CreatedAt", "IsActive", "Name", "UpdatedAt" },
+                columns: new[] { "Id", "CreatedAt", "IsActive", "ModifiedByUserId", "Name", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Zaplanowana", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 2, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Zrealizowana", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 3, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Odwołana", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) }
+                    { 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "Zaplanowana", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 2, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "Zrealizowana", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 3, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "Odwołana", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) }
                 });
 
             migrationBuilder.InsertData(
                 table: "Roles",
-                columns: new[] { "Id", "CreatedAt", "Description", "IsActive", "Level", "Name", "UpdatedAt" },
+                columns: new[] { "Id", "CreatedAt", "Description", "IsActive", "Level", "ModifiedByUserId", "Name", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), "Najwyższy poziom uprawnień, dostęp do wszystkiego", true, 1, "Administrator", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 2, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), "Zarządzanie przydzielonymi zasobami", true, 2, "Nauczyciel", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 3, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), "Przeglądanie danych przypisanego użytkownika, możliwość usprawiedliwienia", true, 3, "Rodzic", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 4, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), "Przeglądanie własnych danych", true, 4, "Uczeń", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) }
+                    { 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), "Najwyższy poziom uprawnień, dostęp do wszystkiego", true, 1, null, "Administrator", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 2, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), "Zarządzanie przydzielonymi zasobami", true, 2, null, "Nauczyciel", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 3, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), "Przeglądanie danych przypisanego użytkownika, możliwość usprawiedliwienia", true, 3, null, "Rodzic", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 4, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), "Przeglądanie własnych danych", true, 4, null, "Uczeń", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) }
                 });
 
             migrationBuilder.InsertData(
                 table: "SchoolYears",
-                columns: new[] { "Id", "CreatedAt", "EndDate", "IsActive", "Name", "StartDate", "UpdatedAt" },
+                columns: new[] { "Id", "CreatedAt", "EndDate", "IsActive", "ModifiedByUserId", "Name", "StartDate", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new DateOnly(2026, 6, 30), true, "2025/2026", new DateOnly(2025, 9, 1), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 2, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new DateOnly(2027, 6, 30), true, "2026/2027", new DateOnly(2026, 9, 1), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) }
+                    { 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new DateOnly(2026, 6, 30), true, null, "2025/2026", new DateOnly(2025, 9, 1), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 2, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new DateOnly(2027, 6, 30), true, null, "2026/2027", new DateOnly(2026, 9, 1), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) }
                 });
 
             migrationBuilder.InsertData(
                 table: "Subjects",
-                columns: new[] { "Id", "CreatedAt", "IsActive", "Name", "UpdatedAt" },
+                columns: new[] { "Id", "CreatedAt", "IsActive", "ModifiedByUserId", "Name", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "matematyka", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 2, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "język polski", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 3, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "język angielski", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 4, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "język niemiecki", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 5, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "informatyka", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 6, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "wychowanie fizyczne", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 7, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "historia", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 8, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "WOS", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 9, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "biologia", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 10, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "chemia", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 11, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "fizyka", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 12, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "Geografia", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 13, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "przyroda", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 14, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "plastyka", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 15, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "muzyka", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 16, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "zajęcia artystyczne", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 17, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "religia", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 18, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "etyka", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 19, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "WDŻ", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 20, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "technika", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 21, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "EDB", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) }
+                    { 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "matematyka", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 2, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "język polski", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 3, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "język angielski", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 4, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "język niemiecki", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 5, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "informatyka", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 6, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "wychowanie fizyczne", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 7, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "historia", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 8, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "WOS", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 9, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "biologia", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 10, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "chemia", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 11, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "fizyka", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 12, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "Geografia", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 13, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "przyroda", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 14, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "plastyka", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 15, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "muzyka", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 16, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "zajęcia artystyczne", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 17, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "religia", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 18, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "etyka", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 19, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "WDŻ", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 20, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "technika", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 21, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "EDB", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) }
                 });
 
             migrationBuilder.InsertData(
                 table: "Target",
-                columns: new[] { "Id", "Label", "Title" },
+                columns: new[] { "Id", "CreatedAt", "Label", "ModifiedByUserId", "Title", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, "WebAdmin", "Administrator - strona internetowa" },
-                    { 2, "WebTeacher", "Nauczyciel - strona internetowa" },
-                    { 3, "MobileParent", "Rodzic - aplikacja mobilna" },
-                    { 4, "MobileStudent", "Uczeń - aplikacja mobilna" }
+                    { 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), "WebAdmin", null, "Administrator - strona internetowa", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 2, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), "WebTeacher", null, "Nauczyciel - strona internetowa", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 3, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), "MobileParent", null, "Rodzic - aplikacja mobilna", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 4, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), "MobileStudent", null, "Uczeń - aplikacja mobilna", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) }
                 });
 
             migrationBuilder.InsertData(
                 table: "Classes",
-                columns: new[] { "Id", "CreatedAt", "IsActive", "Letter", "Level", "SchoolYearId", "UpdatedAt" },
+                columns: new[] { "Id", "CreatedAt", "IsActive", "Letter", "Level", "ModifiedByUserId", "SchoolYearId", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "A", 1, 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 2, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "C", 8, 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) }
+                    { 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "A", 1, null, 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 2, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "C", 8, null, 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) }
                 });
 
             migrationBuilder.InsertData(
                 table: "Semesters",
-                columns: new[] { "Id", "CreatedAt", "EndDate", "IsActive", "Name", "SchoolYearId", "StartDate", "UpdatedAt" },
+                columns: new[] { "Id", "CreatedAt", "EndDate", "IsActive", "ModifiedByUserId", "Name", "SchoolYearId", "StartDate", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new DateOnly(2026, 1, 31), true, "Semestr 1", 1, new DateOnly(2025, 9, 1), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 2, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new DateOnly(2026, 6, 30), true, "Semestr 2", 1, new DateOnly(2026, 2, 1), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 3, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new DateOnly(2027, 1, 31), true, "Semestr 1", 2, new DateOnly(2026, 9, 1), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 4, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new DateOnly(2027, 6, 30), true, "Semestr 2", 2, new DateOnly(2027, 2, 1), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) }
+                    { 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new DateOnly(2026, 1, 31), true, null, "Semestr 1", 1, new DateOnly(2025, 9, 1), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 2, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new DateOnly(2026, 6, 30), true, null, "Semestr 2", 1, new DateOnly(2026, 2, 1), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 3, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new DateOnly(2027, 1, 31), true, null, "Semestr 1", 2, new DateOnly(2026, 9, 1), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
+                    { 4, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new DateOnly(2027, 6, 30), true, null, "Semestr 2", 2, new DateOnly(2027, 2, 1), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) }
                 });
 
             migrationBuilder.CreateIndex(
@@ -1124,9 +1172,19 @@ namespace Data.Migrations
                 column: "TeacherId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_PageContents_ModifiedByUserId",
+                table: "PageContents",
+                column: "ModifiedByUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PageContents_PageId",
                 table: "PageContents",
                 column: "PageId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Pages_ModifiedByUserId",
+                table: "Pages",
+                column: "ModifiedByUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Pages_TargetId",
@@ -1163,6 +1221,11 @@ namespace Data.Migrations
                 name: "IX_SubjectTeachers_TeacherId",
                 table: "SubjectTeachers",
                 column: "TeacherId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Target_ModifiedByUserId",
+                table: "Target",
+                column: "ModifiedByUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TeacherClassSubjects_ClassId",

@@ -48,4 +48,13 @@ public class AttendanceTypeController : ControllerBase
 
         return NoContent();
     }
+
+    [HttpPatch("{id}/restore")]
+    public async Task<IActionResult> Restore(int id)
+    {
+        var success = await _service.RestoreAsync(id);
+        if (!success) return NotFound();
+
+        return Ok(new { message = "Przywrócono" });
+    }
 }

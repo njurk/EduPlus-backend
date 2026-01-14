@@ -60,27 +60,27 @@ namespace BusinessLogic.Seeders
         {
             return new List<(int, string, string, string, string, string, string)>
             {
-                (1, "Anna", "Kowalska", "akowalska@szkola.edu.pl", "Z�ota 44/12", "Warszawa", "00-120"),
-                (2, "Jan", "Nowak", "jnowak@szkola.edu.pl", "Marsza�kowska 85/3", "Warszawa", "00-683"),
-                (3, "Ewa", "Wi�niewska", "ewisniewska@szkola.edu.pl", "Aleje Jerozolimskie 100", "Warszawa", "00-807"),
-                (4, "Piotr", "Kami�ski", "pkaminski@szkola.edu.pl", "Chmielna 5", "Warszawa", "00-021"),
-                (5, "Marek", "Lewandowski", "mlewandowski@szkola.edu.pl", "Nowy �wiat 22", "Warszawa", "00-373"),
-                (6, "Katarzyna", "Zieli�ska", "kzielinska@szkola.edu.pl", "Pu�awska 15", "Warszawa", "02-515"),
-                (7, "Micha�", "Szyma�ski", "mszymanski@szkola.edu.pl", "Wilanowska 200", "Warszawa", "02-765"),
-                (8, "Agnieszka", "Wo�niak", "awozniak@szkola.edu.pl", "Francuska 12", "Warszawa", "03-906"),
-                (9, "Tomasz", "D�browski", "tdabrowski@szkola.edu.pl", "Targowa 67", "Warszawa", "03-729"),
-                (10, "Pawe�", "Koz�owski", "pkozlowski@szkola.edu.pl", "Gr�jecka 45", "Warszawa", "02-031"),
-                (11, "Ma�gorzata", "Jankowska", "mjankowska@szkola.edu.pl", "Wojska Polskiego 10", "Pruszk�w", "05-800"),
-                (12, "Joanna", "Mazur", "jmazur@szkola.edu.pl", "Ko�ciuszki 5", "Piaseczno", "05-500"),
-                (13, "Grzegorz", "Wojciechowski", "gwojciechowski@szkola.edu.pl", "Pi�sudskiego 99", "Marki", "05-270"),
+                (1, "Anna", "Kowalska", "akowalska@szkola.edu.pl", "Zďż˝ota 44/12", "Warszawa", "00-120"),
+                (2, "Jan", "Nowak", "jnowak@szkola.edu.pl", "Marszaďż˝kowska 85/3", "Warszawa", "00-683"),
+                (3, "Ewa", "Wiďż˝niewska", "ewisniewska@szkola.edu.pl", "Aleje Jerozolimskie 100", "Warszawa", "00-807"),
+                (4, "Piotr", "Kamiďż˝ski", "pkaminski@szkola.edu.pl", "Chmielna 5", "Warszawa", "00-021"),
+                (5, "Marek", "Lewandowski", "mlewandowski@szkola.edu.pl", "Nowy ďż˝wiat 22", "Warszawa", "00-373"),
+                (6, "Katarzyna", "Zieliďż˝ska", "kzielinska@szkola.edu.pl", "Puďż˝awska 15", "Warszawa", "02-515"),
+                (7, "Michaďż˝", "Szymaďż˝ski", "mszymanski@szkola.edu.pl", "Wilanowska 200", "Warszawa", "02-765"),
+                (8, "Agnieszka", "Woďż˝niak", "awozniak@szkola.edu.pl", "Francuska 12", "Warszawa", "03-906"),
+                (9, "Tomasz", "Dďż˝browski", "tdabrowski@szkola.edu.pl", "Targowa 67", "Warszawa", "03-729"),
+                (10, "Paweďż˝", "Kozďż˝owski", "pkozlowski@szkola.edu.pl", "Grďż˝jecka 45", "Warszawa", "02-031"),
+                (11, "Maďż˝gorzata", "Jankowska", "mjankowska@szkola.edu.pl", "Wojska Polskiego 10", "Pruszkďż˝w", "05-800"),
+                (12, "Joanna", "Mazur", "jmazur@szkola.edu.pl", "Koďż˝ciuszki 5", "Piaseczno", "05-500"),
+                (13, "Grzegorz", "Wojciechowski", "gwojciechowski@szkola.edu.pl", "Piďż˝sudskiego 99", "Marki", "05-270"),
                 (14, "Barbara", "Kwiatkowska", "bkwiatkowska@szkola.edu.pl", "3 Maja 14", "Legionowo", "05-120"),
-                (15, "�ukasz", "Krawczyk", "lkrawczyk@szkola.edu.pl", "Sienkiewicza 7", "Otwock", "05-400"),
-                (16, "Dorota", "Piotrowska", "dpiotrowska@szkola.edu.pl", "Mickiewicza 2", "Z�bki", "05-091"),
-                (17, "Marcin", "Grabowski", "mgrabowski@szkola.edu.pl", "Le�na 18", "�omianki", "05-092"),
-                (18, "El�bieta", "Paw�owska", "epawlowska@szkola.edu.pl", "Polna 33", "Wo�omin", "05-200"),
-                (19, "Rafa�", "Michalski", "rmichalski@szkola.edu.pl", "Ogrodowa 11", "Sulej�wek", "05-070"),
-                (20, "Karolina", "Kr�l", "kkrol@szkola.edu.pl", "S�oneczna 4", "Konstancin-Jeziorna", "05-520"),
-                (21, "Krzysztof", "Wieczorek", "kwieczorek@szkola.edu.pl", "Kwiatowa 8", "J�zef�w", "05-420")
+                (15, "ďż˝ukasz", "Krawczyk", "lkrawczyk@szkola.edu.pl", "Sienkiewicza 7", "Otwock", "05-400"),
+                (16, "Dorota", "Piotrowska", "dpiotrowska@szkola.edu.pl", "Mickiewicza 2", "Zďż˝bki", "05-091"),
+                (17, "Marcin", "Grabowski", "mgrabowski@szkola.edu.pl", "Leďż˝na 18", "ďż˝omianki", "05-092"),
+                (18, "Elďż˝bieta", "Pawďż˝owska", "epawlowska@szkola.edu.pl", "Polna 33", "Woďż˝omin", "05-200"),
+                (19, "Rafaďż˝", "Michalski", "rmichalski@szkola.edu.pl", "Ogrodowa 11", "Sulejďż˝wek", "05-070"),
+                (20, "Karolina", "Krďż˝l", "kkrol@szkola.edu.pl", "Sďż˝oneczna 4", "Konstancin-Jeziorna", "05-520"),
+                (21, "Krzysztof", "Wieczorek", "kwieczorek@szkola.edu.pl", "Kwiatowa 8", "Jďż˝zefďż˝w", "05-420")
             };
         }
 
@@ -88,32 +88,32 @@ namespace BusinessLogic.Seeders
         {
             return new List<(string, string, string, string, string, string, string, string)>
             {
-                ("Leon", "Urbaniak", "lurbaniak@szkola.edu.pl", "Marek", "murbaniak@szkola.edu.pl", "D�uga 55", "Grodzisk Mazowiecki", "05-825"),
-                ("Pola", "Sikora", "psikora@szkola.edu.pl", "Ewa", "esikora@szkola.edu.pl", "Kr�tka 1", "Mi�sk Mazowiecki", "05-300"),
-                ("Oliwier", "Baran", "obaran@szkola.edu.pl", "Adam", "abaran@szkola.edu.pl", "Spacerowa 9", "Milan�wek", "05-822"),
-                ("Laura", "Krajewska", "lkrajewska@szkola.edu.pl", "Monika", "mkrajewska@szkola.edu.pl", "Wsp�lna 12", "Brwin�w", "05-840"),
-                ("Nikodem", "Mr�z", "nmroz@szkola.edu.pl", "Piotr", "pmroz@szkola.edu.pl", "Lipowa 6", "B�onie", "05-870"),
-                ("Iga", "Wr�blewska", "iwroblewska@szkola.edu.pl", "Anna", "awroblewska@szkola.edu.pl", "Akacjowa 3", "Nadarzyn", "05-830"),
-                ("Tymon", "G�owacki", "tglowacki@szkola.edu.pl", "Krzysztof", "kglowacki@szkola.edu.pl", "Brzozowa 21", "Raszyn", "05-090"),
+                ("Leon", "Urbaniak", "lurbaniak@szkola.edu.pl", "Marek", "murbaniak@szkola.edu.pl", "Dďż˝uga 55", "Grodzisk Mazowiecki", "05-825"),
+                ("Pola", "Sikora", "psikora@szkola.edu.pl", "Ewa", "esikora@szkola.edu.pl", "Krďż˝tka 1", "Miďż˝sk Mazowiecki", "05-300"),
+                ("Oliwier", "Baran", "obaran@szkola.edu.pl", "Adam", "abaran@szkola.edu.pl", "Spacerowa 9", "Milanďż˝wek", "05-822"),
+                ("Laura", "Krajewska", "lkrajewska@szkola.edu.pl", "Monika", "mkrajewska@szkola.edu.pl", "Wspďż˝lna 12", "Brwinďż˝w", "05-840"),
+                ("Nikodem", "Mrďż˝z", "nmroz@szkola.edu.pl", "Piotr", "pmroz@szkola.edu.pl", "Lipowa 6", "Bďż˝onie", "05-870"),
+                ("Iga", "Wrďż˝blewska", "iwroblewska@szkola.edu.pl", "Anna", "awroblewska@szkola.edu.pl", "Akacjowa 3", "Nadarzyn", "05-830"),
+                ("Tymon", "Gďż˝owacki", "tglowacki@szkola.edu.pl", "Krzysztof", "kglowacki@szkola.edu.pl", "Brzozowa 21", "Raszyn", "05-090"),
                 ("Marcelina", "Zakrzewska", "mzakrzewska@szkola.edu.pl", "Maria", "mazakrzewska@szkola.edu.pl", "Topolowa 15", "Zielonka", "05-220"),
-                ("Ignacy", "Laskowski", "ilaskowski@szkola.edu.pl", "Pawe�", "plaskowski@szkola.edu.pl", "Klonowa 7", "Koby�ka", "05-230"),
-                ("Klara", "Makowska", "kmakowska@szkola.edu.pl", "Zofia", "zmakowska@szkola.edu.pl", "D�bowa 2", "O�ar�w Mazowiecki", "05-850"),
+                ("Ignacy", "Laskowski", "ilaskowski@szkola.edu.pl", "Paweďż˝", "plaskowski@szkola.edu.pl", "Klonowa 7", "Kobyďż˝ka", "05-230"),
+                ("Klara", "Makowska", "kmakowska@szkola.edu.pl", "Zofia", "zmakowska@szkola.edu.pl", "Dďż˝bowa 2", "Oďż˝arďż˝w Mazowiecki", "05-850"),
 
-                ("Antoni", "Czerwi�ski", "aczerwinski@szkola.edu.pl", "Robert", "rczerwinski@szkola.edu.pl", "Polna 5", "Grodzisk Mazowiecki", "05-825"),
-                ("Maja", "Szymczak", "mszymczak@szkola.edu.pl", "Agnieszka", "aszymczak@szkola.edu.pl", "Szkolna 12", "Milan�wek", "05-822"),
-                ("Filip", "B�k", "fbak@szkola.edu.pl", "Tomasz", "tbak@szkola.edu.pl", "Le�na 3", "Podkowa Le�na", "05-807"),
-                ("Julia", "W�odarczyk", "jwlodarczyk@szkola.edu.pl", "Katarzyna", "kwlodarczyk@szkola.edu.pl", "Kwiatowa 8", "Brwin�w", "05-840"),
-                ("Szymon", "Dudzi�ski", "sdudzinski@szkola.edu.pl", "Marcin", "mdudzinski@szkola.edu.pl", "Ogrodowa 20", "B�onie", "05-870"),
-                ("Zuzanna", "Kaczmarek", "zkaczmarek@szkola.edu.pl", "Micha�", "mikaczmarek@szkola.edu.pl", "S�oneczna 15", "Raszyn", "05-090"),
-                ("Franciszek", "Ko�odziej", "fkolodziej@szkola.edu.pl", "Wojciech", "wkolodziej@szkola.edu.pl", "Lipowa 2", "Nadarzyn", "05-830"),
-                ("Lena", "Sobolewska", "lsobolewska@szkola.edu.pl", "Marta", "msobolewska@szkola.edu.pl", "Wi�niowa 9", "O�ar�w Mazowiecki", "05-850"),
-                ("Miko�aj", "Rogowski", "mrogowski@szkola.edu.pl", "Kamil", "krogowski@szkola.edu.pl", "Brzozowa 11", "Stare Babice", "05-082"),
+                ("Antoni", "Czerwiďż˝ski", "aczerwinski@szkola.edu.pl", "Robert", "rczerwinski@szkola.edu.pl", "Polna 5", "Grodzisk Mazowiecki", "05-825"),
+                ("Maja", "Szymczak", "mszymczak@szkola.edu.pl", "Agnieszka", "aszymczak@szkola.edu.pl", "Szkolna 12", "Milanďż˝wek", "05-822"),
+                ("Filip", "Bďż˝k", "fbak@szkola.edu.pl", "Tomasz", "tbak@szkola.edu.pl", "Leďż˝na 3", "Podkowa Leďż˝na", "05-807"),
+                ("Julia", "Wďż˝odarczyk", "jwlodarczyk@szkola.edu.pl", "Katarzyna", "kwlodarczyk@szkola.edu.pl", "Kwiatowa 8", "Brwinďż˝w", "05-840"),
+                ("Szymon", "Dudziďż˝ski", "sdudzinski@szkola.edu.pl", "Marcin", "mdudzinski@szkola.edu.pl", "Ogrodowa 20", "Bďż˝onie", "05-870"),
+                ("Zuzanna", "Kaczmarek", "zkaczmarek@szkola.edu.pl", "Michaďż˝", "mikaczmarek@szkola.edu.pl", "Sďż˝oneczna 15", "Raszyn", "05-090"),
+                ("Franciszek", "Koďż˝odziej", "fkolodziej@szkola.edu.pl", "Wojciech", "wkolodziej@szkola.edu.pl", "Lipowa 2", "Nadarzyn", "05-830"),
+                ("Lena", "Sobolewska", "lsobolewska@szkola.edu.pl", "Marta", "msobolewska@szkola.edu.pl", "Wiďż˝niowa 9", "Oďż˝arďż˝w Mazowiecki", "05-850"),
+                ("Mikoďż˝aj", "Rogowski", "mrogowski@szkola.edu.pl", "Kamil", "krogowski@szkola.edu.pl", "Brzozowa 11", "Stare Babice", "05-082"),
                 ("Alicja", "Witkowska", "awitkowska@szkola.edu.pl", "Piotr", "pwitkowski@szkola.edu.pl", "Zielona 4", "Leszno", "05-084"),
-                ("Stanis�aw", "Lis", "slis@szkola.edu.pl", "Jacek", "jlis@szkola.edu.pl", "Miodowa 7", "Izabelin", "05-080"),
-                ("Amelia", "Nawrocka", "anawrocka@szkola.edu.pl", "Ewelina", "enawrocka@szkola.edu.pl", "Parkowa 10", "�omianki", "05-092"),
-                ("Jakub", "Bednarek", "jbednarek@szkola.edu.pl", "Grzegorz", "gbednarek@szkola.edu.pl", "Wrzosowa 5", "Czosn�w", "05-152"),
+                ("Stanisďż˝aw", "Lis", "slis@szkola.edu.pl", "Jacek", "jlis@szkola.edu.pl", "Miodowa 7", "Izabelin", "05-080"),
+                ("Amelia", "Nawrocka", "anawrocka@szkola.edu.pl", "Ewelina", "enawrocka@szkola.edu.pl", "Parkowa 10", "ďż˝omianki", "05-092"),
+                ("Jakub", "Bednarek", "jbednarek@szkola.edu.pl", "Grzegorz", "gbednarek@szkola.edu.pl", "Wrzosowa 5", "Czosnďż˝w", "05-152"),
                 ("Hanna", "Olejniczak", "holejniczak@szkola.edu.pl", "Dominika", "dolejniczak@szkola.edu.pl", "Sosnowa 14", "Leoncin", "05-155"),
-                ("Wojciech", "Pietrzak", "wpietrzak@szkola.edu.pl", "S�awomir", "spietrzak@szkola.edu.pl", "Klonowa 33", "Nowy Dw�r Mazowiecki", "05-100")
+                ("Wojciech", "Pietrzak", "wpietrzak@szkola.edu.pl", "Sďż˝awomir", "spietrzak@szkola.edu.pl", "Klonowa 33", "Nowy Dwďż˝r Mazowiecki", "05-100")
             };
         }
 
@@ -122,31 +122,31 @@ namespace BusinessLogic.Seeders
             return new List<(string, string, string, string, string, string, string, string)>
             {
                 ("Kacper", "Dudek", "kdudek@szkola.edu.pl", "Tomasz", "tdudek@szkola.edu.pl", "Sosnowa 19", "Karczew", "05-480"),
-                ("Natalia", "Adamczyk", "nadamczyk@szkola.edu.pl", "Magdalena", "madamczyk@szkola.edu.pl", "�wierkowa 14", "Radzymin", "05-250"),
-                ("Mateusz", "Wieczorek", "mwieczorek@szkola.edu.pl", "Andrzej", "awieczorek@szkola.edu.pl", "Jarz�binowa 5", "T�uszcz", "05-240"),
-                ("Karolina", "St�pie�", "kstepien@szkola.edu.pl", "Joanna", "jstepien@szkola.edu.pl", "Wrzosowa 8", "G�ra Kalwaria", "05-530"),
-                ("Bartosz", "Pawlak", "bpawlak@szkola.edu.pl", "Grzegorz", "gpawlak@szkola.edu.pl", "R�ana 10", "Weso�a", "05-077"),
-                ("Weronika", "Walczak", "wwalczak@szkola.edu.pl", "Barbara", "bwalczak@szkola.edu.pl", "B��kitna 3", "Wawer", "04-645"),
-                ("Dawid", "Sikorski", "dsikorski@szkola.edu.pl", "Robert", "rsikorski@szkola.edu.pl", "Cicha 6", "Rembert�w", "04-406"),
+                ("Natalia", "Adamczyk", "nadamczyk@szkola.edu.pl", "Magdalena", "madamczyk@szkola.edu.pl", "ďż˝wierkowa 14", "Radzymin", "05-250"),
+                ("Mateusz", "Wieczorek", "mwieczorek@szkola.edu.pl", "Andrzej", "awieczorek@szkola.edu.pl", "Jarzďż˝binowa 5", "Tďż˝uszcz", "05-240"),
+                ("Karolina", "Stďż˝pieďż˝", "kstepien@szkola.edu.pl", "Joanna", "jstepien@szkola.edu.pl", "Wrzosowa 8", "Gďż˝ra Kalwaria", "05-530"),
+                ("Bartosz", "Pawlak", "bpawlak@szkola.edu.pl", "Grzegorz", "gpawlak@szkola.edu.pl", "Rďż˝ana 10", "Wesoďż˝a", "05-077"),
+                ("Weronika", "Walczak", "wwalczak@szkola.edu.pl", "Barbara", "bwalczak@szkola.edu.pl", "Bďż˝ďż˝kitna 3", "Wawer", "04-645"),
+                ("Dawid", "Sikorski", "dsikorski@szkola.edu.pl", "Robert", "rsikorski@szkola.edu.pl", "Cicha 6", "Rembertďż˝w", "04-406"),
                 ("Martyna", "Sobczak", "msobczak@szkola.edu.pl", "Agnieszka", "asobczak@szkola.edu.pl", "Spokojna 11", "Ursus", "02-495"),
-                ("Kamil", "Drzewiecki", "kdrzewiecki@szkola.edu.pl", "Dariusz", "ddrzewiecki@szkola.edu.pl", "Weso�a 22", "W�ochy", "02-400"),
+                ("Kamil", "Drzewiecki", "kdrzewiecki@szkola.edu.pl", "Dariusz", "ddrzewiecki@szkola.edu.pl", "Wesoďż˝a 22", "Wďż˝ochy", "02-400"),
                 ("Patrycja", "Malinowska", "pmalinowska@szkola.edu.pl", "Katarzyna", "kmalinowska@szkola.edu.pl", "Prosta 40", "Bemowo", "01-310"),
 
-                ("Oskar", "Jasi�ski", "ojasinski@szkola.edu.pl", "Mariusz", "mjasinski@szkola.edu.pl", "D�bowa 7", "Sulej�wek", "05-070"),
-                ("Wiktoria", "G�rska", "wgorska@szkola.edu.pl", "Iwona", "igorska@szkola.edu.pl", "Kasztanowa 12", "Halin�w", "05-074"),
-                ("Mi�osz", "Sawicki", "msawicki@szkola.edu.pl", "Rafa�", "rsawicki@szkola.edu.pl", "Jod�owa 3", "J�zef�w", "05-420"),
+                ("Oskar", "Jasiďż˝ski", "ojasinski@szkola.edu.pl", "Mariusz", "mjasinski@szkola.edu.pl", "Dďż˝bowa 7", "Sulejďż˝wek", "05-070"),
+                ("Wiktoria", "Gďż˝rska", "wgorska@szkola.edu.pl", "Iwona", "igorska@szkola.edu.pl", "Kasztanowa 12", "Halinďż˝w", "05-074"),
+                ("Miďż˝osz", "Sawicki", "msawicki@szkola.edu.pl", "Rafaďż˝", "rsawicki@szkola.edu.pl", "Jodďż˝owa 3", "Jďż˝zefďż˝w", "05-420"),
                 ("Gabriela", "Kruk", "gkruk@szkola.edu.pl", "Dorota", "dkruk@szkola.edu.pl", "Topolowa 9", "Otwock", "05-400"),
-                ("Hubert", "Szczepa�ski", "hszczepanski@szkola.edu.pl", "Marek", "mszczepanski@szkola.edu.pl", "Wsp�lna 21", "Karczew", "05-480"),
-                ("Zofia", "Ka�mierczak", "zkazmierczak@szkola.edu.pl", "Aneta", "akazmierczak@szkola.edu.pl", "Le�na 55", "Wi�zowna", "05-462"),
-                ("Maciej", "Skowro�ski", "mskowronski@szkola.edu.pl", "Krzysztof", "kskowronski@szkola.edu.pl", "Polna 8", "Ko�biel", "05-340"),
-                ("Aleksandra", "Konieczna", "akonieczna@szkola.edu.pl", "Ma�gorzata", "makonieczna@szkola.edu.pl", "Warszawska 100", "Mi�sk Mazowiecki", "05-300"),
-                ("Adam", "Domaga�a", "adomagala@szkola.edu.pl", "Jan", "jdomagala@szkola.edu.pl", "Siedlecka 12", "D�be Wielkie", "05-311"),
-                ("Magdalena", "Wr�bel", "mwrobel@szkola.edu.pl", "Bo�ena", "bwrobel@szkola.edu.pl", "Mi�a 2", "Stanis�aw�w", "05-304"),
-                ("Dominik", "Mazurek", "dmazurek@szkola.edu.pl", "Adam", "admazurek@szkola.edu.pl", "Cicha 15", "Wo�omin", "05-200"),
-                ("Emilia", "Zar�ba", "ezareba@szkola.edu.pl", "Monika", "mzareba@szkola.edu.pl", "Piaskowa 7", "Koby�ka", "05-230"),
-                ("Borys", "Pi�tek", "bpiatek@szkola.edu.pl", "Artur", "apiatek@szkola.edu.pl", "S�oneczna 19", "Marki", "05-270"),
-                ("Blanka", "Grzelak", "bgrzelak@szkola.edu.pl", "Sylwia", "sgrzelak@szkola.edu.pl", "Graniczna 4", "Z�bki", "05-091"),
-                ("Ksawery", "�uczak", "kluczak@szkola.edu.pl", "Damian", "dluczak@szkola.edu.pl", "Mickiewicza 11", "Zielonka", "05-220")
+                ("Hubert", "Szczepaďż˝ski", "hszczepanski@szkola.edu.pl", "Marek", "mszczepanski@szkola.edu.pl", "Wspďż˝lna 21", "Karczew", "05-480"),
+                ("Zofia", "Kaďż˝mierczak", "zkazmierczak@szkola.edu.pl", "Aneta", "akazmierczak@szkola.edu.pl", "Leďż˝na 55", "Wiďż˝zowna", "05-462"),
+                ("Maciej", "Skowroďż˝ski", "mskowronski@szkola.edu.pl", "Krzysztof", "kskowronski@szkola.edu.pl", "Polna 8", "Koďż˝biel", "05-340"),
+                ("Aleksandra", "Konieczna", "akonieczna@szkola.edu.pl", "Maďż˝gorzata", "makonieczna@szkola.edu.pl", "Warszawska 100", "Miďż˝sk Mazowiecki", "05-300"),
+                ("Adam", "Domagaďż˝a", "adomagala@szkola.edu.pl", "Jan", "jdomagala@szkola.edu.pl", "Siedlecka 12", "Dďż˝be Wielkie", "05-311"),
+                ("Magdalena", "Wrďż˝bel", "mwrobel@szkola.edu.pl", "Boďż˝ena", "bwrobel@szkola.edu.pl", "Miďż˝a 2", "Stanisďż˝awďż˝w", "05-304"),
+                ("Dominik", "Mazurek", "dmazurek@szkola.edu.pl", "Adam", "admazurek@szkola.edu.pl", "Cicha 15", "Woďż˝omin", "05-200"),
+                ("Emilia", "Zarďż˝ba", "ezareba@szkola.edu.pl", "Monika", "mzareba@szkola.edu.pl", "Piaskowa 7", "Kobyďż˝ka", "05-230"),
+                ("Borys", "Piďż˝tek", "bpiatek@szkola.edu.pl", "Artur", "apiatek@szkola.edu.pl", "Sďż˝oneczna 19", "Marki", "05-270"),
+                ("Blanka", "Grzelak", "bgrzelak@szkola.edu.pl", "Sylwia", "sgrzelak@szkola.edu.pl", "Graniczna 4", "Zďż˝bki", "05-091"),
+                ("Ksawery", "ďż˝uczak", "kluczak@szkola.edu.pl", "Damian", "dluczak@szkola.edu.pl", "Mickiewicza 11", "Zielonka", "05-220")
             };
         }
 
@@ -511,7 +511,7 @@ namespace BusinessLogic.Seeders
             var gradeCategoryIds = _context.GradeCategories.Select(x => x.Id).ToList();
 
             if (!gradeTypeIds.Any() || !gradeCategoryIds.Any())
-                throw new Exception("Brak typów lub kategorii ocen");
+                throw new Exception("Brak typĂłw lub kategorii ocen");
 
             var weeklySchedules = _context.WeeklySchedules.ToList();
             if (!weeklySchedules.Any()) return;
@@ -652,16 +652,16 @@ namespace BusinessLogic.Seeders
 
             var titles = new[]
             {
-                "Zebranie rodzic�w",
-                "Wa�na informacja",
+                "Zebranie rodzicďż˝w",
+                "Waďż˝na informacja",
                 "Zmiana w planie lekcji",
-                "G�osowanie na przewodnicz�cego",
-                "Zbli�aj�ce si� konkursy szkolne",
+                "Gďż˝osowanie na przewodniczďż˝cego",
+                "Zbliďż˝ajďż˝ce siďż˝ konkursy szkolne",
                 "Wycieczka do Londynu",
-                "Zbi�rka makulatury",
-                "Wa�ne: wp�aty na Rad� Rodzic�w",
-                "Najbli�sze dni wolne od zaj��",
-                "Zaj�cia dodatkowe z przedmiot�w",
+                "Zbiďż˝rka makulatury",
+                "Waďż˝ne: wpďż˝aty na Radďż˝ Rodzicďż˝w",
+                "Najbliďż˝sze dni wolne od zajďż˝ďż˝",
+                "Zajďż˝cia dodatkowe z przedmiotďż˝w",
             };
 
             var loremIpsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Curabitur pretium tincidunt lacus. Nulla gravida orci a odio. Nullam varius, turpis et commodo pharetra, est eros bibendum elit, nec luctus magna felis sollicitudin mauris.";

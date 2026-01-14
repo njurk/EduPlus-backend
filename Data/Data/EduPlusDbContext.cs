@@ -196,10 +196,10 @@ namespace Data.Data
             modelBuilder.Entity<ParentStudentView>().HasNoKey().ToView("vw_ParentStudentView");
 
             modelBuilder.Entity<Target>().HasData(
-                new Target { Id = 1, Label = "WebAdmin", Title = "Administrator - strona internetowa" },
-                new Target { Id = 2, Label = "WebTeacher", Title = "Nauczyciel - strona internetowa" },
-                new Target { Id = 3, Label = "MobileParent", Title = "Rodzic - aplikacja mobilna" },
-                new Target { Id = 4, Label = "MobileStudent", Title = "Uczeñ - aplikacja mobilna" }
+                new Target { Id = 1, Label = "WebAdmin", Title = "Administrator - strona internetowa", CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
+                new Target { Id = 2, Label = "WebTeacher", Title = "Nauczyciel - strona internetowa", CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
+                new Target { Id = 3, Label = "MobileParent", Title = "Rodzic - aplikacja mobilna", CreatedAt = initialDateTime, UpdatedAt = initialDateTime },
+                new Target { Id = 4, Label = "MobileStudent", Title = "Uczeñ - aplikacja mobilna", CreatedAt = initialDateTime, UpdatedAt = initialDateTime }
             );
 
             modelBuilder.Entity<Role>().HasData(

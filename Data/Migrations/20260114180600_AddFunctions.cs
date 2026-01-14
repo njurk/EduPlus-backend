@@ -1,14 +1,11 @@
-using Microsoft.EntityFrameworkCore.Migrations;
-using System.Reflection;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace Data.Migrations
 {
-    /// <inheritdoc />
     public partial class AddFunctions : Migration
     {
-        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.Sql(@"
@@ -34,15 +31,19 @@ namespace Data.Migrations
 
             migrationBuilder.Sql(@"
                 CREATE OR ALTER FUNCTION [dbo].[fn_GetUserRoles](@UserId INT)
-                RETURNS NVARCHAR(MAX) AS
+                RETURNS NVARCHAR(MAX)
+                AS
                 BEGIN
-                    RETURN (SELECT STRING_AGG(r.Name, ', ') FROM UserRoles ur JOIN Roles r ON ur.RoleId = r.Id WHERE ur.UserId = @UserId);
+                    DECLARE @RoleNames NVARCHAR(MAX);
+                    SELECT @RoleNames = STRING_AGG(r.Name, ', ')
+                    FROM UserRoles ur
+                    JOIN Roles r ON ur.RoleId = r.Id
+                    WHERE ur.UserId = @UserId;
+                    RETURN ISNULL(@RoleNames, '');
                 END;
-                GO
             ");
         }
 
-        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.Sql("DROP FUNCTION IF EXISTS [dbo].[fn_CalculateWeightedAverage]");
@@ -50,3 +51,4 @@ namespace Data.Migrations
         }
     }
 }
+

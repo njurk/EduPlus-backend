@@ -14,6 +14,7 @@ namespace API.Controllers
     public class DashboardController : ControllerBase
     {
         private readonly EduPlusDbContext _context;
+        private static readonly DateTime _startTime = DateTime.Now;
 
         public DashboardController(EduPlusDbContext context)
         {
@@ -44,18 +45,28 @@ namespace API.Controllers
                     .FirstOrDefaultAsync();
             }
 
-            var announcements = await _context.Announcements
+            var parentRoleId = await _context.Roles
+                .Where(r => r.Name.ToLower().Contains("rodzic") || r.Name.ToLower().Contains("parent"))
+                .Select(r => r.Id)
+                .FirstOrDefaultAsync();
+
+            var totalParents = parentRoleId > 0 
+                ? await _context.UserRoles.CountAsync(ur => ur.RoleId == parentRoleId && ur.User.IsActive)
+                : 0;
+
+            var recentTickets = await _context.Tickets
                 .AsNoTracking()
-                .Include(a => a.Author)
-                .Where(a => a.IsActive)
-                .OrderByDescending(a => a.CreatedAt)
-                .Take(3)
-                .Select(a => new DashboardAnnouncementDto
+                .Include(t => t.User)
+                .Where(t => !t.IsClosed)
+                .OrderByDescending(t => t.CreatedAt)
+                .Take(5)
+                .Select(t => new DashboardTicketDto
                 {
-                    Id = a.Id,
-                    Title = a.Title,
-                    Date = a.CreatedAt.ToString("yyyy-MM-dd"),
-                    Author = a.Author != null ? $"{a.Author.FirstName} {a.Author.LastName}" : "Brak danych"
+                    Id = t.Id,
+                    Subject = t.Subject,
+                    UserName = t.User != null ? $"{t.User.FirstName} {t.User.LastName}" : "Nieznany",
+                    CreatedAt = t.CreatedAt.ToString("yyyy-MM-dd HH:mm"),
+                    IsClosed = t.IsClosed
                 })
                 .ToListAsync();
 
@@ -66,14 +77,15 @@ namespace API.Controllers
                     TotalUsers = statsView.TotalUsers,
                     TotalStudents = statsView.TotalStudents,
                     TotalTeachers = statsView.TotalTeachers,
-                    TotalClasses = statsView.TotalClasses
+                    TotalClasses = statsView.TotalClasses,
+                    TotalParents = totalParents
                 },
                 Status = new DashboardStatusDto
                 {
                     SchoolYear = currentSemester?.SchoolYear?.Name ?? "Brak danych",
                     Semester = currentSemester?.Name ?? "-"
                 },
-                Announcements = announcements
+                RecentTickets = recentTickets
             };
 
             return Ok(result);
@@ -105,5 +117,19 @@ namespace API.Controllers
 
             return Ok(result);
         }
+
+        [HttpGet("uptime")]
+        [AllowAnonymous]
+        public ActionResult<object> GetUptime()
+        {
+            var uptime = DateTime.Now - _startTime;
+            return Ok(new 
+            { 
+                StartedAt = _startTime.ToString("yyyy-MM-dd HH:mm:ss"),
+                Uptime = $"{(int)uptime.TotalDays}d {uptime.Hours}h {uptime.Minutes}m {uptime.Seconds}s",
+                UptimeSeconds = (int)uptime.TotalSeconds
+            });
+        }
     }
 }
+

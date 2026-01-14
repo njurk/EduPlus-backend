@@ -16,6 +16,7 @@ namespace Data.Data.Entities
         public bool IsActive { get; set; } = true;
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
+        public int? ModifiedByUserId { get; set; }
         public virtual ICollection<ClassStudent> ClassStudents { get; set; } = new List<ClassStudent>();
     }
 }

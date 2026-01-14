@@ -13,6 +13,7 @@ namespace Data.Data.Entities
         public bool IsActive { get; set; } = true;
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
+        public int? ModifiedByUserId { get; set; }
         public int SchoolYearId { get; set; }
         [ForeignKey(nameof(SchoolYearId))]
         public virtual SchoolYear? SchoolYear { get; set; } = null!;

@@ -15,8 +15,15 @@ namespace API
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddDbContext<EduPlusDbContext>(options =>
-            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            builder.Services.AddHttpContextAccessor();
+            builder.Services.AddScoped<AuditSaveChangesInterceptor>();
+
+            builder.Services.AddDbContext<EduPlusDbContext>((sp, options) =>
+            {
+                var interceptor = sp.GetRequiredService<AuditSaveChangesInterceptor>();
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+                       .AddInterceptors(interceptor);
+            });
 
             builder.Services.AddControllers()
             .AddJsonOptions(options =>
