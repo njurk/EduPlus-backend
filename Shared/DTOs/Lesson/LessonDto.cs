@@ -17,6 +17,11 @@ namespace Shared.DTOs
         public int OrderNumber { get; set; }
         public string StartTime { get; set; } = string.Empty;
         public string EndTime { get; set; } = string.Empty;
-        public string Topic { get; set; }
+        public string Topic { get; set; } = string.Empty;
+        public int StatusId { get; set; }
+        public string StatusName { get; set; } = string.Empty;
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
     }
 }
+

@@ -2,6 +2,7 @@ using BusinessLogic.Services;
 using Data.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Shared.DTOs;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -16,15 +17,63 @@ public class AnnouncementController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAll(
+        [FromQuery] string? search = null,
+        [FromQuery] string? sortBy = null,
+        [FromQuery] bool sortDesc = true,
+        [FromQuery] bool showInactive = false)
     {
-        return Ok(await _service.GetAllAsync());
+        var items = await _service.GetAllAsync(search, sortBy, sortDesc, showInactive);
+        var result = items.Select(a => new AnnouncementDto
+        {
+            Id = a.Id,
+            Title = a.Title,
+            Description = a.Description,
+            AuthorId = a.AuthorId,
+            AuthorName = a.Author != null ? $"{a.Author.FirstName} {a.Author.LastName}" : string.Empty,
+            IsActive = a.IsActive,
+            CreatedAt = a.CreatedAt,
+            UpdatedAt = a.UpdatedAt
+        });
+        return Ok(result);
+    }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById(int id)
+    {
+        var item = await _service.GetByIdAsync(id);
+        if (item == null) return NotFound();
+        return Ok(new AnnouncementDto
+        {
+            Id = item.Id,
+            Title = item.Title,
+            Description = item.Description,
+            AuthorId = item.AuthorId,
+            AuthorName = item.Author != null ? $"{item.Author.FirstName} {item.Author.LastName}" : string.Empty,
+            IsActive = item.IsActive,
+            CreatedAt = item.CreatedAt,
+            UpdatedAt = item.UpdatedAt
+        });
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(Announcement entity)
+    public async Task<IActionResult> Create([FromBody] CreateAnnouncementDto dto)
     {
+        var entity = new Announcement
+        {
+            Title = dto.Title,
+            Description = dto.Description,
+            AuthorId = dto.AuthorId
+        };
         var result = await _service.CreateAsync(entity);
+        return Ok(result);
+    }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update(int id, [FromBody] UpdateAnnouncementDto dto)
+    {
+        var result = await _service.UpdateAsync(id, dto.Title, dto.Description);
+        if (result == null) return NotFound();
         return Ok(result);
     }
 
@@ -35,4 +84,13 @@ public class AnnouncementController : ControllerBase
         if (!success) return NotFound();
         return NoContent();
     }
+
+    [HttpPatch("{id}/restore")]
+    public async Task<IActionResult> Restore(int id)
+    {
+        var success = await _service.RestoreAsync(id);
+        if (!success) return NotFound();
+        return NoContent();
+    }
 }
+

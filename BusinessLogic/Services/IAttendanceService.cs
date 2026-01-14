@@ -12,9 +12,10 @@ namespace BusinessLogic.Services
 {
     public interface IAttendanceService
     {
-        Task<IEnumerable<AttendanceAdminDto>> GetAllForAdminAsync(bool includeInactive);
+        Task<IEnumerable<AttendanceAdminDto>> GetAllForAdminAsync(bool includeInactive, string? sortBy = null, bool sortDesc = true);
         Task<IEnumerable<Attendance>> GetAllAsync();
         Task<Attendance> CreateAsync(Attendance entity);
+        Task<Attendance?> UpdateAsync(int id, int attendanceTypeId);
         Task<bool> RestoreAsync(int id);
         Task<bool> DeleteAsync(int id);
     }
@@ -28,17 +29,18 @@ namespace BusinessLogic.Services
             _context = context;
         }
 
-        public async Task<IEnumerable<AttendanceAdminDto>> GetAllForAdminAsync(bool includeInactive)
+        public async Task<IEnumerable<AttendanceAdminDto>> GetAllForAdminAsync(bool includeInactive, string? sortBy = null, bool sortDesc = true)
         {
             var query = _context.Attendances.AsNoTracking();
 
             if (!includeInactive) query = query.Where(x => x.IsActive);
 
-            return await query
+            var projected = query
                 .Include(a => a.Student)
                 .Include(a => a.AttendanceType)
                 .Include(a => a.Lesson).ThenInclude(l => l.Subject)
                 .Include(a => a.Lesson).ThenInclude(l => l.Teacher)
+                .Include(a => a.Lesson).ThenInclude(l => l.LessonHour)
                 .Select(a => new AttendanceAdminDto
                 {
                     Id = a.Id,
@@ -48,14 +50,26 @@ namespace BusinessLogic.Services
                     SubjectName = a.Lesson.Subject.Name,
                     TeacherName = a.Lesson.Teacher.LastName + " " + a.Lesson.Teacher.FirstName,
                     LessonDate = a.Lesson.Date,
+                    OrderNumber = a.Lesson.LessonHour.OrderNumber,
                     TypeName = a.AttendanceType.Name,
                     ShortCode = a.AttendanceType.ShortCode,
+                    AttendanceTypeId = a.AttendanceTypeId,
                     CreatedAt = a.CreatedAt,
                     UpdatedAt = a.UpdatedAt,
                     IsActive = a.IsActive
-                })
-                .OrderByDescending(a => a.LessonDate)
-                .ToListAsync();
+                });
+
+            projected = sortBy?.ToLower() switch
+            {
+                "updatedat" => sortDesc ? projected.OrderByDescending(a => a.UpdatedAt) : projected.OrderBy(a => a.UpdatedAt),
+                "typename" or "status" => sortDesc ? projected.OrderByDescending(a => a.TypeName) : projected.OrderBy(a => a.TypeName),
+                "studentname" => sortDesc ? projected.OrderByDescending(a => a.StudentName) : projected.OrderBy(a => a.StudentName),
+                "subjectname" => sortDesc ? projected.OrderByDescending(a => a.SubjectName) : projected.OrderBy(a => a.SubjectName),
+                "createdat" => sortDesc ? projected.OrderByDescending(a => a.CreatedAt) : projected.OrderBy(a => a.CreatedAt),
+                _ => sortDesc ? projected.OrderByDescending(a => a.LessonDate) : projected.OrderBy(a => a.LessonDate)
+            };
+
+            return await projected.ToListAsync();
         }
 
         public async Task<IEnumerable<Attendance>> GetAllAsync()
@@ -75,6 +89,18 @@ namespace BusinessLogic.Services
             _context.Attendances.Add(entity);
             await _context.SaveChangesAsync();
             return entity;
+        }
+
+        public async Task<Attendance?> UpdateAsync(int id, int attendanceTypeId)
+        {
+            var item = await _context.Attendances.FindAsync(id);
+            if (item == null) return null;
+
+            item.AttendanceTypeId = attendanceTypeId;
+            item.UpdatedAt = DateTime.Now;
+
+            await _context.SaveChangesAsync();
+            return item;
         }
 
         public async Task<bool> RestoreAsync(int id)
@@ -102,3 +128,4 @@ namespace BusinessLogic.Services
         }
     }
 }
+

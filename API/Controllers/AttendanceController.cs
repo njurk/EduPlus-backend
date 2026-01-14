@@ -2,6 +2,7 @@ using BusinessLogic.Services;
 using Data.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Shared.DTOs;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -16,9 +17,12 @@ public class AttendanceController : ControllerBase
     }
 
     [HttpGet("admin")]
-    public async Task<IActionResult> GetAllForAdmin([FromQuery] bool includeInactive = false)
+    public async Task<IActionResult> GetAllForAdmin(
+        [FromQuery] bool includeInactive = false,
+        [FromQuery] string? sortBy = null,
+        [FromQuery] bool sortDesc = true)
     {
-        var result = await _service.GetAllForAdminAsync(includeInactive);
+        var result = await _service.GetAllForAdminAsync(includeInactive, sortBy, sortDesc);
         return Ok(result);
     }
 
@@ -35,7 +39,15 @@ public class AttendanceController : ControllerBase
         return Ok(result);
     }
 
-    [HttpPut("{id}/restore")]
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update(int id, [FromBody] UpdateAttendanceDto dto)
+    {
+        var result = await _service.UpdateAsync(id, dto.AttendanceTypeId);
+        if (result == null) return NotFound();
+        return Ok(result);
+    }
+
+    [HttpPatch("{id}/restore")]
     public async Task<IActionResult> Restore(int id)
     {
         var success = await _service.RestoreAsync(id);
@@ -51,3 +63,4 @@ public class AttendanceController : ControllerBase
         return NoContent();
     }
 }
+
