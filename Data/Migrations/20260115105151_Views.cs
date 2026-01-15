@@ -4,7 +4,7 @@
 
 namespace Data.Migrations
 {
-    public partial class AddViews : Migration
+    public partial class Views : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

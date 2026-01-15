@@ -12,7 +12,7 @@ namespace BusinessLogic.Services
 {
     public interface IAttendanceService
     {
-        Task<IEnumerable<AttendanceAdminDto>> GetAllForAdminAsync(bool includeInactive, string? sortBy = null, bool sortDesc = true);
+        Task<IEnumerable<AttendanceAdminDto>> GetAllForAdminAsync(bool includeInactive, string? search = null, string? sortBy = null, bool sortDesc = true);
         Task<IEnumerable<Attendance>> GetAllAsync();
         Task<Attendance> CreateAsync(Attendance entity);
         Task<Attendance?> UpdateAsync(int id, int attendanceTypeId);
@@ -29,19 +29,29 @@ namespace BusinessLogic.Services
             _context = context;
         }
 
-        public async Task<IEnumerable<AttendanceAdminDto>> GetAllForAdminAsync(bool includeInactive, string? sortBy = null, bool sortDesc = true)
+        public async Task<IEnumerable<AttendanceAdminDto>> GetAllForAdminAsync(bool includeInactive, string? search = null, string? sortBy = null, bool sortDesc = true)
         {
-            var query = _context.Attendances.AsNoTracking();
-
-            if (!includeInactive) query = query.Where(x => x.IsActive);
-
-            var projected = query
+            var query = _context.Attendances.AsNoTracking()
                 .Include(a => a.Student)
                 .Include(a => a.AttendanceType)
                 .Include(a => a.Lesson).ThenInclude(l => l.Subject)
                 .Include(a => a.Lesson).ThenInclude(l => l.Teacher)
                 .Include(a => a.Lesson).ThenInclude(l => l.LessonHour)
-                .Select(a => new AttendanceAdminDto
+                .AsQueryable();
+
+            if (!includeInactive) query = query.Where(x => x.IsActive);
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                var s = search.Trim().ToLower();
+                query = query.Where(a =>
+                    a.Student.LastName.ToLower().Contains(s) ||
+                    a.Student.FirstName.ToLower().Contains(s) ||
+                    a.Lesson.Subject.Name.ToLower().Contains(s) ||
+                    a.Lesson.Teacher.LastName.ToLower().Contains(s));
+            }
+
+            var projected = query.Select(a => new AttendanceAdminDto
                 {
                     Id = a.Id,
                     StudentId = a.StudentId,
