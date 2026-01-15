@@ -19,11 +19,10 @@ public class AttendanceController : ControllerBase
     [HttpGet("admin")]
     public async Task<IActionResult> GetAllForAdmin(
         [FromQuery] bool includeInactive = false,
-        [FromQuery] string? search = null,
         [FromQuery] string? sortBy = null,
         [FromQuery] bool sortDesc = true)
     {
-        var result = await _service.GetAllForAdminAsync(includeInactive, search, sortBy, sortDesc);
+        var result = await _service.GetAllForAdminAsync(includeInactive, sortBy, sortDesc);
         return Ok(result);
     }
 

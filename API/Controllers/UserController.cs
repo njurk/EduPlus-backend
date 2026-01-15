@@ -95,7 +95,7 @@ public class UserController : ControllerBase
             ParentIds = relations.Where(ps => ps.StudentId == id).Select(ps => ps.ParentId).ToList(),
             Relations = relations.Select(ps => 
                 ps.ParentId == id 
-                    ? $"{ps.Student.LastName} {ps.Student.FirstName} (Uczeñ)" 
+                    ? $"{ps.Student.LastName} {ps.Student.FirstName} (UczeÅ„)" 
                     : $"{ps.Parent.LastName} {ps.Parent.FirstName} (Rodzic)"
             ).ToList()
         });
@@ -105,10 +105,10 @@ public class UserController : ControllerBase
     public async Task<IActionResult> Create(UserCreateDto dto)
     {
         if (await _context.Users.IgnoreQueryFilters().AnyAsync(u => u.Email == dto.Email))
-            return BadRequest("Podany email ju¿ istnieje w bazie");
+            return BadRequest("Podany email juÅ¼ istnieje w bazie");
 
         if (dto.RoleIds == null || !dto.RoleIds.Any())
-            return BadRequest("U¿ytkownik musi mieæ rolê");
+            return BadRequest("UÅ¼ytkownik musi mieÄ‡ rolÄ™");
 
         var entity = new User
         {
@@ -152,102 +152,88 @@ public class UserController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, UserUpdateDto dto)
     {
-        var user = await _context.Users
+        var dbUser = await _context.Users
             .Include(u => u.UserRoles)
+            .Include(u => u.ParentStudents)
+            .IgnoreQueryFilters()
             .FirstOrDefaultAsync(u => u.Id == id);
 
-        if (user == null) return NotFound();
+        if (dbUser == null) return NotFound();
 
-        user.FirstName = dto.FirstName;
-        user.LastName = dto.LastName;
-        user.Email = dto.Email;
-        user.Phone = dto.Phone;
-        user.Street = dto.Street;
-        user.City = dto.City;
-        user.PostalCode = dto.PostalCode;
-        user.IsActive = dto.IsActive;
-        user.UpdatedAt = DateTime.Now;
-
-        var currentUserId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-        if (int.TryParse(currentUserId, out int uid))
-        {
-            user.ModifiedByUserId = uid;
-        }
+        dbUser.FirstName = dto.FirstName;
+        dbUser.LastName = dto.LastName;
+        dbUser.Email = dto.Email;
+        dbUser.Phone = dto.Phone;
+        dbUser.Street = dto.Street;
+        dbUser.City = dto.City;
+        dbUser.PostalCode = dto.PostalCode;
+        dbUser.IsActive = dto.IsActive;
+        dbUser.UpdatedAt = DateTime.Now;
 
         if (!string.IsNullOrEmpty(dto.Password))
+            dbUser.Password = _passwordHashService.HashPassword(dto.Password);
+
+        var rolesToRemove = dbUser.UserRoles.Where(ur => !dto.RoleIds.Contains(ur.RoleId)).ToList();
+        foreach (var role in rolesToRemove) dbUser.UserRoles.Remove(role);
+
+        foreach (var roleId in dto.RoleIds)
         {
-            user.Password = _passwordHashService.HashPassword(dto.Password);
+            if (!dbUser.UserRoles.Any(ur => ur.RoleId == roleId))
+                dbUser.UserRoles.Add(new UserRole { RoleId = roleId, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now });
         }
 
-        if (dto.RoleIds != null)
+        if (dto.ChildIds != null)
         {
-            var currentRoles = user.UserRoles.Select(ur => ur.RoleId).ToList();
-            var toAdd = dto.RoleIds.Except(currentRoles).ToList();
-            var toRemove = currentRoles.Except(dto.RoleIds).ToList();
+            var relationsToDelete = dbUser.ParentStudents
+                .Where(pr => !dto.ChildIds.Contains(pr.StudentId))
+                .ToList();
 
-            foreach (var rid in toRemove)
-            {
-                var r = user.UserRoles.First(ur => ur.RoleId == rid);
-                _context.UserRoles.Remove(r);
-            }
+            foreach (var rel in relationsToDelete) dbUser.ParentStudents.Remove(rel);
 
-            foreach (var rid in toAdd)
+            var existingStudentIds = dbUser.ParentStudents.Select(pr => pr.StudentId).ToList();
+            var newStudentIds = dto.ChildIds.Where(id => !existingStudentIds.Contains(id)).Distinct();
+
+            foreach (var studentId in newStudentIds)
             {
-                user.UserRoles.Add(new UserRole { RoleId = rid, UserId = user.Id });
+                dbUser.ParentStudents.Add(new ParentStudent
+                {
+                    ParentId = id,
+                    StudentId = studentId,
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now
+                });
             }
         }
 
-        if (dto.ParentIds != null && dto.ParentIds.Any())
+        if (dto.ParentIds != null)
         {
-            var currentParents = await _context.ParentStudents
+            var relationsByStudent = await _context.ParentStudents
                 .Where(ps => ps.StudentId == id)
                 .ToListAsync();
-            
-            var currentParentIds = currentParents.Select(ps => ps.ParentId).ToList();
-            var toAdd = dto.ParentIds.Except(currentParentIds).ToList();
-            var toRemove = currentParentIds.Except(dto.ParentIds).ToList();
 
-            foreach (var pid in toRemove)
-            {
-                var rel = currentParents.First(ps => ps.ParentId == pid);
-                _context.ParentStudents.Remove(rel);
-            }
-            foreach (var pid in toAdd)
-            {
-                _context.ParentStudents.Add(new ParentStudent { StudentId = id, ParentId = pid });
-            }
-        }
-        
-        if (dto.ChildIds != null && dto.ChildIds.Any()) 
-        {
-                var currentChilds = await _context.ParentStudents
-                .Where(ps => ps.ParentId == id)
-                .ToListAsync();
+            var relationsToRemove = relationsByStudent
+                .Where(ps => !dto.ParentIds.Contains(ps.ParentId))
+                .ToList();
 
-            var currentChildIds = currentChilds.Select(ps => ps.StudentId).ToList();
-            var toAdd = dto.ChildIds.Except(currentChildIds).ToList();
-            var toRemove = currentChildIds.Except(dto.ChildIds).ToList();
-            
-            foreach (var sid in toRemove)
+            foreach (var rel in relationsToRemove) _context.ParentStudents.Remove(rel);
+
+            var existingParentIds = relationsByStudent.Select(ps => ps.ParentId).ToList();
+            var newParentIds = dto.ParentIds.Where(pId => !existingParentIds.Contains(pId)).Distinct();
+
+            foreach (var parentId in newParentIds)
             {
-                var rel = currentChilds.First(ps => ps.StudentId == sid);
-                _context.ParentStudents.Remove(rel); 
-            }
-            foreach (var sid in toAdd)
-            {
-                _context.ParentStudents.Add(new ParentStudent { ParentId = id, StudentId = sid });
+                _context.ParentStudents.Add(new ParentStudent
+                {
+                    ParentId = parentId,
+                    StudentId = id,
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now
+                });
             }
         }
 
-        try
-        {
-            await _context.SaveChangesAsync();
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, ex.Message);
-        }
+        await _context.SaveChangesAsync();
+        return Ok(dbUser);
     }
 
     [HttpPatch("{id}/change-password")]
@@ -257,13 +243,13 @@ public class UserController : ControllerBase
         if (dbUser == null) return NotFound();
 
         if (!_passwordHashService.VerifyPassword(dto.CurrentPassword, dbUser.Password))
-            return BadRequest("Aktualne has˜o jest nieprawid˜owe.");
+            return BadRequest("Aktualne hasï¿½o jest nieprawidï¿½owe.");
 
         dbUser.Password = _passwordHashService.HashPassword(dto.NewPassword);
         dbUser.UpdatedAt = DateTime.Now;
         await _context.SaveChangesAsync();
 
-        return Ok(new { message = "Has˜o zosta˜o zmienione pomy˜lnie." });
+        return Ok(new { message = "Hasï¿½o zostaï¿½o zmienione pomyï¿½lnie." });
     }
 
     [HttpPatch("{id}/restore")]
@@ -279,7 +265,7 @@ public class UserController : ControllerBase
         user.UpdatedAt = DateTime.Now;
         await _context.SaveChangesAsync();
 
-        return Ok(new { message = "U¿ytkownik przywrócony", id = user.Id });
+        return Ok(new { message = "Uï¿½ytkownik przywrï¿½cony", id = user.Id });
     }
 
     [HttpDelete("{id}")]
@@ -290,14 +276,18 @@ public class UserController : ControllerBase
 
         if (item.IsActive)
         {
-            if (!item.LastName.EndsWith(" (usuniêty)"))
-                item.LastName = $"{item.LastName} (usuniêty)";
+            if (!item.LastName.EndsWith(" (nieaktywny)"))
+                item.LastName = $"{item.LastName} (nieaktywny)";
 
             item.IsActive = false;
             item.UpdatedAt = DateTime.Now;
-            await _context.SaveChangesAsync();
+        }
+        else
+        {
+            _context.Users.Remove(item);
         }
 
+        await _context.SaveChangesAsync();
         return NoContent();
     }
 }
