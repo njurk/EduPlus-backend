@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace API.Services
+namespace BusinessLogic.Services
 {
     public interface IExportService
     {

@@ -21,14 +21,7 @@ public class GradeCategoryController : ControllerBase
     {
         var query = _context.GradeCategories.AsNoTracking().AsQueryable();
 
-        if (showInactive)
-        {
-            query = query.Where(r => !r.IsActive);
-        }
-        else
-        {
-            query = query.Where(r => r.IsActive);
-        }
+        query = showInactive ? query.Where(r => !r.IsActive) : query.Where(r => r.IsActive);
 
         if (!string.IsNullOrWhiteSpace(search))
         {
@@ -45,16 +38,26 @@ public class GradeCategoryController : ControllerBase
             _ => sortDesc ? query.OrderByDescending(x => x.Name) : query.OrderBy(x => x.Name)
         };
 
-        return Ok(await query.ToListAsync());
+        var result = await query
+            .Select(x => new
+            {
+                x.Id,
+                x.Name,
+                x.Weight,
+                x.IsActive,
+                x.CreatedAt,
+                x.UpdatedAt,
+                ModifiedByName = _context.Users.Where(u => u.Id == x.ModifiedByUserId).Select(u => u.FirstName + " " + u.LastName).FirstOrDefault() ?? "System"
+            })
+            .ToListAsync();
+
+        return Ok(result);
     }
 
     [HttpPost]
     public async Task<IActionResult> Create(GradeCategory entity)
     {
-        entity.CreatedAt = DateTime.Now;
-        entity.UpdatedAt = DateTime.Now;
         entity.IsActive = true;
-
         _context.GradeCategories.Add(entity);
         await _context.SaveChangesAsync();
         return Ok(entity);
@@ -66,11 +69,8 @@ public class GradeCategoryController : ControllerBase
         if (id != entity.Id) return BadRequest();
 
         if (entity.IsActive && entity.Name.EndsWith(" (nieaktywny)"))
-        {
             entity.Name = entity.Name.Replace(" (nieaktywny)", "");
-        }
 
-        entity.UpdatedAt = DateTime.Now;
         _context.Entry(entity).State = EntityState.Modified;
         _context.Entry(entity).Property(x => x.CreatedAt).IsModified = false;
 
@@ -97,10 +97,7 @@ public class GradeCategoryController : ControllerBase
         {
             item.IsActive = false;
             if (!item.Name.EndsWith(" (nieaktywny)"))
-            {
                 item.Name += " (nieaktywny)";
-            }
-            item.UpdatedAt = DateTime.Now;
         }
         else
         {
@@ -110,4 +107,19 @@ public class GradeCategoryController : ControllerBase
         await _context.SaveChangesAsync();
         return NoContent();
     }
+
+    [HttpPatch("{id}/restore")]
+    public async Task<IActionResult> Restore(int id)
+    {
+        var item = await _context.GradeCategories.IgnoreQueryFilters().FirstOrDefaultAsync(x => x.Id == id);
+        if (item == null) return NotFound();
+
+        item.IsActive = true;
+        if (item.Name.EndsWith(" (nieaktywny)"))
+            item.Name = item.Name.Replace(" (nieaktywny)", "").Trim();
+
+        await _context.SaveChangesAsync();
+        return Ok(new { message = "Przywrócono" });
+    }
 }
+

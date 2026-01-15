@@ -46,7 +46,7 @@ namespace API
             builder.Services.AddScoped<IWeeklyScheduleService, WeeklyScheduleService>();
             builder.Services.AddScoped<ILessonService, LessonService>();
             builder.Services.AddScoped<IExcuseService, ExcuseService>();
-            builder.Services.AddScoped<API.Services.IExportService, API.Services.ExportService>();
+            builder.Services.AddScoped<IExportService, ExportService>();
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
