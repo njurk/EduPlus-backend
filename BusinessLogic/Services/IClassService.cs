@@ -284,7 +284,7 @@ namespace BusinessLogic.Services
 
         public async Task<Class> UpdateAsync(int id, Class entity)
         {
-            if (id != entity.Id) throw new ArgumentException("ID mismatch");
+            if (id != entity.Id) throw new ArgumentException("Złe ID");
 
             var exists = await _context.Classes.AnyAsync(c =>
                 c.SchoolYearId == entity.SchoolYearId &&

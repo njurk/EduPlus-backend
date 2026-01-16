@@ -1,4 +1,4 @@
-using Data.Data;
+ï»¿using Data.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -40,12 +40,12 @@ namespace BusinessLogic.Services
 
             if (user == null || !user.IsActive || !_passwordHashService.VerifyPassword(dto.Password, user.Password))
             {
-                throw new UnauthorizedAccessException("B³êdny email lub has³o");
+                throw new UnauthorizedAccessException("BÅ‚Ä™dny email lub hasÅ‚o");
             }
 
             if (!user.UserRoles.Any(ur => ur.Role.Level == 1))
             {
-                throw new UnauthorizedAccessException("Nie posiadasz odpowiednich uprawnieñ");
+                throw new UnauthorizedAccessException("Nie posiadasz odpowiednich uprawnieÅ„");
             }
 
             var tokenString = GenerateJwtToken(user);

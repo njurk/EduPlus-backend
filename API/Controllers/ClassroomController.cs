@@ -1,4 +1,4 @@
-using BusinessLogic.Services;
+﻿using BusinessLogic.Services;
 using Data.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -32,7 +32,7 @@ public class ClassroomController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] Classroom entity)
     {
-        if (id != entity.Id) return BadRequest("ID mismatch");
+        if (id != entity.Id) return BadRequest("Złe ID");
 
         var result = await _service.UpdateAsync(id, entity);
         if (result == null) return NotFound();
@@ -55,6 +55,6 @@ public class ClassroomController : ControllerBase
         var success = await _service.RestoreAsync(id);
         if (!success) return NotFound();
 
-        return Ok(new { message = "Przywr�cono" });
+        return Ok(new { message = "Przywrócono" });
     }
 }

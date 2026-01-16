@@ -1,4 +1,4 @@
-using BusinessLogic.Services;
+ï»¿using BusinessLogic.Services;
 using Data.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -51,7 +51,7 @@ public class AnnouncementController : ControllerBase
         var userIdClaim = User.FindFirst("userId")?.Value ?? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
         if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var authorId))
         {
-            return Unauthorized("Nie mo¿na ustaliæ autora og³oszenia.");
+            return Unauthorized("Nie moÅ¼na ustaliÄ‡ autora ogÅ‚oszenia.");
         }
 
         var entity = new Announcement

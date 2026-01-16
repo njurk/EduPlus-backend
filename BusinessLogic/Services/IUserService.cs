@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -104,7 +104,7 @@ namespace BusinessLogic.Services
                 ParentIds = relations.Where(ps => ps.StudentId == id).Select(ps => ps.ParentId).ToList(),
                 Relations = relations.Select(ps =>
                     ps.ParentId == id
-                        ? $"{ps.Student.LastName} {ps.Student.FirstName} (Uczeñ)"
+                        ? $"{ps.Student.LastName} {ps.Student.FirstName} (UczeÅ„)"
                         : $"{ps.Parent.LastName} {ps.Parent.FirstName} (Rodzic)"
                 ).ToList()
             };
@@ -113,10 +113,10 @@ namespace BusinessLogic.Services
         public async Task<User> CreateAsync(UserCreateDto dto)
         {
             if (await _context.Users.IgnoreQueryFilters().AnyAsync(u => u.Email == dto.Email))
-                throw new InvalidOperationException("Podany email ju¿ istnieje w bazie");
+                throw new InvalidOperationException("Podany email juÅ¼ istnieje w bazie");
 
             if (dto.RoleIds == null || !dto.RoleIds.Any())
-                throw new InvalidOperationException("U¿ytkownik musi mieæ rolê");
+                throw new InvalidOperationException("Uytkownik musi mieÄ‡ rolÄ™");
 
             var entity = new User
             {
@@ -251,7 +251,7 @@ namespace BusinessLogic.Services
             if (dbUser == null) return false;
 
             if (!_passwordHashService.VerifyPassword(currentPassword, dbUser.Password))
-                throw new UnauthorizedAccessException("Aktualne has³o jest nieprawid³owe.");
+                throw new UnauthorizedAccessException("Aktualne hasÅ‚o jest nieprawidÅ‚owe.");
 
             dbUser.Password = _passwordHashService.HashPassword(newPassword);
             dbUser.UpdatedAt = DateTime.Now;
@@ -282,8 +282,8 @@ namespace BusinessLogic.Services
 
             if (item.IsActive)
             {
-                if (!item.LastName.EndsWith(" (usuniêty)"))
-                    item.LastName = $"{item.LastName} (usuniêty)";
+                if (!item.LastName.EndsWith(" (usuniÄ™ty)"))
+                    item.LastName = $"{item.LastName} (usuniÄ™ty)";
 
                 item.IsActive = false;
                 item.UpdatedAt = DateTime.Now;

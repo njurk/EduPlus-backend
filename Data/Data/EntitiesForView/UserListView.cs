@@ -1,4 +1,4 @@
-namespace Data.Data.EntitiesForView
+﻿namespace Data.Data.EntitiesForView
 {
     public class UserListView
     {

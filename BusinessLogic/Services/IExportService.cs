@@ -1,4 +1,4 @@
-using ClosedXML.Excel;
+ï»¿using ClosedXML.Excel;
 using Data.Data;
 using Microsoft.EntityFrameworkCore;
 using QuestPDF.Fluent;
@@ -23,7 +23,7 @@ namespace BusinessLogic.Services
     public class ExportService : IExportService
     {
         private readonly EduPlusDbContext _context;
-        private readonly string[] _dayNames = { "Niedziela", "Poniedzia³ek", "Wtorek", "Œroda", "Czwartek", "Pi¹tek", "Sobota" };
+        private readonly string[] _dayNames = { "Niedziela", "PoniedziaÅ‚ek", "Wtorek", "Åšroda", "Czwartek", "PiÄ…tek", "Sobota" };
 
         public ExportService(EduPlusDbContext context)
         {
@@ -151,7 +151,7 @@ namespace BusinessLogic.Services
             using var workbook = new XLWorkbook();
             var worksheet = workbook.Worksheets.Add($"Plan {className}");
 
-            worksheet.Cell(1, 1).Value = "Dzieñ";
+            worksheet.Cell(1, 1).Value = "DzieÅ„";
             worksheet.Cell(1, 2).Value = "Nr";
             worksheet.Cell(1, 3).Value = "Godziny";
             worksheet.Cell(1, 4).Value = "Przedmiot";
@@ -186,7 +186,7 @@ namespace BusinessLogic.Services
             var (className, rows) = await GetScheduleDataAsync(classId, yearId, semesterId);
 
             var sb = new StringBuilder();
-            sb.AppendLine("Dzieñ;Nr;Godziny;Przedmiot;Nauczyciel;Sala");
+            sb.AppendLine("DzieÅ„;Nr;Godziny;Przedmiot;Nauczyciel;Sala");
 
             var sortedRows = rows.OrderBy(r => r.DayNumber).ThenBy(r => r.LessonNumber);
             foreach (var row in sortedRows)
