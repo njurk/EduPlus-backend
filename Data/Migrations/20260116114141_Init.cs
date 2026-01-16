@@ -410,7 +410,7 @@ namespace Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Target",
+                name: "Targets",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -423,9 +423,9 @@ namespace Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Target", x => x.Id);
+                    table.PrimaryKey("PK_Targets", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Target_Users_ModifiedByUserId",
+                        name: "FK_Targets_Users_ModifiedByUserId",
                         column: x => x.ModifiedByUserId,
                         principalTable: "Users",
                         principalColumn: "Id");
@@ -759,9 +759,9 @@ namespace Data.Migrations
                 {
                     table.PrimaryKey("PK_Pages", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Pages_Target_TargetId",
+                        name: "FK_Pages_Targets_TargetId",
                         column: x => x.TargetId,
-                        principalTable: "Target",
+                        principalTable: "Targets",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -875,11 +875,11 @@ namespace Data.Migrations
                 columns: new[] { "Id", "CreatedAt", "IsActive", "ModifiedByUserId", "Name", "ShortCode", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "Obecność", "OB", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 2, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "Nieobecność", "NB", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 3, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "Spóźnienie", "SP", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 4, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "Usprawiedliwione", "U", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 5, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "Zwolnienie", "ZW", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) }
+                    { 1, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "Obecność", "OB", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 2, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "Nieobecność", "NB", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 3, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "Spóźnienie", "SP", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 4, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "Usprawiedliwione", "U", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 5, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "Zwolnienie", "ZW", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) }
                 });
 
             migrationBuilder.InsertData(
@@ -887,24 +887,24 @@ namespace Data.Migrations
                 columns: new[] { "Id", "CreatedAt", "IsActive", "ModifiedByUserId", "Name", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "101", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 2, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "102", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 3, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "103", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 4, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "104", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 5, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "105", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 6, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "201", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 7, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "202", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 8, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "203", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 9, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "204", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 10, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "205", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 11, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "301", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 12, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "302", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 13, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "303", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 14, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "304", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 15, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "305", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 16, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "gimnastyczna 1", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 17, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "gimnastyczna 2", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 18, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "aula", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) }
+                    { 1, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "101", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 2, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "102", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 3, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "103", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 4, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "104", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 5, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "105", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 6, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "201", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 7, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "202", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 8, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "203", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 9, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "204", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 10, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "205", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 11, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "301", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 12, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "302", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 13, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "303", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 14, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "304", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 15, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "305", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 16, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "gimnastyczna 1", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 17, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "gimnastyczna 2", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 18, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "aula", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) }
                 });
 
             migrationBuilder.InsertData(
@@ -912,11 +912,11 @@ namespace Data.Migrations
                 columns: new[] { "Id", "CreatedAt", "IsActive", "ModifiedByUserId", "Name", "UpdatedAt", "Weight" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "Sprawdzian", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), 3 },
-                    { 2, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "Kartkówka", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), 2 },
-                    { 3, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "Odpowiedź ustna", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), 1 },
-                    { 4, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "Aktywność", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), 1 },
-                    { 5, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "Zadanie domowe", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), 1 }
+                    { 1, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "Sprawdzian", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), 3 },
+                    { 2, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "Kartkówka", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), 2 },
+                    { 3, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "Odpowiedź ustna", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), 1 },
+                    { 4, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "Aktywność", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), 1 },
+                    { 5, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "Zadanie domowe", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), 1 }
                 });
 
             migrationBuilder.InsertData(
@@ -924,12 +924,12 @@ namespace Data.Migrations
                 columns: new[] { "Id", "CreatedAt", "IsActive", "ModifiedByUserId", "Name", "Numeric", "UpdatedAt", "Value" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "Niedostateczny", "1", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), 1.0m },
-                    { 2, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "Dopuszczający", "2", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), 2.0m },
-                    { 3, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "Dostateczny", "3", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), 3.0m },
-                    { 4, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "Dobry", "4", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), 4.0m },
-                    { 5, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "Bardzo dobry", "5", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), 5.0m },
-                    { 6, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "Celujący", "6", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), 6.0m }
+                    { 1, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "Niedostateczny", "1", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), 1.0m },
+                    { 2, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "Dopuszczający", "2", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), 2.0m },
+                    { 3, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "Dostateczny", "3", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), 3.0m },
+                    { 4, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "Dobry", "4", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), 4.0m },
+                    { 5, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "Bardzo dobry", "5", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), 5.0m },
+                    { 6, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "Celujący", "6", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), 6.0m }
                 });
 
             migrationBuilder.InsertData(
@@ -937,15 +937,15 @@ namespace Data.Migrations
                 columns: new[] { "Id", "CreatedAt", "EndTime", "IsActive", "ModifiedByUserId", "OrderNumber", "StartTime", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new TimeOnly(8, 45, 0), true, null, 1, new TimeOnly(8, 0, 0), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 2, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new TimeOnly(9, 40, 0), true, null, 2, new TimeOnly(8, 55, 0), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 3, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new TimeOnly(10, 35, 0), true, null, 3, new TimeOnly(9, 50, 0), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 4, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new TimeOnly(11, 30, 0), true, null, 4, new TimeOnly(10, 45, 0), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 5, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new TimeOnly(12, 30, 0), true, null, 5, new TimeOnly(11, 45, 0), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 6, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new TimeOnly(13, 35, 0), true, null, 6, new TimeOnly(12, 50, 0), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 7, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new TimeOnly(14, 30, 0), true, null, 7, new TimeOnly(13, 45, 0), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 8, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new TimeOnly(15, 25, 0), true, null, 8, new TimeOnly(14, 40, 0), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 9, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new TimeOnly(16, 15, 0), true, null, 9, new TimeOnly(15, 30, 0), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) }
+                    { 1, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), new TimeOnly(8, 45, 0), true, null, 1, new TimeOnly(8, 0, 0), new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 2, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), new TimeOnly(9, 40, 0), true, null, 2, new TimeOnly(8, 55, 0), new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 3, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), new TimeOnly(10, 35, 0), true, null, 3, new TimeOnly(9, 50, 0), new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 4, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), new TimeOnly(11, 30, 0), true, null, 4, new TimeOnly(10, 45, 0), new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 5, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), new TimeOnly(12, 30, 0), true, null, 5, new TimeOnly(11, 45, 0), new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 6, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), new TimeOnly(13, 35, 0), true, null, 6, new TimeOnly(12, 50, 0), new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 7, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), new TimeOnly(14, 30, 0), true, null, 7, new TimeOnly(13, 45, 0), new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 8, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), new TimeOnly(15, 25, 0), true, null, 8, new TimeOnly(14, 40, 0), new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 9, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), new TimeOnly(16, 15, 0), true, null, 9, new TimeOnly(15, 30, 0), new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) }
                 });
 
             migrationBuilder.InsertData(
@@ -953,9 +953,9 @@ namespace Data.Migrations
                 columns: new[] { "Id", "CreatedAt", "IsActive", "ModifiedByUserId", "Name", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "Zaplanowana", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 2, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "Zrealizowana", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 3, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "Odwołana", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) }
+                    { 1, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "Zaplanowana", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 2, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "Zrealizowana", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 3, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "Odwołana", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) }
                 });
 
             migrationBuilder.InsertData(
@@ -963,10 +963,10 @@ namespace Data.Migrations
                 columns: new[] { "Id", "CreatedAt", "Description", "IsActive", "Level", "ModifiedByUserId", "Name", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), "Najwyższy poziom uprawnień, dostęp do wszystkiego", true, 1, null, "Administrator", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 2, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), "Zarządzanie przydzielonymi zasobami", true, 2, null, "Nauczyciel", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 3, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), "Przeglądanie danych przypisanego użytkownika, możliwość usprawiedliwienia", true, 3, null, "Rodzic", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 4, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), "Przeglądanie własnych danych", true, 4, null, "Uczeń", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) }
+                    { 1, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Najwyższy poziom uprawnień, dostęp do wszystkiego", true, 1, null, "Administrator", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 2, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Zarządzanie przydzielonymi zasobami", true, 2, null, "Nauczyciel", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 3, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Przeglądanie danych przypisanego użytkownika, możliwość usprawiedliwienia", true, 3, null, "Rodzic", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 4, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Przeglądanie własnych danych", true, 4, null, "Uczeń", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) }
                 });
 
             migrationBuilder.InsertData(
@@ -974,8 +974,8 @@ namespace Data.Migrations
                 columns: new[] { "Id", "CreatedAt", "EndDate", "IsActive", "ModifiedByUserId", "Name", "StartDate", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new DateOnly(2026, 6, 30), true, null, "2025/2026", new DateOnly(2025, 9, 1), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 2, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new DateOnly(2027, 6, 30), true, null, "2026/2027", new DateOnly(2026, 9, 1), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) }
+                    { 1, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), new DateOnly(2026, 6, 30), true, null, "2025/2026", new DateOnly(2025, 9, 1), new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 2, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), new DateOnly(2027, 6, 30), true, null, "2026/2027", new DateOnly(2026, 9, 1), new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) }
                 });
 
             migrationBuilder.InsertData(
@@ -983,38 +983,39 @@ namespace Data.Migrations
                 columns: new[] { "Id", "CreatedAt", "IsActive", "ModifiedByUserId", "Name", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "matematyka", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 2, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "język polski", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 3, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "język angielski", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 4, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "język niemiecki", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 5, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "informatyka", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 6, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "wychowanie fizyczne", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 7, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "historia", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 8, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "WOS", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 9, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "biologia", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 10, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "chemia", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 11, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "fizyka", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 12, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "Geografia", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 13, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "przyroda", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 14, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "plastyka", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 15, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "muzyka", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 16, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "zajęcia artystyczne", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 17, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "religia", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 18, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "etyka", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 19, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "WDŻ", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 20, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "technika", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 21, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, null, "EDB", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) }
+                    { 1, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "matematyka", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 2, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "język polski", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 3, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "język angielski", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 4, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "język niemiecki", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 5, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "informatyka", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 6, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "wychowanie fizyczne", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 7, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "historia", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 8, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "WOS", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 9, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "biologia", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 10, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "chemia", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 11, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "fizyka", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 12, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "Geografia", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 13, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "przyroda", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 14, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "plastyka", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 15, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "muzyka", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 16, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "zajęcia artystyczne", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 17, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "religia", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 18, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "etyka", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 19, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "WDŻ", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 20, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "technika", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 21, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "EDB", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) }
                 });
 
             migrationBuilder.InsertData(
-                table: "Target",
+                table: "Targets",
                 columns: new[] { "Id", "CreatedAt", "Label", "ModifiedByUserId", "Title", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), "WebAdmin", null, "Administrator - strona internetowa", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 2, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), "WebTeacher", null, "Nauczyciel - strona internetowa", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 3, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), "MobileParent", null, "Rodzic - aplikacja mobilna", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 4, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), "MobileStudent", null, "Uczeń - aplikacja mobilna", new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) }
+                    { 1, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "WebAdmin", null, "Administrator - strona internetowa", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 2, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "WebTeacher", null, "Nauczyciel - strona internetowa", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 3, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "MobileParent", null, "Rodzic - aplikacja mobilna", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 4, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "MobileStudent", null, "Uczeń - aplikacja mobilna", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 5, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "All", null, "Wszystkie platformy", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) }
                 });
 
             migrationBuilder.InsertData(
@@ -1022,8 +1023,30 @@ namespace Data.Migrations
                 columns: new[] { "Id", "CreatedAt", "IsActive", "Letter", "Level", "ModifiedByUserId", "SchoolYearId", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "A", 1, null, 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 2, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), true, "C", 8, null, 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) }
+                    { 1, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, "A", 1, null, 1, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 2, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, "C", 8, null, 1, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Pages",
+                columns: new[] { "Id", "CreatedAt", "Link", "ModifiedByUserId", "Position", "TargetId", "Title", "UpdatedAt" },
+                values: new object[,]
+                {
+                    { 1, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "system", null, 1, 5, "Ustawienia systemu", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 2, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "dashboard", null, 1, 1, "Dashboard", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 3, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "users", null, 2, 1, "Uzytkownicy", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 4, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "announcements", null, 3, 1, "Ogloszenia", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 5, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "tickets", null, 4, 1, "Zgloszenia", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 6, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "excuses", null, 5, 1, "Usprawiedliwienia", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 7, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "lessons", null, 6, 1, "Lekcje", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 8, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "schedule", null, 7, 1, "Plan lekcji", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 9, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "grades", null, 8, 1, "Oceny", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 10, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "attendance", null, 9, 1, "Frekwencja", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 11, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "classManagement", null, 10, 1, "Zarzadzanie klasami", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 12, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "settings", null, 11, 1, "Ustawienia konta", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 13, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "systemConfig", null, 12, 1, "Konfiguracja systemu", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 14, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "layout", null, 0, 1, "Pasek boczny", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 15, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "login", null, 0, 1, "Login", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) }
                 });
 
             migrationBuilder.InsertData(
@@ -1031,10 +1054,183 @@ namespace Data.Migrations
                 columns: new[] { "Id", "CreatedAt", "EndDate", "IsActive", "ModifiedByUserId", "Name", "SchoolYearId", "StartDate", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new DateOnly(2026, 1, 31), true, null, "Semestr 1", 1, new DateOnly(2025, 9, 1), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 2, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new DateOnly(2026, 6, 30), true, null, "Semestr 2", 1, new DateOnly(2026, 2, 1), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 3, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new DateOnly(2027, 1, 31), true, null, "Semestr 1", 2, new DateOnly(2026, 9, 1), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) },
-                    { 4, new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc), new DateOnly(2027, 6, 30), true, null, "Semestr 2", 2, new DateOnly(2027, 2, 1), new DateTime(2025, 12, 27, 22, 0, 0, 0, DateTimeKind.Utc) }
+                    { 1, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), new DateOnly(2026, 1, 31), true, null, "Semestr 1", 1, new DateOnly(2025, 9, 1), new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 2, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), new DateOnly(2026, 6, 30), true, null, "Semestr 2", 1, new DateOnly(2026, 2, 1), new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 3, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), new DateOnly(2027, 1, 31), true, null, "Semestr 1", 2, new DateOnly(2026, 9, 1), new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 4, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), new DateOnly(2027, 6, 30), true, null, "Semestr 2", 2, new DateOnly(2027, 2, 1), new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) }
+                });
+
+            migrationBuilder.InsertData(
+                table: "PageContents",
+                columns: new[] { "Id", "CreatedAt", "Key", "ModifiedByUserId", "PageId", "UpdatedAt", "Value" },
+                values: new object[,]
+                {
+                    { 1, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "systemName", null, 1, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "EduPlus" },
+                    { 2, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "systemLogo", null, 1, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "/assets/logo.svg" },
+                    { 3, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "title", null, 2, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Dashboard" },
+                    { 4, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "loading", null, 2, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Ladowanie..." },
+                    { 5, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "title", null, 3, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Uzytkownicy" },
+                    { 6, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "actions.add", null, 3, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Dodaj" },
+                    { 7, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "actions.save", null, 3, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Zapisz" },
+                    { 8, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "actions.cancel", null, 3, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Anuluj" },
+                    { 9, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "loading", null, 3, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Ladowanie..." },
+                    { 10, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "empty", null, 3, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Brak danych" },
+                    { 11, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "modal.add", null, 3, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Dodaj uzytkownika" },
+                    { 12, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "modal.edit", null, 3, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Edytuj uzytkownika" },
+                    { 13, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "columns.name", null, 3, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Imie i nazwisko" },
+                    { 14, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "columns.email", null, 3, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Email" },
+                    { 15, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "columns.roles", null, 3, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Role" },
+                    { 16, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "columns.createdAt", null, 3, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Utworzono" },
+                    { 17, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "columns.updatedAt", null, 3, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Edytowano" },
+                    { 18, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "columns.actions", null, 3, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Akcje" },
+                    { 19, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "sort.name", null, 3, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Nazwisko" },
+                    { 20, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "sort.email", null, 3, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Email" },
+                    { 21, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "sort.updatedAt", null, 3, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Edytowano" },
+                    { 22, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "confirm.delete", null, 3, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Czy na pewno chcesz usunac?" },
+                    { 23, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "confirm.restore", null, 3, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Czy na pewno chcesz przywrocic?" },
+                    { 24, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "title", null, 4, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Ogloszenia" },
+                    { 25, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "actions.add", null, 4, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Dodaj" },
+                    { 26, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "loading", null, 4, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Ladowanie..." },
+                    { 27, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "empty", null, 4, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Brak ogloszen" },
+                    { 28, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "title", null, 5, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Zgloszenia" },
+                    { 29, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "loading", null, 5, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Ladowanie..." },
+                    { 30, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "empty", null, 5, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Brak zgloszen" },
+                    { 31, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "title", null, 6, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Usprawiedliwienia" },
+                    { 32, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "loading", null, 6, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Ladowanie..." },
+                    { 33, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "empty", null, 6, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Brak usprawiedliwien" },
+                    { 34, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "title", null, 7, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Lekcje" },
+                    { 35, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "loading", null, 7, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Ladowanie..." },
+                    { 36, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "empty", null, 7, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Brak lekcji" },
+                    { 37, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "title", null, 8, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Plan lekcji" },
+                    { 38, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "loading", null, 8, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Ladowanie planu..." },
+                    { 39, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "title", null, 9, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Oceny" },
+                    { 40, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "actions.add", null, 9, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Dodaj" },
+                    { 41, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "loading", null, 9, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Ladowanie..." },
+                    { 42, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "empty", null, 9, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Brak ocen" },
+                    { 43, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "columns.student", null, 9, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Uczen" },
+                    { 44, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "columns.class", null, 9, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Klasa" },
+                    { 45, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "columns.subject", null, 9, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Przedmiot" },
+                    { 46, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "columns.grade", null, 9, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Ocena" },
+                    { 47, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "columns.category", null, 9, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Kategoria" },
+                    { 48, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "columns.date", null, 9, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Data" },
+                    { 49, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "sort.student", null, 9, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Uczen" },
+                    { 50, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "sort.subject", null, 9, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Przedmiot" },
+                    { 51, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "sort.date", null, 9, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Data" },
+                    { 52, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "title", null, 10, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Frekwencja" },
+                    { 53, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "actions.add", null, 10, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Dodaj" },
+                    { 54, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "loading", null, 10, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Ladowanie..." },
+                    { 55, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "empty", null, 10, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Brak danych frekwencji" },
+                    { 56, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "sort.student", null, 10, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Uczen" },
+                    { 57, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "sort.date", null, 10, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Data" },
+                    { 58, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "columns.student", null, 10, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Uczen" },
+                    { 59, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "columns.lesson", null, 10, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Lekcja" },
+                    { 60, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "columns.status", null, 10, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Status" },
+                    { 61, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "columns.date", null, 10, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Data" },
+                    { 62, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "title", null, 11, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Zarzadzanie klasami" },
+                    { 63, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "actions.add", null, 11, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Dodaj" },
+                    { 64, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "actions.save", null, 11, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Zapisz" },
+                    { 65, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "actions.cancel", null, 11, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Anuluj" },
+                    { 66, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "actions.assign", null, 11, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Przypisz" },
+                    { 67, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "loading", null, 11, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Ladowanie..." },
+                    { 68, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "empty", null, 11, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Brak klas" },
+                    { 69, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "empty.students", null, 11, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Brak uczniow" },
+                    { 70, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "empty.subjects", null, 11, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Brak przedmiotow" },
+                    { 71, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "modal.newClass", null, 11, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Nowa klasa" },
+                    { 72, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "modal.editClass", null, 11, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Edycja klasy" },
+                    { 73, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "modal.assignStudents", null, 11, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Przypisz uczniow" },
+                    { 74, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "modal.assignSubject", null, 11, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Przypisz przedmiot" },
+                    { 75, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "tabs.students", null, 11, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Uczniowie" },
+                    { 76, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "tabs.subjects", null, 11, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Przedmioty" },
+                    { 77, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "form.level", null, 11, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Poziom" },
+                    { 78, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "form.section", null, 11, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Oddzial" },
+                    { 79, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "form.subject", null, 11, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Przedmiot" },
+                    { 80, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "form.teacher", null, 11, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Nauczyciel" },
+                    { 81, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "form.selectOption", null, 11, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Wybierz..." },
+                    { 82, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "form.selectTeacher", null, 11, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Wybierz nauczyciela..." },
+                    { 83, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "form.selectSubjectFirst", null, 11, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Najpierw wybierz przedmiot" },
+                    { 84, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "placeholder.search", null, 11, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Szukaj..." },
+                    { 85, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "columns.class", null, 11, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Klasa" },
+                    { 86, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "columns.studentCount", null, 11, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Liczba uczniow" },
+                    { 87, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "columns.ordinal", null, 11, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Lp." },
+                    { 88, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "columns.student", null, 11, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Uczen" },
+                    { 89, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "columns.email", null, 11, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Email" },
+                    { 90, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "columns.subject", null, 11, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Przedmiot" },
+                    { 91, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "columns.teacher", null, 11, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Nauczyciel" },
+                    { 92, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "columns.createdAt", null, 11, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Utworzono" },
+                    { 93, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "columns.updatedAt", null, 11, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Edytowano" },
+                    { 94, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "columns.actions", null, 11, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Akcje" },
+                    { 95, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "sort.class", null, 11, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Klasa" },
+                    { 96, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "sort.lastName", null, 11, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Nazwisko" },
+                    { 97, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "sort.email", null, 11, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Email" },
+                    { 98, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "sort.ordinal", null, 11, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Lp." },
+                    { 99, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "sort.subject", null, 11, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Przedmiot" },
+                    { 100, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "sort.teacher", null, 11, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Nauczyciel" },
+                    { 101, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "sort.createdAt", null, 11, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Utworzono" },
+                    { 102, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "sort.updatedAt", null, 11, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Edytowano" },
+                    { 103, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "confirm.delete", null, 11, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Usunac?" },
+                    { 104, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "confirm.restore", null, 11, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Przywrocic?" },
+                    { 105, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "confirm.removeStudent", null, 11, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Czy na pewno chcesz usunac tego ucznia z klasy?" },
+                    { 106, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "confirm.removeSubject", null, 11, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Czy na pewno chcesz usunac ten przedmiot z klasy?" },
+                    { 107, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "error.general", null, 11, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Wystapil blad" },
+                    { 108, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "error.save", null, 11, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Blad zapisu" },
+                    { 109, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "error.delete", null, 11, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Blad usuwania" },
+                    { 110, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "error.noTeachers", null, 11, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Brak nauczycieli przypisanych do tego przedmiotu." },
+                    { 111, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "title", null, 12, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Ustawienia konta" },
+                    { 112, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "section.profile", null, 12, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Profil" },
+                    { 113, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "section.password", null, 12, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Zmiana hasla" },
+                    { 114, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "modal.new", null, 13, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Nowy element" },
+                    { 115, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "modal.edit", null, 13, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Edycja elementu" },
+                    { 116, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "actions.save", null, 13, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Zapisz" },
+                    { 117, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "actions.cancel", null, 13, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Anuluj" },
+                    { 118, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "confirm.restore", null, 13, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Przywrocic element?" },
+                    { 119, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "confirm.moveToTrash", null, 13, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Przeniesc do kosza?" },
+                    { 120, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "confirm.permanentDelete", null, 13, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Usunac trwale?" },
+                    { 121, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "error.save", null, 13, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Blad zapisu" },
+                    { 122, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "error.status", null, 13, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Blad zmiany statusu" },
+                    { 123, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "error.delete", null, 13, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Blad usuwania" },
+                    { 124, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "columns.number", null, 13, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Nr" },
+                    { 125, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "columns.hours", null, 13, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Godziny" },
+                    { 126, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "columns.symbol", null, 13, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Symbol" },
+                    { 127, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "columns.name", null, 13, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Nazwa" },
+                    { 128, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "columns.value", null, 13, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Wartosc" },
+                    { 129, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "columns.weight", null, 13, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Waga" },
+                    { 130, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "columns.shortCode", null, 13, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Skrot" },
+                    { 131, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "columns.createdAt", null, 13, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Utworzono" },
+                    { 132, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "columns.updatedAt", null, 13, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Edytowano" },
+                    { 133, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "columns.actions", null, 13, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Akcje" },
+                    { 134, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "systemName", null, 14, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "EduPlus" },
+                    { 135, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "version", null, 14, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "v1.0.0 EduPlus" },
+                    { 136, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "confirm.logout", null, 14, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Na pewno chcesz sie wylogowac?" },
+                    { 137, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "greeting.prefix", null, 14, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Witaj, " },
+                    { 138, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "greeting.suffix", null, 14, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "!" },
+                    { 139, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "greeting.defaultUser", null, 14, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Uzytkownik" },
+                    { 140, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "nav.dashboard", null, 14, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Pulpit" },
+                    { 141, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "nav.section.management", null, 14, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Zarzadzanie" },
+                    { 142, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "nav.users", null, 14, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Uzytkownicy" },
+                    { 143, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "nav.classes", null, 14, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Klasy" },
+                    { 144, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "nav.announcements", null, 14, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Ogloszenia" },
+                    { 145, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "nav.tickets", null, 14, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Zgloszenia" },
+                    { 146, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "nav.section.teaching", null, 14, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Nauczanie" },
+                    { 147, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "nav.schedule", null, 14, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Plany lekcji" },
+                    { 148, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "nav.lessons", null, 14, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Lekcje" },
+                    { 149, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "nav.grades", null, 14, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Oceny" },
+                    { 150, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "nav.attendance", null, 14, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Frekwencja" },
+                    { 151, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "nav.excuses", null, 14, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Usprawiedliwienia" },
+                    { 152, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "nav.section.system", null, 14, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "System" },
+                    { 153, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "nav.config", null, 14, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Konfiguracja" },
+                    { 154, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "nav.cms", null, 14, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "CMS" },
+                    { 155, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "nav.settings", null, 14, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Ustawienia" },
+                    { 156, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "nav.logout", null, 14, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Wyloguj" },
+                    { 157, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "title", null, 15, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "EduPlus Admin" },
+                    { 158, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "logoUrl", null, 15, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "/logo-512.png" },
+                    { 159, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "logoAlt", null, 15, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "EduPlus Logo" },
+                    { 160, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "form.email", null, 15, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Email" },
+                    { 161, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "form.password", null, 15, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Haslo" },
+                    { 162, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "form.forgotPassword", null, 15, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Zapomniałes hasla?" },
+                    { 163, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "button.login", null, 15, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Zaloguj sie" },
+                    { 164, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "button.loading", null, 15, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Logowanie..." },
+                    { 165, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "error.login", null, 15, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Wystapil blad logowania" },
+                    { 166, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "footer", null, 15, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "EduPlus v1.0.0" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -1223,8 +1419,8 @@ namespace Data.Migrations
                 column: "TeacherId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Target_ModifiedByUserId",
-                table: "Target",
+                name: "IX_Targets_ModifiedByUserId",
+                table: "Targets",
                 column: "ModifiedByUserId");
 
             migrationBuilder.CreateIndex(
@@ -1381,7 +1577,7 @@ namespace Data.Migrations
                 name: "Lessons");
 
             migrationBuilder.DropTable(
-                name: "Target");
+                name: "Targets");
 
             migrationBuilder.DropTable(
                 name: "Classes");

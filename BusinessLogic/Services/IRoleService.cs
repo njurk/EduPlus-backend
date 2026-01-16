@@ -34,7 +34,17 @@ namespace BusinessLogic.Services
 
             return await query
                 .OrderBy(x => x.Id)
-                .Select(x => new { x.Id, x.Name, x.Level })
+                .Select(x => new { 
+                    x.Id, 
+                    x.Name, 
+                    x.Level,
+                    x.Description,
+                    x.CreatedAt,
+                    x.UpdatedAt,
+                    ModifiedByName = x.ModifiedByUserId != null 
+                        ? _context.Users.Where(u => u.Id == x.ModifiedByUserId).Select(u => u.FirstName + " " + u.LastName).FirstOrDefault()
+                        : "System"
+                })
                 .ToListAsync();
         }
     }

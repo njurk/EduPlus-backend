@@ -48,11 +48,17 @@ public class AnnouncementController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateAnnouncementDto dto)
     {
+        var userIdClaim = User.FindFirst("userId")?.Value ?? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var authorId))
+        {
+            return Unauthorized("Nie mo¿na ustaliæ autora og³oszenia.");
+        }
+
         var entity = new Announcement
         {
             Title = dto.Title,
             Description = dto.Description,
-            AuthorId = dto.AuthorId
+            AuthorId = authorId
         };
         var result = await _service.CreateAsync(entity);
         return Ok(result);

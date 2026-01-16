@@ -44,7 +44,7 @@ namespace BusinessLogic.Services
             query = sortBy?.ToLower() switch
             {
                 "title" => sortDesc ? query.OrderByDescending(a => a.Title) : query.OrderBy(a => a.Title),
-                "author" => sortDesc ? query.OrderByDescending(a => a.Author!.LastName) : query.OrderBy(a => a.Author!.LastName),
+                "author" or "authorname" => sortDesc ? query.OrderByDescending(a => a.Author!.LastName) : query.OrderBy(a => a.Author!.LastName),
                 "updatedat" => sortDesc ? query.OrderByDescending(a => a.UpdatedAt) : query.OrderBy(a => a.UpdatedAt),
                 _ => sortDesc ? query.OrderByDescending(a => a.CreatedAt) : query.OrderBy(a => a.CreatedAt)
             };

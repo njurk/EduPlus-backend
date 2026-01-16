@@ -1,4 +1,4 @@
-using BusinessLogic.Services;
+﻿using BusinessLogic.Services;
 using Data.Data.Entities;
 using Shared.DTOs;
 using Microsoft.AspNetCore.Authorization;
@@ -81,7 +81,7 @@ public class ClassController : ControllerBase
         }
         catch (ArgumentException)
         {
-            return BadRequest("Nieprawid�owe ID");
+            return BadRequest("Nieprawidłowe ID");
         }
         catch (InvalidOperationException ex)
         {
@@ -99,5 +99,33 @@ public class ClassController : ControllerBase
         var success = await _service.DeleteAsync(id);
         if (!success) return NotFound();
         return NoContent();
+    }
+
+    [HttpDelete("students/{classStudentId}")]
+    public async Task<IActionResult> RemoveStudent(int classStudentId)
+    {
+        try
+        {
+            await _service.RemoveStudentAsync(classStudentId);
+            return NoContent();
+        }
+        catch (KeyNotFoundException)
+        {
+            return NotFound();
+        }
+    }
+
+    [HttpDelete("subjects/{classSubjectId}")]
+    public async Task<IActionResult> RemoveSubject(int classSubjectId)
+    {
+        try
+        {
+            await _service.RemoveSubjectAsync(classSubjectId);
+            return NoContent();
+        }
+        catch (KeyNotFoundException)
+        {
+            return NotFound();
+        }
     }
 }

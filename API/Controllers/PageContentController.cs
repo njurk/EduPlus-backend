@@ -23,6 +23,7 @@ namespace API.Controllers
             return Ok(result);
         }
 
+        [AllowAnonymous]
         [HttpGet("by-label/{pageLabel}")]
         public async Task<IActionResult> GetByPageLabel(string pageLabel)
         {

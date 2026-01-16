@@ -1,4 +1,4 @@
-using System;
+Ôªøusing System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +15,8 @@ namespace BusinessLogic.Services
         Task<object?> GetDetailsAsync(int id, string sortBy, bool sortDesc, string studentSearch, string subjectSearch, string subjectSortBy, bool subjectSortDesc);
         Task<IEnumerable<object>> GetCandidatesAsync(int classId, string search);
         Task AddStudentsBulkAsync(int classId, List<int> studentIds);
+        Task RemoveStudentAsync(int classStudentId);
+        Task RemoveSubjectAsync(int classSubjectId);
         Task<Class> CreateAsync(Class entity);
         Task AssignSubjectAsync(int classId, int subjectId, int teacherId);
         Task<Class> UpdateAsync(int id, Class entity);
@@ -78,12 +80,12 @@ namespace BusinessLogic.Services
 
             studentsQuery = sortBy?.ToLower() switch
             {
-                "id" => sortDesc ? studentsQuery.OrderByDescending(x => x.OrderNumber) : studentsQuery.OrderBy(x => x.OrderNumber),
-                "email" => sortDesc ? studentsQuery.OrderByDescending(x => x.Student.Email) : studentsQuery.OrderBy(x => x.Student.Email),
-                "createdat" => sortDesc ? studentsQuery.OrderByDescending(x => x.CreatedAt) : studentsQuery.OrderBy(x => x.CreatedAt),
-                _ => sortDesc
+                "name" => sortDesc 
                     ? studentsQuery.OrderByDescending(x => x.Student.LastName).ThenByDescending(x => x.Student.FirstName)
                     : studentsQuery.OrderBy(x => x.Student.LastName).ThenBy(x => x.Student.FirstName),
+                "email" => sortDesc ? studentsQuery.OrderByDescending(x => x.Student.Email) : studentsQuery.OrderBy(x => x.Student.Email),
+                "createdat" => sortDesc ? studentsQuery.OrderByDescending(x => x.CreatedAt) : studentsQuery.OrderBy(x => x.CreatedAt),
+                _ => sortDesc ? studentsQuery.OrderByDescending(x => x.OrderNumber) : studentsQuery.OrderBy(x => x.OrderNumber),
             };
 
             var students = await studentsQuery.Select(cs => new
@@ -92,6 +94,10 @@ namespace BusinessLogic.Services
                 cs.StudentId,
                 cs.OrderNumber,
                 cs.CreatedAt,
+                cs.UpdatedAt,
+                ModifiedByName = cs.ModifiedByUserId != null 
+                    ? _context.Users.Where(u => u.Id == cs.ModifiedByUserId).Select(u => u.FirstName + " " + u.LastName).FirstOrDefault()
+                    : "System",
                 Student = new { cs.Student.Id, cs.Student.FirstName, cs.Student.LastName, cs.Student.Email }
             }).ToListAsync();
 
@@ -113,6 +119,10 @@ namespace BusinessLogic.Services
                 cs.SubjectId,
                 SubjectName = cs.Subject.Name,
                 cs.CreatedAt,
+                cs.UpdatedAt,
+                ModifiedByName = cs.ModifiedByUserId != null 
+                    ? _context.Users.Where(u => u.Id == cs.ModifiedByUserId).Select(u => u.FirstName + " " + u.LastName).FirstOrDefault()
+                    : "System",
                 TeacherInfo = _context.TeacherClassSubjects
                     .Where(t => t.ClassId == id && t.SubjectId == cs.SubjectId)
                     .Select(t => new { t.TeacherId, Name = t.Teacher.LastName + " " + t.Teacher.FirstName })
@@ -131,6 +141,8 @@ namespace BusinessLogic.Services
                 s.SubjectId,
                 s.SubjectName,
                 s.CreatedAt,
+                s.UpdatedAt,
+                s.ModifiedByName,
                 TeacherId = s.TeacherInfo?.TeacherId,
                 TeacherName = s.TeacherInfo?.Name
             });
@@ -146,7 +158,7 @@ namespace BusinessLogic.Services
         public async Task<IEnumerable<object>> GetCandidatesAsync(int classId, string search)
         {
             var query = _context.Users.AsNoTracking()
-                .Where(u => u.IsActive && u.UserRoles.Any(ur => ur.Role.Name == "UczeÒ"))
+                .Where(u => u.IsActive && u.UserRoles.Any(ur => ur.Role.Name == "Ucze≈Ñ"))
                 .Where(u => !u.ClassStudents.Any(cs => cs.ClassId == classId));
 
             if (!string.IsNullOrWhiteSpace(search))
@@ -173,7 +185,7 @@ namespace BusinessLogic.Services
                 c.Letter == entity.Letter
             );
 
-            if (exists) throw new InvalidOperationException($"Klasa {entity.Level}{entity.Letter} juø istnieje w tym roku.");
+            if (exists) throw new InvalidOperationException($"Klasa {entity.Level}{entity.Letter} ju≈º istnieje w tym roku.");
 
             entity.CreatedAt = DateTime.Now;
             entity.UpdatedAt = DateTime.Now;
@@ -186,12 +198,7 @@ namespace BusinessLogic.Services
 
         public async Task AddStudentsBulkAsync(int classId, List<int> studentIds)
         {
-            var currentMaxOrder = await _context.ClassStudents
-                .Where(cs => cs.ClassId == classId)
-                .MaxAsync(cs => (int?)cs.OrderNumber) ?? 0;
-
             var newRelations = new List<ClassStudent>();
-            int i = 1;
             foreach (var studentId in studentIds)
             {
                 if (!await _context.ClassStudents.AnyAsync(cs => cs.ClassId == classId && cs.StudentId == studentId))
@@ -200,11 +207,10 @@ namespace BusinessLogic.Services
                     {
                         ClassId = classId,
                         StudentId = studentId,
-                        OrderNumber = currentMaxOrder + i,
+                        OrderNumber = 0,
                         CreatedAt = DateTime.Now,
                         UpdatedAt = DateTime.Now
                     });
-                    i++;
                 }
             }
 
@@ -212,7 +218,28 @@ namespace BusinessLogic.Services
             {
                 _context.ClassStudents.AddRange(newRelations);
                 await _context.SaveChangesAsync();
+
+                await RecalculateOrderNumbersAsync(classId);
             }
+        }
+
+        private async Task RecalculateOrderNumbersAsync(int classId)
+        {
+            var allStudents = await _context.ClassStudents
+                .Where(cs => cs.ClassId == classId)
+                .Include(cs => cs.Student)
+                .OrderBy(cs => cs.Student.LastName)
+                .ThenBy(cs => cs.Student.FirstName)
+                .ToListAsync();
+
+            int order = 1;
+            foreach (var cs in allStudents)
+            {
+                cs.OrderNumber = order++;
+                cs.UpdatedAt = DateTime.Now;
+            }
+
+            await _context.SaveChangesAsync();
         }
 
         public async Task AssignSubjectAsync(int classId, int subjectId, int teacherId)
@@ -222,7 +249,7 @@ namespace BusinessLogic.Services
 
             if (!isAuthorized)
             {
-                throw new InvalidOperationException("Wybrany nauczyciel nie ma uprawnieÒ do nauczania tego przedmiotu.");
+                throw new InvalidOperationException("Wybrany nauczyciel nie ma uprawnie≈Ñ do nauczania tego przedmiotu.");
             }
 
             var exists = await _context.ClassSubjects
@@ -230,7 +257,7 @@ namespace BusinessLogic.Services
 
             if (exists)
             {
-                throw new InvalidOperationException("Ten przedmiot jest juø przypisany do tej klasy.");
+                throw new InvalidOperationException("Ten przedmiot jest ju≈º przypisany do tej klasy.");
             }
 
             var classSubject = new ClassSubject
@@ -266,7 +293,7 @@ namespace BusinessLogic.Services
                 c.Id != id
             );
 
-            if (exists) throw new InvalidOperationException($"Klasa {entity.Level}{entity.Letter} juø istnieje w tym roku.");
+            if (exists) throw new InvalidOperationException($"Klasa {entity.Level}{entity.Letter} ju≈º istnieje w tym roku.");
 
             var dbClass = await _context.Classes.FindAsync(id);
             if (dbClass == null) throw new KeyNotFoundException("Klasa nie znaleziona");
@@ -297,6 +324,34 @@ namespace BusinessLogic.Services
 
             await _context.SaveChangesAsync();
             return true;
+        }
+
+        public async Task RemoveStudentAsync(int classStudentId)
+        {
+            var classStudent = await _context.ClassStudents.FindAsync(classStudentId);
+            if (classStudent == null)
+                throw new KeyNotFoundException("Nie znaleziono przypisania ucznia.");
+
+            var classId = classStudent.ClassId;
+            _context.ClassStudents.Remove(classStudent);
+            await _context.SaveChangesAsync();
+
+            await RecalculateOrderNumbersAsync(classId);
+        }
+
+        public async Task RemoveSubjectAsync(int classSubjectId)
+        {
+            var classSubject = await _context.ClassSubjects.FindAsync(classSubjectId);
+            if (classSubject == null)
+                throw new KeyNotFoundException("Nie znaleziono przypisania przedmiotu.");
+
+            var teacherAssignments = await _context.TeacherClassSubjects
+                .Where(t => t.ClassId == classSubject.ClassId && t.SubjectId == classSubject.SubjectId)
+                .ToListAsync();
+
+            _context.TeacherClassSubjects.RemoveRange(teacherAssignments);
+            _context.ClassSubjects.Remove(classSubject);
+            await _context.SaveChangesAsync();
         }
     }
 }
