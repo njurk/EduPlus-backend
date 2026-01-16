@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(EduPlusDbContext))]
-    [Migration("20260116203450_Procedures")]
+    [Migration("20260116225357_Procedures")]
     partial class Procedures
     {
         /// <inheritdoc />
