@@ -1,95 +1,60 @@
-using Data.Data;
+using BusinessLogic.Services;
 using Data.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
 public class SchoolYearController : ControllerBase
 {
-    private readonly EduPlusDbContext _context;
+    private readonly ISchoolYearService _service;
 
-    public SchoolYearController(EduPlusDbContext context)
+    public SchoolYearController(ISchoolYearService service)
     {
-        _context = context;
+        _service = service;
     }
 
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        return Ok(await _context.SchoolYears.OrderByDescending(y => y.StartDate).ToListAsync());
+        return Ok(await _service.GetAllAsync());
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
-        var year = await _context.SchoolYears
-            .Include(y => y.Semesters)
-            .FirstOrDefaultAsync(y => y.Id == id);
-
-        if (year == null) return NotFound();
-        return Ok(year);
+        var result = await _service.GetByIdAsync(id);
+        if (result == null) return NotFound();
+        return Ok(result);
     }
 
     [HttpGet("{id}/semesters")]
-    public async Task<IActionResult> GetSemestersByYear(int id)
+    public async Task<IActionResult> GetSemesters(int id)
     {
-        var semesters = await _context.Semesters
-            .AsNoTracking()
-            .Where(s => s.SchoolYearId == id)
-            .OrderBy(s => s.StartDate)
-            .Select(s => new
-            {
-                s.Id,
-                s.Name,
-                Order = _context.Semesters
-                    .Where(x => x.SchoolYearId == id && x.StartDate < s.StartDate)
-                    .Count() + 1
-            })
-            .ToListAsync();
-
-        return Ok(semesters);
+        return Ok(await _service.GetSemestersAsync(id));
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(SchoolYear year)
+    public async Task<IActionResult> Create(SchoolYear entity)
     {
-        year.CreatedAt = DateTime.Now;
-        year.UpdatedAt = DateTime.Now;
-        _context.SchoolYears.Add(year);
-        await _context.SaveChangesAsync();
-        return CreatedAtAction(nameof(GetById), new { id = year.Id }, year);
+        var result = await _service.CreateAsync(entity);
+        return Ok(result);
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, SchoolYear year)
+    public async Task<IActionResult> Update(int id, SchoolYear entity)
     {
-        if (id != year.Id) return BadRequest();
-        var dbYear = await _context.SchoolYears.FindAsync(id);
-        if (dbYear == null) return NotFound();
-
-        dbYear.Name = year.Name;
-        dbYear.StartDate = year.StartDate;
-        dbYear.EndDate = year.EndDate;
-        dbYear.IsActive = year.IsActive;
-        dbYear.UpdatedAt = DateTime.Now;
-
-        await _context.SaveChangesAsync();
-        return Ok(dbYear);
+        var result = await _service.UpdateAsync(id, entity);
+        if (result == null) return NotFound();
+        return Ok(result);
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
-        var year = await _context.SchoolYears.FindAsync(id);
-        if (year == null) return NotFound();
-
-        if (year.IsActive) { year.IsActive = false; year.UpdatedAt = DateTime.Now; }
-        else { _context.SchoolYears.Remove(year); }
-
-        await _context.SaveChangesAsync();
+        var success = await _service.DeleteAsync(id);
+        if (!success) return NotFound();
         return NoContent();
     }
 }

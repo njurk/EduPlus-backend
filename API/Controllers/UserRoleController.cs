@@ -1,84 +1,38 @@
-using Shared.DTOs;
-using Data.Data;
+using BusinessLogic.Services;
 using Data.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
 public class UserRoleController : ControllerBase
 {
-    private readonly EduPlusDbContext _context;
+    private readonly IUserRoleService _service;
 
-    public UserRoleController(EduPlusDbContext context) => _context = context;
+    public UserRoleController(IUserRoleService service)
+    {
+        _service = service;
+    }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAll(string? search = null, string? sortBy = null, bool sortDesc = false)
     {
-        var userRoles = await _context.UserRoles
-            .Include(ur => ur.User)
-            .Include(ur => ur.Role)
-            .AsNoTracking()
-            .Select(ur => new
-            {
-                ur.Id,
-                ur.UserId,
-                ur.RoleId,
-                UserFirstName = ur.User.FirstName,
-                UserLastName = ur.User.LastName,
-                RoleName = ur.Role.Name
-            })
-            .ToListAsync();
-
-        return Ok(userRoles);
+        return Ok(await _service.GetAllAsync(search, sortBy, sortDesc));
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(CreateUserRoleDto dto)
+    public async Task<IActionResult> Create(UserRole entity)
     {
-        var exists = await _context.UserRoles
-            .AnyAsync(x => x.UserId == dto.UserId && x.RoleId == dto.RoleId);
-
-        if (exists)
-        {
-            return BadRequest("U¿ytkownik ju¿ posiada tê rolê");
-        }
-
-        var entity = new UserRole
-        {
-            UserId = dto.UserId,
-            RoleId = dto.RoleId,
-            CreatedAt = DateTime.Now,
-            UpdatedAt = DateTime.Now
-        };
-
-        _context.UserRoles.Add(entity);
-        await _context.SaveChangesAsync();
-
-        return Ok(entity);
+        var result = await _service.CreateAsync(entity);
+        return Ok(result);
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
-        var roleToDelete = await _context.UserRoles
-            .FirstOrDefaultAsync(x => x.Id == id);
-
-        if (roleToDelete == null) return NotFound();
-
-        var activeRolesCount = await _context.UserRoles
-            .CountAsync(ur => ur.UserId == roleToDelete.UserId && ur.Id != id);
-
-        if (activeRolesCount == 0)
-        {
-            return BadRequest("U¿ytkownik musi mieæ rolê");
-        }
-
-        _context.UserRoles.Remove(roleToDelete);
-
-        await _context.SaveChangesAsync();
+        var success = await _service.DeleteAsync(id);
+        if (!success) return NotFound();
         return NoContent();
     }
 }

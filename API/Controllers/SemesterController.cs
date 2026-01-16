@@ -1,68 +1,46 @@
-using Data.Data;
+using BusinessLogic.Services;
 using Data.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
 public class SemesterController : ControllerBase
 {
-    private readonly EduPlusDbContext _context;
+    private readonly ISemesterService _service;
 
-    public SemesterController(EduPlusDbContext context)
+    public SemesterController(ISemesterService service)
     {
-        _context = context;
+        _service = service;
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll([FromQuery] int? schoolYearId)
+    public async Task<IActionResult> GetAll(int? schoolYearId = null)
     {
-        var query = _context.Semesters.AsQueryable();
-        if (schoolYearId.HasValue) query = query
-                .Where(s => s.SchoolYearId == schoolYearId);
-
-        return Ok(await query.ToListAsync());
+        return Ok(await _service.GetAllAsync(schoolYearId));
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(Semester semester)
+    public async Task<IActionResult> Create(Semester entity)
     {
-        semester.CreatedAt = DateTime.Now;
-        semester.UpdatedAt = DateTime.Now;
-        _context.Semesters.Add(semester);
-        await _context.SaveChangesAsync();
-        return Ok(semester);
+        var result = await _service.CreateAsync(entity);
+        return Ok(result);
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, Semester semester)
+    public async Task<IActionResult> Update(int id, Semester entity)
     {
-        if (id != semester.Id) return BadRequest();
-        var dbSem = await _context.Semesters.FindAsync(id);
-        if (dbSem == null) return NotFound();
-
-        dbSem.Name = semester.Name;
-        dbSem.StartDate = semester.StartDate;
-        dbSem.EndDate = semester.EndDate;
-        dbSem.IsActive = semester.IsActive;
-        dbSem.UpdatedAt = DateTime.Now;
-
-        await _context.SaveChangesAsync();
-        return Ok(dbSem);
+        var result = await _service.UpdateAsync(id, entity);
+        if (result == null) return NotFound();
+        return Ok(result);
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
-        var semester = await _context.Semesters.FindAsync(id);
-        if (semester == null) return NotFound();
-
-        if (semester.IsActive) { semester.IsActive = false; semester.UpdatedAt = DateTime.Now; }
-        else { _context.Semesters.Remove(semester); }
-
-        await _context.SaveChangesAsync();
+        var success = await _service.DeleteAsync(id);
+        if (!success) return NotFound();
         return NoContent();
     }
 }

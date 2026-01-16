@@ -1,33 +1,22 @@
-using Data.Data;
+using BusinessLogic.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
 public class RoleController : ControllerBase
 {
-    private readonly EduPlusDbContext _context;
+    private readonly IRoleService _service;
 
-    public RoleController(EduPlusDbContext context)
+    public RoleController(IRoleService service)
     {
-        _context = context;
+        _service = service;
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll([FromQuery] string? search)
+    public async Task<IActionResult> GetAll(string? search = null)
     {
-        var query = _context.Roles.AsNoTracking().AsQueryable();
-
-        if (!string.IsNullOrWhiteSpace(search))
-        {
-            var s = search.Trim();
-            query = query.Where(r => r.Name.Contains(s) || (r.Description != null && r.Description.Contains(s)));
-        }
-
-        query = query.OrderBy(r => r.Level).ThenBy(r => r.Name);
-
-        return Ok(await query.ToListAsync());
+        return Ok(await _service.GetAllAsync(search));
     }
 }

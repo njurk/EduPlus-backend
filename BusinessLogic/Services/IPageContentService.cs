@@ -8,6 +8,7 @@ namespace BusinessLogic.Services
     public interface IPageContentService
     {
         Task<IEnumerable<PageContentDto>> GetByPageIdAsync(int pageId);
+        Task<IEnumerable<PageContentDto>> GetByPageLabelAsync(string pageLabel);
         Task<PageContentDto> UpdateAsync(int id, string newValue);
     }
 
@@ -34,11 +35,25 @@ namespace BusinessLogic.Services
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<PageContentDto>> GetByPageLabelAsync(string pageLabel)
+        {
+            return await _context.PageContents.AsNoTracking()
+                .Where(pc => pc.Page.Link == pageLabel)
+                .Select(pc => new PageContentDto
+                {
+                    Id = pc.Id,
+                    PageId = pc.PageId,
+                    Key = pc.Key,
+                    Value = pc.Value
+                })
+                .ToListAsync();
+        }
+
         public async Task<PageContentDto> UpdateAsync(int id, string newValue)
         {
             var content = await _context.PageContents.FindAsync(id);
             if (content == null)
-                throw new KeyNotFoundException("Zawartość strony nie została znaleziona");
+                throw new KeyNotFoundException("Zawartosc strony nie zostala znaleziona");
 
             content.Value = newValue;
             await _context.SaveChangesAsync();

@@ -23,6 +23,13 @@ namespace API.Controllers
             return Ok(result);
         }
 
+        [HttpGet("by-label/{pageLabel}")]
+        public async Task<IActionResult> GetByPageLabel(string pageLabel)
+        {
+            var result = await _service.GetByPageLabelAsync(pageLabel);
+            return Ok(result);
+        }
+
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] string newValue)
         {

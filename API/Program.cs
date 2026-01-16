@@ -47,6 +47,21 @@ namespace API
             builder.Services.AddScoped<ILessonService, LessonService>();
             builder.Services.AddScoped<IExcuseService, ExcuseService>();
             builder.Services.AddScoped<IExportService, ExportService>();
+            builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IGradeService, GradeService>();
+            builder.Services.AddScoped<IGradeTypeService, GradeTypeService>();
+            builder.Services.AddScoped<IGradeCategoryService, GradeCategoryService>();
+            builder.Services.AddScoped<ILessonHourService, LessonHourService>();
+            builder.Services.AddScoped<ILessonStatusService, LessonStatusService>();
+            builder.Services.AddScoped<IRoleService, RoleService>();
+            builder.Services.AddScoped<ISubjectService, SubjectService>();
+            builder.Services.AddScoped<ISchoolYearService, SchoolYearService>();
+            builder.Services.AddScoped<ISemesterService, SemesterService>();
+            builder.Services.AddScoped<IParentStudentService, ParentStudentService>();
+                        builder.Services.AddScoped<IPageService, PageService>();
+            builder.Services.AddScoped<IUserRoleService, UserRoleService>();
+            builder.Services.AddScoped<IDashboardService, DashboardService>();
+            builder.Services.AddScoped<ITargetService, TargetService>();
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -111,7 +126,7 @@ namespace API
                 }
             }
 
-            // Configure the HTTP request pipeline.
+            
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();

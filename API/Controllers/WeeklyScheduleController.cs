@@ -8,7 +8,7 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    // [Authorize] // Odkomentować w produkcji
+    [Authorize]
     public class WeeklyScheduleController : ControllerBase
     {
         private readonly IWeeklyScheduleService _service;
@@ -21,7 +21,7 @@ namespace API.Controllers
         [HttpGet("{classId}")]
         public async Task<IActionResult> GetSchedule(int classId, [FromQuery] DateTime dateFrom, [FromQuery] DateTime dateTo)
         {
-            if (dateFrom == default) dateFrom = DateTime.Today; // Domyślnie chociaż dzisiaj, ale frontend powinien wysyłać
+            if (dateFrom == default) dateFrom = DateTime.Today;
             if (dateTo == default) dateTo = dateFrom.AddDays(7);
 
             var schedule = await _service.GetScheduleForClassAsync(classId, dateFrom, dateTo);

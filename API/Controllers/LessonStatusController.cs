@@ -1,112 +1,54 @@
-using Data.Data;
+using BusinessLogic.Services;
 using Data.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
 public class LessonStatusController : ControllerBase
 {
-    private readonly EduPlusDbContext _context;
+    private readonly ILessonStatusService _service;
 
-    public LessonStatusController(EduPlusDbContext context)
+    public LessonStatusController(ILessonStatusService service)
     {
-        _context = context;
+        _service = service;
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll([FromQuery] string? search, [FromQuery] string? sortBy, [FromQuery] bool sortDesc = false, [FromQuery] bool showInactive = false)
+    public async Task<IActionResult> GetAll(string? search, string? sortBy, bool sortDesc = false, bool showInactive = false)
     {
-        var query = _context.LessonStatuses.AsNoTracking().AsQueryable();
-
-        if (showInactive)
-        {
-            query = query.Where(r => !r.IsActive);
-        }
-        else
-        {
-            query = query.Where(r => r.IsActive);
-        }
-
-        if (!string.IsNullOrWhiteSpace(search))
-        {
-            var s = search.Trim();
-            query = query.Where(x => x.Name.Contains(s));
-        }
-
-        query = sortBy?.ToLower() switch
-        {
-            "ordernumber" => sortDesc ? query.OrderByDescending(x => x.Name) : query.OrderBy(x => x.Name),
-            "created" => sortDesc ? query.OrderByDescending(x => x.CreatedAt) : query.OrderBy(x => x.CreatedAt),
-            "updated" => sortDesc ? query.OrderByDescending(x => x.UpdatedAt) : query.OrderBy(x => x.UpdatedAt),
-            _ => sortDesc ? query.OrderByDescending(x => x.Name) : query.OrderBy(x => x.Name)
-        };
-
-        return Ok(await query.ToListAsync());
+        return Ok(await _service.GetAllAsync(search, sortBy, sortDesc, showInactive));
     }
 
     [HttpPost]
     public async Task<IActionResult> Create(LessonStatus entity)
     {
-        entity.CreatedAt = DateTime.Now;
-        entity.UpdatedAt = DateTime.Now;
-        entity.IsActive = true;
-
-        _context.LessonStatuses.Add(entity);
-        await _context.SaveChangesAsync();
-        return Ok(entity);
+        var result = await _service.CreateAsync(entity);
+        return Ok(result);
     }
 
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, LessonStatus entity)
     {
-        if (id != entity.Id) return BadRequest();
-
-        if (entity.IsActive && entity.Name.EndsWith(" (nieaktywny)"))
-        {
-            entity.Name = entity.Name.Replace(" (nieaktywny)", "");
-        }
-
-        entity.UpdatedAt = DateTime.Now;
-        _context.Entry(entity).State = EntityState.Modified;
-        _context.Entry(entity).Property(x => x.CreatedAt).IsModified = false;
-
-        try
-        {
-            await _context.SaveChangesAsync();
-        }
-        catch (DbUpdateConcurrencyException)
-        {
-            if (!await _context.LessonStatuses.AnyAsync(e => e.Id == id)) return NotFound();
-            throw;
-        }
-
-        return Ok(entity);
+        var result = await _service.UpdateAsync(id, entity);
+        if (result == null) return NotFound();
+        return Ok(result);
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
-        var item = await _context.LessonStatuses.FindAsync(id);
-        if (item == null) return NotFound();
-
-        if (item.IsActive)
-        {
-            item.IsActive = false;
-            if (!item.Name.EndsWith(" (nieaktywny)"))
-            {
-                item.Name += " (nieaktywny)";
-            }
-            item.UpdatedAt = DateTime.Now;
-        }
-        else
-        {
-            _context.LessonStatuses.Remove(item);
-        }
-
-        await _context.SaveChangesAsync();
+        var success = await _service.DeleteAsync(id);
+        if (!success) return NotFound();
         return NoContent();
+    }
+
+    [HttpPatch("{id}/restore")]
+    public async Task<IActionResult> Restore(int id)
+    {
+        var success = await _service.RestoreAsync(id);
+        if (!success) return NotFound();
+        return Ok(new { message = "Przywrocono", id });
     }
 }
