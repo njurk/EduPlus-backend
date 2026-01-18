@@ -23,12 +23,6 @@ namespace API.Controllers
             return Ok(await _service.GetSummaryAsync());
         }
 
-        [HttpGet("attendance-chart")]
-        public async Task<IActionResult> GetAttendanceChart()
-        {
-            return Ok(await _service.GetAttendanceChartAsync());
-        }
-
         [HttpGet("uptime")]
         [AllowAnonymous]
         public IActionResult GetUptime()

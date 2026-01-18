@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(EduPlusDbContext))]
-    [Migration("20260116225346_Functions")]
-    partial class Functions
+    [Migration("20260117233834_Views")]
+    partial class Views
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -76,7 +76,7 @@ namespace Data.Migrations
                             Link = "system",
                             Position = 1,
                             TargetId = 5,
-                            Title = "Ustawienia systemu",
+                            Title = "System",
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
@@ -275,6 +275,24 @@ namespace Data.Migrations
                         {
                             Id = 2,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "pageTitle",
+                            PageId = 1,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "EduPlus - Twój e-dziennik"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "faviconUrl",
+                            PageId = 1,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "logo-64.png"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "title",
                             PageId = 2,
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
@@ -282,7 +300,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 3,
+                            Id = 5,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "schoolYear",
                             PageId = 2,
@@ -291,7 +309,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 4,
+                            Id = 6,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "stats.users",
                             PageId = 2,
@@ -300,7 +318,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 5,
+                            Id = 7,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "stats.students",
                             PageId = 2,
@@ -309,7 +327,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 6,
+                            Id = 8,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "stats.teachers",
                             PageId = 2,
@@ -318,7 +336,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 7,
+                            Id = 9,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "stats.parents",
                             PageId = 2,
@@ -327,30 +345,12 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 8,
+                            Id = 10,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "stats.classes",
                             PageId = 2,
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Value = "Klas"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "chart.title",
-                            PageId = 2,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Frekwencja tygodniowa"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "chart.attendance",
-                            PageId = 2,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Obecność"
                         },
                         new
                         {
@@ -428,24 +428,6 @@ namespace Data.Migrations
                         {
                             Id = 19,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "modal.add",
-                            PageId = 3,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Dodaj użytkownika"
-                        },
-                        new
-                        {
-                            Id = 20,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "modal.edit",
-                            PageId = 3,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Edytuj użytkownika"
-                        },
-                        new
-                        {
-                            Id = 21,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "modal.newUser",
                             PageId = 3,
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
@@ -453,7 +435,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 22,
+                            Id = 20,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "modal.editUser",
                             PageId = 3,
@@ -462,7 +444,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 23,
+                            Id = 21,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "modal.manageRelations",
                             PageId = 3,
@@ -471,7 +453,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 24,
+                            Id = 22,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "modal.user",
                             PageId = 3,
@@ -480,7 +462,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 25,
+                            Id = 23,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "tabs.users",
                             PageId = 3,
@@ -489,7 +471,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 26,
+                            Id = 24,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "tabs.roles",
                             PageId = 3,
@@ -498,7 +480,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 27,
+                            Id = 25,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "tabs.relations",
                             PageId = 3,
@@ -507,16 +489,16 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 28,
+                            Id = 26,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "columns.name",
+                            Key = "columns.user",
                             PageId = 3,
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Imię i nazwisko"
+                            Value = "Użytkownik"
                         },
                         new
                         {
-                            Id = 29,
+                            Id = 27,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "columns.email",
                             PageId = 3,
@@ -525,16 +507,25 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 30,
+                            Id = 28,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "columns.roles",
+                            Key = "columns.phone",
                             PageId = 3,
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Role"
+                            Value = "Telefon"
                         },
                         new
                         {
-                            Id = 31,
+                            Id = 29,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "columns.role",
+                            PageId = 3,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Rola"
+                        },
+                        new
+                        {
+                            Id = 30,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "columns.createdAt",
                             PageId = 3,
@@ -543,12 +534,21 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 32,
+                            Id = 31,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "columns.updatedAt",
                             PageId = 3,
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Value = "Edytowano"
+                        },
+                        new
+                        {
+                            Id = 32,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "columns.modifiedBy",
+                            PageId = 3,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Edytowane przez"
                         },
                         new
                         {
@@ -563,37 +563,37 @@ namespace Data.Migrations
                         {
                             Id = 34,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "columns.user",
+                            Key = "columns.parent",
                             PageId = 3,
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Użytkownik"
+                            Value = "Rodzic"
                         },
                         new
                         {
                             Id = 35,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "columns.phone",
+                            Key = "columns.student",
                             PageId = 3,
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Telefon"
+                            Value = "Uczeń"
                         },
                         new
                         {
                             Id = 36,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "columns.role",
+                            Key = "columns.status",
                             PageId = 3,
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Rola"
+                            Value = "Status"
                         },
                         new
                         {
                             Id = 37,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "columns.modifiedBy",
+                            Key = "columns.roleName",
                             PageId = 3,
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Edytowane przez"
+                            Value = "Nazwa roli"
                         },
                         new
                         {
@@ -617,123 +617,6 @@ namespace Data.Migrations
                         {
                             Id = 40,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "columns.parent",
-                            PageId = 3,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Rodzic"
-                        },
-                        new
-                        {
-                            Id = 41,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "columns.student",
-                            PageId = 3,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Uczeń"
-                        },
-                        new
-                        {
-                            Id = 42,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "columns.status",
-                            PageId = 3,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Status"
-                        },
-                        new
-                        {
-                            Id = 43,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "columns.roleName",
-                            PageId = 3,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Nazwa roli"
-                        },
-                        new
-                        {
-                            Id = 44,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "sort.name",
-                            PageId = 3,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Nazwisko"
-                        },
-                        new
-                        {
-                            Id = 45,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "sort.email",
-                            PageId = 3,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Email"
-                        },
-                        new
-                        {
-                            Id = 46,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "sort.updatedAt",
-                            PageId = 3,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Edytowano"
-                        },
-                        new
-                        {
-                            Id = 47,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "sort.lastName",
-                            PageId = 3,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Nazwisko"
-                        },
-                        new
-                        {
-                            Id = 48,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "sort.role",
-                            PageId = 3,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Rola"
-                        },
-                        new
-                        {
-                            Id = 49,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "sort.created",
-                            PageId = 3,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Data utworzenia"
-                        },
-                        new
-                        {
-                            Id = 50,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "sort.updated",
-                            PageId = 3,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Data modyfikacji"
-                        },
-                        new
-                        {
-                            Id = 51,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "sort.parent",
-                            PageId = 3,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Rodzic"
-                        },
-                        new
-                        {
-                            Id = 52,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "sort.student",
-                            PageId = 3,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Uczeń"
-                        },
-                        new
-                        {
-                            Id = 53,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "form.role",
                             PageId = 3,
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
@@ -741,25 +624,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 54,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "filter.unassignedParents",
-                            PageId = 3,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Pokaż nieprzypisanych"
-                        },
-                        new
-                        {
-                            Id = 55,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "status.noRelations",
-                            PageId = 3,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Brak powiązań"
-                        },
-                        new
-                        {
-                            Id = 56,
+                            Id = 41,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "title",
                             PageId = 4,
@@ -768,7 +633,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 57,
+                            Id = 42,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "columns.date",
                             PageId = 4,
@@ -777,7 +642,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 58,
+                            Id = 43,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "columns.title",
                             PageId = 4,
@@ -786,7 +651,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 59,
+                            Id = 44,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "columns.content",
                             PageId = 4,
@@ -795,7 +660,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 60,
+                            Id = 45,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "columns.author",
                             PageId = 4,
@@ -804,7 +669,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 61,
+                            Id = 46,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "columns.modifiedBy",
                             PageId = 4,
@@ -813,7 +678,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 62,
+                            Id = 47,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "columns.actions",
                             PageId = 4,
@@ -822,25 +687,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 63,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "sort.date",
-                            PageId = 4,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Data"
-                        },
-                        new
-                        {
-                            Id = 64,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "sort.author",
-                            PageId = 4,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Autor"
-                        },
-                        new
-                        {
-                            Id = 65,
+                            Id = 48,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "title",
                             PageId = 5,
@@ -849,7 +696,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 66,
+                            Id = 49,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "title",
                             PageId = 6,
@@ -858,7 +705,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 67,
+                            Id = 50,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "title",
                             PageId = 7,
@@ -867,7 +714,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 68,
+                            Id = 51,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "title",
                             PageId = 8,
@@ -876,7 +723,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 69,
+                            Id = 52,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "title",
                             PageId = 9,
@@ -885,7 +732,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 70,
+                            Id = 53,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "columns.student",
                             PageId = 9,
@@ -894,7 +741,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 71,
+                            Id = 54,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "columns.class",
                             PageId = 9,
@@ -903,7 +750,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 72,
+                            Id = 55,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "columns.subject",
                             PageId = 9,
@@ -912,7 +759,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 73,
+                            Id = 56,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "columns.grade",
                             PageId = 9,
@@ -921,7 +768,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 74,
+                            Id = 57,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "columns.category",
                             PageId = 9,
@@ -930,7 +777,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 75,
+                            Id = 58,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "columns.date",
                             PageId = 9,
@@ -939,34 +786,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 76,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "sort.student",
-                            PageId = 9,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Uczeń"
-                        },
-                        new
-                        {
-                            Id = 77,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "sort.subject",
-                            PageId = 9,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Przedmiot"
-                        },
-                        new
-                        {
-                            Id = 78,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "sort.date",
-                            PageId = 9,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Data"
-                        },
-                        new
-                        {
-                            Id = 79,
+                            Id = 59,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "title",
                             PageId = 10,
@@ -975,7 +795,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 80,
+                            Id = 60,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "columns.student",
                             PageId = 10,
@@ -984,16 +804,16 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 81,
+                            Id = 61,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "columns.lesson",
+                            Key = "columns.subject",
                             PageId = 10,
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Lekcja"
+                            Value = "Przedmiot"
                         },
                         new
                         {
-                            Id = 82,
+                            Id = 62,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "columns.status",
                             PageId = 10,
@@ -1002,7 +822,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 83,
+                            Id = 63,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "columns.date",
                             PageId = 10,
@@ -1011,25 +831,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 84,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "sort.student",
-                            PageId = 10,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Uczeń"
-                        },
-                        new
-                        {
-                            Id = 85,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "sort.date",
-                            PageId = 10,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Data"
-                        },
-                        new
-                        {
-                            Id = 86,
+                            Id = 64,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "title",
                             PageId = 11,
@@ -1038,7 +840,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 87,
+                            Id = 65,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "modal.newClass",
                             PageId = 11,
@@ -1047,7 +849,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 88,
+                            Id = 66,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "modal.editClass",
                             PageId = 11,
@@ -1056,7 +858,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 89,
+                            Id = 67,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "modal.assignStudents",
                             PageId = 11,
@@ -1065,7 +867,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 90,
+                            Id = 68,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "modal.assignSubject",
                             PageId = 11,
@@ -1074,7 +876,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 91,
+                            Id = 69,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "tabs.students",
                             PageId = 11,
@@ -1083,7 +885,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 92,
+                            Id = 70,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "tabs.subjects",
                             PageId = 11,
@@ -1092,7 +894,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 93,
+                            Id = 71,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "form.level",
                             PageId = 11,
@@ -1101,7 +903,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 94,
+                            Id = 72,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "form.section",
                             PageId = 11,
@@ -1110,7 +912,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 95,
+                            Id = 73,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "form.subject",
                             PageId = 11,
@@ -1119,7 +921,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 96,
+                            Id = 74,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "form.teacher",
                             PageId = 11,
@@ -1128,7 +930,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 97,
+                            Id = 75,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "columns.class",
                             PageId = 11,
@@ -1137,7 +939,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 98,
+                            Id = 76,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "columns.studentCount",
                             PageId = 11,
@@ -1146,7 +948,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 99,
+                            Id = 77,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "columns.ordinal",
                             PageId = 11,
@@ -1155,7 +957,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 100,
+                            Id = 78,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "columns.student",
                             PageId = 11,
@@ -1164,7 +966,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 101,
+                            Id = 79,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "columns.email",
                             PageId = 11,
@@ -1173,7 +975,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 102,
+                            Id = 80,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "columns.subject",
                             PageId = 11,
@@ -1182,7 +984,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 103,
+                            Id = 81,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "columns.teacher",
                             PageId = 11,
@@ -1191,7 +993,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 104,
+                            Id = 82,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "columns.createdAt",
                             PageId = 11,
@@ -1200,7 +1002,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 105,
+                            Id = 83,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "columns.updatedAt",
                             PageId = 11,
@@ -1209,7 +1011,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 106,
+                            Id = 84,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "columns.actions",
                             PageId = 11,
@@ -1218,79 +1020,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 107,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "sort.class",
-                            PageId = 11,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Klasa"
-                        },
-                        new
-                        {
-                            Id = 108,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "sort.lastName",
-                            PageId = 11,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Nazwisko"
-                        },
-                        new
-                        {
-                            Id = 109,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "sort.email",
-                            PageId = 11,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Email"
-                        },
-                        new
-                        {
-                            Id = 110,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "sort.ordinal",
-                            PageId = 11,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Lp."
-                        },
-                        new
-                        {
-                            Id = 111,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "sort.subject",
-                            PageId = 11,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Przedmiot"
-                        },
-                        new
-                        {
-                            Id = 112,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "sort.teacher",
-                            PageId = 11,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Nauczyciel"
-                        },
-                        new
-                        {
-                            Id = 113,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "sort.createdAt",
-                            PageId = 11,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Utworzono"
-                        },
-                        new
-                        {
-                            Id = 114,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "sort.updatedAt",
-                            PageId = 11,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Edytowano"
-                        },
-                        new
-                        {
-                            Id = 115,
+                            Id = 85,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "title",
                             PageId = 12,
@@ -1299,7 +1029,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 116,
+                            Id = 86,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "section.profile",
                             PageId = 12,
@@ -1308,7 +1038,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 117,
+                            Id = 87,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "section.password",
                             PageId = 12,
@@ -1317,7 +1047,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 118,
+                            Id = 88,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "modal.new",
                             PageId = 13,
@@ -1326,7 +1056,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 119,
+                            Id = 89,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "modal.edit",
                             PageId = 13,
@@ -1335,7 +1065,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 120,
+                            Id = 90,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "columns.number",
                             PageId = 13,
@@ -1344,7 +1074,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 121,
+                            Id = 91,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "columns.hours",
                             PageId = 13,
@@ -1353,7 +1083,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 122,
+                            Id = 92,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "columns.symbol",
                             PageId = 13,
@@ -1362,7 +1092,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 123,
+                            Id = 93,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "columns.name",
                             PageId = 13,
@@ -1371,7 +1101,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 124,
+                            Id = 94,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "columns.value",
                             PageId = 13,
@@ -1380,7 +1110,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 125,
+                            Id = 95,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "columns.weight",
                             PageId = 13,
@@ -1389,7 +1119,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 126,
+                            Id = 96,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "columns.shortCode",
                             PageId = 13,
@@ -1398,7 +1128,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 127,
+                            Id = 97,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "columns.createdAt",
                             PageId = 13,
@@ -1407,7 +1137,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 128,
+                            Id = 98,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "columns.updatedAt",
                             PageId = 13,
@@ -1416,7 +1146,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 129,
+                            Id = 99,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "columns.actions",
                             PageId = 13,
@@ -1425,16 +1155,16 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 130,
+                            Id = 100,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "systemName",
                             PageId = 14,
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "EduPlus"
+                            Value = "EduPlus Admin"
                         },
                         new
                         {
-                            Id = 131,
+                            Id = 101,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "version",
                             PageId = 14,
@@ -1443,7 +1173,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 132,
+                            Id = 102,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "nav.dashboard",
                             PageId = 14,
@@ -1452,7 +1182,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 133,
+                            Id = 103,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "nav.section.management",
                             PageId = 14,
@@ -1461,7 +1191,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 134,
+                            Id = 104,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "nav.users",
                             PageId = 14,
@@ -1470,7 +1200,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 135,
+                            Id = 105,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "nav.classes",
                             PageId = 14,
@@ -1479,7 +1209,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 136,
+                            Id = 106,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "nav.announcements",
                             PageId = 14,
@@ -1488,7 +1218,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 137,
+                            Id = 107,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "nav.tickets",
                             PageId = 14,
@@ -1497,7 +1227,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 138,
+                            Id = 108,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "nav.section.teaching",
                             PageId = 14,
@@ -1506,7 +1236,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 139,
+                            Id = 109,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "nav.schedule",
                             PageId = 14,
@@ -1515,7 +1245,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 140,
+                            Id = 110,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "nav.lessons",
                             PageId = 14,
@@ -1524,7 +1254,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 141,
+                            Id = 111,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "nav.grades",
                             PageId = 14,
@@ -1533,7 +1263,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 142,
+                            Id = 112,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "nav.attendance",
                             PageId = 14,
@@ -1542,7 +1272,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 143,
+                            Id = 113,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "nav.excuses",
                             PageId = 14,
@@ -1551,7 +1281,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 144,
+                            Id = 114,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "nav.section.system",
                             PageId = 14,
@@ -1560,7 +1290,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 145,
+                            Id = 115,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "nav.config",
                             PageId = 14,
@@ -1569,7 +1299,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 146,
+                            Id = 116,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "nav.cms",
                             PageId = 14,
@@ -1578,7 +1308,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 147,
+                            Id = 117,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "title",
                             PageId = 15,
@@ -1587,7 +1317,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 148,
+                            Id = 118,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "logoUrl",
                             PageId = 15,
@@ -1596,7 +1326,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 149,
+                            Id = 119,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "logoAlt",
                             PageId = 15,
@@ -1605,7 +1335,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 150,
+                            Id = 120,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "form.email",
                             PageId = 15,
@@ -1614,7 +1344,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 151,
+                            Id = 121,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "form.password",
                             PageId = 15,
@@ -1623,7 +1353,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 152,
+                            Id = 122,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "form.forgotPassword",
                             PageId = 15,
@@ -1632,16 +1362,7 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 153,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "button.login",
-                            PageId = 15,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Zaloguj się"
-                        },
-                        new
-                        {
-                            Id = 154,
+                            Id = 123,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "footer",
                             PageId = 15,
@@ -2923,7 +2644,7 @@ namespace Data.Migrations
                         {
                             Id = 1,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Description = "Najwyższy poziom uprawnień, dostęp do wszystkiego",
+                            Description = "Najwyższy poziom uprawnień",
                             IsActive = true,
                             Level = 1,
                             Name = "Administrator",
@@ -2933,7 +2654,7 @@ namespace Data.Migrations
                         {
                             Id = 2,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Description = "Zarządzanie przydzielonymi zasobami",
+                            Description = "Zarządzanie przydzielonymi klasami",
                             IsActive = true,
                             Level = 2,
                             Name = "Nauczyciel",
@@ -2943,7 +2664,7 @@ namespace Data.Migrations
                         {
                             Id = 3,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Description = "Przeglądanie danych przypisanego użytkownika, możliwość usprawiedliwienia",
+                            Description = "Dostęp do dziennika dziecka",
                             IsActive = true,
                             Level = 3,
                             Name = "Rodzic",
@@ -2953,7 +2674,7 @@ namespace Data.Migrations
                         {
                             Id = 4,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Description = "Przeglądanie własnych danych",
+                            Description = "Dostęp do własnego dziennika",
                             IsActive = true,
                             Level = 4,
                             Name = "Uczeń",

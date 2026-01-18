@@ -51,7 +51,7 @@ public class AnnouncementController : ControllerBase
         var userIdClaim = User.FindFirst("userId")?.Value ?? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
         if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var authorId))
         {
-            return Unauthorized("Nie można ustalić autora ogłoszenia.");
+            return Unauthorized("Nie udało się ustalić autora ogłoszenia");
         }
 
         var entity = new Announcement

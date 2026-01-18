@@ -49,6 +49,6 @@ public class LessonHourController : ControllerBase
     {
         var success = await _service.RestoreAsync(id);
         if (!success) return NotFound();
-        return Ok(new { message = "Przywrocono", id });
+        return Ok(new { message = "Przywrócono", id });
     }
 }

@@ -8,8 +8,11 @@
     public class DataSeeder
     {
         private readonly EduPlusDbContext _context;
-
         private readonly Random _random = new Random();
+
+        private const string adminMail = "eduplus.test.1@gmail.com";
+        private const string teacherMail = "eduplus.test.2@gmail.com";
+        private const string password = "Test123!";
 
         public DataSeeder(EduPlusDbContext context)
         {
@@ -60,7 +63,7 @@
         {
             return new List<(int, string, string, string, string, string, string)>
             {
-                (1, "Anna", "Kowalska", "akowalska@szkola.edu.pl", "Złota 44/12", "Warszawa", "00-120"),
+                (1, "Anna", "Kowalska", teacherMail, "Złota 44/12", "Warszawa", "00-120"),
                 (2, "Jan", "Nowak", "jnowak@szkola.edu.pl", "Marszałkowska 85/3", "Warszawa", "00-683"),
                 (3, "Ewa", "Wiśniewska", "ewisniewska@szkola.edu.pl", "Aleje Jerozolimskie 100", "Warszawa", "00-807"),
                 (4, "Piotr", "Kamiński", "pkaminski@szkola.edu.pl", "Chmielna 5", "Warszawa", "00-021"),
@@ -151,8 +154,6 @@
         private void SeedUsers(IPasswordHashService passwordHashService)
         {
             var users = new List<User>();
-            var password = "Test123!";
-            var adminMail = "eduplus.test.1@gmail.com";
 
             var admin = new User
             {
@@ -658,7 +659,7 @@
                 "Zbliżające się konkursy szkolne",
                 "Wycieczka do Londynu",
                 "Zbiórka makulatury",
-                "Ważne: wpłaty na Radę Rodziców",
+                "Ważne: wpłaty na radę rodziców",
                 "Najbliższe dni wolne od zajęć",
                 "Zajęcia dodatkowe z przedmiotów",
             };
@@ -666,7 +667,7 @@
             var loremIpsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Curabitur pretium tincidunt lacus. Nulla gravida orci a odio. Nullam varius, turpis et commodo pharetra, est eros bibendum elit, nec luctus magna felis sollicitudin mauris.";
 
             var announcements = new List<Announcement>();
-            int quantityToGenerate = 10;
+            int quantityToGenerate = 5;
 
             for (int i = 0; i < quantityToGenerate; i++)
             {

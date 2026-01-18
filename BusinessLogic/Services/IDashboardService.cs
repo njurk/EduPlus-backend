@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Data.Data;
 using Data.Data.EntitiesForView;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +9,6 @@ namespace BusinessLogic.Services
     public interface IDashboardService
     {
         Task<DashboardSummaryDto> GetSummaryAsync();
-        Task<IEnumerable<AttendanceChartDto>> GetAttendanceChartAsync();
     }
 
     public class DashboardService : IDashboardService
@@ -90,32 +85,6 @@ namespace BusinessLogic.Services
                 },
                 RecentTickets = recentTickets
             };
-        }
-
-        public async Task<IEnumerable<AttendanceChartDto>> GetAttendanceChartAsync()
-        {
-            var dbData = await _context.Database
-                .SqlQueryRaw<WeeklyAttendanceResultDto>("EXEC sp_GetWeeklyAttendance")
-                .ToListAsync();
-
-            var result = new List<AttendanceChartDto>();
-            var culture = new CultureInfo("pl-PL");
-            var today = DateTime.Now.Date;
-
-            for (int i = 6; i >= 0; i--)
-            {
-                var loopDate = today.AddDays(-i);
-                var dayStat = dbData.FirstOrDefault(d => d.Date.Date == loopDate);
-
-                result.Add(new AttendanceChartDto
-                {
-                    Date = loopDate.ToString("dd.MM"),
-                    DayName = culture.DateTimeFormat.GetAbbreviatedDayName(loopDate.DayOfWeek),
-                    AttendancePercentage = dayStat?.Percentage ?? 0
-                });
-            }
-
-            return result;
         }
     }
 }

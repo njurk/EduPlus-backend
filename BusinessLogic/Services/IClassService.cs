@@ -185,7 +185,7 @@ namespace BusinessLogic.Services
                 c.Letter == entity.Letter
             );
 
-            if (exists) throw new InvalidOperationException($"Klasa {entity.Level}{entity.Letter} już istnieje w tym roku.");
+            if (exists) throw new InvalidOperationException($"Klasa {entity.Level}{entity.Letter} już istnieje w tym roku szkolnym");
 
             entity.CreatedAt = DateTime.Now;
             entity.UpdatedAt = DateTime.Now;
@@ -249,7 +249,7 @@ namespace BusinessLogic.Services
 
             if (!isAuthorized)
             {
-                throw new InvalidOperationException("Wybrany nauczyciel nie ma uprawnień do nauczania tego przedmiotu.");
+                throw new InvalidOperationException("Wybrany nauczyciel nie ma uprawnień do nauczania tego przedmiotu");
             }
 
             var exists = await _context.ClassSubjects
@@ -257,7 +257,7 @@ namespace BusinessLogic.Services
 
             if (exists)
             {
-                throw new InvalidOperationException("Ten przedmiot jest już przypisany do tej klasy.");
+                throw new InvalidOperationException("Ten przedmiot jest już przypisany do tej klasy");
             }
 
             var classSubject = new ClassSubject

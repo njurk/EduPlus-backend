@@ -25,15 +25,15 @@ namespace API.Controllers
             try
             {
                 await _service.RequestResetAsync(dto.Email, _emailService);
-                return Ok(new { message = "Link do resetu hasła został wysłany na podany adres email" });
+                return Ok(new { message = "Link do resetu hasła został wysłany" });
             }
             catch (KeyNotFoundException)
             {
-                return Ok(new { message = "Jeśli adres istnieje w bazie, link został wysłany" });
+                return Ok(new { message = "Jeśli podany email jest w naszym systemie, link zostanie wysłany" });
             }
             catch (Exception)
             {
-                return Ok(new { message = "Jeśli adres istnieje w bazie, link został wysłany" });
+                return Ok(new { message = "Jeśli podany email jest w naszym systemie, link zostanie wysłany" });
             }
         }
 

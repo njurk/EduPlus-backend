@@ -73,7 +73,7 @@ public class UserController : ControllerBase
         {
             var success = await _service.ChangePasswordAsync(id, dto.CurrentPassword, dto.NewPassword);
             if (!success) return NotFound();
-            return Ok(new { message = "Haslo zostalo zmienione pomyslnie." });
+            return Ok(new { message = "Hasło zmienione pomyślnie" });
         }
         catch (UnauthorizedAccessException ex)
         {
@@ -86,7 +86,7 @@ public class UserController : ControllerBase
     {
         var success = await _service.RestoreAsync(id);
         if (!success) return NotFound();
-        return Ok(new { message = "Uzytkownik przywrocony", id });
+        return Ok(new { message = "Użytkownik przywrócony", id });
     }
 
     [HttpDelete("{id}")]
