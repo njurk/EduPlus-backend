@@ -7,7 +7,7 @@ namespace BusinessLogic.Services
 {
     public interface ITicketService
     {
-        Task<PaginatedResponse<TicketDto>> GetAllAsync(int pageNumber, int pageSize, bool? showClosed, string? search, string? sortBy, bool sortDesc);
+        Task<PaginatedResponse<TicketDto>> GetAllAsync(int pageNumber, int pageSize, bool? showClosed, string? search, string? sortBy, bool sortDesc, string? userFullName = null);
         Task<TicketDto?> GetByIdAsync(int id);
         Task<Ticket> CreateAsync(int userId, CreateTicketDto dto, IEmailService emailService);
         Task<bool> CloseAsync(int id, CloseTicketDto dto, IEmailService emailService);
@@ -22,7 +22,7 @@ namespace BusinessLogic.Services
             _context = context;
         }
 
-        public async Task<PaginatedResponse<TicketDto>> GetAllAsync(int pageNumber, int pageSize, bool? showClosed, string? search, string? sortBy, bool sortDesc)
+        public async Task<PaginatedResponse<TicketDto>> GetAllAsync(int pageNumber, int pageSize, bool? showClosed, string? search, string? sortBy, bool sortDesc, string? userFullName = null)
         {
             var query = _context.Tickets.AsNoTracking().Include(t => t.User).AsQueryable();
 
@@ -39,14 +39,21 @@ namespace BusinessLogic.Services
                     t.User.Email.ToLower().Contains(s));
             }
 
+            if (!string.IsNullOrWhiteSpace(userFullName))
+            {
+                query = query.Where(t => (t.User.LastName + " " + t.User.FirstName) == userFullName);
+            }
+
             query = sortBy?.ToLower() switch
             {
                 "subject" => sortDesc ? query.OrderByDescending(t => t.Subject) : query.OrderBy(t => t.Subject),
-                "userfullname" => sortDesc
+                "user" or "userfullname" => sortDesc
                     ? query.OrderByDescending(t => t.User.LastName).ThenByDescending(t => t.User.FirstName)
                     : query.OrderBy(t => t.User.LastName).ThenBy(t => t.User.FirstName),
-                "isclosed" => sortDesc ? query.OrderByDescending(t => t.IsClosed) : query.OrderBy(t => t.IsClosed),
-                _ => sortDesc ? query.OrderByDescending(t => t.CreatedAt) : query.OrderBy(t => t.CreatedAt),
+                "isclosed" or "closed" => sortDesc ? query.OrderByDescending(t => t.IsClosed) : query.OrderBy(t => t.IsClosed),
+                "closedat" => sortDesc ? query.OrderByDescending(t => t.ClosedAt) : query.OrderBy(t => t.ClosedAt),
+                "updated" or "updatedat" => sortDesc ? query.OrderByDescending(t => t.UpdatedAt) : query.OrderBy(t => t.UpdatedAt),
+                "created" or "createdat" or _ => sortDesc ? query.OrderByDescending(t => t.CreatedAt) : query.OrderBy(t => t.CreatedAt),
             };
 
             var totalCount = await query.CountAsync();
@@ -65,7 +72,10 @@ namespace BusinessLogic.Services
                     ClosedAt = t.ClosedAt,
                     AdminResponse = t.AdminResponse,
                     CreatedAt = t.CreatedAt,
-                    UpdatedAt = t.UpdatedAt
+                    UpdatedAt = t.UpdatedAt,
+                    ModifiedByName = t.ModifiedByUserId != null
+                        ? _context.Users.Where(u => u.Id == t.ModifiedByUserId).Select(u => u.FirstName + " " + u.LastName).FirstOrDefault()
+                        : "System"
                 })
                 .ToListAsync();
 

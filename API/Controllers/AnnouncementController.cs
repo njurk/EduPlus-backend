@@ -21,9 +21,10 @@ public class AnnouncementController : ControllerBase
         [FromQuery] string? search = null,
         [FromQuery] string? sortBy = null,
         [FromQuery] bool sortDesc = true,
-        [FromQuery] bool showInactive = false)
+        [FromQuery] bool showInactive = false,
+        [FromQuery] string? authorName = null)
     {
-        var items = await _service.GetAllAsync(search, sortBy, sortDesc, showInactive);
+        var items = await _service.GetAllAsync(search, sortBy, sortDesc, showInactive, authorName);
         return Ok(items);
     }
 

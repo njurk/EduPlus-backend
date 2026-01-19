@@ -11,7 +11,7 @@ namespace BusinessLogic.Services
 {
     public interface IAnnouncementService
     {
-        Task<IEnumerable<object>> GetAllAsync(string? search = null, string? sortBy = null, bool sortDesc = true, bool showInactive = false);
+        Task<IEnumerable<object>> GetAllAsync(string? search = null, string? sortBy = null, bool sortDesc = true, bool showInactive = false, string? authorName = null);
         Task<Announcement?> GetByIdAsync(int id);
         Task<Announcement> CreateAsync(Announcement entity);
         Task<Announcement?> UpdateAsync(int id, string title, string description);
@@ -28,7 +28,7 @@ namespace BusinessLogic.Services
             _context = context;
         }
 
-        public async Task<IEnumerable<object>> GetAllAsync(string? search = null, string? sortBy = null, bool sortDesc = true, bool showInactive = false)
+        public async Task<IEnumerable<object>> GetAllAsync(string? search = null, string? sortBy = null, bool sortDesc = true, bool showInactive = false, string? authorName = null)
         {
             var query = _context.Announcements
                 .Include(a => a.Author)
@@ -41,12 +41,17 @@ namespace BusinessLogic.Services
                 query = query.Where(a => a.Title.ToLower().Contains(searchLower) || a.Description.ToLower().Contains(searchLower));
             }
 
+            if (!string.IsNullOrWhiteSpace(authorName))
+            {
+                query = query.Where(a => a.Author != null && (a.Author.FirstName + " " + a.Author.LastName) == authorName);
+            }
+
             query = sortBy?.ToLower() switch
             {
                 "title" => sortDesc ? query.OrderByDescending(a => a.Title) : query.OrderBy(a => a.Title),
                 "author" or "authorname" => sortDesc ? query.OrderByDescending(a => a.Author!.LastName) : query.OrderBy(a => a.Author!.LastName),
-                "updatedat" => sortDesc ? query.OrderByDescending(a => a.UpdatedAt) : query.OrderBy(a => a.UpdatedAt),
-                _ => sortDesc ? query.OrderByDescending(a => a.CreatedAt) : query.OrderBy(a => a.CreatedAt)
+                "updated" or "updatedat" => sortDesc ? query.OrderByDescending(a => a.UpdatedAt) : query.OrderBy(a => a.UpdatedAt),
+                "created" or "createdat" or _ => sortDesc ? query.OrderByDescending(a => a.CreatedAt) : query.OrderBy(a => a.CreatedAt)
             };
 
             return await query

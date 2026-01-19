@@ -15,8 +15,8 @@ public class RoleController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll(string? search = null)
+    public async Task<IActionResult> GetAll(string? search = null, string? sortBy = null, bool sortDesc = true)
     {
-        return Ok(await _service.GetAllAsync(search));
+        return Ok(await _service.GetAllAsync(search, sortBy, sortDesc));
     }
 }

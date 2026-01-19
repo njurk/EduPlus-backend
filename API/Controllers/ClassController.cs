@@ -17,9 +17,9 @@ public class ClassController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll(int? schoolYearId, bool includeInactive = true)
+    public async Task<IActionResult> GetAll(int? schoolYearId, bool includeInactive = true, string? sortBy = null, bool sortDesc = false, int? level = null)
     {
-        return Ok(await _service.GetAllAsync(schoolYearId, includeInactive));
+        return Ok(await _service.GetAllAsync(schoolYearId, includeInactive, sortBy, sortDesc, level));
     }
 
     [HttpGet("{id}/details")]

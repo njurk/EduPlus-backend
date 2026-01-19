@@ -10,7 +10,7 @@ namespace BusinessLogic.Services
 {
     public interface IRoleService
     {
-        Task<IEnumerable<object>> GetAllAsync(string? search);
+        Task<IEnumerable<object>> GetAllAsync(string? search, string? sortBy = null, bool sortDesc = true);
     }
 
     public class RoleService : IRoleService
@@ -22,7 +22,7 @@ namespace BusinessLogic.Services
             _context = context;
         }
 
-        public async Task<IEnumerable<object>> GetAllAsync(string? search)
+        public async Task<IEnumerable<object>> GetAllAsync(string? search, string? sortBy = null, bool sortDesc = true)
         {
             var query = _context.Roles.AsNoTracking().AsQueryable();
 
@@ -32,8 +32,16 @@ namespace BusinessLogic.Services
                 query = query.Where(x => x.Name.ToLower().Contains(s));
             }
 
+            query = sortBy?.ToLower() switch
+            {
+                "name" => sortDesc ? query.OrderByDescending(x => x.Name) : query.OrderBy(x => x.Name),
+                "level" => sortDesc ? query.OrderByDescending(x => x.Level) : query.OrderBy(x => x.Level),
+                "created" => sortDesc ? query.OrderByDescending(x => x.CreatedAt) : query.OrderBy(x => x.CreatedAt),
+                "updated" => sortDesc ? query.OrderByDescending(x => x.UpdatedAt) : query.OrderBy(x => x.UpdatedAt),
+                _ => query.OrderBy(x => x.Id)
+            };
+
             return await query
-                .OrderBy(x => x.Id)
                 .Select(x => new { 
                     x.Id, 
                     x.Name, 
@@ -49,3 +57,4 @@ namespace BusinessLogic.Services
         }
     }
 }
+

@@ -60,7 +60,7 @@ namespace BusinessLogic.Services
                 "created" => query.SortDesc ? dbQuery.OrderByDescending(u => u.CreatedAt) : dbQuery.OrderBy(u => u.CreatedAt),
                 "updated" => query.SortDesc ? dbQuery.OrderByDescending(u => u.UpdatedAt) : dbQuery.OrderBy(u => u.UpdatedAt),
                 "role" => query.SortDesc ? dbQuery.OrderByDescending(u => u.RoleNames) : dbQuery.OrderBy(u => u.RoleNames),
-                "lastname" => query.SortDesc
+                "name" or "lastname" => query.SortDesc
                     ? dbQuery.OrderByDescending(u => u.LastName).ThenByDescending(u => u.FirstName)
                     : dbQuery.OrderBy(u => u.LastName).ThenBy(u => u.FirstName),
                 _ => query.SortDesc ? dbQuery.OrderByDescending(u => u.UpdatedAt) : dbQuery.OrderBy(u => u.UpdatedAt)

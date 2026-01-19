@@ -21,9 +21,9 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll(int pageNumber = 1, int pageSize = 10, bool? showClosed = null, string? search = null, string? sortBy = "createdAt", bool sortDesc = true)
+        public async Task<IActionResult> GetAll(int pageNumber = 1, int pageSize = 10, bool? showClosed = null, string? search = null, string? sortBy = "createdAt", bool sortDesc = true, string? userFullName = null)
         {
-            var result = await _service.GetAllAsync(pageNumber, pageSize, showClosed, search, sortBy, sortDesc);
+            var result = await _service.GetAllAsync(pageNumber, pageSize, showClosed, search, sortBy, sortDesc, userFullName);
             return Ok(result);
         }
 

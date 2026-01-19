@@ -12,5 +12,6 @@
         public string? AdminResponse { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
+        public string? ModifiedByName { get; set; }
     }
 }

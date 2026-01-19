@@ -11,7 +11,7 @@ namespace BusinessLogic.Services
 {
     public interface IClassService
     {
-        Task<IEnumerable<object>> GetAllAsync(int? schoolYearId, bool includeInactive);
+        Task<IEnumerable<object>> GetAllAsync(int? schoolYearId, bool includeInactive, string? sortBy = null, bool sortDesc = false, int? level = null);
         Task<object?> GetDetailsAsync(int id, string sortBy, bool sortDesc, string studentSearch, string subjectSearch, string subjectSortBy, bool subjectSortDesc);
         Task<IEnumerable<object>> GetCandidatesAsync(int classId, string search);
         Task AddStudentsBulkAsync(int classId, List<int> studentIds);
@@ -32,7 +32,7 @@ namespace BusinessLogic.Services
             _context = context;
         }
 
-        public async Task<IEnumerable<object>> GetAllAsync(int? schoolYearId, bool includeInactive)
+        public async Task<IEnumerable<object>> GetAllAsync(int? schoolYearId, bool includeInactive, string? sortBy = null, bool sortDesc = false, int? level = null)
         {
             var query = _context.Classes.AsNoTracking();
 
@@ -42,7 +42,10 @@ namespace BusinessLogic.Services
             if (!includeInactive)
                 query = query.Where(c => c.IsActive);
 
-            return await query
+            if (level.HasValue)
+                query = query.Where(c => c.Level == level.Value);
+
+            var projected = query
                 .Include(c => c.ClassStudents)
                 .Select(c => new
                 {
@@ -54,9 +57,26 @@ namespace BusinessLogic.Services
                     c.CreatedAt,
                     c.UpdatedAt,
                     StudentCount = c.ClassStudents.Count
-                })
-                .OrderBy(c => c.Level).ThenBy(c => c.Letter)
-                .ToListAsync();
+                });
+
+            projected = sortBy?.ToLower() switch
+            {
+                "class" => sortDesc 
+                    ? projected.OrderByDescending(c => c.Level).ThenByDescending(c => c.Letter) 
+                    : projected.OrderBy(c => c.Level).ThenBy(c => c.Letter),
+                "studentcount" => sortDesc 
+                    ? projected.OrderByDescending(c => c.StudentCount) 
+                    : projected.OrderBy(c => c.StudentCount),
+                "created" => sortDesc 
+                    ? projected.OrderByDescending(c => c.CreatedAt) 
+                    : projected.OrderBy(c => c.CreatedAt),
+                "updated" => sortDesc 
+                    ? projected.OrderByDescending(c => c.UpdatedAt) 
+                    : projected.OrderBy(c => c.UpdatedAt),
+                _ => projected.OrderBy(c => c.Level).ThenBy(c => c.Letter)
+            };
+
+            return await projected.ToListAsync();
         }
 
         public async Task<object?> GetDetailsAsync(int id, string sortBy, bool sortDesc, string studentSearch, string subjectSearch, string subjectSortBy, bool subjectSortDesc)
@@ -106,12 +126,6 @@ namespace BusinessLogic.Services
                 .Include(cs => cs.Subject)
                 .AsQueryable();
 
-            if (!string.IsNullOrWhiteSpace(subjectSearch))
-            {
-                var s = subjectSearch.Trim().ToLower();
-                subjectsQuery = subjectsQuery.Where(cs => cs.Subject.Name.ToLower().Contains(s));
-            }
-
             var rawSubjects = await subjectsQuery.Select(cs => new
             {
                 cs.Id,
@@ -128,6 +142,15 @@ namespace BusinessLogic.Services
                     .Select(t => new { t.TeacherId, Name = t.Teacher.LastName + " " + t.Teacher.FirstName })
                     .FirstOrDefault()
             }).ToListAsync();
+
+            if (!string.IsNullOrWhiteSpace(subjectSearch))
+            {
+                var s = subjectSearch.Trim().ToLower();
+                rawSubjects = rawSubjects.Where(x => 
+                    x.SubjectName.ToLower().Contains(s) || 
+                    (x.TeacherInfo?.Name?.ToLower().Contains(s) ?? false)
+                ).ToList();
+            }
 
             var subjects = (subjectSortBy?.ToLower() switch
             {
