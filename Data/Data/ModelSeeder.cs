@@ -20,10 +20,7 @@ namespace Data.Data
             SeedGradeCategories(modelBuilder);
             SeedLessonStatuses(modelBuilder);
             SeedLessonHours(modelBuilder);
-            SeedClassrooms(modelBuilder);
-            SeedSubjects(modelBuilder);
             SeedSemesters(modelBuilder);
-            SeedClasses(modelBuilder);
         }
 
         private static void SeedTargets(ModelBuilder modelBuilder)
@@ -272,57 +269,6 @@ namespace Data.Data
             );
         }
 
-        private static void SeedClassrooms(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Classroom>().HasData(
-                new Classroom { Id = 1, Name = "101", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
-                new Classroom { Id = 2, Name = "102", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
-                new Classroom { Id = 3, Name = "103", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
-                new Classroom { Id = 4, Name = "104", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
-                new Classroom { Id = 5, Name = "105", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
-                new Classroom { Id = 6, Name = "201", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
-                new Classroom { Id = 7, Name = "202", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
-                new Classroom { Id = 8, Name = "203", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
-                new Classroom { Id = 9, Name = "204", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
-                new Classroom { Id = 10, Name = "205", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
-                new Classroom { Id = 11, Name = "301", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
-                new Classroom { Id = 12, Name = "302", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
-                new Classroom { Id = 13, Name = "303", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
-                new Classroom { Id = 14, Name = "304", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
-                new Classroom { Id = 15, Name = "305", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
-                new Classroom { Id = 16, Name = "gimnastyczna 1", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
-                new Classroom { Id = 17, Name = "gimnastyczna 2", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
-                new Classroom { Id = 18, Name = "aula", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime }
-            );
-        }
-
-        private static void SeedSubjects(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Subject>().HasData(
-                new Subject { Id = 1, Name = "Matematyka", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
-                new Subject { Id = 2, Name = "Język polski", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
-                new Subject { Id = 3, Name = "Język angielski", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
-                new Subject { Id = 4, Name = "Język niemiecki", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
-                new Subject { Id = 5, Name = "Informatyka", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
-                new Subject { Id = 6, Name = "Wychowanie fizyczne", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
-                new Subject { Id = 7, Name = "Historia", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
-                new Subject { Id = 8, Name = "Wiedza o społeczeństwie", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
-                new Subject { Id = 9, Name = "Biologia", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
-                new Subject { Id = 10, Name = "Chemia", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
-                new Subject { Id = 11, Name = "Fizyka", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
-                new Subject { Id = 12, Name = "Geografia", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
-                new Subject { Id = 13, Name = "Przyroda", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
-                new Subject { Id = 14, Name = "Plastyka", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
-                new Subject { Id = 15, Name = "Muzyka", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
-                new Subject { Id = 16, Name = "Zajęcia artystyczne", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
-                new Subject { Id = 17, Name = "Religia", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
-                new Subject { Id = 18, Name = "Etyka", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
-                new Subject { Id = 19, Name = "Wychowanie do życia w rodzinie", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
-                new Subject { Id = 20, Name = "Technika", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
-                new Subject { Id = 21, Name = "Edukacja dla bezpieczeństwa", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime }
-            );
-        }
-
         private static void SeedSemesters(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Semester>().HasData(
@@ -330,14 +276,6 @@ namespace Data.Data
                 new Semester { Id = 2, SchoolYearId = 1, Name = "Semestr 2", StartDate = new DateOnly(2026, 02, 01), EndDate = new DateOnly(2026, 06, 30), IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
                 new Semester { Id = 3, SchoolYearId = 2, Name = "Semestr 1", StartDate = new DateOnly(2026, 09, 01), EndDate = new DateOnly(2027, 01, 31), IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
                 new Semester { Id = 4, SchoolYearId = 2, Name = "Semestr 2", StartDate = new DateOnly(2027, 02, 01), EndDate = new DateOnly(2027, 06, 30), IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime }
-            );
-        }
-
-        private static void SeedClasses(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Class>().HasData(
-                new Class { Id = 1, Level = 1, Letter = "A", SchoolYearId = 1, IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
-                new Class { Id = 2, Level = 8, Letter = "C", SchoolYearId = 1, IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime }
             );
         }
     }

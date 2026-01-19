@@ -8,6 +8,7 @@ namespace BusinessLogic.Services
     public interface ITicketService
     {
         Task<PaginatedResponse<TicketDto>> GetAllAsync(int pageNumber, int pageSize, bool? showClosed, string? search, string? sortBy, bool sortDesc, string? userFullName = null);
+        Task<List<string>> GetSubmittersAsync();
         Task<TicketDto?> GetByIdAsync(int id);
         Task<Ticket> CreateAsync(int userId, CreateTicketDto dto, IEmailService emailService);
         Task<bool> CloseAsync(int id, CloseTicketDto dto, IEmailService emailService);
@@ -86,6 +87,18 @@ namespace BusinessLogic.Services
                 PageSize = pageSize,
                 Data = data
             };
+        }
+
+        public async Task<List<string>> GetSubmittersAsync()
+        {
+            return await _context.Tickets
+                .AsNoTracking()
+                .Include(t => t.User)
+                .Where(t => t.User != null)
+                .Select(t => t.User.LastName + " " + t.User.FirstName)
+                .Distinct()
+                .OrderBy(name => name)
+                .ToListAsync();
         }
 
         public async Task<TicketDto?> GetByIdAsync(int id)

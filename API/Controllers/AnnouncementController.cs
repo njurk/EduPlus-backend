@@ -28,6 +28,13 @@ public class AnnouncementController : ControllerBase
         return Ok(items);
     }
 
+    [HttpGet("authors")]
+    public async Task<IActionResult> GetAuthors()
+    {
+        var result = await _service.GetAuthorsAsync();
+        return Ok(result);
+    }
+
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {

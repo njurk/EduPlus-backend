@@ -27,6 +27,13 @@ namespace API.Controllers
             return Ok(result);
         }
 
+        [HttpGet("submitters")]
+        public async Task<IActionResult> GetSubmitters()
+        {
+            var result = await _service.GetSubmittersAsync();
+            return Ok(result);
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {

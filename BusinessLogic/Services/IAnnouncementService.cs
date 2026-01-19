@@ -12,6 +12,7 @@ namespace BusinessLogic.Services
     public interface IAnnouncementService
     {
         Task<IEnumerable<object>> GetAllAsync(string? search = null, string? sortBy = null, bool sortDesc = true, bool showInactive = false, string? authorName = null);
+        Task<List<string>> GetAuthorsAsync();
         Task<Announcement?> GetByIdAsync(int id);
         Task<Announcement> CreateAsync(Announcement entity);
         Task<Announcement?> UpdateAsync(int id, string title, string description);
@@ -67,6 +68,18 @@ namespace BusinessLogic.Services
                     a.UpdatedAt,
                     ModifiedByName = _context.Users.Where(u => u.Id == a.ModifiedByUserId).Select(u => u.FirstName + " " + u.LastName).FirstOrDefault() ?? "System"
                 })
+                .ToListAsync();
+        }
+
+        public async Task<List<string>> GetAuthorsAsync()
+        {
+            return await _context.Announcements
+                .AsNoTracking()
+                .Include(a => a.Author)
+                .Where(a => a.Author != null)
+                .Select(a => a.Author.FirstName + " " + a.Author.LastName)
+                .Distinct()
+                .OrderBy(name => name)
                 .ToListAsync();
         }
 

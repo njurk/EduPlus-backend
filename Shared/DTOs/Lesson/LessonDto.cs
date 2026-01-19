@@ -14,6 +14,7 @@ namespace Shared.DTOs
         public int? ClassroomId { get; set; }
         public string ClassroomName { get; set; } = string.Empty;
         public DateTime Date { get; set; }
+        public int DayOfWeek { get; set; }
         public int OrderNumber { get; set; }
         public string StartTime { get; set; } = string.Empty;
         public string EndTime { get; set; } = string.Empty;

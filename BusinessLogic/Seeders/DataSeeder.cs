@@ -28,6 +28,21 @@
         {
             if (!_context.Database.CanConnect()) return;
 
+            if (!_context.Classrooms.Any())
+            {
+                SeedClassrooms();
+            }
+
+            if (!_context.Subjects.Any())
+            {
+                SeedSubjects();
+            }
+
+            if (!_context.Classes.Any())
+            {
+                SeedBaseClasses();
+            }
+
             if (!_context.Users.Any())
             {
                 SeedUsers(passwordHashService);
@@ -695,6 +710,80 @@
             announcements = announcements.OrderBy(a => a.CreatedAt).ToList();
 
             _context.Announcements.AddRange(announcements);
+            _context.SaveChanges();
+        }
+
+        private void SeedClassrooms()
+        {
+            var classrooms = new List<Classroom>
+            {
+                new Classroom { Name = "101", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
+                new Classroom { Name = "102", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
+                new Classroom { Name = "103", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
+                new Classroom { Name = "104", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
+                new Classroom { Name = "105", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
+                new Classroom { Name = "201", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
+                new Classroom { Name = "202", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
+                new Classroom { Name = "203", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
+                new Classroom { Name = "204", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
+                new Classroom { Name = "205", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
+                new Classroom { Name = "301", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
+                new Classroom { Name = "302", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
+                new Classroom { Name = "303", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
+                new Classroom { Name = "304", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
+                new Classroom { Name = "305", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
+                new Classroom { Name = "gimnastyczna 1", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
+                new Classroom { Name = "gimnastyczna 2", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
+                new Classroom { Name = "aula", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now }
+            };
+
+            _context.Classrooms.AddRange(classrooms);
+            _context.SaveChanges();
+        }
+
+        private void SeedSubjects()
+        {
+            var subjects = new List<Subject>
+            {
+                new Subject { Name = "Matematyka", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
+                new Subject { Name = "Język polski", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
+                new Subject { Name = "Język angielski", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
+                new Subject { Name = "Język niemiecki", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
+                new Subject { Name = "Informatyka", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
+                new Subject { Name = "Wychowanie fizyczne", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
+                new Subject { Name = "Historia", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
+                new Subject { Name = "Wiedza o społeczeństwie", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
+                new Subject { Name = "Biologia", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
+                new Subject { Name = "Chemia", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
+                new Subject { Name = "Fizyka", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
+                new Subject { Name = "Geografia", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
+                new Subject { Name = "Przyroda", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
+                new Subject { Name = "Plastyka", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
+                new Subject { Name = "Muzyka", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
+                new Subject { Name = "Zajęcia artystyczne", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
+                new Subject { Name = "Religia", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
+                new Subject { Name = "Etyka", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
+                new Subject { Name = "Wychowanie do życia w rodzinie", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
+                new Subject { Name = "Technika", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
+                new Subject { Name = "Edukacja dla bezpieczeństwa", IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now }
+            };
+
+            _context.Subjects.AddRange(subjects);
+            _context.SaveChanges();
+        }
+
+        private void SeedBaseClasses()
+        {
+            var schoolYear = _context.SchoolYears.FirstOrDefault(sy => sy.IsActive);
+            if (schoolYear == null) return;
+
+            var classes = new List<Class>
+            {
+                new Class { Level = 1, Letter = "A", SchoolYearId = schoolYear.Id, IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
+                new Class { Level = 8, Letter = "C", SchoolYearId = schoolYear.Id, IsActive = true, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now }
+            };
+
+            _context.Classes.AddRange(classes);
             _context.SaveChanges();
         }
     }

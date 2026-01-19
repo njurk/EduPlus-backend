@@ -19,12 +19,9 @@ namespace API.Controllers
         }
 
         [HttpGet("{classId}")]
-        public async Task<IActionResult> GetSchedule(int classId, [FromQuery] DateTime dateFrom, [FromQuery] DateTime dateTo)
+        public async Task<IActionResult> GetSchedule(int classId, [FromQuery] int? semesterId = null)
         {
-            if (dateFrom == default) dateFrom = DateTime.Today;
-            if (dateTo == default) dateTo = dateFrom.AddDays(7);
-
-            var schedule = await _service.GetScheduleForClassAsync(classId, dateFrom, dateTo);
+            var schedule = await _service.GetScheduleForClassAsync(classId, semesterId);
             return Ok(schedule);
         }
     }

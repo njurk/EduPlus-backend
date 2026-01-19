@@ -10,8 +10,7 @@ namespace BusinessLogic.Services
 {
     public interface IWeeklyScheduleService
     {
-        Task<List<LessonDto>> GetScheduleForClassAsync(int classId, DateTime dateFrom, DateTime dateTo);
-        // Task<List<LessonDto>> GetScheduleForTeacherAsync(int teacherId, DateTime dateFrom, DateTime dateTo);
+        Task<List<LessonDto>> GetScheduleForClassAsync(int classId, int? semesterId = null);
     }
 
     public class WeeklyScheduleService : IWeeklyScheduleService
@@ -23,33 +22,36 @@ namespace BusinessLogic.Services
             _context = context;
         }
 
-        public async Task<List<LessonDto>> GetScheduleForClassAsync(int classId, DateTime dateFrom, DateTime dateTo)
+        public async Task<List<LessonDto>> GetScheduleForClassAsync(int classId, int? semesterId = null)
         {
-            var lessons = await _context.Lessons
-                .Include(l => l.Subject)
-                .Include(l => l.Class)
-                .Include(l => l.Teacher)
-                .Include(l => l.Classroom)
-                .Include(l => l.LessonHour)
-                .Where(l => l.ClassId == classId && l.Date >= dateFrom && l.Date <= dateTo && l.IsActive)
-                .ToListAsync();
+            var query = _context.WeeklySchedules
+                .Include(ws => ws.Subject)
+                .Include(ws => ws.Class)
+                .Include(ws => ws.Teacher)
+                .Include(ws => ws.Classroom)
+                .Include(ws => ws.LessonHour)
+                .Where(ws => ws.ClassId == classId && ws.IsActive);
 
-            var result = lessons.Select(l => new LessonDto
+            if (semesterId.HasValue)
+                query = query.Where(ws => ws.SemesterId == semesterId.Value);
+
+            var scheduleEntries = await query.ToListAsync();
+
+            var result = scheduleEntries.Select(ws => new LessonDto
             {
-                Id = l.Id,
-                SubjectId = l.SubjectId,
-                SubjectName = l.Subject?.Name ?? "Nieznany",
-                ClassId = l.ClassId,
-                ClassName = l.Class != null ? $"{l.Class.Level}{l.Class.Letter}" : "",
-                TeacherId = l.TeacherId,
-                TeacherName = l.Teacher != null ? $"{l.Teacher.FirstName} {l.Teacher.LastName}" : "",
-                ClassroomId = l.ClassroomId,
-                ClassroomName = l.Classroom?.Name ?? "",
-                Date = l.Date,
-                OrderNumber = l.LessonHour?.OrderNumber ?? 0,
-                StartTime = l.LessonHour?.StartTime.ToString(@"hh\:mm") ?? "",
-                EndTime = l.LessonHour?.EndTime.ToString(@"hh\:mm") ?? "",
-                Topic = l.Topic
+                Id = ws.Id,
+                SubjectId = ws.SubjectId,
+                SubjectName = ws.Subject?.Name ?? "-",
+                ClassId = ws.ClassId,
+                ClassName = ws.Class != null ? $"{ws.Class.Level}{ws.Class.Letter}" : "",
+                TeacherId = ws.TeacherId,
+                TeacherName = ws.Teacher != null ? $"{ws.Teacher.FirstName} {ws.Teacher.LastName}" : "",
+                ClassroomId = ws.ClassroomId,
+                ClassroomName = ws.Classroom?.Name ?? "",
+                DayOfWeek = ws.DayOfWeek,
+                OrderNumber = ws.LessonHour?.OrderNumber ?? 0,
+                StartTime = ws.LessonHour?.StartTime.ToString(@"hh\:mm") ?? "",
+                EndTime = ws.LessonHour?.EndTime.ToString(@"hh\:mm") ?? ""
             }).ToList();
 
             return result;

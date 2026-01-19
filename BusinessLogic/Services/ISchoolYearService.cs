@@ -63,18 +63,20 @@ namespace BusinessLogic.Services
 
         public async Task<IEnumerable<object>> GetSemestersAsync(int id)
         {
-            return await _context.Semesters.AsNoTracking()
+            var semesters = await _context.Semesters.AsNoTracking()
                 .Where(s => s.SchoolYearId == id)
                 .OrderBy(s => s.StartDate)
-                .Select(s => new
-                {
-                    s.Id,
-                    s.Name,
-                    s.StartDate,
-                    s.EndDate,
-                    s.IsActive
-                })
                 .ToListAsync();
+
+            return semesters.Select((s, index) => new
+            {
+                s.Id,
+                s.Name,
+                Order = index + 1,
+                s.StartDate,
+                s.EndDate,
+                s.IsActive
+            });
         }
 
         public async Task<SchoolYear> CreateAsync(SchoolYear entity)
