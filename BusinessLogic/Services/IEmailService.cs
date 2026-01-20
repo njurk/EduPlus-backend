@@ -8,8 +8,8 @@ namespace BusinessLogic.Services
     public interface IEmailService
     {
         Task SendPasswordResetEmailAsync(string toEmail, string resetLink);
-        Task SendTicketCreatedEmailAsync(string toEmail, int ticketNumber, string subject);
-        Task SendTicketClosedEmailAsync(string toEmail, int ticketNumber, string subject, string adminResponse);
+        Task SendTicketCreatedEmailAsync(string toEmail, int ticketNumber, string reason, string content);
+        Task SendTicketClosedEmailAsync(string toEmail, int ticketNumber, string reason, string content, string adminResponse, string resolvedBy);
     }
 
     public class EmailService : IEmailService
@@ -43,7 +43,7 @@ namespace BusinessLogic.Services
             await SendEmailAsync(message);
         }
 
-        public async Task SendTicketCreatedEmailAsync(string toEmail, int ticketNumber, string subject)
+        public async Task SendTicketCreatedEmailAsync(string toEmail, int ticketNumber, string reason, string content)
         {
             var message = new MimeMessage();
             message.From.Add(new MailboxAddress("EduPlus", _configuration["Email:From"]));
@@ -55,7 +55,9 @@ namespace BusinessLogic.Services
                 Text = $@"
                     <h2>Twoje zgłoszenie zostało przyjęte</h2>
                     <p><strong>Numer zgłoszenia:</strong> #{ticketNumber}</p>
-                    <p><strong>Temat:</strong> {subject}</p>
+                    <p><strong>Powód:</strong> {reason}</p>
+                    <p><strong>Treść zgłoszenia:</strong></p>
+                    <div style=""background-color: #f5f5f5; padding: 12px; border-radius: 4px; margin: 8px 0;"">{content}</div>
                     <br/>
                     <p>Dziękujemy za przesłanie zgłoszenia. Nasz zespół zajmie się nim najszybciej jak to możliwe.</p>
                     <br/>
@@ -66,7 +68,7 @@ namespace BusinessLogic.Services
             await SendEmailAsync(message);
         }
 
-        public async Task SendTicketClosedEmailAsync(string toEmail, int ticketNumber, string subject, string adminResponse)
+        public async Task SendTicketClosedEmailAsync(string toEmail, int ticketNumber, string reason, string content, string adminResponse, string resolvedBy)
         {
             var message = new MimeMessage();
             message.From.Add(new MailboxAddress("EduPlus", _configuration["Email:From"]));
@@ -78,10 +80,12 @@ namespace BusinessLogic.Services
                 Text = $@"
                     <h2>Twoje zgłoszenie zostało rozpatrzone</h2>
                     <p><strong>Numer zgłoszenia:</strong> #{ticketNumber}</p>
-                    <p><strong>Temat:</strong> {subject}</p>
-                    <br/>
-                    <p><strong>Odpowiedź administratora:</strong></p>
-                    <p>{adminResponse}</p>
+                    <p><strong>Powód:</strong> {reason}</p>
+                    <p><strong>Treść zgłoszenia:</strong></p>
+                    <div style=""background-color: #f5f5f5; padding: 12px; border-radius: 4px; margin: 8px 0;"">{content}</div>
+                    <p><strong>Rozpatrzone przez:</strong> {resolvedBy}</p>
+                    <p><strong>Odpowiedź:</strong></p>
+                    <div style=""background-color: #e8f5e9; padding: 12px; border-radius: 4px; margin: 8px 0;"">{adminResponse}</div>
                     <br/>
                     <p>Pozdrawiamy,<br/>Zespół EduPlus</p>
                 "

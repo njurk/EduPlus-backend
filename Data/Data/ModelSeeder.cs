@@ -21,6 +21,7 @@ namespace Data.Data
             SeedLessonStatuses(modelBuilder);
             SeedLessonHours(modelBuilder);
             SeedSemesters(modelBuilder);
+            SeedTicketReasons(modelBuilder);
         }
 
         private static void SeedTargets(ModelBuilder modelBuilder)
@@ -106,15 +107,13 @@ namespace Data.Data
                 new PageContent { Id = 46, Key = "columns.modifiedBy", Value = "Edytowane przez", PageId = 4, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
                 new PageContent { Id = 47, Key = "columns.actions", Value = "Akcje", PageId = 4, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
                 new PageContent { Id = 48, Key = "title", Value = "Zgłoszenia", PageId = 5, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
-                new PageContent { Id = 124, Key = "columns.submitter", Value = "Użytkownik", PageId = 5, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
-                new PageContent { Id = 125, Key = "columns.subject", Value = "Temat", PageId = 5, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
-                new PageContent { Id = 126, Key = "columns.status", Value = "Zamknięte", PageId = 5, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
+                new PageContent { Id = 124, Key = "columns.email", Value = "Email", PageId = 5, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
+                new PageContent { Id = 125, Key = "columns.reason", Value = "Powód", PageId = 5, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
+                new PageContent { Id = 126, Key = "columns.status", Value = "Status", PageId = 5, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
                 new PageContent { Id = 127, Key = "columns.closedAt", Value = "Data zamknięcia", PageId = 5, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
                 new PageContent { Id = 128, Key = "columns.createdAt", Value = "Utworzono", PageId = 5, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
-                new PageContent { Id = 129, Key = "filter.showClosed", Value = "Pokaż zamknięte", PageId = 5, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
-                new PageContent { Id = 130, Key = "sort.createdAt", Value = "Data utworzenia", PageId = 5, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
-                new PageContent { Id = 131, Key = "sort.subject", Value = "Temat", PageId = 5, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
-                new PageContent { Id = 132, Key = "sort.user", Value = "Użytkownik", PageId = 5, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
+                new PageContent { Id = 130, Key = "columns.modifiedBy", Value = "Zamknięte przez", PageId = 5, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
+                new PageContent { Id = 131, Key = "columns.actions", Value = "Akcje", PageId = 5, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
                 new PageContent { Id = 49, Key = "title", Value = "Usprawiedliwienia", PageId = 6, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
                 new PageContent { Id = 50, Key = "title", Value = "Lekcje", PageId = 7, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
                 new PageContent { Id = 51, Key = "title", Value = "Plan lekcji", PageId = 8, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
@@ -276,6 +275,16 @@ namespace Data.Data
                 new Semester { Id = 2, SchoolYearId = 1, Name = "Semestr 2", StartDate = new DateOnly(2026, 02, 01), EndDate = new DateOnly(2026, 06, 30), IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
                 new Semester { Id = 3, SchoolYearId = 2, Name = "Semestr 1", StartDate = new DateOnly(2026, 09, 01), EndDate = new DateOnly(2027, 01, 31), IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
                 new Semester { Id = 4, SchoolYearId = 2, Name = "Semestr 2", StartDate = new DateOnly(2027, 02, 01), EndDate = new DateOnly(2027, 06, 30), IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime }
+            );
+        }
+
+        private static void SeedTicketReasons(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<TicketReason>().HasData(
+                new TicketReason { Id = 1, Name = "Problem z logowaniem", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
+                new TicketReason { Id = 2, Name = "Zmiana danych osobowych", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
+                new TicketReason { Id = 3, Name = "Błąd w systemie", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
+                new TicketReason { Id = 4, Name = "Inne", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime }
             );
         }
     }

@@ -72,6 +72,11 @@
             {
                 SeedAnnouncements();
             }
+
+            if (!_context.Tickets.Any())
+            {
+                SeedTickets();
+            }
         }
 
         private List<(int SubjectId, string FirstName, string LastName, string Email, string Street, string City, string PostalCode)> GetTeachersData()
@@ -652,6 +657,48 @@
 
             _context.Attendances.AddRange(attendances);
             _context.Grades.AddRange(grades);
+            _context.SaveChanges();
+        }
+
+        private void SeedTickets()
+        {
+            var reasons = _context.TicketReasons.ToList();
+            if (!reasons.Any()) return;
+
+            var tickets = new List<Ticket>
+            {
+                new Ticket
+                {
+                    Email = "test.user1@example.com",
+                    ReasonId = reasons.First(r => r.Name == "Problem z logowaniem").Id,
+                    Content = "Nie mogę się zalogować do systemu. Przy próbie logowania pojawia się komunikat o błędnym haśle.",
+                    IsClosed = true,
+                    ClosedAt = DateTime.Now.AddDays(-3),
+                    AdminResponse = "Problem został rozwiązany. Proszę wyczyścić pamięć podręczną przeglądarki i spróbować ponownie.",
+                    CreatedAt = DateTime.Now.AddDays(-5),
+                    UpdatedAt = DateTime.Now.AddDays(-3)
+                },
+                new Ticket
+                {
+                    Email = "rodzic.ucznia@example.com",
+                    ReasonId = reasons.First(r => r.Name == "Błąd w systemie").Id,
+                    Content = "W dzienniku widnieje błędna ocena z matematyki. Proszę o weryfikację.",
+                    IsClosed = false,
+                    CreatedAt = DateTime.Now.AddDays(-2),
+                    UpdatedAt = DateTime.Now.AddDays(-2)
+                },
+                new Ticket
+                {
+                    Email = teacherMail,
+                    ReasonId = reasons.First(r => r.Name == "Inne").Id,
+                    Content = "Prośba o nadanie uprawnień do modułu zastępstw.",
+                    IsClosed = false,
+                    CreatedAt = DateTime.Now.AddDays(-1),
+                    UpdatedAt = DateTime.Now.AddDays(-1)
+                }
+            };
+
+            _context.Tickets.AddRange(tickets);
             _context.SaveChanges();
         }
 

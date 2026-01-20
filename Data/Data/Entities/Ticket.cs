@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Data.Data.Entities
 {
@@ -6,9 +7,11 @@ namespace Data.Data.Entities
     {
         [Key]
         public int Id { get; set; }
-        public int UserId { get; set; }
-        public virtual User User { get; set; }
-        public required string Subject { get; set; }
+        public required string Email { get; set; }
+        public int ReasonId { get; set; }
+        [ForeignKey(nameof(ReasonId))]
+        public virtual TicketReason? Reason { get; set; }
+        public required string Content { get; set; }
         public bool IsClosed { get; set; } = false;
         public DateTime? ClosedAt { get; set; }
         public string? AdminResponse { get; set; }
@@ -17,3 +20,4 @@ namespace Data.Data.Entities
         public int? ModifiedByUserId { get; set; }
     }
 }
+

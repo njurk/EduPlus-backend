@@ -695,19 +695,19 @@ namespace Data.Migrations
                         {
                             Id = 124,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "columns.submitter",
+                            Key = "columns.email",
                             PageId = 5,
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Użytkownik"
+                            Value = "Email"
                         },
                         new
                         {
                             Id = 125,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "columns.subject",
+                            Key = "columns.reason",
                             PageId = 5,
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Temat"
+                            Value = "Powód"
                         },
                         new
                         {
@@ -740,37 +740,37 @@ namespace Data.Migrations
                         {
                             Id = 129,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "filter.showClosed",
+                            Key = "columns.updatedAt",
                             PageId = 5,
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Pokaż zamknięte"
+                            Value = "Edytowano"
                         },
                         new
                         {
                             Id = 130,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "sort.createdAt",
+                            Key = "columns.modifiedBy",
                             PageId = 5,
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Data utworzenia"
+                            Value = "Edytowane przez"
                         },
                         new
                         {
                             Id = 131,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "sort.subject",
+                            Key = "columns.actions",
                             PageId = 5,
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Temat"
+                            Value = "Akcje"
                         },
                         new
                         {
                             Id = 132,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "sort.user",
+                            Key = "filter.showClosed",
                             PageId = 5,
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Użytkownik"
+                            Value = "Pokaż zamknięte"
                         },
                         new
                         {
@@ -2852,10 +2852,18 @@ namespace Data.Migrations
                     b.Property<DateTime?>("ClosedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("IsClosed")
                         .HasColumnType("bit");
@@ -2863,7 +2871,40 @@ namespace Data.Migrations
                     b.Property<int?>("ModifiedByUserId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Subject")
+                    b.Property<int>("ReasonId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Email");
+
+                    b.HasIndex("ReasonId");
+
+                    b.ToTable("Tickets");
+                });
+
+            modelBuilder.Entity("Data.Data.Entities.TicketReason", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -2872,14 +2913,43 @@ namespace Data.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GETUTCDATE()");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.ToTable("TicketReasons");
 
-                    b.ToTable("Tickets");
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            Name = "Problem z logowaniem",
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            Name = "Zmiana danych osobowych",
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            Name = "Błąd w systemie",
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            Name = "Inne",
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
+                        });
                 });
 
             modelBuilder.Entity("Data.Data.Entities.User", b =>
@@ -3510,13 +3580,13 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Data.Data.Entities.Ticket", b =>
                 {
-                    b.HasOne("Data.Data.Entities.User", "User")
+                    b.HasOne("Data.Data.Entities.TicketReason", "Reason")
                         .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("ReasonId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.Navigation("Reason");
                 });
 
             modelBuilder.Entity("Data.Data.Entities.UserRole", b =>

@@ -7,10 +7,10 @@ namespace BusinessLogic.Services
 {
     public interface ITicketService
     {
-        Task<PaginatedResponse<TicketDto>> GetAllAsync(int pageNumber, int pageSize, bool? showClosed, string? search, string? sortBy, bool sortDesc, string? userFullName = null);
+        Task<PaginatedResponse<TicketDto>> GetAllAsync(int pageNumber, int pageSize, bool? showClosed, string? search, string? sortBy, bool sortDesc, int? reasonId = null);
         Task<List<string>> GetSubmittersAsync();
         Task<TicketDto?> GetByIdAsync(int id);
-        Task<Ticket> CreateAsync(int userId, CreateTicketDto dto, IEmailService emailService);
+        Task<Ticket> CreateAsync(CreateTicketDto dto, IEmailService emailService);
         Task<bool> CloseAsync(int id, CloseTicketDto dto, IEmailService emailService);
     }
 
@@ -23,34 +23,29 @@ namespace BusinessLogic.Services
             _context = context;
         }
 
-        public async Task<PaginatedResponse<TicketDto>> GetAllAsync(int pageNumber, int pageSize, bool? showClosed, string? search, string? sortBy, bool sortDesc, string? userFullName = null)
+        public async Task<PaginatedResponse<TicketDto>> GetAllAsync(int pageNumber, int pageSize, bool? showClosed, string? search, string? sortBy, bool sortDesc, int? reasonId = null)
         {
-            var query = _context.Tickets.AsNoTracking().Include(t => t.User).AsQueryable();
+            var query = _context.Tickets.AsNoTracking().Include(t => t.Reason).AsQueryable();
 
             if (showClosed.HasValue)
                 query = query.Where(t => t.IsClosed == showClosed.Value);
+
+            if (reasonId.HasValue)
+                query = query.Where(t => t.ReasonId == reasonId.Value);
 
             if (!string.IsNullOrWhiteSpace(search))
             {
                 var s = search.Trim().ToLower();
                 query = query.Where(t =>
-                    t.Subject.ToLower().Contains(s) ||
-                    t.User.FirstName.ToLower().Contains(s) ||
-                    t.User.LastName.ToLower().Contains(s) ||
-                    t.User.Email.ToLower().Contains(s));
-            }
-
-            if (!string.IsNullOrWhiteSpace(userFullName))
-            {
-                query = query.Where(t => (t.User.LastName + " " + t.User.FirstName) == userFullName);
+                    t.Email.ToLower().Contains(s) ||
+                    t.Content.ToLower().Contains(s) ||
+                    (t.Reason != null && t.Reason.Name.ToLower().Contains(s)));
             }
 
             query = sortBy?.ToLower() switch
             {
-                "subject" => sortDesc ? query.OrderByDescending(t => t.Subject) : query.OrderBy(t => t.Subject),
-                "user" or "userfullname" => sortDesc
-                    ? query.OrderByDescending(t => t.User.LastName).ThenByDescending(t => t.User.FirstName)
-                    : query.OrderBy(t => t.User.LastName).ThenBy(t => t.User.FirstName),
+                "email" => sortDesc ? query.OrderByDescending(t => t.Email) : query.OrderBy(t => t.Email),
+                "reason" => sortDesc ? query.OrderByDescending(t => t.Reason!.Name) : query.OrderBy(t => t.Reason!.Name),
                 "isclosed" or "closed" => sortDesc ? query.OrderByDescending(t => t.IsClosed) : query.OrderBy(t => t.IsClosed),
                 "closedat" => sortDesc ? query.OrderByDescending(t => t.ClosedAt) : query.OrderBy(t => t.ClosedAt),
                 "updated" or "updatedat" => sortDesc ? query.OrderByDescending(t => t.UpdatedAt) : query.OrderBy(t => t.UpdatedAt),
@@ -65,10 +60,10 @@ namespace BusinessLogic.Services
                 .Select(t => new TicketDto
                 {
                     Id = t.Id,
-                    UserId = t.UserId,
-                    UserFullName = t.User.LastName + " " + t.User.FirstName,
-                    UserEmail = t.User.Email,
-                    Subject = t.Subject,
+                    Email = t.Email,
+                    ReasonId = t.ReasonId,
+                    ReasonName = t.Reason != null ? t.Reason.Name : "",
+                    Content = t.Content,
                     IsClosed = t.IsClosed,
                     ClosedAt = t.ClosedAt,
                     AdminResponse = t.AdminResponse,
@@ -93,18 +88,16 @@ namespace BusinessLogic.Services
         {
             return await _context.Tickets
                 .AsNoTracking()
-                .Include(t => t.User)
-                .Where(t => t.User != null)
-                .Select(t => t.User.LastName + " " + t.User.FirstName)
+                .Select(t => t.Email)
                 .Distinct()
-                .OrderBy(name => name)
+                .OrderBy(email => email)
                 .ToListAsync();
         }
 
         public async Task<TicketDto?> GetByIdAsync(int id)
         {
             var ticket = await _context.Tickets.AsNoTracking()
-                .Include(t => t.User)
+                .Include(t => t.Reason)
                 .FirstOrDefaultAsync(t => t.Id == id);
 
             if (ticket == null) return null;
@@ -112,10 +105,10 @@ namespace BusinessLogic.Services
             return new TicketDto
             {
                 Id = ticket.Id,
-                UserId = ticket.UserId,
-                UserFullName = ticket.User.LastName + " " + ticket.User.FirstName,
-                UserEmail = ticket.User.Email,
-                Subject = ticket.Subject,
+                Email = ticket.Email,
+                ReasonId = ticket.ReasonId,
+                ReasonName = ticket.Reason?.Name ?? "",
+                Content = ticket.Content,
                 IsClosed = ticket.IsClosed,
                 ClosedAt = ticket.ClosedAt,
                 AdminResponse = ticket.AdminResponse,
@@ -124,15 +117,13 @@ namespace BusinessLogic.Services
             };
         }
 
-        public async Task<Ticket> CreateAsync(int userId, CreateTicketDto dto, IEmailService emailService)
+        public async Task<Ticket> CreateAsync(CreateTicketDto dto, IEmailService emailService)
         {
-            var user = await _context.Users.FindAsync(userId);
-            if (user == null) throw new KeyNotFoundException("Użytkownik nie istnieje");
-
             var ticket = new Ticket
             {
-                UserId = userId,
-                Subject = dto.Subject,
+                Email = dto.Email,
+                ReasonId = dto.ReasonId,
+                Content = dto.Content,
                 IsClosed = false,
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now
@@ -143,11 +134,11 @@ namespace BusinessLogic.Services
 
             try
             {
-                await emailService.SendTicketCreatedEmailAsync(user.Email, ticket.Id, ticket.Subject);
+                var reason = await _context.TicketReasons.FindAsync(dto.ReasonId);
+                await emailService.SendTicketCreatedEmailAsync(dto.Email, ticket.Id, reason?.Name ?? "Zgłoszenie", dto.Content);
             }
             catch 
             { 
-                
             }
 
             return ticket;
@@ -155,7 +146,7 @@ namespace BusinessLogic.Services
 
         public async Task<bool> CloseAsync(int id, CloseTicketDto dto, IEmailService emailService)
         {
-            var ticket = await _context.Tickets.Include(t => t.User).FirstOrDefaultAsync(t => t.Id == id);
+            var ticket = await _context.Tickets.Include(t => t.Reason).FirstOrDefaultAsync(t => t.Id == id);
             if (ticket == null || ticket.IsClosed) return false;
 
             ticket.IsClosed = true;
@@ -165,9 +156,17 @@ namespace BusinessLogic.Services
 
             await _context.SaveChangesAsync();
 
-            await emailService.SendTicketClosedEmailAsync(ticket.User.Email, ticket.Id, ticket.Subject, dto.AdminResponse);
+            var modifiedBy = "System";
+            if (ticket.ModifiedByUserId.HasValue)
+            {
+                var user = await _context.Users.FindAsync(ticket.ModifiedByUserId.Value);
+                if (user != null) modifiedBy = $"{user.FirstName} {user.LastName}";
+            }
+
+            await emailService.SendTicketClosedEmailAsync(ticket.Email, ticket.Id, ticket.Reason?.Name ?? "Zgłoszenie", ticket.Content, dto.AdminResponse, modifiedBy);
 
             return true;
         }
     }
 }
+

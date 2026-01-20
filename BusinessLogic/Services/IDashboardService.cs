@@ -54,15 +54,15 @@ namespace BusinessLogic.Services
 
             var recentTickets = await _context.Tickets
                 .AsNoTracking()
-                .Include(t => t.User)
+                .Include(t => t.Reason)
                 .Where(t => !t.IsClosed)
                 .OrderByDescending(t => t.CreatedAt)
                 .Take(5)
                 .Select(t => new DashboardTicketDto
                 {
                     Id = t.Id,
-                    Subject = t.Subject,
-                    UserName = t.User != null ? $"{t.User.FirstName} {t.User.LastName}" : "Nieznany",
+                    ReasonName = t.Reason != null ? t.Reason.Name : "",
+                    Email = t.Email,
                     CreatedAt = t.CreatedAt.ToString("yyyy-MM-dd HH:mm"),
                     IsClosed = t.IsClosed
                 })

@@ -37,6 +37,7 @@ namespace Data.Data
         public DbSet<WeeklySchedule> WeeklySchedules { get; set; } = null!;
         public DbSet<ParentStudent> ParentStudents { get; set; } = null!;
         public DbSet<Ticket> Tickets { get; set; }
+        public DbSet<TicketReason> TicketReasons { get; set; }
         public DbSet<PasswordResetToken> PasswordResetTokens { get; set; }
         public DbSet<Page> Pages { get; set; } = null!;
         public DbSet<Target> Targets { get; set; } = null!;
@@ -180,11 +181,14 @@ namespace Data.Data
                  .OnDelete(DeleteBehavior.Restrict);
             });
 
-            modelBuilder.Entity<Ticket>()
-                .HasOne(t => t.User)
-                .WithMany()
-                .HasForeignKey(t => t.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Ticket>(e =>
+            {
+                e.HasIndex(t => t.Email);
+                e.HasOne(t => t.Reason)
+                    .WithMany()
+                    .HasForeignKey(t => t.ReasonId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
 
             modelBuilder.Entity<GradeType>().Property(p => p.Value).HasColumnType("decimal(2,1)");
 

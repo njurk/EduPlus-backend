@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.DTOs;
-using System.Security.Claims;
 
 namespace API.Controllers
 {
@@ -21,9 +20,9 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll(int pageNumber = 1, int pageSize = 10, bool? showClosed = null, string? search = null, string? sortBy = "createdAt", bool sortDesc = true, string? userFullName = null)
+        public async Task<IActionResult> GetAll(int pageNumber = 1, int pageSize = 10, bool? showClosed = null, string? search = null, string? sortBy = "createdAt", bool sortDesc = true, int? reasonId = null)
         {
-            var result = await _service.GetAllAsync(pageNumber, pageSize, showClosed, search, sortBy, sortDesc, userFullName);
+            var result = await _service.GetAllAsync(pageNumber, pageSize, showClosed, search, sortBy, sortDesc, reasonId);
             return Ok(result);
         }
 
@@ -43,10 +42,10 @@ namespace API.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Create([FromBody] CreateTicketDto dto)
         {
-            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
-            var result = await _service.CreateAsync(userId, dto, _emailService);
+            var result = await _service.CreateAsync(dto, _emailService);
             return Ok(result);
         }
 
@@ -59,3 +58,4 @@ namespace API.Controllers
         }
     }
 }
+
