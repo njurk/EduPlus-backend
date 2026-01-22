@@ -17,9 +17,9 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetByPageId(int pageId)
+        public async Task<IActionResult> GetByPageId(int pageId, [FromQuery] string? search = null)
         {
-            var result = await _service.GetByPageIdAsync(pageId);
+            var result = await _service.GetByPageIdAsync(pageId, search);
             return Ok(result);
         }
 

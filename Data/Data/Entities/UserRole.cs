@@ -15,5 +15,6 @@ namespace Data.Data.Entities
         public virtual Role? Role { get; set; } = null!;
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
+        public int? ModifiedByUserId { get; set; }
     }
 }

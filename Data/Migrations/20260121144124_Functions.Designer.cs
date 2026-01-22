@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(EduPlusDbContext))]
-    [Migration("20260120113911_Views")]
-    partial class Views
+    [Migration("20260121144124_Functions")]
+    partial class Functions
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -196,7 +196,7 @@ namespace Data.Migrations
                             Link = "systemConfig",
                             Position = 12,
                             TargetId = 1,
-                            Title = "Konfiguracja systemu",
+                            Title = "Konfiguracja",
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
@@ -296,7 +296,7 @@ namespace Data.Migrations
                             Key = "title",
                             PageId = 2,
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Dashboard"
+                            Value = "Pulpit"
                         },
                         new
                         {
@@ -638,7 +638,7 @@ namespace Data.Migrations
                             Key = "columns.date",
                             PageId = 4,
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Data"
+                            Value = "Utworzono"
                         },
                         new
                         {
@@ -719,7 +719,7 @@ namespace Data.Migrations
                             Key = "columns.status",
                             PageId = 5,
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Zamknięte"
+                            Value = "Status"
                         },
                         new
                         {
@@ -741,21 +741,12 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 129,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "columns.updatedAt",
-                            PageId = 5,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Edytowano"
-                        },
-                        new
-                        {
                             Id = 130,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "columns.modifiedBy",
                             PageId = 5,
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Edytowane przez"
+                            Value = "Zamknięte przez"
                         },
                         new
                         {
@@ -765,15 +756,6 @@ namespace Data.Migrations
                             PageId = 5,
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Value = "Akcje"
-                        },
-                        new
-                        {
-                            Id = 132,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "filter.showClosed",
-                            PageId = 5,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Pokaż zamknięte"
                         },
                         new
                         {
@@ -792,6 +774,141 @@ namespace Data.Migrations
                             PageId = 7,
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Value = "Lekcje"
+                        },
+                        new
+                        {
+                            Id = 133,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "columns.orderNumber",
+                            PageId = 7,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Nr lekcji"
+                        },
+                        new
+                        {
+                            Id = 134,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "columns.class",
+                            PageId = 7,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Klasa"
+                        },
+                        new
+                        {
+                            Id = 135,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "columns.classroom",
+                            PageId = 7,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Sala"
+                        },
+                        new
+                        {
+                            Id = 136,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "columns.subject",
+                            PageId = 7,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Przedmiot"
+                        },
+                        new
+                        {
+                            Id = 137,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "columns.status",
+                            PageId = 7,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Status"
+                        },
+                        new
+                        {
+                            Id = 138,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "columns.createdAt",
+                            PageId = 7,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Utworzono"
+                        },
+                        new
+                        {
+                            Id = 139,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "columns.updatedAt",
+                            PageId = 7,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Edytowano"
+                        },
+                        new
+                        {
+                            Id = 140,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "columns.modifiedBy",
+                            PageId = 7,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Edytowane przez"
+                        },
+                        new
+                        {
+                            Id = 141,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "columns.actions",
+                            PageId = 7,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Akcje"
+                        },
+                        new
+                        {
+                            Id = 142,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "columns.teacher",
+                            PageId = 7,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Nauczyciel"
+                        },
+                        new
+                        {
+                            Id = 143,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "columns.date",
+                            PageId = 7,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Data"
+                        },
+                        new
+                        {
+                            Id = 144,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "columns.time",
+                            PageId = 7,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Godziny"
+                        },
+                        new
+                        {
+                            Id = 145,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "columns.topic",
+                            PageId = 7,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Temat"
+                        },
+                        new
+                        {
+                            Id = 146,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "modal.details",
+                            PageId = 7,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Lekcja"
+                        },
+                        new
+                        {
+                            Id = 147,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "emptyMessage",
+                            PageId = 7,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Brak danych"
                         },
                         new
                         {
@@ -917,7 +1034,7 @@ namespace Data.Migrations
                             Key = "title",
                             PageId = 11,
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Zarządzanie klasami"
+                            Value = "Klasy"
                         },
                         new
                         {
@@ -1128,6 +1245,15 @@ namespace Data.Migrations
                         },
                         new
                         {
+                            Id = 132,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "title",
+                            PageId = 13,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Konfiguracja"
+                        },
+                        new
+                        {
                             Id = 88,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "modal.new",
@@ -1322,7 +1448,7 @@ namespace Data.Migrations
                             Key = "nav.schedule",
                             PageId = 14,
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Plany lekcji"
+                            Value = "Plan lekcji"
                         },
                         new
                         {
@@ -1394,7 +1520,7 @@ namespace Data.Migrations
                             Key = "title",
                             PageId = 15,
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "EduPlus Admin"
+                            Value = "Logowanie"
                         },
                         new
                         {
@@ -1525,7 +1651,7 @@ namespace Data.Migrations
                             Id = 5,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Label = "All",
-                            Title = "Wszystkie platformy",
+                            Title = "System",
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
                         });
                 });
@@ -1610,6 +1736,31 @@ namespace Data.Migrations
                         .IsUnique();
 
                     b.ToTable("AnnouncementReads");
+                });
+
+            modelBuilder.Entity("Data.Data.Entities.AnnouncementTarget", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AnnouncementId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("RoleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.HasIndex("AnnouncementId", "RoleId")
+                        .IsUnique()
+                        .HasFilter("[RoleId] IS NOT NULL");
+
+                    b.ToTable("AnnouncementTargets");
                 });
 
             modelBuilder.Entity("Data.Data.Entities.Attendance", b =>
@@ -2787,6 +2938,19 @@ namespace Data.Migrations
                     b.Property<int>("TeacherId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<int?>("ModifiedByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
                     b.HasKey("SubjectId", "TeacherId");
 
                     b.HasIndex("TeacherId");
@@ -2906,6 +3070,9 @@ namespace Data.Migrations
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
+
+                    b.Property<int?>("ModifiedByUserId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -3034,6 +3201,9 @@ namespace Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<int?>("ModifiedByUserId")
+                        .HasColumnType("int");
 
                     b.Property<int>("RoleId")
                         .HasColumnType("int");
@@ -3295,6 +3465,23 @@ namespace Data.Migrations
                     b.Navigation("Announcement");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Data.Data.Entities.AnnouncementTarget", b =>
+                {
+                    b.HasOne("Data.Data.Entities.Announcement", "Announcement")
+                        .WithMany("AnnouncementTargets")
+                        .HasForeignKey("AnnouncementId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Data.Data.Entities.Role", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId");
+
+                    b.Navigation("Announcement");
+
+                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("Data.Data.Entities.Attendance", b =>
@@ -3678,6 +3865,11 @@ namespace Data.Migrations
             modelBuilder.Entity("Data.Data.CMS.Target", b =>
                 {
                     b.Navigation("Pages");
+                });
+
+            modelBuilder.Entity("Data.Data.Entities.Announcement", b =>
+                {
+                    b.Navigation("AnnouncementTargets");
                 });
 
             modelBuilder.Entity("Data.Data.Entities.Class", b =>

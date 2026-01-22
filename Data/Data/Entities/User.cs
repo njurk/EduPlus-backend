@@ -1,10 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Data.Data.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
 namespace Data.Data.Entities
 {
     [Index(nameof(Email), IsUnique = true)]
-    public class User
+    public class User : IAuditableEntity
     {
         [Key]
         public int Id { get; set; }

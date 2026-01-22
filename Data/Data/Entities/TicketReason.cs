@@ -1,8 +1,9 @@
+using Data.Data.Interfaces;
 using System.ComponentModel.DataAnnotations;
 
 namespace Data.Data.Entities
 {
-    public class TicketReason
+    public class TicketReason : IAuditableEntity
     {
         [Key]
         public int Id { get; set; }
@@ -10,5 +11,7 @@ namespace Data.Data.Entities
         public bool IsActive { get; set; } = true;
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
+        public int? ModifiedByUserId { get; set; }
     }
 }
+

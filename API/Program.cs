@@ -1,5 +1,6 @@
 ﻿namespace API
 {
+    using BusinessLogic.Interceptors;
     using BusinessLogic.Seeders;
     using BusinessLogic.Services;
     using Data.Data;

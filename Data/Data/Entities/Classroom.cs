@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+using Data.Data.Interfaces;
+using System.ComponentModel.DataAnnotations;
 
 namespace Data.Data.Entities
 {
-    public class Classroom
+    public class Classroom : IAuditableEntity
     {
         [Key]
         public int Id { get; set; }
@@ -15,3 +16,4 @@ namespace Data.Data.Entities
         public int? ModifiedByUserId { get; set; }
     }
 }
+

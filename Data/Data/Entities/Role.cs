@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+using Data.Data.Interfaces;
+using System.ComponentModel.DataAnnotations;
 
 namespace Data.Data.Entities
 {
-    public class Role
+    public class Role : IAuditableEntity
     {
         [Key]
         public int Id { get; set; }
@@ -16,3 +17,4 @@ namespace Data.Data.Entities
         public virtual ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
     }
 }
+

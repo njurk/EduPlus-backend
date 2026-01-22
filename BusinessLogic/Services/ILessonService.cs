@@ -41,6 +41,8 @@ namespace BusinessLogic.Services
                 .Include(l => l.Status)
                 .AsQueryable();
 
+            var users = _context.Users.AsNoTracking();
+
             if (classId.HasValue)
                 query = query.Where(l => l.ClassId == classId.Value);
 
@@ -72,7 +74,8 @@ namespace BusinessLogic.Services
                 StatusId = l.StatusId,
                 StatusName = l.Status != null ? l.Status.Name : string.Empty,
                 CreatedAt = l.CreatedAt,
-                UpdatedAt = l.UpdatedAt
+                UpdatedAt = l.UpdatedAt,
+                ModifiedByName = l.ModifiedByUserId != null ? users.Where(u => u.Id == l.ModifiedByUserId).Select(u => u.LastName + " " + u.FirstName).FirstOrDefault() : null
             });
 
             projected = sortBy?.ToLower() switch
@@ -81,6 +84,8 @@ namespace BusinessLogic.Services
                 "subject" => sortDesc ? projected.OrderByDescending(l => l.SubjectName) : projected.OrderBy(l => l.SubjectName),
                 "class" => sortDesc ? projected.OrderByDescending(l => l.ClassName) : projected.OrderBy(l => l.ClassName),
                 "ordernumber" => sortDesc ? projected.OrderByDescending(l => l.OrderNumber) : projected.OrderBy(l => l.OrderNumber),
+                "created" => sortDesc ? projected.OrderByDescending(l => l.CreatedAt) : projected.OrderBy(l => l.CreatedAt),
+                "updated" => sortDesc ? projected.OrderByDescending(l => l.UpdatedAt) : projected.OrderBy(l => l.UpdatedAt),
                 _ => sortDesc ? projected.OrderByDescending(l => l.Date).ThenByDescending(l => l.OrderNumber) : projected.OrderBy(l => l.Date).ThenBy(l => l.OrderNumber)
             };
 

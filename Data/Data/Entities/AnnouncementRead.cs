@@ -1,11 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Data.Data.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Data.Data.Entities
 {
     [Index(nameof(AnnouncementId), nameof(UserId), IsUnique = true)]
-    public class AnnouncementRead
+    public class AnnouncementRead : IAuditableEntity
     {
         [Key]
         public int Id { get; set; }
@@ -20,3 +21,4 @@ namespace Data.Data.Entities
         public int? ModifiedByUserId { get; set; }
     }
 }
+

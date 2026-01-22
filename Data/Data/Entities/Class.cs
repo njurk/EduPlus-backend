@@ -1,9 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Data.Data.Interfaces;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Data.Data.Entities
 {
-    public class Class
+    public class Class : IAuditableEntity
     {
         [Key]
         public int Id { get; set; }

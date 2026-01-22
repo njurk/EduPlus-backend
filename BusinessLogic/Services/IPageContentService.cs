@@ -7,7 +7,7 @@ namespace BusinessLogic.Services
 {
     public interface IPageContentService
     {
-        Task<IEnumerable<PageContentDto>> GetByPageIdAsync(int pageId);
+        Task<IEnumerable<PageContentDto>> GetByPageIdAsync(int pageId, string? search = null);
         Task<IEnumerable<PageContentDto>> GetByPageLabelAsync(string pageLabel);
         Task<PageContentDto> UpdateAsync(int id, string newValue);
     }
@@ -21,10 +21,17 @@ namespace BusinessLogic.Services
             _context = context;
         }
 
-        public async Task<IEnumerable<PageContentDto>> GetByPageIdAsync(int pageId)
+        public async Task<IEnumerable<PageContentDto>> GetByPageIdAsync(int pageId, string? search = null)
         {
-            return await _context.PageContents.AsNoTracking()
-                .Where(pc => pc.PageId == pageId)
+            var query = _context.PageContents.AsNoTracking()
+                .Where(pc => pc.PageId == pageId);
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                query = query.Where(pc => pc.Key.Contains(search) || pc.Value.Contains(search));
+            }
+
+            return await query
                 .Select(pc => new PageContentDto
                 {
                     Id = pc.Id,

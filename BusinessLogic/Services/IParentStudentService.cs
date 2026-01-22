@@ -31,6 +31,8 @@ namespace BusinessLogic.Services
                 .Include(ps => ps.Student)
                 .AsQueryable();
 
+            var users = _context.Users.AsNoTracking();
+
             if (!string.IsNullOrWhiteSpace(search))
             {
                 var s = search.Trim().ToLower();
@@ -48,7 +50,11 @@ namespace BusinessLogic.Services
                 ps.StudentId,
                 ParentName = ps.Parent.LastName + " " + ps.Parent.FirstName,
                 StudentName = ps.Student.LastName + " " + ps.Student.FirstName,
-                ps.CreatedAt
+                ps.CreatedAt,
+                ps.UpdatedAt,
+                ModifiedByName = ps.ModifiedByUserId != null 
+                    ? users.Where(u => u.Id == ps.ModifiedByUserId).Select(u => u.LastName + " " + u.FirstName).FirstOrDefault() 
+                    : null
             });
 
             projected = sortBy?.ToLower() switch

@@ -23,6 +23,7 @@ namespace Shared.DTOs
         public string StatusName { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
+        public string? ModifiedByName { get; set; }
     }
 }
 

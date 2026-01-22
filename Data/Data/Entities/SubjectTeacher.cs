@@ -1,4 +1,5 @@
-﻿using System;
+using Data.Data.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Data.Data.Entities
 {
-    public class SubjectTeacher
+    public class SubjectTeacher : IAuditableEntity
     {
         public int SubjectId { get; set; }
         [ForeignKey(nameof(SubjectId))]
@@ -16,5 +17,10 @@ namespace Data.Data.Entities
         public int TeacherId { get; set; }
         [ForeignKey(nameof(TeacherId))]
         public virtual User Teacher { get; set; } = null!;
+
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public DateTime UpdatedAt { get; set; } = DateTime.Now;
+        public int? ModifiedByUserId { get; set; }
     }
 }
+

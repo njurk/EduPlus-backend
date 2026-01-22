@@ -13,6 +13,7 @@ namespace Data.Data
 
         public DbSet<Announcement> Announcements { get; set; } = null!;
         public DbSet<AnnouncementRead> AnnouncementReads { get; set; } = null!;
+        public DbSet<AnnouncementTarget> AnnouncementTargets { get; set; } = null!;
         public DbSet<Attendance> Attendances { get; set; } = null!;
         public DbSet<AttendanceType> AttendanceTypes { get; set; } = null!;
         public DbSet<Class> Classes { get; set; } = null!;

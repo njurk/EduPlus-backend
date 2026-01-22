@@ -16,15 +16,23 @@ public class AnnouncementController : ControllerBase
         _service = service;
     }
 
+    private int GetUserId()
+    {
+        var claim = User.FindFirst("userId")?.Value ?? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        return int.TryParse(claim, out var id) ? id : 0;
+    }
+
     [HttpGet]
     public async Task<IActionResult> GetAll(
         [FromQuery] string? search = null,
         [FromQuery] string? sortBy = null,
         [FromQuery] bool sortDesc = true,
         [FromQuery] bool showInactive = false,
-        [FromQuery] string? authorName = null)
+        [FromQuery] string? authorName = null,
+        [FromQuery] int? targetRoleId = null)
     {
-        var items = await _service.GetAllAsync(search, sortBy, sortDesc, showInactive, authorName);
+        var userId = GetUserId();
+        var items = await _service.GetAllAsync(userId, search, sortBy, sortDesc, showInactive, authorName, targetRoleId);
         return Ok(items);
     }
 
@@ -56,11 +64,8 @@ public class AnnouncementController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateAnnouncementDto dto)
     {
-        var userIdClaim = User.FindFirst("userId")?.Value ?? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-        if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var authorId))
-        {
-            return Unauthorized("Nie udało się ustalić autora ogłoszenia");
-        }
+        var authorId = GetUserId();
+        if (authorId == 0) return Unauthorized("Nie udało się ustalić autora ogłoszenia");
 
         var entity = new Announcement
         {
@@ -68,14 +73,14 @@ public class AnnouncementController : ControllerBase
             Description = dto.Description,
             AuthorId = authorId
         };
-        var result = await _service.CreateAsync(entity);
+        var result = await _service.CreateAsync(entity, dto.RoleIds);
         return Ok(result);
     }
 
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] UpdateAnnouncementDto dto)
     {
-        var result = await _service.UpdateAsync(id, dto.Title, dto.Description);
+        var result = await _service.UpdateAsync(id, dto.Title, dto.Description, dto.RoleIds);
         if (result == null) return NotFound();
         return Ok(result);
     }
@@ -93,6 +98,16 @@ public class AnnouncementController : ControllerBase
     {
         var success = await _service.RestoreAsync(id);
         if (!success) return NotFound();
+        return NoContent();
+    }
+
+    [HttpPost("{id}/read")]
+    public async Task<IActionResult> MarkAsRead(int id)
+    {
+        var userId = GetUserId();
+        if (userId == 0) return Unauthorized();
+        
+        await _service.MarkAsReadAsync(id, userId);
         return NoContent();
     }
 }

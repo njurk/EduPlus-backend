@@ -11,13 +11,14 @@ namespace BusinessLogic.Services
 {
     public interface IAnnouncementService
     {
-        Task<IEnumerable<object>> GetAllAsync(string? search = null, string? sortBy = null, bool sortDesc = true, bool showInactive = false, string? authorName = null);
+        Task<IEnumerable<object>> GetAllAsync(int userId, string? search = null, string? sortBy = null, bool sortDesc = true, bool showInactive = false, string? authorName = null, int? targetRoleId = null);
         Task<List<string>> GetAuthorsAsync();
         Task<Announcement?> GetByIdAsync(int id);
-        Task<Announcement> CreateAsync(Announcement entity);
-        Task<Announcement?> UpdateAsync(int id, string title, string description);
+        Task<Announcement> CreateAsync(Announcement entity, List<int>? roleIds = null);
+        Task<Announcement?> UpdateAsync(int id, string title, string description, List<int>? roleIds = null);
         Task<bool> DeleteAsync(int id);
         Task<bool> RestoreAsync(int id);
+        Task MarkAsReadAsync(int announcementId, int userId);
     }
 
     public class AnnouncementService : IAnnouncementService
@@ -29,12 +30,36 @@ namespace BusinessLogic.Services
             _context = context;
         }
 
-        public async Task<IEnumerable<object>> GetAllAsync(string? search = null, string? sortBy = null, bool sortDesc = true, bool showInactive = false, string? authorName = null)
+
+        public async Task<IEnumerable<object>> GetAllAsync(int userId, string? search = null, string? sortBy = null, bool sortDesc = true, bool showInactive = false, string? authorName = null, int? targetRoleId = null)
         {
+            var userRoleIds = await _context.UserRoles
+                .Where(ur => ur.UserId == userId)
+                .Select(ur => ur.RoleId)
+                .ToListAsync();
+
             var query = _context.Announcements
                 .Include(a => a.Author)
+                .Include(a => a.AnnouncementTargets).ThenInclude(at => at.Role)
                 .AsNoTracking()
                 .Where(a => showInactive ? !a.IsActive : a.IsActive);
+
+            query = query.Where(a =>
+                a.AnnouncementTargets.Any(at => at.RoleId == null) ||
+                a.AnnouncementTargets.Any(at => at.RoleId != null && userRoleIds.Contains(at.RoleId.Value))
+            );
+
+            if (targetRoleId.HasValue)
+            {
+                if (targetRoleId.Value == 0)
+                {
+                    query = query.Where(a => a.AnnouncementTargets.Any(at => at.RoleId == null));
+                }
+                else
+                {
+                    query = query.Where(a => a.AnnouncementTargets.Any(at => at.RoleId == targetRoleId.Value));
+                }
+            }
 
             if (!string.IsNullOrWhiteSpace(search))
             {
@@ -63,6 +88,10 @@ namespace BusinessLogic.Services
                     a.Description,
                     a.AuthorId,
                     AuthorName = a.Author != null ? a.Author.FirstName + " " + a.Author.LastName : null,
+                    TargetRoles = a.AnnouncementTargets.Any(at => at.RoleId == null)
+                        ? "Wszyscy"
+                        : string.Join(", ", a.AnnouncementTargets.Where(at => at.RoleId != null).Select(at => at.Role!.Name)),
+                    IsRead = _context.AnnouncementReads.Any(ar => ar.AnnouncementId == a.Id && ar.UserId == userId),
                     a.IsActive,
                     a.CreatedAt,
                     a.UpdatedAt,
@@ -91,21 +120,67 @@ namespace BusinessLogic.Services
                 .FirstOrDefaultAsync(a => a.Id == id);
         }
 
-        public async Task<Announcement> CreateAsync(Announcement entity)
+        public async Task<Announcement> CreateAsync(Announcement entity, List<int>? roleIds = null)
         {
             entity.IsActive = true;
             _context.Announcements.Add(entity);
             await _context.SaveChangesAsync();
+
+            if (roleIds == null || !roleIds.Any())
+            {
+                _context.AnnouncementTargets.Add(new AnnouncementTarget
+                {
+                    AnnouncementId = entity.Id,
+                    RoleId = null
+                });
+            }
+            else
+            {
+                foreach (var roleId in roleIds)
+                {
+                    _context.AnnouncementTargets.Add(new AnnouncementTarget
+                    {
+                        AnnouncementId = entity.Id,
+                        RoleId = roleId
+                    });
+                }
+            }
+
+            await _context.SaveChangesAsync();
             return entity;
         }
 
-        public async Task<Announcement?> UpdateAsync(int id, string title, string description)
+        public async Task<Announcement?> UpdateAsync(int id, string title, string description, List<int>? roleIds = null)
         {
-            var item = await _context.Announcements.FindAsync(id);
+            var item = await _context.Announcements
+                .Include(a => a.AnnouncementTargets)
+                .FirstOrDefaultAsync(a => a.Id == id);
             if (item == null) return null;
 
             item.Title = title;
             item.Description = description;
+
+            _context.AnnouncementTargets.RemoveRange(item.AnnouncementTargets);
+
+            if (roleIds == null || !roleIds.Any())
+            {
+                item.AnnouncementTargets.Add(new AnnouncementTarget
+                {
+                    AnnouncementId = id,
+                    RoleId = null
+                });
+            }
+            else
+            {
+                foreach (var roleId in roleIds)
+                {
+                    item.AnnouncementTargets.Add(new AnnouncementTarget
+                    {
+                        AnnouncementId = id,
+                        RoleId = roleId
+                    });
+                }
+            }
 
             await _context.SaveChangesAsync();
             return item;
@@ -142,6 +217,22 @@ namespace BusinessLogic.Services
 
             await _context.SaveChangesAsync();
             return true;
+        }
+
+        public async Task MarkAsReadAsync(int announcementId, int userId)
+        {
+            var exists = await _context.AnnouncementReads
+                .AnyAsync(ar => ar.AnnouncementId == announcementId && ar.UserId == userId);
+
+            if (!exists)
+            {
+                _context.AnnouncementReads.Add(new AnnouncementRead
+                {
+                    AnnouncementId = announcementId,
+                    UserId = userId
+                });
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }
