@@ -1,6 +1,7 @@
 ﻿using BusinessLogic.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Shared.DTOs;
 using System;
 using System.Threading.Tasks;
 
@@ -30,6 +31,27 @@ namespace API.Controllers
         {
             var schedule = await _service.GetAvailableForDateAsync(date, classId, teacherId, semesterId);
             return Ok(schedule);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateOrUpdate([FromBody] WeeklyScheduleDto dto)
+        {
+            var result = await _service.CreateOrUpdateAsync(dto);
+            return Ok(result);
+        }
+
+        [HttpDelete("clear")]
+        public async Task<IActionResult> ClearSchedule([FromQuery] int classId, [FromQuery] int semesterId)
+        {
+            var count = await _service.ClearScheduleAsync(classId, semesterId);
+            return Ok(new { deletedCount = count });
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var result = await _service.DeleteAsync(id);
+            return result ? NoContent() : NotFound();
         }
     }
 }

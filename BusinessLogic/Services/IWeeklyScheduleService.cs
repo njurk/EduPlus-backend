@@ -12,6 +12,9 @@ namespace BusinessLogic.Services
     {
         Task<List<LessonDto>> GetScheduleForClassAsync(int classId, int? semesterId = null);
         Task<List<ScheduleTemplateDto>> GetAvailableForDateAsync(DateTime date, int? classId = null, int? teacherId = null, int? semesterId = null);
+        Task<LessonDto> CreateOrUpdateAsync(WeeklyScheduleDto dto);
+        Task<bool> DeleteAsync(int id);
+        Task<int> ClearScheduleAsync(int classId, int semesterId);
     }
 
     public class WeeklyScheduleService : IWeeklyScheduleService
@@ -103,6 +106,94 @@ namespace BusinessLogic.Services
                 .ToList();
 
             return result;
+        }
+
+        public async Task<LessonDto> CreateOrUpdateAsync(WeeklyScheduleDto dto)
+        {
+            Data.Data.Entities.WeeklySchedule entity;
+
+            if (dto.Id.HasValue && dto.Id.Value > 0)
+            {
+                entity = await _context.WeeklySchedules.FindAsync(dto.Id.Value) 
+                    ?? throw new Exception("Nie znaleziono planu");
+                entity.SubjectId = dto.SubjectId;
+                entity.TeacherId = dto.TeacherId;
+                entity.ClassroomId = dto.ClassroomId;
+                entity.UpdatedAt = DateTime.Now;
+            }
+            else
+            {
+                var semester = await _context.Semesters.FindAsync(dto.SemesterId)
+                    ?? throw new Exception("Nie znaleziono semestru");
+
+                entity = new Data.Data.Entities.WeeklySchedule
+                {
+                    ClassId = dto.ClassId,
+                    SemesterId = dto.SemesterId,
+                    SchoolYearId = semester.SchoolYearId,
+                    SubjectId = dto.SubjectId,
+                    TeacherId = dto.TeacherId,
+                    ClassroomId = dto.ClassroomId,
+                    DayOfWeek = dto.DayOfWeek,
+                    LessonHourId = dto.LessonHourId,
+                    IsActive = true,
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now
+                };
+                _context.WeeklySchedules.Add(entity);
+            }
+
+            await _context.SaveChangesAsync();
+
+            await _context.Entry(entity).Reference(e => e.Subject).LoadAsync();
+            await _context.Entry(entity).Reference(e => e.Teacher).LoadAsync();
+            await _context.Entry(entity).Reference(e => e.Classroom).LoadAsync();
+            await _context.Entry(entity).Reference(e => e.Class).LoadAsync();
+            await _context.Entry(entity).Reference(e => e.LessonHour).LoadAsync();
+
+            return new LessonDto
+            {
+                Id = entity.Id,
+                SubjectId = entity.SubjectId,
+                SubjectName = entity.Subject?.Name ?? "-",
+                ClassId = entity.ClassId,
+                ClassName = entity.Class != null ? $"{entity.Class.Level}{entity.Class.Letter}" : "",
+                TeacherId = entity.TeacherId,
+                TeacherName = entity.Teacher != null ? $"{entity.Teacher.FirstName} {entity.Teacher.LastName}" : "",
+                ClassroomId = entity.ClassroomId,
+                ClassroomName = entity.Classroom?.Name ?? "",
+                DayOfWeek = entity.DayOfWeek,
+                OrderNumber = entity.LessonHour?.OrderNumber ?? 0,
+                StartTime = entity.LessonHour?.StartTime.ToString(@"HH\:mm") ?? "",
+                EndTime = entity.LessonHour?.EndTime.ToString(@"HH\:mm") ?? ""
+            };
+        }
+
+        public async Task<bool> DeleteAsync(int id)
+        {
+            var entity = await _context.WeeklySchedules.FindAsync(id);
+            if (entity == null) return false;
+
+            entity.IsActive = false;
+            entity.UpdatedAt = DateTime.Now;
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<int> ClearScheduleAsync(int classId, int semesterId)
+        {
+            var entities = await _context.WeeklySchedules
+                .Where(ws => ws.ClassId == classId && ws.SemesterId == semesterId && ws.IsActive)
+                .ToListAsync();
+
+            foreach (var entity in entities)
+            {
+                entity.IsActive = false;
+                entity.UpdatedAt = DateTime.Now;
+            }
+
+            await _context.SaveChangesAsync();
+            return entities.Count;
         }
     }
 }

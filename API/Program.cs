@@ -59,7 +59,7 @@
             builder.Services.AddScoped<ISchoolYearService, SchoolYearService>();
             builder.Services.AddScoped<ISemesterService, SemesterService>();
             builder.Services.AddScoped<IParentStudentService, ParentStudentService>();
-                        builder.Services.AddScoped<IPageService, PageService>();
+            builder.Services.AddScoped<IPageService, PageService>();
             builder.Services.AddScoped<IUserRoleService, UserRoleService>();
             builder.Services.AddScoped<IDashboardService, DashboardService>();
             builder.Services.AddScoped<ITargetService, TargetService>();
@@ -71,12 +71,11 @@
             {
                 options.AddPolicy("Allow",
                     policy => policy
-                        .WithOrigins(
-                            "http://localhost:5173", 
-                            "http://localhost:3000")
+                        .WithOrigins("http://localhost:5173")
                         .AllowAnyMethod()
                         .AllowAnyHeader()
-                        .AllowCredentials());
+                        .AllowCredentials()
+                        .WithExposedHeaders("Content-Disposition"));
             });
 
             var jwtSettings = builder.Configuration.GetSection("Jwt");
