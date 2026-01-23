@@ -31,7 +31,7 @@ namespace Data.Data
                 new Target { Id = 2, Label = "WebTeacher", Title = "Nauczyciel - strona internetowa", CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new Target { Id = 3, Label = "MobileParent", Title = "Rodzic - aplikacja mobilna", CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new Target { Id = 4, Label = "MobileStudent", Title = "Uczeń - aplikacja mobilna", CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new Target { Id = 5, Label = "All", Title = "System", CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null }
+                new Target { Id = 5, Label = "All", Title = "Zasoby wspólne", CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null }
             );
         }
 
@@ -115,6 +115,17 @@ namespace Data.Data
                 new PageContent { Id = 130, Key = "columns.modifiedBy", Value = "Zamknięte przez", PageId = 5, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 131, Key = "columns.actions", Value = "Akcje", PageId = 5, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 49, Key = "title", Value = "Usprawiedliwienia", PageId = 6, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 154, Key = "columns.date", Value = "Data", PageId = 6, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 155, Key = "columns.student", Value = "Uczeń", PageId = 6, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 156, Key = "columns.parent", Value = "Rodzic", PageId = 6, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 157, Key = "columns.period", Value = "Okres", PageId = 6, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 158, Key = "columns.reason", Value = "Powód", PageId = 6, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 159, Key = "columns.status", Value = "Status", PageId = 6, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 160, Key = "columns.actions", Value = "Akcje", PageId = 6, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 161, Key = "status.accepted", Value = "Zaakceptowane", PageId = 6, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 162, Key = "status.rejected", Value = "Odrzucone", PageId = 6, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 163, Key = "status.pending", Value = "Oczekuje", PageId = 6, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 164, Key = "actions.delete", Value = "Usuń", PageId = 6, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 50, Key = "title", Value = "Lekcje", PageId = 7, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 133, Key = "columns.orderNumber", Value = "Nr lekcji", PageId = 7, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 134, Key = "columns.class", Value = "Klasa", PageId = 7, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
@@ -139,6 +150,12 @@ namespace Data.Data
                 new PageContent { Id = 56, Key = "columns.grade", Value = "Ocena", PageId = 9, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 57, Key = "columns.category", Value = "Kategoria", PageId = 9, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 58, Key = "columns.date", Value = "Data", PageId = 9, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 148, Key = "columns.teacher", Value = "Nauczyciel", PageId = 9, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 149, Key = "columns.createdAt", Value = "Utworzono", PageId = 9, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 150, Key = "columns.updatedAt", Value = "Edytowano", PageId = 9, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 151, Key = "columns.modifiedBy", Value = "Edytowane przez", PageId = 9, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 152, Key = "columns.actions", Value = "Akcje", PageId = 9, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 153, Key = "emptyMessage", Value = "Brak danych", PageId = 9, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 59, Key = "title", Value = "Frekwencja", PageId = 10, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 60, Key = "columns.student", Value = "Uczeń", PageId = 10, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 61, Key = "columns.subject", Value = "Przedmiot", PageId = 10, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
@@ -229,23 +246,23 @@ namespace Data.Data
         private static void SeedAttendanceTypes(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<AttendanceType>().HasData(
-                new AttendanceType { Id = 1, Name = "Obecność", ShortCode = "OB", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new AttendanceType { Id = 2, Name = "Nieobecność", ShortCode = "NB", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new AttendanceType { Id = 3, Name = "Spóźnienie", ShortCode = "SP", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new AttendanceType { Id = 4, Name = "Usprawiedliwione", ShortCode = "U", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new AttendanceType { Id = 5, Name = "Zwolnienie", ShortCode = "ZW", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null }
+                new AttendanceType { Id = 1, Name = "Obecność", Slug = "present", ShortCode = "OB", ColorHex = "#16a34a", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new AttendanceType { Id = 2, Name = "Nieobecność", Slug = "absent", ShortCode = "NB", ColorHex = "#dc2626", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new AttendanceType { Id = 3, Name = "Spóźnienie", Slug = "late", ShortCode = "SP", ColorHex = "#ca8a04", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new AttendanceType { Id = 4, Name = "Usprawiedliwione", Slug = "excused", ShortCode = "U", ColorHex = "#9333ea", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new AttendanceType { Id = 5, Name = "Zwolnienie", Slug = "released", ShortCode = "ZW", ColorHex = "#2563eb", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null }
             );
         }
 
         private static void SeedGradeTypes(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<GradeType>().HasData(
-                new GradeType { Id = 1, Numeric = "1", Name = "Niedostateczny", Value = 1.0m, IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new GradeType { Id = 2, Numeric = "2", Name = "Dopuszczający", Value = 2.0m, IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new GradeType { Id = 3, Numeric = "3", Name = "Dostateczny", Value = 3.0m, IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new GradeType { Id = 4, Numeric = "4", Name = "Dobry", Value = 4.0m, IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new GradeType { Id = 5, Numeric = "5", Name = "Bardzo dobry", Value = 5.0m, IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new GradeType { Id = 6, Numeric = "6", Name = "Celujący", Value = 6.0m, IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null }
+                new GradeType { Id = 1, Numeric = "1", Name = "Niedostateczny", Value = 1.0m, ColorHex = "#dc2626", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new GradeType { Id = 2, Numeric = "2", Name = "Dopuszczający", Value = 2.0m, ColorHex = "#ea580c", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new GradeType { Id = 3, Numeric = "3", Name = "Dostateczny", Value = 3.0m, ColorHex = "#ca8a04", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new GradeType { Id = 4, Numeric = "4", Name = "Dobry", Value = 4.0m, ColorHex = "#65a30d", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new GradeType { Id = 5, Numeric = "5", Name = "Bardzo dobry", Value = 5.0m, ColorHex = "#16a34a", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new GradeType { Id = 6, Numeric = "6", Name = "Celujący", Value = 6.0m, ColorHex = "#0d9488", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null }
             );
         }
 
@@ -263,9 +280,9 @@ namespace Data.Data
         private static void SeedLessonStatuses(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<LessonStatus>().HasData(
-                new LessonStatus { Id = 1, Name = "Zaplanowana", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new LessonStatus { Id = 2, Name = "Zrealizowana", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new LessonStatus { Id = 3, Name = "Odwołana", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null }
+                new LessonStatus { Id = 1, Name = "Zrealizowana", Slug = "completed", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new LessonStatus { Id = 2, Name = "Odwołana", Slug = "cancelled", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new LessonStatus { Id = 3, Name = "Zastępstwo", Slug = "substitute", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null }            
             );
         }
 
@@ -287,10 +304,10 @@ namespace Data.Data
         private static void SeedSemesters(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Semester>().HasData(
-                new Semester { Id = 1, SchoolYearId = 1, Name = "Semestr 1", StartDate = new DateOnly(2025, 09, 01), EndDate = new DateOnly(2026, 01, 31), IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new Semester { Id = 2, SchoolYearId = 1, Name = "Semestr 2", StartDate = new DateOnly(2026, 02, 01), EndDate = new DateOnly(2026, 06, 30), IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new Semester { Id = 3, SchoolYearId = 2, Name = "Semestr 1", StartDate = new DateOnly(2026, 09, 01), EndDate = new DateOnly(2027, 01, 31), IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new Semester { Id = 4, SchoolYearId = 2, Name = "Semestr 2", StartDate = new DateOnly(2027, 02, 01), EndDate = new DateOnly(2027, 06, 30), IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null }
+                new Semester { Id = 1, SchoolYearId = 1, Name = "Semestr 1", StartDate = new DateOnly(2025, 09, 01), EndDate = new DateOnly(2026, 02, 28), IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new Semester { Id = 2, SchoolYearId = 1, Name = "Semestr 2", StartDate = new DateOnly(2026, 03, 01), EndDate = new DateOnly(2026, 06, 30), IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new Semester { Id = 3, SchoolYearId = 2, Name = "Semestr 1", StartDate = new DateOnly(2026, 09, 01), EndDate = new DateOnly(2027, 02, 28), IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new Semester { Id = 4, SchoolYearId = 2, Name = "Semestr 2", StartDate = new DateOnly(2027, 03, 01), EndDate = new DateOnly(2027, 06, 30), IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null }
             );
         }
 

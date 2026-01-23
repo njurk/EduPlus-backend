@@ -765,6 +765,105 @@ namespace Data.Migrations
                         },
                         new
                         {
+                            Id = 154,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "columns.date",
+                            PageId = 6,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Data"
+                        },
+                        new
+                        {
+                            Id = 155,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "columns.student",
+                            PageId = 6,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Uczeń"
+                        },
+                        new
+                        {
+                            Id = 156,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "columns.parent",
+                            PageId = 6,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Rodzic"
+                        },
+                        new
+                        {
+                            Id = 157,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "columns.period",
+                            PageId = 6,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Okres"
+                        },
+                        new
+                        {
+                            Id = 158,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "columns.reason",
+                            PageId = 6,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Powód"
+                        },
+                        new
+                        {
+                            Id = 159,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "columns.status",
+                            PageId = 6,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Status"
+                        },
+                        new
+                        {
+                            Id = 160,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "columns.actions",
+                            PageId = 6,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Akcje"
+                        },
+                        new
+                        {
+                            Id = 161,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "status.accepted",
+                            PageId = 6,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Zaakceptowane"
+                        },
+                        new
+                        {
+                            Id = 162,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "status.rejected",
+                            PageId = 6,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Odrzucone"
+                        },
+                        new
+                        {
+                            Id = 163,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "status.pending",
+                            PageId = 6,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Oczekuje"
+                        },
+                        new
+                        {
+                            Id = 164,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "actions.delete",
+                            PageId = 6,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Usuń"
+                        },
+                        new
+                        {
                             Id = 50,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "title",
@@ -978,6 +1077,60 @@ namespace Data.Migrations
                             PageId = 9,
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Value = "Data"
+                        },
+                        new
+                        {
+                            Id = 148,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "columns.teacher",
+                            PageId = 9,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Nauczyciel"
+                        },
+                        new
+                        {
+                            Id = 149,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "columns.createdAt",
+                            PageId = 9,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Utworzono"
+                        },
+                        new
+                        {
+                            Id = 150,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "columns.updatedAt",
+                            PageId = 9,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Edytowano"
+                        },
+                        new
+                        {
+                            Id = 151,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "columns.modifiedBy",
+                            PageId = 9,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Edytowane przez"
+                        },
+                        new
+                        {
+                            Id = 152,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "columns.actions",
+                            PageId = 9,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Akcje"
+                        },
+                        new
+                        {
+                            Id = 153,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "emptyMessage",
+                            PageId = 9,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Brak danych"
                         },
                         new
                         {
@@ -1648,7 +1801,7 @@ namespace Data.Migrations
                             Id = 5,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Label = "All",
-                            Title = "System",
+                            Title = "Zasoby wspólne",
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
                         });
                 });
@@ -1813,6 +1966,10 @@ namespace Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("ColorHex")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
@@ -1832,6 +1989,10 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
@@ -1845,46 +2006,56 @@ namespace Data.Migrations
                         new
                         {
                             Id = 1,
+                            ColorHex = "#16a34a",
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             Name = "Obecność",
                             ShortCode = "OB",
+                            Slug = "present",
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 2,
+                            ColorHex = "#dc2626",
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             Name = "Nieobecność",
                             ShortCode = "NB",
+                            Slug = "absent",
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 3,
+                            ColorHex = "#ca8a04",
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             Name = "Spóźnienie",
                             ShortCode = "SP",
+                            Slug = "late",
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 4,
+                            ColorHex = "#9333ea",
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             Name = "Usprawiedliwione",
                             ShortCode = "U",
+                            Slug = "excused",
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 5,
+                            ColorHex = "#2563eb",
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             Name = "Zwolnienie",
                             ShortCode = "ZW",
+                            Slug = "released",
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
                         });
                 });
@@ -2243,6 +2414,10 @@ namespace Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("ColorHex")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
@@ -2278,6 +2453,7 @@ namespace Data.Migrations
                         new
                         {
                             Id = 1,
+                            ColorHex = "#dc2626",
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             Name = "Niedostateczny",
@@ -2288,6 +2464,7 @@ namespace Data.Migrations
                         new
                         {
                             Id = 2,
+                            ColorHex = "#ea580c",
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             Name = "Dopuszczający",
@@ -2298,6 +2475,7 @@ namespace Data.Migrations
                         new
                         {
                             Id = 3,
+                            ColorHex = "#ca8a04",
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             Name = "Dostateczny",
@@ -2308,6 +2486,7 @@ namespace Data.Migrations
                         new
                         {
                             Id = 4,
+                            ColorHex = "#65a30d",
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             Name = "Dobry",
@@ -2318,6 +2497,7 @@ namespace Data.Migrations
                         new
                         {
                             Id = 5,
+                            ColorHex = "#16a34a",
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             Name = "Bardzo dobry",
@@ -2328,6 +2508,7 @@ namespace Data.Migrations
                         new
                         {
                             Id = 6,
+                            ColorHex = "#0d9488",
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             Name = "Celujący",
@@ -2559,6 +2740,10 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
@@ -2574,7 +2759,8 @@ namespace Data.Migrations
                             Id = 1,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
-                            Name = "Zaplanowana",
+                            Name = "Zrealizowana",
+                            Slug = "completed",
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
@@ -2582,7 +2768,8 @@ namespace Data.Migrations
                             Id = 2,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
-                            Name = "Zrealizowana",
+                            Name = "Odwołana",
+                            Slug = "cancelled",
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
@@ -2590,7 +2777,8 @@ namespace Data.Migrations
                             Id = 3,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
-                            Name = "Odwołana",
+                            Name = "Zastępstwo",
+                            Slug = "substitute",
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
                         });
                 });
@@ -2852,7 +3040,7 @@ namespace Data.Migrations
                         {
                             Id = 1,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            EndDate = new DateOnly(2026, 1, 31),
+                            EndDate = new DateOnly(2026, 2, 28),
                             IsActive = true,
                             Name = "Semestr 1",
                             SchoolYearId = 1,
@@ -2867,14 +3055,14 @@ namespace Data.Migrations
                             IsActive = true,
                             Name = "Semestr 2",
                             SchoolYearId = 1,
-                            StartDate = new DateOnly(2026, 2, 1),
+                            StartDate = new DateOnly(2026, 3, 1),
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             Id = 3,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            EndDate = new DateOnly(2027, 1, 31),
+                            EndDate = new DateOnly(2027, 2, 28),
                             IsActive = true,
                             Name = "Semestr 1",
                             SchoolYearId = 2,
@@ -2889,7 +3077,7 @@ namespace Data.Migrations
                             IsActive = true,
                             Name = "Semestr 2",
                             SchoolYearId = 2,
-                            StartDate = new DateOnly(2027, 2, 1),
+                            StartDate = new DateOnly(2027, 3, 1),
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
                         });
                 });

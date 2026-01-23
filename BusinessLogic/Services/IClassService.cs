@@ -248,21 +248,8 @@ namespace BusinessLogic.Services
 
         private async Task RecalculateOrderNumbersAsync(int classId)
         {
-            var allStudents = await _context.ClassStudents
-                .Where(cs => cs.ClassId == classId)
-                .Include(cs => cs.Student)
-                .OrderBy(cs => cs.Student.LastName)
-                .ThenBy(cs => cs.Student.FirstName)
-                .ToListAsync();
-
-            int order = 1;
-            foreach (var cs in allStudents)
-            {
-                cs.OrderNumber = order++;
-                cs.UpdatedAt = DateTime.Now;
-            }
-
-            await _context.SaveChangesAsync();
+            await _context.Database.ExecuteSqlRawAsync(
+                "EXEC sp_RecalculateClassStudentOrder @ClassId = {0}", classId);
         }
 
         public async Task AssignSubjectAsync(int classId, int subjectId, int teacherId)

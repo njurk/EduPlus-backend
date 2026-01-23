@@ -13,7 +13,7 @@ namespace BusinessLogic.Services
     {
         Task<int> GetCurrentSemesterAsync(int schoolYearId);
         Task<IEnumerable<object>> GetClassGradesAsync(int classId, int subjectId, int semester, int? schoolYearId);
-        Task<IEnumerable<object>> GetAllAsync(string? search, string? sortBy, bool sortDesc, int? classId, bool showInactive);
+        Task<IEnumerable<object>> GetAllAsync(string? search, string? sortBy, bool sortDesc, int? classId, int? semesterId, int? schoolYearId, bool showInactive);
         Task<object> CreateAsync(GradeDto dto, int teacherId);
         Task<object?> UpdateAsync(int id, GradeDto dto);
         Task<bool> DeleteAsync(int id);
@@ -78,8 +78,9 @@ namespace BusinessLogic.Services
                 .OrderBy(x => x.OrderNumber).ToListAsync();
         }
 
-        public async Task<IEnumerable<object>> GetAllAsync(string? search, string? sortBy, bool sortDesc, int? classId, bool showInactive)
+        public async Task<IEnumerable<object>> GetAllAsync(string? search, string? sortBy, bool sortDesc, int? classId, int? semesterId, int? schoolYearId, bool showInactive)
         {
+            var users = _context.Users.AsNoTracking();
             var query = _context.Grades.AsNoTracking()
                 .Include(g => g.Student)
                 .Include(g => g.Subject)
@@ -88,7 +89,7 @@ namespace BusinessLogic.Services
                 .Include(g => g.Teacher)
                 .AsQueryable();
 
-            if (!showInactive) query = query.Where(g => g.IsActive);
+            query = query.Where(g => showInactive ? !g.IsActive : g.IsActive);
 
             if (!string.IsNullOrWhiteSpace(search))
             {
@@ -109,6 +110,27 @@ namespace BusinessLogic.Services
                 query = query.Where(g => studentIds.Contains(g.StudentId));
             }
 
+            if (semesterId.HasValue)
+            {
+                var semester = await _context.Semesters.FindAsync(semesterId.Value);
+                if (semester != null)
+                {
+                    var startDate = semester.StartDate.ToDateTime(TimeOnly.MinValue);
+                    var endDate = semester.EndDate.ToDateTime(TimeOnly.MaxValue);
+                    query = query.Where(g => g.CreatedAt >= startDate && g.CreatedAt <= endDate);
+                }
+            }
+            else if (schoolYearId.HasValue)
+            {
+                var schoolYear = await _context.SchoolYears.FindAsync(schoolYearId.Value);
+                if (schoolYear != null)
+                {
+                    var startDate = schoolYear.StartDate.ToDateTime(TimeOnly.MinValue);
+                    var endDate = schoolYear.EndDate.ToDateTime(TimeOnly.MaxValue);
+                    query = query.Where(g => g.CreatedAt >= startDate && g.CreatedAt <= endDate);
+                }
+            }
+
             var projected = query.Select(g => new
             {
                 g.Id,
@@ -118,21 +140,25 @@ namespace BusinessLogic.Services
                     .Select(cs => cs.Class.Level + cs.Class.Letter)
                     .FirstOrDefault(),
                 SubjectName = g.Subject.Name,
-                GradeTypeName = g.GradeType.Name,
+                GradeTypeName = g.GradeType.Numeric,
                 GradeValue = g.GradeType.Value,
                 CategoryName = g.GradeCategory.Name,
+                TeacherName = g.Teacher.LastName + " " + g.Teacher.FirstName,
                 g.Comment,
                 g.CreatedAt,
                 g.UpdatedAt,
                 g.IsActive,
-                TeacherName = g.Teacher.FirstName + " " + g.Teacher.LastName
+                ModifiedByName = g.ModifiedByUserId != null ? users.Where(u => u.Id == g.ModifiedByUserId).Select(u => u.LastName + " " + u.FirstName).FirstOrDefault() : null
             });
 
             projected = sortBy?.ToLower() switch
             {
                 "studentname" => sortDesc ? projected.OrderByDescending(g => g.StudentName) : projected.OrderBy(g => g.StudentName),
+                "classname" => sortDesc ? projected.OrderByDescending(g => g.ClassName) : projected.OrderBy(g => g.ClassName),
                 "subjectname" => sortDesc ? projected.OrderByDescending(g => g.SubjectName) : projected.OrderBy(g => g.SubjectName),
                 "gradevalue" => sortDesc ? projected.OrderByDescending(g => g.GradeValue) : projected.OrderBy(g => g.GradeValue),
+                "categoryname" => sortDesc ? projected.OrderByDescending(g => g.CategoryName) : projected.OrderBy(g => g.CategoryName),
+                "teachername" => sortDesc ? projected.OrderByDescending(g => g.TeacherName) : projected.OrderBy(g => g.TeacherName),
                 "updatedat" => sortDesc ? projected.OrderByDescending(g => g.UpdatedAt) : projected.OrderBy(g => g.UpdatedAt),
                 _ => sortDesc ? projected.OrderByDescending(g => g.CreatedAt) : projected.OrderBy(g => g.CreatedAt)
             };

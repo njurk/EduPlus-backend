@@ -20,7 +20,9 @@ namespace Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Slug = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ShortCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ColorHex = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
@@ -75,6 +77,7 @@ namespace Data.Migrations
                     Numeric = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Value = table.Column<decimal>(type: "decimal(2,1)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ColorHex = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
@@ -111,6 +114,7 @@ namespace Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Slug = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
@@ -919,14 +923,14 @@ namespace Data.Migrations
 
             migrationBuilder.InsertData(
                 table: "AttendanceTypes",
-                columns: new[] { "Id", "CreatedAt", "IsActive", "ModifiedByUserId", "Name", "ShortCode", "UpdatedAt" },
+                columns: new[] { "Id", "ColorHex", "CreatedAt", "IsActive", "ModifiedByUserId", "Name", "ShortCode", "Slug", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "Obecność", "OB", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
-                    { 2, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "Nieobecność", "NB", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
-                    { 3, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "Spóźnienie", "SP", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
-                    { 4, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "Usprawiedliwione", "U", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
-                    { 5, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "Zwolnienie", "ZW", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) }
+                    { 1, "#16a34a", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "Obecność", "OB", "present", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 2, "#dc2626", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "Nieobecność", "NB", "absent", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 3, "#ca8a04", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "Spóźnienie", "SP", "late", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 4, "#9333ea", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "Usprawiedliwione", "U", "excused", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 5, "#2563eb", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "Zwolnienie", "ZW", "released", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) }
                 });
 
             migrationBuilder.InsertData(
@@ -943,15 +947,15 @@ namespace Data.Migrations
 
             migrationBuilder.InsertData(
                 table: "GradeTypes",
-                columns: new[] { "Id", "CreatedAt", "IsActive", "ModifiedByUserId", "Name", "Numeric", "UpdatedAt", "Value" },
+                columns: new[] { "Id", "ColorHex", "CreatedAt", "IsActive", "ModifiedByUserId", "Name", "Numeric", "UpdatedAt", "Value" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "Niedostateczny", "1", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), 1.0m },
-                    { 2, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "Dopuszczający", "2", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), 2.0m },
-                    { 3, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "Dostateczny", "3", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), 3.0m },
-                    { 4, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "Dobry", "4", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), 4.0m },
-                    { 5, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "Bardzo dobry", "5", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), 5.0m },
-                    { 6, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "Celujący", "6", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), 6.0m }
+                    { 1, "#dc2626", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "Niedostateczny", "1", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), 1.0m },
+                    { 2, "#ea580c", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "Dopuszczający", "2", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), 2.0m },
+                    { 3, "#ca8a04", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "Dostateczny", "3", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), 3.0m },
+                    { 4, "#65a30d", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "Dobry", "4", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), 4.0m },
+                    { 5, "#16a34a", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "Bardzo dobry", "5", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), 5.0m },
+                    { 6, "#0d9488", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "Celujący", "6", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), 6.0m }
                 });
 
             migrationBuilder.InsertData(
@@ -972,12 +976,12 @@ namespace Data.Migrations
 
             migrationBuilder.InsertData(
                 table: "LessonStatuses",
-                columns: new[] { "Id", "CreatedAt", "IsActive", "ModifiedByUserId", "Name", "UpdatedAt" },
+                columns: new[] { "Id", "CreatedAt", "IsActive", "ModifiedByUserId", "Name", "Slug", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "Zaplanowana", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
-                    { 2, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "Zrealizowana", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
-                    { 3, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "Odwołana", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) }
+                    { 1, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "Zrealizowana", "completed", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 2, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "Odwołana", "cancelled", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 3, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "Zastępstwo", "substitute", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) }
                 });
 
             migrationBuilder.InsertData(
@@ -1009,7 +1013,7 @@ namespace Data.Migrations
                     { 2, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "WebTeacher", null, "Nauczyciel - strona internetowa", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
                     { 3, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "MobileParent", null, "Rodzic - aplikacja mobilna", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
                     { 4, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "MobileStudent", null, "Uczeń - aplikacja mobilna", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
-                    { 5, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "All", null, "System", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) }
+                    { 5, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "All", null, "Zasoby wspólne", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) }
                 });
 
             migrationBuilder.InsertData(
@@ -1050,10 +1054,10 @@ namespace Data.Migrations
                 columns: new[] { "Id", "CreatedAt", "EndDate", "IsActive", "ModifiedByUserId", "Name", "SchoolYearId", "StartDate", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), new DateOnly(2026, 1, 31), true, null, "Semestr 1", 1, new DateOnly(2025, 9, 1), new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
-                    { 2, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), new DateOnly(2026, 6, 30), true, null, "Semestr 2", 1, new DateOnly(2026, 2, 1), new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
-                    { 3, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), new DateOnly(2027, 1, 31), true, null, "Semestr 1", 2, new DateOnly(2026, 9, 1), new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
-                    { 4, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), new DateOnly(2027, 6, 30), true, null, "Semestr 2", 2, new DateOnly(2027, 2, 1), new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) }
+                    { 1, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), new DateOnly(2026, 2, 28), true, null, "Semestr 1", 1, new DateOnly(2025, 9, 1), new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 2, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), new DateOnly(2026, 6, 30), true, null, "Semestr 2", 1, new DateOnly(2026, 3, 1), new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 3, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), new DateOnly(2027, 2, 28), true, null, "Semestr 1", 2, new DateOnly(2026, 9, 1), new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 4, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), new DateOnly(2027, 6, 30), true, null, "Semestr 2", 2, new DateOnly(2027, 3, 1), new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) }
                 });
 
             migrationBuilder.InsertData(
@@ -1206,7 +1210,24 @@ namespace Data.Migrations
                     { 144, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "columns.time", null, 7, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Godziny" },
                     { 145, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "columns.topic", null, 7, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Temat" },
                     { 146, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "modal.details", null, 7, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Lekcja" },
-                    { 147, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "emptyMessage", null, 7, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Brak danych" }
+                    { 147, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "emptyMessage", null, 7, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Brak danych" },
+                    { 148, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "columns.teacher", null, 9, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Nauczyciel" },
+                    { 149, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "columns.createdAt", null, 9, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Utworzono" },
+                    { 150, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "columns.updatedAt", null, 9, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Edytowano" },
+                    { 151, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "columns.modifiedBy", null, 9, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Edytowane przez" },
+                    { 152, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "columns.actions", null, 9, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Akcje" },
+                    { 153, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "emptyMessage", null, 9, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Brak danych" },
+                    { 154, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "columns.date", null, 6, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Data" },
+                    { 155, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "columns.student", null, 6, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Uczeń" },
+                    { 156, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "columns.parent", null, 6, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Rodzic" },
+                    { 157, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "columns.period", null, 6, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Okres" },
+                    { 158, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "columns.reason", null, 6, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Powód" },
+                    { 159, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "columns.status", null, 6, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Status" },
+                    { 160, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "columns.actions", null, 6, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Akcje" },
+                    { 161, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "status.accepted", null, 6, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Zaakceptowane" },
+                    { 162, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "status.rejected", null, 6, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Odrzucone" },
+                    { 163, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "status.pending", null, 6, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Oczekuje" },
+                    { 164, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "actions.delete", null, 6, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Usuń" }
                 });
 
             migrationBuilder.CreateIndex(

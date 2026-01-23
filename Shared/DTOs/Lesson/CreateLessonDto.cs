@@ -21,10 +21,10 @@ namespace Shared.DTOs
         public int? ClassroomId { get; set; }
     }
 
-    public class GenerateLessonsDto
+    public class CreateFromScheduleDto
     {
-        public int ClassId { get; set; }
-        public int SchoolYearId { get; set; }
-        public int SemesterId { get; set; }
+        public int ScheduleId { get; set; }
+        public DateTime Date { get; set; }
+        public int? TeacherId { get; set; }
     }
 }

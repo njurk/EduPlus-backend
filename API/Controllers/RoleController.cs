@@ -1,6 +1,7 @@
 ﻿using BusinessLogic.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Shared.DTOs;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -18,5 +19,12 @@ public class RoleController : ControllerBase
     public async Task<IActionResult> GetAll(string? search = null, string? sortBy = null, bool sortDesc = true)
     {
         return Ok(await _service.GetAllAsync(search, sortBy, sortDesc));
+    }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update(int id, [FromBody] RoleUpdateDto dto)
+    {
+        var result = await _service.UpdateAsync(id, dto);
+        return result ? NoContent() : NotFound();
     }
 }

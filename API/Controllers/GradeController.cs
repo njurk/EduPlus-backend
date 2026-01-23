@@ -46,9 +46,11 @@ public class GradeController : ControllerBase
         [FromQuery] string? sortBy = null,
         [FromQuery] bool sortDesc = true,
         [FromQuery] int? classId = null,
+        [FromQuery] int? semesterId = null,
+        [FromQuery] int? schoolYearId = null,
         [FromQuery] bool showInactive = false)
     {
-        return Ok(await _service.GetAllAsync(search, sortBy, sortDesc, classId, showInactive));
+        return Ok(await _service.GetAllAsync(search, sortBy, sortDesc, classId, semesterId, schoolYearId, showInactive));
     }
 
     [HttpPost]

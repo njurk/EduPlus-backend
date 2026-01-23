@@ -24,5 +24,12 @@ namespace API.Controllers
             var schedule = await _service.GetScheduleForClassAsync(classId, semesterId);
             return Ok(schedule);
         }
+
+        [HttpGet("available")]
+        public async Task<IActionResult> GetAvailableForDate([FromQuery] DateTime date, [FromQuery] int? classId = null, [FromQuery] int? teacherId = null, [FromQuery] int? semesterId = null)
+        {
+            var schedule = await _service.GetAvailableForDateAsync(date, classId, teacherId, semesterId);
+            return Ok(schedule);
+        }
     }
 }

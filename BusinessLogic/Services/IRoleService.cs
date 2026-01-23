@@ -5,12 +5,14 @@ using System.Threading.Tasks;
 using Data.Data;
 using Data.Data.Entities;
 using Microsoft.EntityFrameworkCore;
+using Shared.DTOs;
 
 namespace BusinessLogic.Services
 {
     public interface IRoleService
     {
         Task<IEnumerable<object>> GetAllAsync(string? search, string? sortBy = null, bool sortDesc = true);
+        Task<bool> UpdateAsync(int id, RoleUpdateDto dto);
     }
 
     public class RoleService : IRoleService
@@ -54,6 +56,19 @@ namespace BusinessLogic.Services
                         : "System"
                 })
                 .ToListAsync();
+        }
+
+        public async Task<bool> UpdateAsync(int id, RoleUpdateDto dto)
+        {
+            var role = await _context.Roles.FindAsync(id);
+            if (role == null) return false;
+
+            role.Name = dto.Name;
+            role.Description = dto.Description;
+            role.UpdatedAt = DateTime.Now;
+
+            await _context.SaveChangesAsync();
+            return true;
         }
     }
 }

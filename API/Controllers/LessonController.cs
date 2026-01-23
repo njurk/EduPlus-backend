@@ -21,9 +21,12 @@ public class LessonController : ControllerBase
         [FromQuery] string? sortBy = null,
         [FromQuery] bool sortDesc = true,
         [FromQuery] int? classId = null,
-        [FromQuery] int? subjectId = null)
+        [FromQuery] int? subjectId = null,
+        [FromQuery] int? semesterId = null,
+        [FromQuery] int? schoolYearId = null,
+        [FromQuery] bool showInactive = false)
     {
-        var result = await _service.GetAllAsync(search, sortBy, sortDesc, classId, subjectId);
+        var result = await _service.GetAllAsync(search, sortBy, sortDesc, classId, subjectId, semesterId, schoolYearId, showInactive);
         return Ok(result);
     }
 
@@ -33,6 +36,29 @@ public class LessonController : ControllerBase
         var item = await _service.GetByIdAsync(id);
         if (item == null) return NotFound();
         return Ok(item);
+    }
+
+    [HttpGet("{id}/details")]
+    public async Task<IActionResult> GetDetails(int id)
+    {
+        var item = await _service.GetDetailsAsync(id);
+        if (item == null) return NotFound();
+        return Ok(item);
+    }
+
+    [HttpGet("{id}/attendance")]
+    public async Task<IActionResult> GetAttendance(int id)
+    {
+        var result = await _service.GetLessonAttendanceAsync(id);
+        return Ok(result);
+    }
+
+    [HttpPatch("{id}/attendance/{studentId}")]
+    public async Task<IActionResult> UpdateAttendance(int id, int studentId, [FromBody] UpdateLessonAttendanceDto dto)
+    {
+        var success = await _service.UpdateLessonAttendanceAsync(id, studentId, dto.AttendanceTypeId);
+        if (!success) return NotFound();
+        return NoContent();
     }
 
     [HttpPost]
@@ -58,11 +84,22 @@ public class LessonController : ControllerBase
         return NoContent();
     }
 
-    [HttpPost("generate")]
-    public async Task<IActionResult> GenerateLessons([FromBody] GenerateLessonsDto dto)
+    [HttpPost("from-schedule")]
+    public async Task<IActionResult> CreateFromSchedule([FromBody] CreateFromScheduleDto dto)
     {
-        var count = await _service.GenerateLessonsAsync(dto.ClassId, dto.SchoolYearId, dto.SemesterId);
-        return Ok(new { GeneratedCount = count });
+        try
+        {
+            var result = await _service.CreateFromScheduleAsync(dto.ScheduleId, dto.Date, dto.TeacherId);
+            return Ok(result);
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return Conflict(ex.Message);
+        }
     }
 }
 
