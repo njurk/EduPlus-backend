@@ -17,9 +17,17 @@ public class UserController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll([FromQuery] UserQueryDto query)
+    public async Task<IActionResult> GetAll(
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 20,
+        [FromQuery] string? search = null,
+        [FromQuery] string? sortBy = null,
+        [FromQuery] bool sortDesc = true,
+        [FromQuery] bool showInactive = false,
+        [FromQuery] bool onlyUnassignedParents = false,
+        [FromQuery] int? roleLevel = null)
     {
-        return Ok(await _service.GetAllAsync(query));
+        return Ok(await _service.GetAllAsync(pageNumber, pageSize, search, sortBy, sortDesc, showInactive, onlyUnassignedParents, roleLevel));
     }
 
     [HttpGet("{id}")]

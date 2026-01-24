@@ -50,6 +50,7 @@ namespace BusinessLogic.Services
                 {
                     x.Id,
                     x.Name,
+                    x.Slug,
                     x.IsActive,
                     x.CreatedAt,
                     x.UpdatedAt,

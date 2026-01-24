@@ -53,6 +53,7 @@ namespace BusinessLogic.Services
                     x.Id,
                     x.Name,
                     x.ShortCode,
+                    x.ColorHex,
                     x.IsActive,
                     x.CreatedAt,
                     x.UpdatedAt,

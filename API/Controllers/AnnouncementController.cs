@@ -24,6 +24,8 @@ public class AnnouncementController : ControllerBase
 
     [HttpGet]
     public async Task<IActionResult> GetAll(
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 20,
         [FromQuery] string? search = null,
         [FromQuery] string? sortBy = null,
         [FromQuery] bool sortDesc = true,
@@ -32,7 +34,7 @@ public class AnnouncementController : ControllerBase
         [FromQuery] int? targetRoleId = null)
     {
         var userId = GetUserId();
-        var items = await _service.GetAllAsync(userId, search, sortBy, sortDesc, showInactive, authorName, targetRoleId);
+        var items = await _service.GetAllAsync(userId, pageNumber, pageSize, search, sortBy, sortDesc, showInactive, authorName, targetRoleId);
         return Ok(items);
     }
 

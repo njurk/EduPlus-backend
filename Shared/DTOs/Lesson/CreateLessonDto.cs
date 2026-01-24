@@ -19,6 +19,7 @@ namespace Shared.DTOs
         public string? Topic { get; set; }
         public int? StatusId { get; set; }
         public int? ClassroomId { get; set; }
+        public int? TeacherId { get; set; }
     }
 
     public class CreateFromScheduleDto
@@ -26,5 +27,6 @@ namespace Shared.DTOs
         public int ScheduleId { get; set; }
         public DateTime Date { get; set; }
         public int? TeacherId { get; set; }
+        public int? StatusId { get; set; }
     }
 }

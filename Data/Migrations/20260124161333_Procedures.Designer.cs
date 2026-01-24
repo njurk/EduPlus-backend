@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(EduPlusDbContext))]
-    [Migration("20260123003542_Functions")]
-    partial class Functions
+    [Migration("20260124161333_Procedures")]
+    partial class Procedures
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

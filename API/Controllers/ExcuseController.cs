@@ -17,12 +17,14 @@ public class ExcuseController : ControllerBase
 
     [HttpGet]
     public async Task<IActionResult> GetAll(
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 20,
         [FromQuery] string? search = null,
         [FromQuery] string? sortBy = null,
         [FromQuery] bool sortDesc = true,
         [FromQuery] bool? isAccepted = null)
     {
-        var result = await _service.GetAllAsync(search, sortBy, sortDesc, isAccepted);
+        var result = await _service.GetAllAsync(pageNumber, pageSize, search, sortBy, sortDesc, isAccepted);
         return Ok(result);
     }
 

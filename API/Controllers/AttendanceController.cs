@@ -19,11 +19,18 @@ public class AttendanceController : ControllerBase
     [HttpGet("admin")]
     public async Task<IActionResult> GetAllForAdmin(
         [FromQuery] bool includeInactive = false,
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 20,
         [FromQuery] string? search = null,
         [FromQuery] string? sortBy = null,
-        [FromQuery] bool sortDesc = true)
+        [FromQuery] bool sortDesc = true,
+        [FromQuery] int? classId = null,
+        [FromQuery] DateTime? date = null,
+        [FromQuery] string? subjectName = null,
+        [FromQuery] string? teacherName = null,
+        [FromQuery] string? attendanceTypeShortCode = null)
     {
-        var result = await _service.GetAllForAdminAsync(includeInactive, search, sortBy, sortDesc);
+        var result = await _service.GetAllForAdminAsync(includeInactive, pageNumber, pageSize, search, sortBy, sortDesc, classId, date, subjectName, teacherName, attendanceTypeShortCode);
         return Ok(result);
     }
 

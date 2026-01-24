@@ -11,7 +11,7 @@ namespace BusinessLogic.Services
 {
     public interface ILessonService
     {
-        Task<IEnumerable<LessonDto>> GetAllAsync(string? search = null, string? sortBy = null, bool sortDesc = true, int? classId = null, int? subjectId = null, int? semesterId = null, int? schoolYearId = null, bool showInactive = false);
+        Task<PaginatedResponse<LessonDto>> GetAllAsync(int pageNumber = 1, int pageSize = 20, string? search = null, string? sortBy = null, bool sortDesc = true, int? classId = null, int? subjectId = null, int? semesterId = null, int? schoolYearId = null, bool showInactive = false, int? statusId = null, int? classroomId = null, int? teacherId = null);
         Task<Lesson?> GetByIdAsync(int id);
         Task<LessonDetailsDto?> GetDetailsAsync(int id);
         Task<IEnumerable<LessonAttendanceDto>> GetLessonAttendanceAsync(int lessonId);
@@ -19,7 +19,8 @@ namespace BusinessLogic.Services
         Task<Lesson> CreateAsync(CreateLessonDto dto);
         Task<Lesson?> UpdateAsync(int id, UpdateLessonDto dto);
         Task<bool> DeleteAsync(int id);
-        Task<Lesson> CreateFromScheduleAsync(int scheduleId, DateTime date, int? teacherIdOverride = null);
+        Task<bool> RestoreAsync(int id);
+        Task<Lesson> CreateFromScheduleAsync(int scheduleId, DateTime date, int? teacherIdOverride = null, int? statusIdOverride = null);
     }
 
     public class LessonService : ILessonService
@@ -31,7 +32,7 @@ namespace BusinessLogic.Services
             _context = context;
         }
 
-        public async Task<IEnumerable<LessonDto>> GetAllAsync(string? search = null, string? sortBy = null, bool sortDesc = true, int? classId = null, int? subjectId = null, int? semesterId = null, int? schoolYearId = null, bool showInactive = false)
+        public async Task<PaginatedResponse<LessonDto>> GetAllAsync(int pageNumber = 1, int pageSize = 20, string? search = null, string? sortBy = null, bool sortDesc = true, int? classId = null, int? subjectId = null, int? semesterId = null, int? schoolYearId = null, bool showInactive = false, int? statusId = null, int? classroomId = null, int? teacherId = null)
         {
             var query = _context.Lessons
                 .AsNoTracking()
@@ -73,6 +74,15 @@ namespace BusinessLogic.Services
                 }
             }
 
+            if (statusId.HasValue)
+                query = query.Where(l => l.StatusId == statusId.Value);
+
+            if (classroomId.HasValue)
+                query = query.Where(l => l.ClassroomId == classroomId.Value);
+
+            if (teacherId.HasValue)
+                query = query.Where(l => l.TeacherId == teacherId.Value);
+
             if (!string.IsNullOrWhiteSpace(search))
             {
                 var searchLower = search.ToLower();
@@ -99,7 +109,8 @@ namespace BusinessLogic.Services
                 StatusName = l.Status != null ? l.Status.Name : string.Empty,
                 CreatedAt = l.CreatedAt,
                 UpdatedAt = l.UpdatedAt,
-                ModifiedByName = l.ModifiedByUserId != null ? users.Where(u => u.Id == l.ModifiedByUserId).Select(u => u.LastName + " " + u.FirstName).FirstOrDefault() : null
+                ModifiedByName = l.ModifiedByUserId != null ? users.Where(u => u.Id == l.ModifiedByUserId).Select(u => u.LastName + " " + u.FirstName).FirstOrDefault() : null,
+                IsActive = l.IsActive
             });
 
             projected = sortBy?.ToLower() switch
@@ -113,7 +124,20 @@ namespace BusinessLogic.Services
                 _ => sortDesc ? projected.OrderByDescending(l => l.Date).ThenByDescending(l => l.OrderNumber) : projected.OrderBy(l => l.Date).ThenBy(l => l.OrderNumber)
             };
 
-            return await projected.ToListAsync();
+            var totalCount = await projected.CountAsync();
+
+            var data = await projected
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return new PaginatedResponse<LessonDto>
+            {
+                TotalCount = totalCount,
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                Data = data
+            };
         }
 
         public async Task<Lesson?> GetByIdAsync(int id)
@@ -170,6 +194,7 @@ namespace BusinessLogic.Services
                 }
             }
             if (dto.ClassroomId.HasValue) item.ClassroomId = dto.ClassroomId.Value;
+            if (dto.TeacherId.HasValue) item.TeacherId = dto.TeacherId.Value;
             item.UpdatedAt = DateTime.Now;
 
             await _context.SaveChangesAsync();
@@ -181,14 +206,33 @@ namespace BusinessLogic.Services
             var item = await _context.Lessons.FindAsync(id);
             if (item == null) return false;
 
-            item.IsActive = false;
+            if (item.IsActive)
+            {
+                item.IsActive = false;
+                item.UpdatedAt = DateTime.Now;
+            }
+            else
+            {
+                _context.Lessons.Remove(item);
+            }
+
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> RestoreAsync(int id)
+        {
+            var item = await _context.Lessons.FirstOrDefaultAsync(l => l.Id == id && !l.IsActive);
+            if (item == null) return false;
+
+            item.IsActive = true;
             item.UpdatedAt = DateTime.Now;
 
             await _context.SaveChangesAsync();
             return true;
         }
 
-        public async Task<Lesson> CreateFromScheduleAsync(int scheduleId, DateTime date, int? teacherIdOverride = null)
+        public async Task<Lesson> CreateFromScheduleAsync(int scheduleId, DateTime date, int? teacherIdOverride = null, int? statusIdOverride = null)
         {
             var schedule = await _context.WeeklySchedules
                 .Include(ws => ws.Subject)
@@ -226,7 +270,7 @@ namespace BusinessLogic.Services
                 ClassroomId = schedule.ClassroomId,
                 LessonHourId = schedule.LessonHourId,
                 Topic = string.Empty,
-                StatusId = defaultStatus?.Id ?? 1,
+                StatusId = statusIdOverride ?? defaultStatus?.Id ?? 1,
                 Date = date,
                 IsActive = true,
                 CreatedAt = DateTime.Now,

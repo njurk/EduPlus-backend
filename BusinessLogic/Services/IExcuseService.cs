@@ -11,7 +11,7 @@ namespace BusinessLogic.Services
 {
     public interface IExcuseService
     {
-        Task<IEnumerable<ExcuseDto>> GetAllAsync(string? search = null, string? sortBy = null, bool sortDesc = true, bool? isAccepted = null);
+        Task<PaginatedResponse<ExcuseDto>> GetAllAsync(int pageNumber = 1, int pageSize = 20, string? search = null, string? sortBy = null, bool sortDesc = true, bool? isAccepted = null);
         Task<Excuse?> GetByIdAsync(int id);
         Task<Excuse> CreateAsync(CreateExcuseDto dto);
         Task<Excuse?> UpdateAsync(int id, UpdateExcuseDto dto);
@@ -28,7 +28,7 @@ namespace BusinessLogic.Services
             _context = context;
         }
 
-        public async Task<IEnumerable<ExcuseDto>> GetAllAsync(string? search = null, string? sortBy = null, bool sortDesc = true, bool? isAccepted = null)
+        public async Task<PaginatedResponse<ExcuseDto>> GetAllAsync(int pageNumber = 1, int pageSize = 20, string? search = null, string? sortBy = null, bool sortDesc = true, bool? isAccepted = null)
         {
             var query = _context.Excuses
                 .AsNoTracking()
@@ -77,7 +77,16 @@ namespace BusinessLogic.Services
                 _ => sortDesc ? projected.OrderByDescending(e => e.SubmittedAt) : projected.OrderBy(e => e.SubmittedAt)
             };
 
-            return await projected.ToListAsync();
+            var totalCount = await projected.CountAsync();
+            var data = await projected.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
+
+            return new PaginatedResponse<ExcuseDto>
+            {
+                Data = data,
+                TotalCount = totalCount,
+                PageNumber = pageNumber,
+                PageSize = pageSize
+            };
         }
 
         public async Task<Excuse?> GetByIdAsync(int id)

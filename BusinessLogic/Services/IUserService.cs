@@ -12,7 +12,15 @@ namespace BusinessLogic.Services
 {
     public interface IUserService
     {
-        Task<IEnumerable<UserListView>> GetAllAsync(UserQueryDto query);
+        Task<PaginatedResponse<UserListView>> GetAllAsync(
+            int pageNumber = 1,
+            int pageSize = 20,
+            string? search = null,
+            string? sortBy = null,
+            bool sortDesc = true,
+            bool showInactive = false,
+            bool onlyUnassignedParents = false,
+            int? roleLevel = null);
         Task<object?> GetByIdAsync(int id);
         Task<User> CreateAsync(UserCreateDto dto);
         Task<bool> UpdateAsync(int id, UserUpdateDto dto, int? modifiedByUserId);
@@ -32,41 +40,67 @@ namespace BusinessLogic.Services
             _passwordHashService = passwordHashService;
         }
 
-        public async Task<IEnumerable<UserListView>> GetAllAsync(UserQueryDto query)
+        public async Task<PaginatedResponse<UserListView>> GetAllAsync(
+            int pageNumber = 1,
+            int pageSize = 20,
+            string? search = null,
+            string? sortBy = null,
+            bool sortDesc = true,
+            bool showInactive = false,
+            bool onlyUnassignedParents = false,
+            int? roleLevel = null)
         {
             var dbQuery = _context.UserList.AsNoTracking().AsQueryable();
 
-            dbQuery = query.ShowInactive ? dbQuery.Where(u => !u.IsActive) : dbQuery.Where(u => u.IsActive);
+            dbQuery = showInactive ? dbQuery.Where(u => !u.IsActive) : dbQuery.Where(u => u.IsActive);
 
-            if (!string.IsNullOrWhiteSpace(query.Search))
+            if (!string.IsNullOrWhiteSpace(search))
             {
-                var s = query.Search.Trim();
+                var s = search.Trim();
                 dbQuery = dbQuery.Where(u => u.LastName.Contains(s) || u.FirstName.Contains(s) || u.Email.Contains(s));
             }
 
-            if (!string.IsNullOrWhiteSpace(query.RoleName))
+            if (roleLevel.HasValue)
             {
-                dbQuery = dbQuery.Where(u => u.RoleNames.Contains(query.RoleName));
+                var roleName = await _context.Roles
+                    .Where(r => r.Level == roleLevel.Value)
+                    .Select(r => r.Name)
+                    .FirstOrDefaultAsync();
+                if (!string.IsNullOrEmpty(roleName))
+                    dbQuery = dbQuery.Where(u => u.RoleNames.Contains(roleName));
             }
 
-            if (query.OnlyUnassignedParents)
+            if (onlyUnassignedParents)
             {
                 dbQuery = dbQuery.Where(u => u.IsUnassignedParent);
             }
 
-            dbQuery = query.SortBy?.ToLower() switch
+            dbQuery = sortBy?.ToLower() switch
             {
-                "email" => query.SortDesc ? dbQuery.OrderByDescending(u => u.Email) : dbQuery.OrderBy(u => u.Email),
-                "created" => query.SortDesc ? dbQuery.OrderByDescending(u => u.CreatedAt) : dbQuery.OrderBy(u => u.CreatedAt),
-                "updated" => query.SortDesc ? dbQuery.OrderByDescending(u => u.UpdatedAt) : dbQuery.OrderBy(u => u.UpdatedAt),
-                "role" => query.SortDesc ? dbQuery.OrderByDescending(u => u.RoleNames) : dbQuery.OrderBy(u => u.RoleNames),
-                "name" or "lastname" => query.SortDesc
+                "email" => sortDesc ? dbQuery.OrderByDescending(u => u.Email) : dbQuery.OrderBy(u => u.Email),
+                "created" => sortDesc ? dbQuery.OrderByDescending(u => u.CreatedAt) : dbQuery.OrderBy(u => u.CreatedAt),
+                "updated" => sortDesc ? dbQuery.OrderByDescending(u => u.UpdatedAt) : dbQuery.OrderBy(u => u.UpdatedAt),
+                "role" => sortDesc ? dbQuery.OrderByDescending(u => u.RoleNames) : dbQuery.OrderBy(u => u.RoleNames),
+                "name" or "lastname" => sortDesc
                     ? dbQuery.OrderByDescending(u => u.LastName).ThenByDescending(u => u.FirstName)
                     : dbQuery.OrderBy(u => u.LastName).ThenBy(u => u.FirstName),
-                _ => query.SortDesc ? dbQuery.OrderByDescending(u => u.UpdatedAt) : dbQuery.OrderBy(u => u.UpdatedAt)
+                _ => sortDesc ? dbQuery.OrderByDescending(u => u.UpdatedAt) : dbQuery.OrderBy(u => u.UpdatedAt)
             };
 
-            return await dbQuery.ToListAsync();
+            var totalCount = await dbQuery.CountAsync();
+
+            var data = await dbQuery
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return new PaginatedResponse<UserListView>
+            {
+                TotalCount = totalCount,
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                Data = data
+            };
         }
 
         public async Task<object?> GetByIdAsync(int id)

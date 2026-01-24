@@ -13,7 +13,7 @@ namespace BusinessLogic.Services
     {
         Task<int> GetCurrentSemesterAsync(int schoolYearId);
         Task<IEnumerable<object>> GetClassGradesAsync(int classId, int subjectId, int semester, int? schoolYearId);
-        Task<IEnumerable<object>> GetAllAsync(string? search, string? sortBy, bool sortDesc, int? classId, int? semesterId, int? schoolYearId, bool showInactive);
+        Task<PaginatedResponse<object>> GetAllAsync(int pageNumber = 1, int pageSize = 20, string? search = null, string? sortBy = null, bool sortDesc = true, int? classId = null, int? semesterId = null, int? schoolYearId = null, int? subjectId = null, int? gradeTypeId = null, int? gradeCategoryId = null, int? teacherId = null, bool showInactive = false);
         Task<object> CreateAsync(GradeDto dto, int teacherId);
         Task<object?> UpdateAsync(int id, GradeDto dto);
         Task<bool> DeleteAsync(int id);
@@ -78,7 +78,7 @@ namespace BusinessLogic.Services
                 .OrderBy(x => x.OrderNumber).ToListAsync();
         }
 
-        public async Task<IEnumerable<object>> GetAllAsync(string? search, string? sortBy, bool sortDesc, int? classId, int? semesterId, int? schoolYearId, bool showInactive)
+        public async Task<PaginatedResponse<object>> GetAllAsync(int pageNumber = 1, int pageSize = 20, string? search = null, string? sortBy = null, bool sortDesc = true, int? classId = null, int? semesterId = null, int? schoolYearId = null, int? subjectId = null, int? gradeTypeId = null, int? gradeCategoryId = null, int? teacherId = null, bool showInactive = false)
         {
             var users = _context.Users.AsNoTracking();
             var query = _context.Grades.AsNoTracking()
@@ -131,6 +131,18 @@ namespace BusinessLogic.Services
                 }
             }
 
+            if (subjectId.HasValue)
+                query = query.Where(g => g.SubjectId == subjectId.Value);
+
+            if (gradeTypeId.HasValue)
+                query = query.Where(g => g.GradeTypeId == gradeTypeId.Value);
+
+            if (gradeCategoryId.HasValue)
+                query = query.Where(g => g.GradeCategoryId == gradeCategoryId.Value);
+
+            if (teacherId.HasValue)
+                query = query.Where(g => g.TeacherId == teacherId.Value);
+
             var projected = query.Select(g => new
             {
                 g.Id,
@@ -163,7 +175,20 @@ namespace BusinessLogic.Services
                 _ => sortDesc ? projected.OrderByDescending(g => g.CreatedAt) : projected.OrderBy(g => g.CreatedAt)
             };
 
-            return await projected.ToListAsync();
+            var totalCount = await projected.CountAsync();
+
+            var data = await projected
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return new PaginatedResponse<object>
+            {
+                TotalCount = totalCount,
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                Data = data.Cast<object>().ToList()
+            };
         }
 
         public async Task<object> CreateAsync(GradeDto dto, int teacherId)

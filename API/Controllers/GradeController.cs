@@ -42,15 +42,21 @@ public class GradeController : ControllerBase
 
     [HttpGet]
     public async Task<IActionResult> GetAll(
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 20,
         [FromQuery] string? search = null,
         [FromQuery] string? sortBy = null,
         [FromQuery] bool sortDesc = true,
         [FromQuery] int? classId = null,
         [FromQuery] int? semesterId = null,
         [FromQuery] int? schoolYearId = null,
+        [FromQuery] int? subjectId = null,
+        [FromQuery] int? gradeTypeId = null,
+        [FromQuery] int? gradeCategoryId = null,
+        [FromQuery] int? teacherId = null,
         [FromQuery] bool showInactive = false)
     {
-        return Ok(await _service.GetAllAsync(search, sortBy, sortDesc, classId, semesterId, schoolYearId, showInactive));
+        return Ok(await _service.GetAllAsync(pageNumber, pageSize, search, sortBy, sortDesc, classId, semesterId, schoolYearId, subjectId, gradeTypeId, gradeCategoryId, teacherId, showInactive));
     }
 
     [HttpPost]

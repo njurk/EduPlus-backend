@@ -2,6 +2,7 @@
 using Data.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Shared.DTOs.API.DTOs;
+using Shared.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace BusinessLogic.Services
 {
     public interface IAttendanceService
     {
-        Task<IEnumerable<AttendanceAdminDto>> GetAllForAdminAsync(bool includeInactive, string? search = null, string? sortBy = null, bool sortDesc = true);
+        Task<PaginatedResponse<AttendanceAdminDto>> GetAllForAdminAsync(bool includeInactive, int pageNumber = 1, int pageSize = 20, string? search = null, string? sortBy = null, bool sortDesc = true, int? classId = null, DateTime? date = null, string? subjectName = null, string? teacherName = null, string? attendanceTypeShortCode = null);
         Task<IEnumerable<Attendance>> GetAllAsync();
         Task<Attendance> CreateAsync(Attendance entity);
         Task<Attendance?> UpdateAsync(int id, int attendanceTypeId);
@@ -29,7 +30,7 @@ namespace BusinessLogic.Services
             _context = context;
         }
 
-        public async Task<IEnumerable<AttendanceAdminDto>> GetAllForAdminAsync(bool includeInactive, string? search = null, string? sortBy = null, bool sortDesc = true)
+        public async Task<PaginatedResponse<AttendanceAdminDto>> GetAllForAdminAsync(bool includeInactive, int pageNumber = 1, int pageSize = 20, string? search = null, string? sortBy = null, bool sortDesc = true, int? classId = null, DateTime? date = null, string? subjectName = null, string? teacherName = null, string? attendanceTypeShortCode = null)
         {
             var query = _context.Attendances.AsNoTracking()
                 .Include(a => a.Student)
@@ -37,9 +38,25 @@ namespace BusinessLogic.Services
                 .Include(a => a.Lesson).ThenInclude(l => l.Subject)
                 .Include(a => a.Lesson).ThenInclude(l => l.Teacher)
                 .Include(a => a.Lesson).ThenInclude(l => l.LessonHour)
+                .Include(a => a.Lesson).ThenInclude(l => l.Class)
                 .AsQueryable();
 
             if (!includeInactive) query = query.Where(x => x.IsActive);
+
+            if (classId.HasValue)
+                query = query.Where(a => a.Lesson.ClassId == classId.Value);
+
+            if (date.HasValue)
+                query = query.Where(a => a.Lesson.Date.Date == date.Value.Date);
+
+            if (!string.IsNullOrWhiteSpace(subjectName))
+                query = query.Where(a => a.Lesson.Subject.Name == subjectName);
+
+            if (!string.IsNullOrWhiteSpace(teacherName))
+                query = query.Where(a => (a.Lesson.Teacher.LastName + " " + a.Lesson.Teacher.FirstName) == teacherName);
+
+            if (!string.IsNullOrWhiteSpace(attendanceTypeShortCode))
+                query = query.Where(a => a.AttendanceType.ShortCode == attendanceTypeShortCode);
 
             if (!string.IsNullOrWhiteSpace(search))
             {
@@ -79,7 +96,16 @@ namespace BusinessLogic.Services
                 _ => sortDesc ? projected.OrderByDescending(a => a.LessonDate) : projected.OrderBy(a => a.LessonDate)
             };
 
-            return await projected.ToListAsync();
+            var totalCount = await projected.CountAsync();
+            var data = await projected.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
+
+            return new PaginatedResponse<AttendanceAdminDto>
+            {
+                Data = data,
+                TotalCount = totalCount,
+                PageNumber = pageNumber,
+                PageSize = pageSize
+            };
         }
 
         public async Task<IEnumerable<Attendance>> GetAllAsync()

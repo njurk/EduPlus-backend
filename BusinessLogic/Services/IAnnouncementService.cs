@@ -1,6 +1,7 @@
 ﻿using Data.Data;
 using Data.Data.Entities;
 using Microsoft.EntityFrameworkCore;
+using Shared.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace BusinessLogic.Services
 {
     public interface IAnnouncementService
     {
-        Task<IEnumerable<object>> GetAllAsync(int userId, string? search = null, string? sortBy = null, bool sortDesc = true, bool showInactive = false, string? authorName = null, int? targetRoleId = null);
+        Task<PaginatedResponse<object>> GetAllAsync(int userId, int pageNumber = 1, int pageSize = 20, string? search = null, string? sortBy = null, bool sortDesc = true, bool showInactive = false, string? authorName = null, int? targetRoleId = null);
         Task<List<string>> GetAuthorsAsync();
         Task<Announcement?> GetByIdAsync(int id);
         Task<Announcement> CreateAsync(Announcement entity, List<int>? roleIds = null);
@@ -31,7 +32,7 @@ namespace BusinessLogic.Services
         }
 
 
-        public async Task<IEnumerable<object>> GetAllAsync(int userId, string? search = null, string? sortBy = null, bool sortDesc = true, bool showInactive = false, string? authorName = null, int? targetRoleId = null)
+        public async Task<PaginatedResponse<object>> GetAllAsync(int userId, int pageNumber = 1, int pageSize = 20, string? search = null, string? sortBy = null, bool sortDesc = true, bool showInactive = false, string? authorName = null, int? targetRoleId = null)
         {
             var userRoleIds = await _context.UserRoles
                 .Where(ur => ur.UserId == userId)
@@ -80,7 +81,11 @@ namespace BusinessLogic.Services
                 "created" or "createdat" or _ => sortDesc ? query.OrderByDescending(a => a.CreatedAt) : query.OrderBy(a => a.CreatedAt)
             };
 
-            return await query
+            var totalCount = await query.CountAsync();
+
+            var data = await query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
                 .Select(a => new
                 {
                     a.Id,
@@ -98,6 +103,14 @@ namespace BusinessLogic.Services
                     ModifiedByName = _context.Users.Where(u => u.Id == a.ModifiedByUserId).Select(u => u.FirstName + " " + u.LastName).FirstOrDefault() ?? "System"
                 })
                 .ToListAsync();
+
+            return new PaginatedResponse<object>
+            {
+                Data = data.Cast<object>().ToList(),
+                TotalCount = totalCount,
+                PageNumber = pageNumber,
+                PageSize = pageSize
+            };
         }
 
         public async Task<List<string>> GetAuthorsAsync()

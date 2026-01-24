@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 using Data.Data;
 using Data.Data.Entities;
 using Microsoft.EntityFrameworkCore;
+using Shared.DTOs;
 
 namespace BusinessLogic.Services
 {
     public interface IClassService
     {
-        Task<IEnumerable<object>> GetAllAsync(int? schoolYearId, bool includeInactive, string? sortBy = null, bool sortDesc = false, int? level = null);
+        Task<PaginatedResponse<object>> GetAllAsync(int? schoolYearId, bool includeInactive, int pageNumber = 1, int pageSize = 20, string? sortBy = null, bool sortDesc = false, int? level = null, string? search = null);
         Task<object?> GetDetailsAsync(int id, string sortBy, bool sortDesc, string studentSearch, string subjectSearch, string subjectSortBy, bool subjectSortDesc);
         Task<IEnumerable<object>> GetCandidatesAsync(int classId, string search);
         Task AddStudentsBulkAsync(int classId, List<int> studentIds);
@@ -32,7 +33,7 @@ namespace BusinessLogic.Services
             _context = context;
         }
 
-        public async Task<IEnumerable<object>> GetAllAsync(int? schoolYearId, bool includeInactive, string? sortBy = null, bool sortDesc = false, int? level = null)
+        public async Task<PaginatedResponse<object>> GetAllAsync(int? schoolYearId, bool includeInactive, int pageNumber = 1, int pageSize = 20, string? sortBy = null, bool sortDesc = false, int? level = null, string? search = null)
         {
             var query = _context.Classes.AsNoTracking();
 
@@ -44,6 +45,12 @@ namespace BusinessLogic.Services
 
             if (level.HasValue)
                 query = query.Where(c => c.Level == level.Value);
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                var searchLower = search.ToLower().Trim();
+                query = query.Where(c => (c.Level.ToString() + c.Letter).ToLower().Contains(searchLower));
+            }
 
             var projected = query
                 .Include(c => c.ClassStudents)
@@ -76,7 +83,16 @@ namespace BusinessLogic.Services
                 _ => projected.OrderBy(c => c.Level).ThenBy(c => c.Letter)
             };
 
-            return await projected.ToListAsync();
+            var totalCount = await projected.CountAsync();
+            var data = await projected.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
+
+            return new PaginatedResponse<object>
+            {
+                Data = data.Cast<object>().ToList(),
+                TotalCount = totalCount,
+                PageNumber = pageNumber,
+                PageSize = pageSize
+            };
         }
 
         public async Task<object?> GetDetailsAsync(int id, string sortBy, bool sortDesc, string studentSearch, string subjectSearch, string subjectSortBy, bool subjectSortDesc)

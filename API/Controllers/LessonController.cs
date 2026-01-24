@@ -17,6 +17,8 @@ public class LessonController : ControllerBase
 
     [HttpGet]
     public async Task<IActionResult> GetAll(
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 20,
         [FromQuery] string? search = null,
         [FromQuery] string? sortBy = null,
         [FromQuery] bool sortDesc = true,
@@ -24,9 +26,12 @@ public class LessonController : ControllerBase
         [FromQuery] int? subjectId = null,
         [FromQuery] int? semesterId = null,
         [FromQuery] int? schoolYearId = null,
-        [FromQuery] bool showInactive = false)
+        [FromQuery] bool showInactive = false,
+        [FromQuery] int? statusId = null,
+        [FromQuery] int? classroomId = null,
+        [FromQuery] int? teacherId = null)
     {
-        var result = await _service.GetAllAsync(search, sortBy, sortDesc, classId, subjectId, semesterId, schoolYearId, showInactive);
+        var result = await _service.GetAllAsync(pageNumber, pageSize, search, sortBy, sortDesc, classId, subjectId, semesterId, schoolYearId, showInactive, statusId, classroomId, teacherId);
         return Ok(result);
     }
 
@@ -84,12 +89,20 @@ public class LessonController : ControllerBase
         return NoContent();
     }
 
+    [HttpPatch("{id}/restore")]
+    public async Task<IActionResult> Restore(int id)
+    {
+        var success = await _service.RestoreAsync(id);
+        if (!success) return NotFound();
+        return NoContent();
+    }
+
     [HttpPost("from-schedule")]
     public async Task<IActionResult> CreateFromSchedule([FromBody] CreateFromScheduleDto dto)
     {
         try
         {
-            var result = await _service.CreateFromScheduleAsync(dto.ScheduleId, dto.Date, dto.TeacherId);
+            var result = await _service.CreateFromScheduleAsync(dto.ScheduleId, dto.Date, dto.TeacherId, dto.StatusId);
             return Ok(result);
         }
         catch (ArgumentException ex)

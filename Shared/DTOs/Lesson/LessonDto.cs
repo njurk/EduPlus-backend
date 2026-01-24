@@ -24,6 +24,7 @@ namespace Shared.DTOs
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public string? ModifiedByName { get; set; }
+        public bool IsActive { get; set; }
     }
 }
 
