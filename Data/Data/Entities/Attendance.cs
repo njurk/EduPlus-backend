@@ -21,6 +21,8 @@ namespace Data.Data.Entities
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
         public int? ModifiedByUserId { get; set; }
+        [ForeignKey(nameof(ModifiedByUserId))]
+        public virtual User? ModifiedBy { get; set; }
     }
 }
 

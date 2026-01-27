@@ -23,4 +23,3 @@ namespace Data.Data.Entities
         public int? ModifiedByUserId { get; set; }
     }
 }
-

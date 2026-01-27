@@ -16,44 +16,28 @@ namespace API.Controllers
             _service = service;
         }
 
-        [HttpGet("schedule/pdf")]
-        public async Task<IActionResult> ExportSchedulePdf(
+        [HttpGet("schedule/{format}")]
+        public async Task<IActionResult> ExportSchedule(
+            string format,
             [FromQuery] int classId,
             [FromQuery] int? yearId = null,
             [FromQuery] int? semesterId = null)
         {
-            var result = await _service.ExportScheduleToPdfAsync(classId, yearId, semesterId);
-            return File(result.Data, "application/pdf", result.FileName);
+            var result = await _service.ExportScheduleAsync(classId, yearId, semesterId, format);
+            return File(result.Data, result.ContentType, result.FileName);
         }
 
-        [HttpGet("schedule/xlsx")]
-        public async Task<IActionResult> ExportScheduleXlsx(
+        [HttpGet("grades/{format}")]
+        public async Task<IActionResult> ExportGrades(
+            string format,
             [FromQuery] int classId,
-            [FromQuery] int? yearId = null,
-            [FromQuery] int? semesterId = null)
+            [FromQuery] int? subjectId = null,
+            [FromQuery] int? semesterId = null,
+            [FromQuery] int? schoolYearId = null,
+            [FromQuery] int? studentId = null)
         {
-            var result = await _service.ExportScheduleToXlsxAsync(classId, yearId, semesterId);
-            return File(result.Data, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", result.FileName);
-        }
-
-        [HttpGet("schedule/csv")]
-        public async Task<IActionResult> ExportScheduleCsv(
-            [FromQuery] int classId,
-            [FromQuery] int? yearId = null,
-            [FromQuery] int? semesterId = null)
-        {
-            var result = await _service.ExportScheduleToCsvAsync(classId, yearId, semesterId);
-            return File(result.Data, "text/csv", result.FileName);
-        }
-
-        [HttpGet("schedule/docx")]
-        public async Task<IActionResult> ExportScheduleDocx(
-            [FromQuery] int classId,
-            [FromQuery] int? yearId = null,
-            [FromQuery] int? semesterId = null)
-        {
-            var result = await _service.ExportScheduleToDocxAsync(classId, yearId, semesterId);
-            return File(result.Data, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", result.FileName);
+            var result = await _service.ExportGradesAsync(classId, subjectId ?? 0, semesterId ?? 0, schoolYearId ?? 0, studentId, format);
+            return File(result.Data, result.ContentType, result.FileName);
         }
     }
 }

@@ -77,11 +77,27 @@ public class GradeController : ControllerBase
         return Ok(result);
     }
 
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById(int id)
+    {
+        var result = await _service.GetByIdAsync(id);
+        if (result == null) return NotFound();
+        return Ok(result);
+    }
+
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
         var success = await _service.DeleteAsync(id);
         if (!success) return NotFound();
         return NoContent();
+    }
+
+    [HttpPatch("{id}/restore")]
+    public async Task<IActionResult> Restore(int id)
+    {
+        var success = await _service.RestoreAsync(id);
+        if (!success) return NotFound();
+        return Ok(new { message = "Przywrócono", id });
     }
 }

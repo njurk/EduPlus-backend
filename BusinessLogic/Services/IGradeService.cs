@@ -14,9 +14,11 @@ namespace BusinessLogic.Services
         Task<int> GetCurrentSemesterAsync(int schoolYearId);
         Task<IEnumerable<object>> GetClassGradesAsync(int classId, int subjectId, int semester, int? schoolYearId);
         Task<PaginatedResponse<object>> GetAllAsync(int pageNumber = 1, int pageSize = 20, string? search = null, string? sortBy = null, bool sortDesc = true, int? classId = null, int? semesterId = null, int? schoolYearId = null, int? subjectId = null, int? gradeTypeId = null, int? gradeCategoryId = null, int? teacherId = null, bool showInactive = false);
+        Task<object?> GetByIdAsync(int id);
         Task<object> CreateAsync(GradeDto dto, int teacherId);
         Task<object?> UpdateAsync(int id, GradeDto dto);
         Task<bool> DeleteAsync(int id);
+        Task<bool> RestoreAsync(int id);
     }
 
     public class GradeService : IGradeService
@@ -72,7 +74,7 @@ namespace BusinessLogic.Services
                             g.CreatedAt,
                             GradeType = new { g.GradeType.Numeric, g.GradeType.Name, g.GradeType.Value },
                             GradeCategory = new { g.GradeCategory.Name },
-                            TeacherName = g.Teacher.FirstName + " " + g.Teacher.LastName
+                            TeacherName = g.Teacher.LastName + " " + g.Teacher.FirstName
                         }).ToList()
                 })
                 .OrderBy(x => x.OrderNumber).ToListAsync();
@@ -80,14 +82,7 @@ namespace BusinessLogic.Services
 
         public async Task<PaginatedResponse<object>> GetAllAsync(int pageNumber = 1, int pageSize = 20, string? search = null, string? sortBy = null, bool sortDesc = true, int? classId = null, int? semesterId = null, int? schoolYearId = null, int? subjectId = null, int? gradeTypeId = null, int? gradeCategoryId = null, int? teacherId = null, bool showInactive = false)
         {
-            var users = _context.Users.AsNoTracking();
-            var query = _context.Grades.AsNoTracking()
-                .Include(g => g.Student)
-                .Include(g => g.Subject)
-                .Include(g => g.GradeType)
-                .Include(g => g.GradeCategory)
-                .Include(g => g.Teacher)
-                .AsQueryable();
+            var query = _context.GradesAdminList.AsNoTracking().AsQueryable();
 
             query = query.Where(g => showInactive ? !g.IsActive : g.IsActive);
 
@@ -95,20 +90,14 @@ namespace BusinessLogic.Services
             {
                 var s = search.Trim().ToLower();
                 query = query.Where(g =>
-                    g.Student.LastName.ToLower().Contains(s) ||
-                    g.Student.FirstName.ToLower().Contains(s) ||
-                    g.Subject.Name.ToLower().Contains(s) ||
-                    g.GradeType.Name.ToLower().Contains(s));
+                    g.StudentName.ToLower().Contains(s) ||
+                    g.SubjectName.ToLower().Contains(s) ||
+                    g.GradeTypeName.ToLower().Contains(s) ||
+                    g.TeacherName.ToLower().Contains(s));
             }
 
             if (classId.HasValue)
-            {
-                var studentIds = await _context.ClassStudents
-                    .Where(cs => cs.ClassId == classId.Value)
-                    .Select(cs => cs.StudentId)
-                    .ToListAsync();
-                query = query.Where(g => studentIds.Contains(g.StudentId));
-            }
+                query = query.Where(g => g.ClassId == classId.Value);
 
             if (semesterId.HasValue)
             {
@@ -146,21 +135,18 @@ namespace BusinessLogic.Services
             var projected = query.Select(g => new
             {
                 g.Id,
-                StudentName = g.Student.LastName + " " + g.Student.FirstName,
-                ClassName = _context.ClassStudents
-                    .Where(cs => cs.StudentId == g.StudentId)
-                    .Select(cs => cs.Class.Level + cs.Class.Letter)
-                    .FirstOrDefault(),
-                SubjectName = g.Subject.Name,
-                GradeTypeName = g.GradeType.Numeric,
-                GradeValue = g.GradeType.Value,
-                CategoryName = g.GradeCategory.Name,
-                TeacherName = g.Teacher.LastName + " " + g.Teacher.FirstName,
+                g.StudentName,
+                g.ClassName,
+                g.SubjectName,
+                GradeTypeName = g.GradeTypeName,
+                GradeValue = g.GradeValue,
+                CategoryName = g.CategoryName,
+                g.TeacherName,
                 g.Comment,
                 g.CreatedAt,
                 g.UpdatedAt,
                 g.IsActive,
-                ModifiedByName = g.ModifiedByUserId != null ? users.Where(u => u.Id == g.ModifiedByUserId).Select(u => u.LastName + " " + u.FirstName).FirstOrDefault() : null
+                g.ModifiedByName
             });
 
             projected = sortBy?.ToLower() switch
@@ -222,7 +208,7 @@ namespace BusinessLogic.Services
                     g.CreatedAt,
                     GradeType = new { g.GradeType.Numeric, g.GradeType.Name, g.GradeType.Value },
                     GradeCategory = new { g.GradeCategory.Name },
-                    TeacherName = g.Teacher.FirstName + " " + g.Teacher.LastName
+                    TeacherName = g.Teacher.LastName + " " + g.Teacher.FirstName
                 })
                 .FirstOrDefaultAsync(g => g.Id == entity.Id);
         }
@@ -256,7 +242,46 @@ namespace BusinessLogic.Services
                 existing.CreatedAt,
                 GradeType = new { existing.GradeType.Numeric, existing.GradeType.Name, existing.GradeType.Value },
                 GradeCategory = new { existing.GradeCategory.Name },
-                TeacherName = existing.Teacher.FirstName + " " + existing.Teacher.LastName
+                TeacherName = existing.Teacher.LastName + " " + existing.Teacher.FirstName
+            };
+        }
+
+        public async Task<object?> GetByIdAsync(int id)
+        {
+            var grade = await _context.Grades.AsNoTracking()
+                .Include(g => g.Student)
+                .Include(g => g.Subject)
+                .Include(g => g.GradeType)
+                .Include(g => g.GradeCategory)
+                .Include(g => g.Teacher)
+                .FirstOrDefaultAsync(g => g.Id == id);
+
+            if (grade == null) return null;
+
+            var className = await _context.ClassStudents
+                .Where(cs => cs.StudentId == grade.StudentId)
+                .Select(cs => cs.Class.Level + cs.Class.Letter)
+                .FirstOrDefaultAsync();
+
+            return new
+            {
+                grade.Id,
+                StudentId = grade.StudentId,
+                StudentName = grade.Student.LastName + " " + grade.Student.FirstName,
+                ClassName = className,
+                SubjectId = grade.SubjectId,
+                SubjectName = grade.Subject.Name,
+                GradeTypeId = grade.GradeTypeId,
+                GradeTypeName = grade.GradeType.Numeric,
+                GradeValue = grade.GradeType.Value,
+                GradeCategoryId = grade.GradeCategoryId,
+                CategoryName = grade.GradeCategory.Name,
+                TeacherId = grade.TeacherId,
+                TeacherName = grade.Teacher.LastName + " " + grade.Teacher.FirstName,
+                grade.Comment,
+                grade.CreatedAt,
+                grade.UpdatedAt,
+                grade.IsActive
             };
         }
 
@@ -264,7 +289,26 @@ namespace BusinessLogic.Services
         {
             var item = await _context.Grades.FindAsync(id);
             if (item == null) return false;
-            item.IsActive = false;
+
+            if (item.IsActive)
+            {
+                item.IsActive = false;
+                item.UpdatedAt = DateTime.Now;
+            }
+            else
+            {
+                _context.Grades.Remove(item);
+            }
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> RestoreAsync(int id)
+        {
+            var item = await _context.Grades.IgnoreQueryFilters().FirstOrDefaultAsync(g => g.Id == id);
+            if (item == null) return false;
+
+            item.IsActive = true;
             item.UpdatedAt = DateTime.Now;
             await _context.SaveChangesAsync();
             return true;

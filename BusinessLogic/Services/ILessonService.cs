@@ -34,18 +34,9 @@ namespace BusinessLogic.Services
 
         public async Task<PaginatedResponse<LessonDto>> GetAllAsync(int pageNumber = 1, int pageSize = 20, string? search = null, string? sortBy = null, bool sortDesc = true, int? classId = null, int? subjectId = null, int? semesterId = null, int? schoolYearId = null, bool showInactive = false, int? statusId = null, int? classroomId = null, int? teacherId = null)
         {
-            var query = _context.Lessons
-                .AsNoTracking()
+            var query = _context.LessonsAdminList.AsNoTracking()
                 .Where(l => showInactive ? !l.IsActive : l.IsActive)
-                .Include(l => l.Subject)
-                .Include(l => l.Teacher)
-                .Include(l => l.Class)
-                .Include(l => l.Classroom)
-                .Include(l => l.LessonHour)
-                .Include(l => l.Status)
                 .AsQueryable();
-
-            var users = _context.Users.AsNoTracking();
 
             if (classId.HasValue)
                 query = query.Where(l => l.ClassId == classId.Value);
@@ -86,30 +77,30 @@ namespace BusinessLogic.Services
             if (!string.IsNullOrWhiteSpace(search))
             {
                 var searchLower = search.ToLower();
-                query = query.Where(l => l.Topic.ToLower().Contains(searchLower) || l.Subject.Name.ToLower().Contains(searchLower));
+                query = query.Where(l => l.Topic.ToLower().Contains(searchLower) || l.SubjectName.ToLower().Contains(searchLower));
             }
 
             var projected = query.Select(l => new LessonDto
             {
                 Id = l.Id,
                 SubjectId = l.SubjectId,
-                SubjectName = l.Subject.Name,
+                SubjectName = l.SubjectName,
                 ClassId = l.ClassId,
-                ClassName = l.Class.Level + l.Class.Letter,
+                ClassName = l.ClassName,
                 TeacherId = l.TeacherId,
-                TeacherName = l.Teacher.LastName + " " + l.Teacher.FirstName,
+                TeacherName = l.TeacherName,
                 ClassroomId = l.ClassroomId,
-                ClassroomName = l.Classroom != null ? l.Classroom.Name : string.Empty,
+                ClassroomName = l.ClassroomName ?? string.Empty,
                 Date = l.Date,
-                OrderNumber = l.LessonHour.OrderNumber,
-                StartTime = l.LessonHour.StartTime.ToString(@"HH\:mm"),
-                EndTime = l.LessonHour.EndTime.ToString(@"HH\:mm"),
+                OrderNumber = l.OrderNumber,
+                StartTime = l.StartTime.ToString(@"HH\:mm"),
+                EndTime = l.EndTime.ToString(@"HH\:mm"),
                 Topic = l.Topic,
                 StatusId = l.StatusId,
-                StatusName = l.Status != null ? l.Status.Name : string.Empty,
+                StatusName = l.StatusName ?? string.Empty,
                 CreatedAt = l.CreatedAt,
                 UpdatedAt = l.UpdatedAt,
-                ModifiedByName = l.ModifiedByUserId != null ? users.Where(u => u.Id == l.ModifiedByUserId).Select(u => u.LastName + " " + u.FirstName).FirstOrDefault() : null,
+                ModifiedByName = l.ModifiedByName,
                 IsActive = l.IsActive
             });
 

@@ -1,5 +1,4 @@
 ﻿using BusinessLogic.Services;
-using Data.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.DTOs;
@@ -28,9 +27,11 @@ public class AttendanceController : ControllerBase
         [FromQuery] DateTime? date = null,
         [FromQuery] string? subjectName = null,
         [FromQuery] string? teacherName = null,
-        [FromQuery] string? attendanceTypeShortCode = null)
+        [FromQuery] string? attendanceTypeShortCode = null,
+        [FromQuery] int? orderNumber = null,
+        [FromQuery] string? studentName = null)
     {
-        var result = await _service.GetAllForAdminAsync(includeInactive, pageNumber, pageSize, search, sortBy, sortDesc, classId, date, subjectName, teacherName, attendanceTypeShortCode);
+        var result = await _service.GetAllForAdminAsync(includeInactive, pageNumber, pageSize, search, sortBy, sortDesc, classId, date, subjectName, teacherName, attendanceTypeShortCode, orderNumber, studentName);
         return Ok(result);
     }
 
@@ -40,13 +41,6 @@ public class AttendanceController : ControllerBase
         return Ok(await _service.GetAllAsync());
     }
 
-    [HttpPost]
-    public async Task<IActionResult> Create(Attendance entity)
-    {
-        var result = await _service.CreateAsync(entity);
-        return Ok(result);
-    }
-
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] UpdateAttendanceDto dto)
     {
@@ -54,21 +48,4 @@ public class AttendanceController : ControllerBase
         if (result == null) return NotFound();
         return Ok(result);
     }
-
-    [HttpPatch("{id}/restore")]
-    public async Task<IActionResult> Restore(int id)
-    {
-        var success = await _service.RestoreAsync(id);
-        if (!success) return NotFound();
-        return NoContent();
-    }
-
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(int id)
-    {
-        var success = await _service.DeleteAsync(id);
-        if (!success) return NotFound();
-        return NoContent();
-    }
 }
-

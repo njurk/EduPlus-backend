@@ -132,7 +132,7 @@ namespace BusinessLogic.Services
                 cs.CreatedAt,
                 cs.UpdatedAt,
                 ModifiedByName = cs.ModifiedByUserId != null 
-                    ? _context.Users.Where(u => u.Id == cs.ModifiedByUserId).Select(u => u.FirstName + " " + u.LastName).FirstOrDefault()
+                    ? _context.Users.Where(u => u.Id == cs.ModifiedByUserId).Select(u => u.LastName + " " + u.FirstName).FirstOrDefault()
                     : "System",
                 Student = new { cs.Student.Id, cs.Student.FirstName, cs.Student.LastName, cs.Student.Email }
             }).ToListAsync();
@@ -151,7 +151,7 @@ namespace BusinessLogic.Services
                 cs.CreatedAt,
                 cs.UpdatedAt,
                 ModifiedByName = cs.ModifiedByUserId != null 
-                    ? _context.Users.Where(u => u.Id == cs.ModifiedByUserId).Select(u => u.FirstName + " " + u.LastName).FirstOrDefault()
+                    ? _context.Users.Where(u => u.Id == cs.ModifiedByUserId).Select(u => u.LastName + " " + u.FirstName).FirstOrDefault()
                     : "System",
                 TeacherInfo = _context.TeacherClassSubjects
                     .Where(t => t.ClassId == id && t.SubjectId == cs.SubjectId)

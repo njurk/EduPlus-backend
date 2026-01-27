@@ -54,7 +54,7 @@ namespace BusinessLogic.Services
                     x.IsActive,
                     x.CreatedAt,
                     x.UpdatedAt,
-                    ModifiedByName = _context.Users.Where(u => u.Id == x.ModifiedByUserId).Select(u => u.FirstName + " " + u.LastName).FirstOrDefault() ?? "System"
+                    ModifiedByName = _context.Users.Where(u => u.Id == x.ModifiedByUserId).Select(u => u.LastName + " " + u.FirstName).FirstOrDefault() ?? "System"
                 })
                 .ToListAsync();
         }

@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace Shared.DTOs
+namespace Data.Data.EntitiesForView
 {
-    public class LessonDto
+    public class LessonsAdminView
     {
         public int Id { get; set; }
         public int SubjectId { get; set; }
@@ -12,19 +10,18 @@ namespace Shared.DTOs
         public int TeacherId { get; set; }
         public string TeacherName { get; set; } = string.Empty;
         public int? ClassroomId { get; set; }
-        public string ClassroomName { get; set; } = string.Empty;
-        public DateTime Date { get; set; }
-        public int DayOfWeek { get; set; }
+        public string? ClassroomName { get; set; }
+        public int LessonHourId { get; set; }
         public int OrderNumber { get; set; }
-        public string StartTime { get; set; } = string.Empty;
-        public string EndTime { get; set; } = string.Empty;
+        public TimeOnly StartTime { get; set; }
+        public TimeOnly EndTime { get; set; }
+        public DateTime Date { get; set; }
         public string Topic { get; set; } = string.Empty;
         public int? StatusId { get; set; }
-        public string StatusName { get; set; } = string.Empty;
+        public string? StatusName { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
-        public string? ModifiedByName { get; set; }
         public bool IsActive { get; set; }
+        public string? ModifiedByName { get; set; }
     }
 }
-

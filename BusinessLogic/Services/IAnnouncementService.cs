@@ -70,7 +70,7 @@ namespace BusinessLogic.Services
 
             if (!string.IsNullOrWhiteSpace(authorName))
             {
-                query = query.Where(a => a.Author != null && (a.Author.FirstName + " " + a.Author.LastName) == authorName);
+                query = query.Where(a => a.Author != null && (a.Author.LastName + " " + a.Author.FirstName) == authorName);
             }
 
             query = sortBy?.ToLower() switch
@@ -92,7 +92,7 @@ namespace BusinessLogic.Services
                     a.Title,
                     a.Description,
                     a.AuthorId,
-                    AuthorName = a.Author != null ? a.Author.FirstName + " " + a.Author.LastName : null,
+                    AuthorName = a.Author != null ? a.Author.LastName + " " + a.Author.FirstName : null,
                     TargetRoles = a.AnnouncementTargets.Any(at => at.RoleId == null)
                         ? "Wszyscy"
                         : string.Join(", ", a.AnnouncementTargets.Where(at => at.RoleId != null).Select(at => at.Role!.Name)),
@@ -100,7 +100,7 @@ namespace BusinessLogic.Services
                     a.IsActive,
                     a.CreatedAt,
                     a.UpdatedAt,
-                    ModifiedByName = _context.Users.Where(u => u.Id == a.ModifiedByUserId).Select(u => u.FirstName + " " + u.LastName).FirstOrDefault() ?? "System"
+                    ModifiedByName = _context.Users.Where(u => u.Id == a.ModifiedByUserId).Select(u => u.LastName + " " + u.FirstName).FirstOrDefault() ?? "System"
                 })
                 .ToListAsync();
 
@@ -119,7 +119,7 @@ namespace BusinessLogic.Services
                 .AsNoTracking()
                 .Include(a => a.Author)
                 .Where(a => a.Author != null)
-                .Select(a => a.Author.FirstName + " " + a.Author.LastName)
+                .Select(a => a.Author.LastName + " " + a.Author.FirstName)
                 .Distinct()
                 .OrderBy(name => name)
                 .ToListAsync();

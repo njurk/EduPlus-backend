@@ -75,7 +75,7 @@
                         .AllowAnyMethod()
                         .AllowAnyHeader()
                         .AllowCredentials()
-                        .WithExposedHeaders("Content-Disposition"));
+                    );
             });
 
             var jwtSettings = builder.Configuration.GetSection("Jwt");

@@ -52,7 +52,7 @@ namespace BusinessLogic.Services
                     x.CreatedAt,
                     x.UpdatedAt,
                     ModifiedByName = x.ModifiedByUserId != null 
-                        ? _context.Users.Where(u => u.Id == x.ModifiedByUserId).Select(u => u.FirstName + " " + u.LastName).FirstOrDefault()
+                        ? _context.Users.Where(u => u.Id == x.ModifiedByUserId).Select(u => u.LastName + " " + u.FirstName).FirstOrDefault()
                         : "System"
                 })
                 .ToListAsync();

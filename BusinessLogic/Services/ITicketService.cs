@@ -70,7 +70,7 @@ namespace BusinessLogic.Services
                     CreatedAt = t.CreatedAt,
                     UpdatedAt = t.UpdatedAt,
                     ModifiedByName = t.ModifiedByUserId != null
-                        ? _context.Users.Where(u => u.Id == t.ModifiedByUserId).Select(u => u.FirstName + " " + u.LastName).FirstOrDefault()
+                        ? _context.Users.Where(u => u.Id == t.ModifiedByUserId).Select(u => u.LastName + " " + u.FirstName).FirstOrDefault()
                         : "System"
                 })
                 .ToListAsync();

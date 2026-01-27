@@ -18,10 +18,11 @@ namespace Shared.DTOs.API.DTOs
         public string ShortCode { get; set; } = string.Empty;
         public int AttendanceTypeId { get; set; }
         public int OrderNumber { get; set; }
+        public string ClassName { get; set; } = string.Empty;
         public DateTime LessonDate { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
+        public string? ModifiedByName { get; set; }
         public bool IsActive { get; set; }
     }
 }
-

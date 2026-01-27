@@ -47,6 +47,9 @@ namespace Data.Data
         public DbSet<DashboardStatsView> DashboardStats { get; set; }
         public DbSet<UserListView> UserList { get; set; }
         public DbSet<ParentStudentView> ParentStudentList { get; set; }
+        public DbSet<AttendanceAdminView> AttendanceAdminList { get; set; }
+        public DbSet<GradesAdminView> GradesAdminList { get; set; }
+        public DbSet<LessonsAdminView> LessonsAdminList { get; set; }
 
 
         [DbFunction("fn_CalculateWeightedAverage", "dbo")]
@@ -200,6 +203,9 @@ namespace Data.Data
             modelBuilder.Entity<DashboardStatsView>().HasNoKey().ToView("vw_DashboardStatsView");
             modelBuilder.Entity<UserListView>().HasNoKey().ToView("vw_UserListView");
             modelBuilder.Entity<ParentStudentView>().HasNoKey().ToView("vw_ParentStudentView");
+            modelBuilder.Entity<AttendanceAdminView>().HasNoKey().ToView("vw_AttendanceAdmin");
+            modelBuilder.Entity<GradesAdminView>().HasNoKey().ToView("vw_GradesAdmin");
+            modelBuilder.Entity<LessonsAdminView>().HasNoKey().ToView("vw_LessonsAdmin");
 
             ModelSeeder.Seed(modelBuilder);
         }
