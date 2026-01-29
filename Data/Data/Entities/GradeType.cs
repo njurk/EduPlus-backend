@@ -13,7 +13,6 @@ namespace Data.Data.Entities
         [Column(TypeName = "decimal(2, 1)")]
         public required decimal Value { get; set; }
         public required string Name { get; set; }
-        public string ColorHex { get; set; } = "#6b7280";
         public bool IsActive { get; set; } = true;
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime UpdatedAt { get; set; } = DateTime.Now;

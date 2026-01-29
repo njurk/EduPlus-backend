@@ -40,8 +40,7 @@ namespace BusinessLogic.Services
             if (schoolYearId.HasValue)
                 query = query.Where(c => c.SchoolYearId == schoolYearId);
 
-            if (!includeInactive)
-                query = query.Where(c => c.IsActive);
+            query = includeInactive ? query.Where(c => !c.IsActive) : query.Where(c => c.IsActive);
 
             if (level.HasValue)
                 query = query.Where(c => c.Level == level.Value);
@@ -342,13 +341,9 @@ namespace BusinessLogic.Services
             {
                 classEntity.IsActive = false;
                 classEntity.UpdatedAt = DateTime.Now;
-            }
-            else
-            {
-                _context.Classes.Remove(classEntity);
+                await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
             return true;
         }
 

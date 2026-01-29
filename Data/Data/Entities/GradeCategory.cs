@@ -9,6 +9,7 @@ namespace Data.Data.Entities
         public int Id { get; set; }
         public int Weight { get; set; }
         public required string Name { get; set; }
+        public string ColorHex { get; set; } = "#6b7280";
         public bool IsActive { get; set; } = true;
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime UpdatedAt { get; set; } = DateTime.Now;

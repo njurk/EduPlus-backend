@@ -39,6 +39,7 @@ namespace Data.Data
         public DbSet<ParentStudent> ParentStudents { get; set; } = null!;
         public DbSet<Ticket> Tickets { get; set; }
         public DbSet<TicketReason> TicketReasons { get; set; }
+        public DbSet<TicketRead> TicketReads { get; set; }
         public DbSet<PasswordResetToken> PasswordResetTokens { get; set; }
         public DbSet<Page> Pages { get; set; } = null!;
         public DbSet<Target> Targets { get; set; } = null!;
@@ -134,12 +135,14 @@ namespace Data.Data
             {
                 e.HasIndex(a => new { a.LessonId, a.StudentId })
                  .IsUnique();
+                e.HasIndex(a => new { a.IsActive, a.LessonId });
                 e.HasOne(x => x.Student).WithMany().OnDelete(DeleteBehavior.Restrict);
             });
 
             modelBuilder.Entity<Grade>(e =>
             {
                 e.HasIndex(g => new { g.StudentId, g.SubjectId, g.DateTime });
+                e.HasIndex(g => new { g.IsActive, g.CreatedAt });
                 e.HasOne(g => g.Student).WithMany().OnDelete(DeleteBehavior.Restrict);
                 e.HasOne(g => g.Teacher).WithMany().OnDelete(DeleteBehavior.Restrict);
             });
@@ -159,6 +162,9 @@ namespace Data.Data
             modelBuilder.Entity<Lesson>(e =>
             {
                 e.HasIndex(l => new { l.Date, l.ClassId, l.SubjectId });
+                e.HasIndex(l => l.LessonHourId);
+                e.HasIndex(l => l.TeacherId);
+                e.HasIndex(l => l.SubjectId);
                 e.HasOne(l => l.Teacher).WithMany().OnDelete(DeleteBehavior.Restrict);
             });
 
@@ -208,6 +214,27 @@ namespace Data.Data
             modelBuilder.Entity<LessonsAdminView>().HasNoKey().ToView("vw_LessonsAdmin");
 
             ModelSeeder.Seed(modelBuilder);
+        }
+
+        public void ApplySqlObjects()
+        {
+            Database.ExecuteSqlRaw(Sql.SqlFunctions.CalculateWeightedAverage);
+            Database.ExecuteSqlRaw(Sql.SqlFunctions.GetUserRoles);
+
+            Database.ExecuteSqlRaw(Sql.SqlProcedures.GenerateNextSchoolYear);
+            Database.ExecuteSqlRaw(Sql.SqlProcedures.DeactivateLessonAttendance);
+            Database.ExecuteSqlRaw(Sql.SqlProcedures.GenerateLessonAttendance);
+            Database.ExecuteSqlRaw(Sql.SqlProcedures.RecalculateClassStudentOrder);
+
+            Database.ExecuteSqlRaw(Sql.SqlViews.DashboardStats);
+            Database.ExecuteSqlRaw(Sql.SqlViews.ParentStudent);
+            Database.ExecuteSqlRaw(Sql.SqlViews.UserList);
+            Database.ExecuteSqlRaw(Sql.SqlViews.StudentGradesSummary);
+            Database.ExecuteSqlRaw(Sql.SqlViews.ClassAttendanceSummary);
+            Database.ExecuteSqlRaw(Sql.SqlViews.TeacherSchedule);
+            Database.ExecuteSqlRaw(Sql.SqlViews.AttendanceAdmin);
+            Database.ExecuteSqlRaw(Sql.SqlViews.GradesAdmin);
+            Database.ExecuteSqlRaw(Sql.SqlViews.LessonsAdmin);
         }
     }
 }

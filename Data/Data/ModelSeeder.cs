@@ -52,7 +52,10 @@ namespace Data.Data
                 new Page { Id = 12, Title = "Ustawienia konta", Link = "settings", Position = 11, TargetId = 1, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new Page { Id = 13, Title = "Konfiguracja", Link = "systemConfig", Position = 12, TargetId = 1, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new Page { Id = 14, Title = "Pasek boczny", Link = "layout", Position = 0, TargetId = 1, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new Page { Id = 15, Title = "Login", Link = "login", Position = 0, TargetId = 1, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null }
+                new Page { Id = 15, Title = "Login", Link = "login", Position = 0, TargetId = 1, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new Page { Id = 16, Title = "Reset hasła", Link = "resetPassword", Position = 0, TargetId = 1, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new Page { Id = 17, Title = "Zgłoś problem", Link = "submitTicket", Position = 0, TargetId = 1, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new Page { Id = 18, Title = "Admin Login", Link = "adminLogin", Position = 0, TargetId = 1, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null }
             );
         }
 
@@ -102,7 +105,6 @@ namespace Data.Data
                 new PageContent { Id = 41, Key = "title", Value = "Ogłoszenia", PageId = 4, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 42, Key = "columns.date", Value = "Utworzono", PageId = 4, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 43, Key = "columns.title", Value = "Tytuł", PageId = 4, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new PageContent { Id = 44, Key = "columns.content", Value = "Treść", PageId = 4, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 45, Key = "columns.author", Value = "Autor", PageId = 4, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 46, Key = "columns.modifiedBy", Value = "Edytowane przez", PageId = 4, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 47, Key = "columns.actions", Value = "Akcje", PageId = 4, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
@@ -111,7 +113,7 @@ namespace Data.Data
                 new PageContent { Id = 125, Key = "columns.reason", Value = "Powód", PageId = 5, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 126, Key = "columns.status", Value = "Status", PageId = 5, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 127, Key = "columns.closedAt", Value = "Data zamknięcia", PageId = 5, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new PageContent { Id = 128, Key = "columns.createdAt", Value = "Utworzono", PageId = 5, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 128, Key = "columns.createdAt", Value = "Data zgłoszenia", PageId = 5, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 130, Key = "columns.modifiedBy", Value = "Zamknięte przez", PageId = 5, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 131, Key = "columns.actions", Value = "Akcje", PageId = 5, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 49, Key = "title", Value = "Usprawiedliwienia", PageId = 6, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
@@ -198,7 +200,7 @@ namespace Data.Data
                 new PageContent { Id = 85, Key = "title", Value = "Ustawienia konta", PageId = 12, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 86, Key = "section.profile", Value = "Profil", PageId = 12, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 87, Key = "section.password", Value = "Zmiana hasła", PageId = 12, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new PageContent { Id = 132, Key = "title", Value = "Konfiguracja", PageId = 13, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null  },
+                new PageContent { Id = 216, Key = "title", Value = "Konfiguracja", PageId = 13, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null  },
                 new PageContent { Id = 88, Key = "modal.new", Value = "Nowy element", PageId = 13, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 89, Key = "modal.edit", Value = "Edycja elementu", PageId = 13, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 90, Key = "columns.number", Value = "Nr", PageId = 13, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
@@ -228,13 +230,42 @@ namespace Data.Data
                 new PageContent { Id = 114, Key = "nav.section.system", Value = "System", PageId = 14, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 115, Key = "nav.config", Value = "Konfiguracja", PageId = 14, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 116, Key = "nav.cms", Value = "CMS", PageId = 14, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new PageContent { Id = 117, Key = "title", Value = "Logowanie", PageId = 15, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 117, Key = "title", Value = "EduPlus", PageId = 15, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 118, Key = "logoUrl", Value = "logo-512.png", PageId = 15, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 119, Key = "logoAlt", Value = "EduPlus", PageId = 15, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new PageContent { Id = 120, Key = "form.email", Value = "Email", PageId = 15, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new PageContent { Id = 121, Key = "form.password", Value = "Hasło", PageId = 15, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 122, Key = "form.forgotPassword", Value = "Zapomniałeś hasła?", PageId = 15, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new PageContent { Id = 123, Key = "footer", Value = "EduPlus v1.0.0", PageId = 15, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null }
+                new PageContent { Id = 123, Key = "footer", Value = "EduPlus v1.0.0", PageId = 15, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 200, Key = "tabs.classrooms", Value = "Sale", PageId = 13, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 201, Key = "tabs.subjects", Value = "Przedmioty", PageId = 13, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 202, Key = "tabs.lessonHours", Value = "Godziny lekcyjne", PageId = 13, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 203, Key = "tabs.lessonStatuses", Value = "Statusy lekcji", PageId = 13, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 204, Key = "tabs.gradeTypes", Value = "Skala ocen", PageId = 13, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 205, Key = "tabs.gradeCategories", Value = "Kategorie ocen", PageId = 13, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 206, Key = "tabs.attendance", Value = "Frekwencja", PageId = 13, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 207, Key = "tabs.ticketReasons", Value = "Powody zgłoszeń", PageId = 13, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 208, Key = "tabs.schoolYears", Value = "Rok szkolny", PageId = 13, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 209, Key = "helpLink", Value = "Masz problem? Kliknij tutaj", PageId = 15, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 210, Key = "adminLink", Value = "Jestem administratorem", PageId = 15, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 211, Key = "title.request", Value = "Resetowanie hasła", PageId = 16, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 212, Key = "title.sent", Value = "Sprawdź swoją skrzynkę", PageId = 16, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 213, Key = "title.reset", Value = "Ustaw nowe hasło", PageId = 16, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 214, Key = "message.sent", Value = "Jeśli adres {email} istnieje w naszej bazie, za chwilę otrzymasz wiadomość z linkiem do resetowania hasła.", PageId = 16, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 215, Key = "message.linkExpirationTime", Value = "Link wygasa po 1 godzinie", PageId = 16, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 217, Key = "title", Value = "Zgłoś problem", PageId = 17, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 218, Key = "subtitle", Value = "Masz problem z logowaniem lub chcesz zgłosić inny problem? Wypełnij formularz poniżej.", PageId = 17, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 221, Key = "form.description", Value = "Opis problemu", PageId = 17, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 222, Key = "form.descriptionPlaceholder", Value = "Opisz szczegółowo problem który napotkałeś", PageId = 17, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 226, Key = "success.message", Value = "Twoje zgłoszenie zostało przyjęte. Odpowiedź otrzymasz na podany adres email.", PageId = 17, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 227, Key = "title", Value = "EduPlus Admin", PageId = 18, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 228, Key = "logoUrl", Value = "logo-512.png", PageId = 18, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 229, Key = "logoAlt", Value = "EduPlus", PageId = 18, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 230, Key = "form.forgotPassword", Value = "Zapomniałeś hasła?", PageId = 18, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 231, Key = "footer", Value = "EduPlus v1.0.0", PageId = 18, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 232, Key = "helpLink", Value = "Masz problem? Kliknij tutaj", PageId = 18, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 233, Key = "teacherLink", Value = "Jestem nauczycielem", PageId = 18, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 234, Key = "title", Value = "Pulpit", PageId = 2, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 235, Key = "tickets.title", Value = "Ostatnie zgłoszenia", PageId = 2, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 236, Key = "quickActions.title", Value = "Szybkie akcje", PageId = 2, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null }
             );
         }
 
@@ -259,34 +290,34 @@ namespace Data.Data
         private static void SeedAttendanceTypes(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<AttendanceType>().HasData(
-                new AttendanceType { Id = 1, Name = "Obecność", Slug = "present", ShortCode = "OB", ColorHex = "#16a34a", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new AttendanceType { Id = 2, Name = "Nieobecność", Slug = "absent", ShortCode = "NB", ColorHex = "#dc2626", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new AttendanceType { Id = 3, Name = "Spóźnienie", Slug = "late", ShortCode = "SP", ColorHex = "#ca8a04", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new AttendanceType { Id = 4, Name = "Usprawiedliwione", Slug = "excused", ShortCode = "U", ColorHex = "#9333ea", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new AttendanceType { Id = 5, Name = "Zwolnienie", Slug = "released", ShortCode = "ZW", ColorHex = "#2563eb", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null }
+                new AttendanceType { Id = 1, Name = "Obecność", Slug = "present", ShortCode = "OB", ColorHex = "#22c55e", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new AttendanceType { Id = 2, Name = "Nieobecność", Slug = "absent", ShortCode = "NB", ColorHex = "#ef4444", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new AttendanceType { Id = 3, Name = "Spóźnienie", Slug = "late", ShortCode = "SP", ColorHex = "#eab308", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new AttendanceType { Id = 4, Name = "Usprawiedliwione", Slug = "excused", ShortCode = "U", ColorHex = "#8b5cf6", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new AttendanceType { Id = 5, Name = "Zwolnienie", Slug = "released", ShortCode = "ZW", ColorHex = "#3b82f6", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null }
             );
         }
 
         private static void SeedGradeTypes(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<GradeType>().HasData(
-                new GradeType { Id = 1, Numeric = "1", Name = "Niedostateczny", Value = 1.0m, ColorHex = "#dc2626", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new GradeType { Id = 2, Numeric = "2", Name = "Dopuszczający", Value = 2.0m, ColorHex = "#ea580c", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new GradeType { Id = 3, Numeric = "3", Name = "Dostateczny", Value = 3.0m, ColorHex = "#ca8a04", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new GradeType { Id = 4, Numeric = "4", Name = "Dobry", Value = 4.0m, ColorHex = "#65a30d", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new GradeType { Id = 5, Numeric = "5", Name = "Bardzo dobry", Value = 5.0m, ColorHex = "#16a34a", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new GradeType { Id = 6, Numeric = "6", Name = "Celujący", Value = 6.0m, ColorHex = "#0d9488", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null }
+                new GradeType { Id = 1, Numeric = "1", Name = "Niedostateczny", Value = 1.0m, IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new GradeType { Id = 2, Numeric = "2", Name = "Dopuszczający", Value = 2.0m, IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new GradeType { Id = 3, Numeric = "3", Name = "Dostateczny", Value = 3.0m, IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new GradeType { Id = 4, Numeric = "4", Name = "Dobry", Value = 4.0m, IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new GradeType { Id = 5, Numeric = "5", Name = "Bardzo dobry", Value = 5.0m, IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new GradeType { Id = 6, Numeric = "6", Name = "Celujący", Value = 6.0m, IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null }
             );
         }
 
         private static void SeedGradeCategories(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<GradeCategory>().HasData(
-                new GradeCategory { Id = 1, Name = "Sprawdzian", Weight = 3, IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new GradeCategory { Id = 2, Name = "Kartkówka", Weight = 2, IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new GradeCategory { Id = 3, Name = "Odpowiedź ustna", Weight = 1, IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new GradeCategory { Id = 4, Name = "Aktywność", Weight = 1, IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new GradeCategory { Id = 5, Name = "Zadanie domowe", Weight = 1, IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null }
+                new GradeCategory { Id = 1, Name = "Sprawdzian", Weight = 3, ColorHex = "#ef4444", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new GradeCategory { Id = 2, Name = "Kartkówka", Weight = 2, ColorHex = "#f97316", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new GradeCategory { Id = 3, Name = "Odpowiedź ustna", Weight = 1, ColorHex = "#3b82f6", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new GradeCategory { Id = 4, Name = "Aktywność", Weight = 1, ColorHex = "#22c55e", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new GradeCategory { Id = 5, Name = "Zadanie domowe", Weight = 1, ColorHex = "#8b5cf6", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null }
             );
         }
 

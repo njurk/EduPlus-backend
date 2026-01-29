@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Data.Data.EntitiesForView
 {
     public class GradesAdminView
@@ -17,6 +19,7 @@ namespace Data.Data.EntitiesForView
         public int? ClassId { get; set; }
         public string SubjectName { get; set; } = string.Empty;
         public string GradeTypeName { get; set; } = string.Empty;
+        [Column(TypeName = "decimal(18,2)")]
         public decimal GradeValue { get; set; }
         public string CategoryName { get; set; } = string.Empty;
         public string TeacherName { get; set; } = string.Empty;

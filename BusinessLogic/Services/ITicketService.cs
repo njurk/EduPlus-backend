@@ -7,7 +7,7 @@ namespace BusinessLogic.Services
 {
     public interface ITicketService
     {
-        Task<PaginatedResponse<TicketDto>> GetAllAsync(int pageNumber, int pageSize, bool? showClosed, string? search, string? sortBy, bool sortDesc, int? reasonId = null);
+        Task<PaginatedResponse<TicketDto>> GetAllAsync(int pageNumber, int pageSize, bool? showClosed, string? search, string? sortBy, bool sortDesc, int? reasonId = null, int? userId = null);
         Task<List<string>> GetSubmittersAsync();
         Task<TicketDto?> GetByIdAsync(int id);
         Task<Ticket> CreateAsync(CreateTicketDto dto, IEmailService emailService);
@@ -23,7 +23,7 @@ namespace BusinessLogic.Services
             _context = context;
         }
 
-        public async Task<PaginatedResponse<TicketDto>> GetAllAsync(int pageNumber, int pageSize, bool? showClosed, string? search, string? sortBy, bool sortDesc, int? reasonId = null)
+        public async Task<PaginatedResponse<TicketDto>> GetAllAsync(int pageNumber, int pageSize, bool? showClosed, string? search, string? sortBy, bool sortDesc, int? reasonId = null, int? userId = null)
         {
             var query = _context.Tickets.AsNoTracking().Include(t => t.Reason).AsQueryable();
 
@@ -71,7 +71,8 @@ namespace BusinessLogic.Services
                     UpdatedAt = t.UpdatedAt,
                     ModifiedByName = t.ModifiedByUserId != null
                         ? _context.Users.Where(u => u.Id == t.ModifiedByUserId).Select(u => u.LastName + " " + u.FirstName).FirstOrDefault()
-                        : "System"
+                        : "System",
+                    IsRead = userId.HasValue ? _context.TicketReads.Any(tr => tr.TicketId == t.Id && tr.UserId == userId.Value) : null
                 })
                 .ToListAsync();
 

@@ -10,7 +10,8 @@ namespace Shared.DTOs
     {
         public required string Token { get; set; }
         public int UserId { get; set; }
-        public required string UserName { get; set; }
+        public required string UserEmail { get; set; }
         public required List<string> Roles { get; set; }
+        public int MaxRoleLevel { get; set; }
     }
 }

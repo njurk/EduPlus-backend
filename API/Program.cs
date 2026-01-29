@@ -1,15 +1,16 @@
-﻿namespace API
-{
-    using BusinessLogic.Interceptors;
-    using BusinessLogic.Seeders;
-    using BusinessLogic.Services;
-    using Data.Data;
-    using Microsoft.AspNetCore.Authentication.JwtBearer;
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.IdentityModel.Tokens;
-    using System.Text;
-    using System.Text.Json.Serialization;
+﻿using API.Middleware;
+using BusinessLogic.Interceptors;
+using BusinessLogic.Seeders;
+using BusinessLogic.Services;
+using Data.Data;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using System.Text.Json.Serialization;
 
+namespace API
+{
     public class Program
     {
         public static void Main(string[] args)
@@ -38,6 +39,7 @@
             builder.Services.AddScoped<IClassroomService, ClassroomService>();
             builder.Services.AddScoped<IAnnouncementService, AnnouncementService>();
             builder.Services.AddScoped<IAnnouncementReadService, AnnouncementReadService>();
+            builder.Services.AddScoped<ITicketReadService, TicketReadService>();
             builder.Services.AddScoped<IAttendanceService, AttendanceService>();
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<ITicketService, TicketService>();
@@ -62,7 +64,9 @@
             builder.Services.AddScoped<IPageService, PageService>();
             builder.Services.AddScoped<IUserRoleService, UserRoleService>();
             builder.Services.AddScoped<IDashboardService, DashboardService>();
+            builder.Services.AddScoped<ILayoutService, LayoutService>();
             builder.Services.AddScoped<ITargetService, TargetService>();
+            builder.Services.AddSingleton<IEventLogService, EventLogService>();
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -111,6 +115,7 @@
                     var passwordHashService = services.GetRequiredService<IPasswordHashService>();
 
                     context.Database.Migrate();
+                    context.ApplySqlObjects();
 
                     var seeder = new DataSeeder(context);
 
@@ -123,7 +128,8 @@
                 }
             }
 
-            
+            app.UseMiddleware<ErrorLoggingMiddleware>();
+
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();

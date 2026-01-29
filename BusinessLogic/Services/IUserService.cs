@@ -300,8 +300,8 @@ namespace BusinessLogic.Services
             if (user == null) return false;
 
             user.IsActive = true;
-            if (user.LastName.EndsWith(" (nieaktywny)"))
-                user.LastName = user.LastName.Replace(" (nieaktywny)", "").Trim();
+            if (user.LastName.EndsWith(" (usunięty)"))
+                user.LastName = user.LastName.Replace(" (usunięty)", "").Trim();
 
             user.UpdatedAt = DateTime.Now;
             await _context.SaveChangesAsync();
