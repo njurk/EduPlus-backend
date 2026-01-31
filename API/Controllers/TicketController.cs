@@ -14,12 +14,14 @@ namespace API.Controllers
         private readonly ITicketService _service;
         private readonly IEmailService _emailService;
         private readonly ITicketReadService _ticketReadService;
+        private readonly IBadgeNotificationService _badgeNotification;
 
-        public TicketController(ITicketService service, IEmailService emailService, ITicketReadService ticketReadService)
+        public TicketController(ITicketService service, IEmailService emailService, ITicketReadService ticketReadService, IBadgeNotificationService badgeNotification)
         {
             _service = service;
             _emailService = emailService;
             _ticketReadService = ticketReadService;
+            _badgeNotification = badgeNotification;
         }
 
         [HttpGet]
@@ -73,6 +75,7 @@ namespace API.Controllers
                 return Unauthorized();
 
             await _ticketReadService.MarkAsReadAsync(id, userId);
+            _badgeNotification.NotifyBadgeChanged(userId);
             return NoContent();
         }
     }

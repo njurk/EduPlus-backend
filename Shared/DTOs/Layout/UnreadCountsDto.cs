@@ -4,5 +4,7 @@ namespace Shared.DTOs
     {
         public int Announcements { get; set; }
         public int Tickets { get; set; }
+        public List<int> UnreadAnnouncementIds { get; set; } = [];
+        public List<int> UnreadTicketIds { get; set; } = [];
     }
 }

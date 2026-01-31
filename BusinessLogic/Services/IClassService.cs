@@ -13,13 +13,16 @@ namespace BusinessLogic.Services
     public interface IClassService
     {
         Task<PaginatedResponse<object>> GetAllAsync(int? schoolYearId, bool includeInactive, int pageNumber = 1, int pageSize = 20, string? sortBy = null, bool sortDesc = false, int? level = null, string? search = null);
-        Task<object?> GetDetailsAsync(int id, string sortBy, bool sortDesc, string studentSearch, string subjectSearch, string subjectSortBy, bool subjectSortDesc);
+        Task<object?> GetDetailsAsync(int id, string sortBy, bool sortDesc, string studentSearch, string subjectSearch, string subjectSortBy, bool subjectSortDesc, bool showInactiveSubjects = false, bool showInactiveStudents = false);
         Task<IEnumerable<object>> GetCandidatesAsync(int classId, string search);
         Task AddStudentsBulkAsync(int classId, List<int> studentIds);
         Task RemoveStudentAsync(int classStudentId);
+        Task RestoreStudentAsync(int classStudentId, int userId);
         Task RemoveSubjectAsync(int classSubjectId);
+        Task RestoreSubjectAsync(int classSubjectId, int userId);
         Task<Class> CreateAsync(Class entity);
         Task AssignSubjectAsync(int classId, int subjectId, int teacherId);
+        Task UpdateSubjectTeacherAsync(int classSubjectId, int teacherId, int userId);
         Task<Class> UpdateAsync(int id, Class entity);
         Task<bool> DeleteAsync(int id);
     }
@@ -40,7 +43,8 @@ namespace BusinessLogic.Services
             if (schoolYearId.HasValue)
                 query = query.Where(c => c.SchoolYearId == schoolYearId);
 
-            query = includeInactive ? query.Where(c => !c.IsActive) : query.Where(c => c.IsActive);
+            if (!includeInactive)
+                query = query.Where(c => c.IsActive);
 
             if (level.HasValue)
                 query = query.Where(c => c.Level == level.Value);
@@ -94,13 +98,14 @@ namespace BusinessLogic.Services
             };
         }
 
-        public async Task<object?> GetDetailsAsync(int id, string sortBy, bool sortDesc, string studentSearch, string subjectSearch, string subjectSortBy, bool subjectSortDesc)
+        public async Task<object?> GetDetailsAsync(int id, string sortBy, bool sortDesc, string studentSearch, string subjectSearch, string subjectSortBy, bool subjectSortDesc, bool showInactiveSubjects = false, bool showInactiveStudents = false)
         {
             var classEntity = await _context.Classes.AsNoTracking().FirstOrDefaultAsync(c => c.Id == id);
             if (classEntity == null) return null;
 
             var studentsQuery = _context.ClassStudents.AsNoTracking()
                 .Where(cs => cs.ClassId == id)
+                .Where(cs => cs.IsActive != showInactiveStudents)
                 .Include(cs => cs.Student)
                 .AsQueryable();
 
@@ -130,6 +135,7 @@ namespace BusinessLogic.Services
                 cs.OrderNumber,
                 cs.CreatedAt,
                 cs.UpdatedAt,
+                cs.IsActive,
                 ModifiedByName = cs.ModifiedByUserId != null 
                     ? _context.Users.Where(u => u.Id == cs.ModifiedByUserId).Select(u => u.LastName + " " + u.FirstName).FirstOrDefault()
                     : "System",
@@ -138,6 +144,7 @@ namespace BusinessLogic.Services
 
             var subjectsQuery = _context.ClassSubjects.AsNoTracking()
                 .Where(cs => cs.ClassId == id)
+                .Where(cs => cs.IsActive != showInactiveSubjects)
                 .Include(cs => cs.Subject)
                 .AsQueryable();
 
@@ -149,11 +156,12 @@ namespace BusinessLogic.Services
                 SubjectName = cs.Subject.Name,
                 cs.CreatedAt,
                 cs.UpdatedAt,
+                cs.IsActive,
                 ModifiedByName = cs.ModifiedByUserId != null 
                     ? _context.Users.Where(u => u.Id == cs.ModifiedByUserId).Select(u => u.LastName + " " + u.FirstName).FirstOrDefault()
                     : "System",
                 TeacherInfo = _context.TeacherClassSubjects
-                    .Where(t => t.ClassId == id && t.SubjectId == cs.SubjectId)
+                    .Where(t => t.ClassId == id && t.SubjectId == cs.SubjectId && t.IsActive)
                     .Select(t => new { t.TeacherId, Name = t.Teacher.LastName + " " + t.Teacher.FirstName })
                     .FirstOrDefault()
             }).ToListAsync();
@@ -181,6 +189,7 @@ namespace BusinessLogic.Services
                 s.CreatedAt,
                 s.UpdatedAt,
                 s.ModifiedByName,
+                s.IsActive,
                 TeacherId = s.TeacherInfo?.TeacherId,
                 TeacherName = s.TeacherInfo?.Name
             });
@@ -270,19 +279,47 @@ namespace BusinessLogic.Services
         public async Task AssignSubjectAsync(int classId, int subjectId, int teacherId)
         {
             var isAuthorized = await _context.SubjectTeachers
-                .AnyAsync(st => st.SubjectId == subjectId && st.TeacherId == teacherId);
+                .AnyAsync(st => st.SubjectId == subjectId && st.TeacherId == teacherId && st.IsActive);
 
             if (!isAuthorized)
             {
                 throw new InvalidOperationException("Wybrany nauczyciel nie ma uprawnień do nauczania tego przedmiotu");
             }
 
-            var exists = await _context.ClassSubjects
-                .AnyAsync(cs => cs.ClassId == classId && cs.SubjectId == subjectId);
+            var existing = await _context.ClassSubjects
+                .FirstOrDefaultAsync(cs => cs.ClassId == classId && cs.SubjectId == subjectId);
 
-            if (exists)
+            if (existing != null)
             {
-                throw new InvalidOperationException("Ten przedmiot jest już przypisany do tej klasy");
+                if (existing.IsActive)
+                    throw new InvalidOperationException("Wybrany przedmiot jest już przypisany do tej klasy");
+                
+                existing.IsActive = true;
+                existing.UpdatedAt = DateTime.Now;
+
+                var existingTeacherAssignment = await _context.TeacherClassSubjects
+                    .FirstOrDefaultAsync(tcs => tcs.ClassId == classId && tcs.SubjectId == subjectId);
+                
+                if (existingTeacherAssignment != null)
+                {
+                    existingTeacherAssignment.TeacherId = teacherId;
+                    existingTeacherAssignment.IsActive = true;
+                    existingTeacherAssignment.UpdatedAt = DateTime.Now;
+                }
+                else
+                {
+                    _context.TeacherClassSubjects.Add(new TeacherClassSubject
+                    {
+                        ClassId = classId,
+                        SubjectId = subjectId,
+                        TeacherId = teacherId,
+                        CreatedAt = DateTime.Now,
+                        UpdatedAt = DateTime.Now
+                    });
+                }
+
+                await _context.SaveChangesAsync();
+                return;
             }
 
             var classSubject = new ClassSubject
@@ -307,6 +344,43 @@ namespace BusinessLogic.Services
             await _context.SaveChangesAsync();
         }
 
+        public async Task UpdateSubjectTeacherAsync(int classSubjectId, int teacherId, int userId)
+        {
+            var classSubject = await _context.ClassSubjects.FindAsync(classSubjectId)
+                ?? throw new KeyNotFoundException("Nie znaleziono wybranego przedmiotu w tej klasie");
+
+            var isAuthorized = await _context.SubjectTeachers
+                .AnyAsync(st => st.SubjectId == classSubject.SubjectId && st.TeacherId == teacherId && st.IsActive);
+            if (!isAuthorized)
+                throw new InvalidOperationException("Wybrany nauczyciel nie ma uprawnień do nauczania tego przedmiotu");
+
+            var teacherAssignment = await _context.TeacherClassSubjects
+                .FirstOrDefaultAsync(t => t.ClassId == classSubject.ClassId && t.SubjectId == classSubject.SubjectId);
+
+            if (teacherAssignment != null)
+            {
+                teacherAssignment.TeacherId = teacherId;
+                teacherAssignment.UpdatedAt = DateTime.Now;
+                teacherAssignment.ModifiedByUserId = userId;
+            }
+            else
+            {
+                _context.TeacherClassSubjects.Add(new TeacherClassSubject
+                {
+                    ClassId = classSubject.ClassId,
+                    SubjectId = classSubject.SubjectId,
+                    TeacherId = teacherId,
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now,
+                    ModifiedByUserId = userId
+                });
+            }
+
+            classSubject.UpdatedAt = DateTime.Now;
+            classSubject.ModifiedByUserId = userId;
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<Class> UpdateAsync(int id, Class entity)
         {
             if (id != entity.Id) throw new ArgumentException("Złe ID");
@@ -318,7 +392,7 @@ namespace BusinessLogic.Services
                 c.Id != id
             );
 
-            if (exists) throw new InvalidOperationException($"Klasa {entity.Level}{entity.Letter} już istnieje w tym roku.");
+            if (exists) throw new InvalidOperationException($"Klasa {entity.Level}{entity.Letter} już istnieje w tym roku szkolnym");
 
             var dbClass = await _context.Classes.FindAsync(id);
             if (dbClass == null) throw new KeyNotFoundException("Klasa nie znaleziona");
@@ -351,27 +425,82 @@ namespace BusinessLogic.Services
         {
             var classStudent = await _context.ClassStudents.FindAsync(classStudentId);
             if (classStudent == null)
-                throw new KeyNotFoundException("Nie znaleziono przypisania ucznia.");
+                throw new KeyNotFoundException("Nie znaleziono wybranego ucznia w tej klasie");
 
             var classId = classStudent.ClassId;
-            _context.ClassStudents.Remove(classStudent);
-            await _context.SaveChangesAsync();
 
+            if (classStudent.IsActive)
+            {
+                classStudent.IsActive = false;
+                classStudent.UpdatedAt = DateTime.Now;
+            }
+            else
+            {
+                _context.ClassStudents.Remove(classStudent);
+            }
+            
+            await _context.SaveChangesAsync();
             await RecalculateOrderNumbersAsync(classId);
+        }
+
+        public async Task RestoreStudentAsync(int classStudentId, int userId)
+        {
+            var classStudent = await _context.ClassStudents.FindAsync(classStudentId);
+            if (classStudent == null)
+                throw new KeyNotFoundException("Nie znaleziono wybranego ucznia w tej klasie");
+
+            classStudent.IsActive = true;
+            classStudent.UpdatedAt = DateTime.Now;
+            classStudent.ModifiedByUserId = userId;
+
+            await _context.SaveChangesAsync();
+            await RecalculateOrderNumbersAsync(classStudent.ClassId);
         }
 
         public async Task RemoveSubjectAsync(int classSubjectId)
         {
             var classSubject = await _context.ClassSubjects.FindAsync(classSubjectId);
             if (classSubject == null)
-                throw new KeyNotFoundException("Nie znaleziono przypisania przedmiotu.");
+                throw new KeyNotFoundException("Nie znaleziono wybranego przedmiotu w tej klasie");
 
-            var teacherAssignments = await _context.TeacherClassSubjects
-                .Where(t => t.ClassId == classSubject.ClassId && t.SubjectId == classSubject.SubjectId)
-                .ToListAsync();
+            if (classSubject.IsActive)
+            {
+                classSubject.IsActive = false;
+                classSubject.UpdatedAt = DateTime.Now;
 
-            _context.TeacherClassSubjects.RemoveRange(teacherAssignments);
-            _context.ClassSubjects.Remove(classSubject);
+                var teacherAssignments = await _context.TeacherClassSubjects
+                    .Where(t => t.ClassId == classSubject.ClassId && t.SubjectId == classSubject.SubjectId && t.IsActive)
+                    .ToListAsync();
+
+                foreach (var assignment in teacherAssignments)
+                {
+                    assignment.IsActive = false;
+                    assignment.UpdatedAt = DateTime.Now;
+                }
+            }
+            else
+            {
+                var teacherAssignments = await _context.TeacherClassSubjects
+                    .Where(t => t.ClassId == classSubject.ClassId && t.SubjectId == classSubject.SubjectId)
+                    .ToListAsync();
+
+                _context.TeacherClassSubjects.RemoveRange(teacherAssignments);
+                _context.ClassSubjects.Remove(classSubject);
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task RestoreSubjectAsync(int classSubjectId, int userId)
+        {
+            var classSubject = await _context.ClassSubjects.FindAsync(classSubjectId);
+            if (classSubject == null)
+                throw new KeyNotFoundException("Nie znaleziono wybranego przedmiotu w tej klasie");
+
+            classSubject.IsActive = true;
+            classSubject.UpdatedAt = DateTime.Now;
+            classSubject.ModifiedByUserId = userId;
+
             await _context.SaveChangesAsync();
         }
     }

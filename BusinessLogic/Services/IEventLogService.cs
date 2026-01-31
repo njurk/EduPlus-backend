@@ -2,56 +2,27 @@ namespace BusinessLogic.Services
 {
     public interface IEventLogService
     {
-        void LogEvent(string eventType, int? userId, string? email, int? roleLevel = null, string? viewName = null, string? details = null);
-        void LogError(string source, string message, Exception? exception = null);
+        void Log(string type, int? userId = null, string? email = null, IEnumerable<int>? roleLevels = null, string? reason = null, Exception? ex = null);
     }
 
     public class EventLogService : IEventLogService
     {
-        private readonly string _logsDirectory;
+        private readonly string _logsDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "logs");
         private readonly object _lock = new();
 
-        public EventLogService()
+        public EventLogService() => Directory.CreateDirectory(_logsDir);
+
+        public void Log(string type, int? userId = null, string? email = null, IEnumerable<int>? roleLevels = null, string? reason = null, Exception? ex = null)
         {
-            _logsDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "logs");
-            if (!Directory.Exists(_logsDirectory))
-            {
-                Directory.CreateDirectory(_logsDirectory);
-            }
-        }
-
-        public void LogEvent(string eventType, int? userId, string? email, int? roleLevel = null, string? viewName = null, string? details = null)
-        {
-            var timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-            var userInfo = userId.HasValue ? $"r:{roleLevel ?? 0} {email}" : "anonymous";
-            var view = viewName ?? "";
-            var logEntry = $"{timestamp} || {eventType,-15} | {view,-20} | {userInfo,-35} | {details ?? ""}";
-
-            WriteToFile("events", logEntry);
-        }
-
-        public void LogError(string source, string message, Exception? exception = null)
-        {
-            var timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-            var exceptionDetails = exception != null ? $" | {exception.GetType().Name}: {exception.Message}" : "";
-            var logEntry = $"{timestamp} | ERROR | {source,-30} | {message}{exceptionDetails}";
-
-            WriteToFile("errors", logEntry);
-
-            if (exception?.StackTrace != null)
-            {
-                WriteToFile("errors", $"    StackTrace: {exception.StackTrace}");
-            }
-        }
-
-        private void WriteToFile(string prefix, string content)
-        {
-            var fileName = $"{prefix}_{DateTime.Now:yyyy-MM-dd}.log";
-            var filePath = Path.Combine(_logsDirectory, fileName);
+            var roles = roleLevels != null ? string.Join(",", roleLevels.OrderBy(r => r)) : "?";
+            var user = userId.HasValue ? $"r:{roles} {email ?? $"id:{userId}"}" : (email ?? "-");
+            var entry = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} || {type,-10} | {user,-35}{(reason != null ? $" | {reason}" : "")}{(ex != null ? $" [{ex.GetType().Name}]" : "")}";
 
             lock (_lock)
             {
-                File.AppendAllText(filePath, content + Environment.NewLine);
+                File.AppendAllText(Path.Combine(_logsDir, $"events_{DateTime.Now:yyyy-MM-dd}.log"), entry + Environment.NewLine);
+                if (ex?.StackTrace != null)
+                    File.AppendAllText(Path.Combine(_logsDir, $"events_{DateTime.Now:yyyy-MM-dd}.log"), $"    {ex.StackTrace}{Environment.NewLine}");
             }
         }
     }

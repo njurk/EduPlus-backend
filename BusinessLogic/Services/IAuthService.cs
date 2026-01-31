@@ -19,7 +19,7 @@ namespace BusinessLogic.Services
         Task<LoginResponseDto> LoginAdminAsync(LoginDto dto);
         Task<LoginResponseDto> LoginTeacherAsync(LoginDto dto);
         Task<LoginResponseDto> LoginMobileAsync(LoginDto dto);
-        void Logout(int userId, string email, int roleLevel, string viewName);
+        void Logout(int userId, string email, IEnumerable<int> roleLevels);
     }
 
     public class AuthService : IAuthService
@@ -44,54 +44,56 @@ namespace BusinessLogic.Services
         public async Task<LoginResponseDto> LoginAdminAsync(LoginDto dto)
         {
             var user = await GetAuthenticatedUser(dto);
-            var maxLevel = user.UserRoles.Max(ur => ur.Role.Level);
+            var roleLevels = user.UserRoles.Select(ur => ur.Role.Level).ToList();
 
             if (!user.UserRoles.Any(ur => ur.Role.Level == 1))
             {
-                _eventLogService.LogEvent("LOGIN_FAILED", user.Id, user.Email, maxLevel, "AdminLogin.tsx", "wrong permissions");
+                _eventLogService.Log("LOGIN_FAIL", user.Id, user.Email, roleLevels, "AdminLogin attempt");
                 throw new UnauthorizedAccessException("Panel administratora jest przeznaczony tylko dla administratorów");
             }
 
             var response = BuildLoginResponse(user);
-            _eventLogService.LogEvent("LOGIN", user.Id, user.Email, maxLevel, "AdminLogin.tsx");
+            _eventLogService.Log("LOGIN", user.Id, user.Email, roleLevels);
             return response;
         }
 
         public async Task<LoginResponseDto> LoginTeacherAsync(LoginDto dto)
         {
             var user = await GetAuthenticatedUser(dto);
-            var maxLevel = user.UserRoles.Max(ur => ur.Role.Level);
+            var roleLevels = user.UserRoles.Select(ur => ur.Role.Level).ToList();
+            var maxLevel = roleLevels.Min();
 
             if (maxLevel == 1 || maxLevel >= 3)
             {
-                _eventLogService.LogEvent("LOGIN_FAILED", user.Id, user.Email, maxLevel, "TeacherLogin.tsx", "wrong permissions");
+                _eventLogService.Log("LOGIN_FAIL", user.Id, user.Email, roleLevels, "TeacherLogin attempt");
                 throw new UnauthorizedAccessException("Panel nauczyciela jest przeznaczony tylko dla nauczycieli");
             }
 
             var response = BuildLoginResponse(user);
-            _eventLogService.LogEvent("LOGIN", user.Id, user.Email, maxLevel, "TeacherLogin.tsx");
+            _eventLogService.Log("LOGIN", user.Id, user.Email, roleLevels);
             return response;
         }
 
         public async Task<LoginResponseDto> LoginMobileAsync(LoginDto dto)
         {
             var user = await GetAuthenticatedUser(dto);
-            var maxLevel = user.UserRoles.Max(ur => ur.Role.Level);
+            var roleLevels = user.UserRoles.Select(ur => ur.Role.Level).ToList();
+            var maxLevel = roleLevels.Min();
 
             if (maxLevel <= 2)
             {
-                _eventLogService.LogEvent("LOGIN_FAILED", user.Id, user.Email, maxLevel, "MobileLogin.tsx", "wrong permissions");
+                _eventLogService.Log("LOGIN_FAIL", user.Id, user.Email, roleLevels, "MobileLogin attempt");
                 throw new UnauthorizedAccessException("Aplikacja mobilna jest przeznaczona tylko dla uczniów i rodziców");
             }
 
             var response = BuildLoginResponse(user);
-            _eventLogService.LogEvent("LOGIN", user.Id, user.Email, maxLevel, "MobileLogin.tsx");
+            _eventLogService.Log("LOGIN", user.Id, user.Email, roleLevels);
             return response;
         }
 
-        public void Logout(int userId, string email, int roleLevel, string viewName)
+        public void Logout(int userId, string email, IEnumerable<int> roleLevels)
         {
-            _eventLogService.LogEvent("LOGOUT", userId, email, roleLevel, viewName);
+            _eventLogService.Log("LOGOUT", userId, email, roleLevels);
         }
 
         private async Task<Data.Data.Entities.User> GetAuthenticatedUser(LoginDto dto)
@@ -103,7 +105,7 @@ namespace BusinessLogic.Services
 
             if (user == null || !user.IsActive || !_passwordHashService.VerifyPassword(dto.Password, user.Password))
             {
-                _eventLogService.LogEvent("LOGIN_FAILED", null, dto.Email, null, "login", "invalid credentials");
+                _eventLogService.Log("LOGIN_FAIL", null, dto.Email, reason: "invalid credentials");
                 throw new UnauthorizedAccessException("Błędny email lub hasło");
             }
 
@@ -119,6 +121,7 @@ namespace BusinessLogic.Services
                 Token = tokenString,
                 UserId = user.Id,
                 UserEmail = user.Email,
+                UserName = $"{user.FirstName} {user.LastName}",
                 Roles = user.UserRoles.Select(ur => ur.Role.Name).ToList(),
                 MaxRoleLevel = user.UserRoles.Max(ur => ur.Role.Level)
             };
@@ -134,7 +137,7 @@ namespace BusinessLogic.Services
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Name, $"{user.FirstName} {user.LastName}"),
-                new Claim("roleLevel", user.UserRoles.Min(ur => ur.Role.Level).ToString())
+                new Claim("roleLevels", string.Join(",", user.UserRoles.Select(ur => ur.Role.Level).OrderBy(l => l)))
             };
 
             foreach (var userRole in user.UserRoles)

@@ -132,6 +132,7 @@ namespace Data.Sql
                 c.Id as ClassId,
                 at.Name as TypeName,
                 at.ShortCode,
+                at.ColorHex,
                 isnull(mb.LastName + ' ' + mb.FirstName, null) as ModifiedByName
             from Attendances a
             join Users s on a.StudentId = s.Id
@@ -163,6 +164,7 @@ namespace Data.Sql
                 gt.Numeric as GradeTypeName,
                 gt.Value as GradeValue,
                 gc.Name as CategoryName,
+                gc.ColorHex as CategoryColorHex,
                 t.LastName + ' ' + t.FirstName as TeacherName,
                 isnull(mb.LastName + ' ' + mb.FirstName, null) as ModifiedByName
             from Grades g

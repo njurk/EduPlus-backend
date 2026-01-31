@@ -23,17 +23,11 @@ namespace API.Middleware
             }
             catch (Exception ex)
             {
-                _eventLogService.LogError(
-                    $"{context.Request.Method} {context.Request.Path}",
-                    ex.Message,
-                    ex
-                );
+                _eventLogService.Log("ERROR", ex: ex);
 
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 context.Response.ContentType = "application/json";
-
-                var response = JsonSerializer.Serialize(new { error = "Wystąpił błąd serwera" });
-                await context.Response.WriteAsync(response);
+                await context.Response.WriteAsync(JsonSerializer.Serialize(new { error = "Wystąpił błąd serwera" }));
             }
         }
     }

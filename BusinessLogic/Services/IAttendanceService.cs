@@ -13,7 +13,7 @@ namespace BusinessLogic.Services
 {
     public interface IAttendanceService
     {
-        Task<PaginatedResponse<AttendanceAdminDto>> GetAllForAdminAsync(bool includeInactive, int pageNumber = 1, int pageSize = 20, string? search = null, string? sortBy = null, bool sortDesc = true, int? classId = null, DateTime? date = null, string? subjectName = null, string? teacherName = null, string? attendanceTypeShortCode = null, int? orderNumber = null, string? studentName = null);
+        Task<PaginatedResponse<AttendanceAdminDto>> GetAllForAdminAsync(bool includeInactive, int pageNumber = 1, int pageSize = 20, string? search = null, string? sortBy = null, bool sortDesc = true, int? classId = null, DateTime? date = null, string? subjectName = null, string? teacherName = null, string? attendanceTypeShortCode = null, int? orderNumber = null);
         Task<IEnumerable<Attendance>> GetAllAsync();
         Task<Attendance?> UpdateAsync(int id, int attendanceTypeId);
     }
@@ -27,7 +27,7 @@ namespace BusinessLogic.Services
             _context = context;
         }
 
-        public async Task<PaginatedResponse<AttendanceAdminDto>> GetAllForAdminAsync(bool includeInactive, int pageNumber = 1, int pageSize = 20, string? search = null, string? sortBy = null, bool sortDesc = true, int? classId = null, DateTime? date = null, string? subjectName = null, string? teacherName = null, string? attendanceTypeShortCode = null, int? orderNumber = null, string? studentName = null)
+        public async Task<PaginatedResponse<AttendanceAdminDto>> GetAllForAdminAsync(bool includeInactive, int pageNumber = 1, int pageSize = 20, string? search = null, string? sortBy = null, bool sortDesc = true, int? classId = null, DateTime? date = null, string? subjectName = null, string? teacherName = null, string? attendanceTypeShortCode = null, int? orderNumber = null)
         {
             var query = _context.AttendanceAdminList.AsNoTracking().AsQueryable();
 
@@ -53,12 +53,6 @@ namespace BusinessLogic.Services
 
             if (orderNumber.HasValue)
                 query = query.Where(a => a.OrderNumber == orderNumber.Value);
-
-            if (!string.IsNullOrWhiteSpace(studentName))
-            {
-                var sName = studentName.Trim().ToLower();
-                query = query.Where(a => a.StudentName.ToLower().Contains(sName));
-            }
 
             if (!string.IsNullOrWhiteSpace(search))
             {

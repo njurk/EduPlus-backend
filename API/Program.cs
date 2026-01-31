@@ -33,40 +33,48 @@ namespace API
                 options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
             });
 
-            builder.Services.AddScoped<IPasswordHashService, PasswordHashService>();
-            builder.Services.AddScoped<IAttendanceTypeService, AttendanceTypeService>();
-            builder.Services.AddScoped<IClassService, ClassService>();
-            builder.Services.AddScoped<IClassroomService, ClassroomService>();
-            builder.Services.AddScoped<IAnnouncementService, AnnouncementService>();
-            builder.Services.AddScoped<IAnnouncementReadService, AnnouncementReadService>();
-            builder.Services.AddScoped<ITicketReadService, TicketReadService>();
-            builder.Services.AddScoped<IAttendanceService, AttendanceService>();
             builder.Services.AddScoped<IAuthService, AuthService>();
-            builder.Services.AddScoped<ITicketService, TicketService>();
-            builder.Services.AddScoped<IEmailService, EmailService>();
+            builder.Services.AddScoped<IPasswordHashService, PasswordHashService>();
             builder.Services.AddScoped<IPasswordResetService, PasswordResetService>();
-            builder.Services.AddScoped<IPageContentService, PageContentService>();
-            builder.Services.AddScoped<IWeeklyScheduleService, WeeklyScheduleService>();
-            builder.Services.AddScoped<ILessonService, LessonService>();
-            builder.Services.AddScoped<IExcuseService, ExcuseService>();
-            builder.Services.AddScoped<IExportService, ExportService>();
+            builder.Services.AddScoped<IEmailService, EmailService>();
+
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IRoleService, RoleService>();
+            builder.Services.AddScoped<IUserRoleService, UserRoleService>();
+            builder.Services.AddScoped<IParentStudentService, ParentStudentService>();
+
+            builder.Services.AddScoped<IClassService, ClassService>();
+            builder.Services.AddScoped<ISubjectService, SubjectService>();
+            builder.Services.AddScoped<IClassroomService, ClassroomService>();
+            builder.Services.AddScoped<ISchoolYearService, SchoolYearService>();
+            builder.Services.AddScoped<ISemesterService, SemesterService>();
+
+            builder.Services.AddScoped<ILessonService, LessonService>();
+            builder.Services.AddScoped<IWeeklyScheduleService, WeeklyScheduleService>();
+            builder.Services.AddScoped<ILessonHourService, LessonHourService>();
+            builder.Services.AddScoped<ILessonStatusService, LessonStatusService>();
+
             builder.Services.AddScoped<IGradeService, GradeService>();
             builder.Services.AddScoped<IGradeTypeService, GradeTypeService>();
             builder.Services.AddScoped<IGradeCategoryService, GradeCategoryService>();
-            builder.Services.AddScoped<ILessonHourService, LessonHourService>();
-            builder.Services.AddScoped<ILessonStatusService, LessonStatusService>();
-            builder.Services.AddScoped<IRoleService, RoleService>();
-            builder.Services.AddScoped<ISubjectService, SubjectService>();
-            builder.Services.AddScoped<ISchoolYearService, SchoolYearService>();
-            builder.Services.AddScoped<ISemesterService, SemesterService>();
-            builder.Services.AddScoped<IParentStudentService, ParentStudentService>();
-            builder.Services.AddScoped<IPageService, PageService>();
-            builder.Services.AddScoped<IUserRoleService, UserRoleService>();
+
+            builder.Services.AddScoped<IAttendanceService, AttendanceService>();
+            builder.Services.AddScoped<IAttendanceTypeService, AttendanceTypeService>();
+            builder.Services.AddScoped<IExcuseService, ExcuseService>();
+
+            builder.Services.AddScoped<IAnnouncementService, AnnouncementService>();
+            builder.Services.AddScoped<IAnnouncementReadService, AnnouncementReadService>();
+            builder.Services.AddScoped<ITicketService, TicketService>();
+            builder.Services.AddScoped<ITicketReadService, TicketReadService>();
+
             builder.Services.AddScoped<IDashboardService, DashboardService>();
-            builder.Services.AddScoped<ILayoutService, LayoutService>();
+            builder.Services.AddScoped<IExportService, ExportService>();
+            builder.Services.AddScoped<IPageContentService, PageContentService>();
+            builder.Services.AddScoped<IPageService, PageService>();
             builder.Services.AddScoped<ITargetService, TargetService>();
+            builder.Services.AddScoped<IBadgeService, BadgeService>();
             builder.Services.AddSingleton<IEventLogService, EventLogService>();
+            builder.Services.AddSingleton<IBadgeNotificationService, BadgeNotificationService>();
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();

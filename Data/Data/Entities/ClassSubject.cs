@@ -17,6 +17,7 @@ namespace Data.Data.Entities
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
         public int? ModifiedByUserId { get; set; }
+        public bool IsActive { get; set; } = true;
     }
 }
 

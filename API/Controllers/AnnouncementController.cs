@@ -10,10 +10,12 @@ using Shared.DTOs;
 public class AnnouncementController : ControllerBase
 {
     private readonly IAnnouncementService _service;
+    private readonly IBadgeNotificationService _badgeNotification;
 
-    public AnnouncementController(IAnnouncementService service)
+    public AnnouncementController(IAnnouncementService service, IBadgeNotificationService badgeNotification)
     {
         _service = service;
+        _badgeNotification = badgeNotification;
     }
 
     private int GetUserId()
@@ -110,6 +112,7 @@ public class AnnouncementController : ControllerBase
         if (userId == 0) return Unauthorized();
         
         await _service.MarkAsReadAsync(id, userId);
+        _badgeNotification.NotifyBadgeChanged(userId);
         return NoContent();
     }
 }

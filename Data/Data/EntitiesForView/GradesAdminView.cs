@@ -22,6 +22,7 @@ namespace Data.Data.EntitiesForView
         [Column(TypeName = "decimal(18,2)")]
         public decimal GradeValue { get; set; }
         public string CategoryName { get; set; } = string.Empty;
+        public string CategoryColorHex { get; set; } = "#6b7280";
         public string TeacherName { get; set; } = string.Empty;
         public string? ModifiedByName { get; set; }
     }

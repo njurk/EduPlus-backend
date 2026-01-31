@@ -4,16 +4,16 @@ using Shared.DTOs;
 
 namespace BusinessLogic.Services
 {
-    public interface ILayoutService
+    public interface IBadgeService
     {
         Task<UnreadCountsDto> GetUnreadCountsAsync(int userId);
     }
 
-    public class LayoutService : ILayoutService
+    public class BadgeService : IBadgeService
     {
         private readonly EduPlusDbContext _context;
 
-        public LayoutService(EduPlusDbContext context)
+        public BadgeService(EduPlusDbContext context)
         {
             _context = context;
         }
@@ -25,23 +25,27 @@ namespace BusinessLogic.Services
                 .Select(ur => ur.RoleId)
                 .ToListAsync();
 
-            var unreadAnnouncements = await _context.Announcements
+            var unreadAnnouncementIds = await _context.Announcements
                 .Where(a => a.IsActive)
                 .Where(a =>
                     a.AnnouncementTargets.Any(at => at.RoleId == null) ||
                     a.AnnouncementTargets.Any(at => at.RoleId != null && userRoleIds.Contains(at.RoleId.Value)))
                 .Where(a => !_context.AnnouncementReads.Any(ar => ar.AnnouncementId == a.Id && ar.UserId == userId))
-                .CountAsync();
+                .Select(a => a.Id)
+                .ToListAsync();
 
-            var unreadTickets = await _context.Tickets
+            var unreadTicketIds = await _context.Tickets
                 .Where(t => !t.IsClosed)
                 .Where(t => !_context.TicketReads.Any(tr => tr.TicketId == t.Id && tr.UserId == userId))
-                .CountAsync();
+                .Select(t => t.Id)
+                .ToListAsync();
 
             return new UnreadCountsDto
             {
-                Announcements = unreadAnnouncements,
-                Tickets = unreadTickets
+                Announcements = unreadAnnouncementIds.Count,
+                Tickets = unreadTicketIds.Count,
+                UnreadAnnouncementIds = unreadAnnouncementIds,
+                UnreadTicketIds = unreadTicketIds
             };
         }
     }

@@ -62,13 +62,14 @@ public class AuthController : ControllerBase
 
     [Authorize]
     [HttpPost("logout")]
-    public IActionResult Logout([FromQuery] string viewName = "Unknown")
+    public IActionResult Logout()
     {
         var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
         var email = User.FindFirst(ClaimTypes.Email)?.Value ?? User.FindFirst(ClaimTypes.Name)?.Value ?? "";
-        var roleLevel = int.Parse(User.FindFirst("MaxRoleLevel")?.Value ?? "0");
+        var roleLevelsStr = User.FindFirst("roleLevels")?.Value ?? "";
+        var roleLevels = roleLevelsStr.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList();
 
-        _authService.Logout(userId, email, roleLevel, viewName);
+        _authService.Logout(userId, email, roleLevels);
 
         return Ok(new { message = "Wylogowano pomyślnie" });
     }

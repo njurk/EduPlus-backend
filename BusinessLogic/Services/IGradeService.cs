@@ -141,6 +141,7 @@ namespace BusinessLogic.Services
                 GradeTypeName = g.GradeTypeName,
                 GradeValue = g.GradeValue,
                 CategoryName = g.CategoryName,
+                CategoryColorHex = g.CategoryColorHex,
                 g.TeacherName,
                 g.Comment,
                 g.CreatedAt,

@@ -18,6 +18,7 @@ namespace Data.Data.EntitiesForView
         public int ClassId { get; set; }
         public string TypeName { get; set; } = string.Empty;
         public string ShortCode { get; set; } = string.Empty;
+        public string ColorHex { get; set; } = string.Empty;
         public string? ModifiedByName { get; set; }
     }
 }

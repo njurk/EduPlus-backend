@@ -111,7 +111,6 @@ namespace BusinessLogic.Services
                 "class" => sortDesc ? projected.OrderByDescending(l => l.ClassName) : projected.OrderBy(l => l.ClassName),
                 "ordernumber" => sortDesc ? projected.OrderByDescending(l => l.OrderNumber) : projected.OrderBy(l => l.OrderNumber),
                 "created" => sortDesc ? projected.OrderByDescending(l => l.CreatedAt) : projected.OrderBy(l => l.CreatedAt),
-                "updated" => sortDesc ? projected.OrderByDescending(l => l.UpdatedAt) : projected.OrderBy(l => l.UpdatedAt),
                 _ => sortDesc ? projected.OrderByDescending(l => l.Date).ThenByDescending(l => l.OrderNumber) : projected.OrderBy(l => l.Date).ThenBy(l => l.OrderNumber)
             };
 
@@ -242,15 +241,28 @@ namespace BusinessLogic.Services
                 throw new ArgumentException("Dzień tygodnia nie pasuje do aktualnego planu");
 
             var existingLesson = await _context.Lessons
-                .AnyAsync(l => l.ClassId == schedule.ClassId 
+                .FirstOrDefaultAsync(l => l.ClassId == schedule.ClassId 
                     && l.Date == date 
-                    && l.LessonHourId == schedule.LessonHourId
-                    && l.IsActive);
+                    && l.LessonHourId == schedule.LessonHourId);
 
-            if (existingLesson)
-                throw new InvalidOperationException("Lekcja w tym terminie już istnieje");
+            if (existingLesson != null)
+            {
+                if (existingLesson.IsActive)
+                    throw new InvalidOperationException("Lekcja w tym terminie już istnieje");
 
-            var defaultStatus = await _context.LessonStatuses
+                var defaultStatus = await _context.LessonStatuses
+                    .FirstOrDefaultAsync(ls => ls.Slug == "completed");
+
+                existingLesson.IsActive = true;
+                existingLesson.TeacherId = teacherIdOverride ?? schedule.TeacherId;
+                existingLesson.StatusId = statusIdOverride ?? defaultStatus?.Id ?? 1;
+                existingLesson.UpdatedAt = DateTime.Now;
+
+                await _context.SaveChangesAsync();
+                return existingLesson;
+            }
+
+            var status = await _context.LessonStatuses
                 .FirstOrDefaultAsync(ls => ls.Slug == "completed");
             
             var lesson = new Lesson
@@ -261,7 +273,7 @@ namespace BusinessLogic.Services
                 ClassroomId = schedule.ClassroomId,
                 LessonHourId = schedule.LessonHourId,
                 Topic = string.Empty,
-                StatusId = statusIdOverride ?? defaultStatus?.Id ?? 1,
+                StatusId = statusIdOverride ?? status?.Id ?? 1,
                 Date = date,
                 IsActive = true,
                 CreatedAt = DateTime.Now,

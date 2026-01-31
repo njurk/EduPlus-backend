@@ -23,9 +23,9 @@ public class ClassController : ControllerBase
     }
 
     [HttpGet("{id}/details")]
-    public async Task<IActionResult> GetDetails(int id, string sortBy = "lastName", bool sortDesc = false, string studentSearch = "", string subjectSearch = "", string subjectSortBy = "subjectName", bool subjectSortDesc = false)
+    public async Task<IActionResult> GetDetails(int id, string sortBy = "lastName", bool sortDesc = false, string studentSearch = "", string subjectSearch = "", string subjectSortBy = "subjectName", bool subjectSortDesc = false, bool showInactiveSubjects = false, bool showInactiveStudents = false)
     {
-        var result = await _service.GetDetailsAsync(id, sortBy, sortDesc, studentSearch, subjectSearch, subjectSortBy, subjectSortDesc);
+        var result = await _service.GetDetailsAsync(id, sortBy, sortDesc, studentSearch, subjectSearch, subjectSortBy, subjectSortDesc, showInactiveSubjects, showInactiveStudents);
         if (result == null) return NotFound();
         return Ok(result);
     }
@@ -54,6 +54,25 @@ public class ClassController : ControllerBase
         catch (InvalidOperationException ex)
         {
             return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpPut("subjects/{classSubjectId}")]
+    public async Task<IActionResult> UpdateSubjectTeacher(int classSubjectId, [FromBody] UpdateSubjectTeacherDto dto)
+    {
+        try
+        {
+            var userId = int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? "0");
+            await _service.UpdateSubjectTeacherAsync(classSubjectId, dto.TeacherId, userId);
+            return Ok();
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (KeyNotFoundException)
+        {
+            return NotFound();
         }
     }
 
@@ -115,6 +134,21 @@ public class ClassController : ControllerBase
         }
     }
 
+    [HttpPut("students/{classStudentId}/restore")]
+    public async Task<IActionResult> RestoreStudent(int classStudentId)
+    {
+        try
+        {
+            var userId = int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? "0");
+            await _service.RestoreStudentAsync(classStudentId, userId);
+            return Ok();
+        }
+        catch (KeyNotFoundException)
+        {
+            return NotFound();
+        }
+    }
+
     [HttpDelete("subjects/{classSubjectId}")]
     public async Task<IActionResult> RemoveSubject(int classSubjectId)
     {
@@ -122,6 +156,21 @@ public class ClassController : ControllerBase
         {
             await _service.RemoveSubjectAsync(classSubjectId);
             return NoContent();
+        }
+        catch (KeyNotFoundException)
+        {
+            return NotFound();
+        }
+    }
+
+    [HttpPut("subjects/{classSubjectId}/restore")]
+    public async Task<IActionResult> RestoreSubject(int classSubjectId)
+    {
+        try
+        {
+            var userId = int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? "0");
+            await _service.RestoreSubjectAsync(classSubjectId, userId);
+            return Ok();
         }
         catch (KeyNotFoundException)
         {

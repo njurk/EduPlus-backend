@@ -331,6 +331,7 @@
                         SubjectId = t.SubjectId,
                         CreatedAt = DateTime.Now,
                         UpdatedAt = DateTime.Now,
+                        IsActive = true,
                         ModifiedByUserId = null
                     });
                 }
@@ -411,6 +412,7 @@
                         SubjectId = subjId,
                         CreatedAt = DateTime.Now,
                         UpdatedAt = DateTime.Now,
+                        IsActive = true,
                         ModifiedByUserId = null
                     });
                     _context.TeacherClassSubjects.Add(new TeacherClassSubject
@@ -420,6 +422,7 @@
                         TeacherId = teachersMap[subjId],
                         CreatedAt = DateTime.Now,
                         UpdatedAt = DateTime.Now,
+                        IsActive = true,
                         ModifiedByUserId = null
                     });
                 }
@@ -436,6 +439,7 @@
                         SubjectId = subjId,
                         CreatedAt = DateTime.Now,
                         UpdatedAt = DateTime.Now,
+                        IsActive = true,
                         ModifiedByUserId = null
                     });
                     _context.TeacherClassSubjects.Add(new TeacherClassSubject
@@ -445,6 +449,7 @@
                         TeacherId = teachersMap[subjId],
                         CreatedAt = DateTime.Now,
                         UpdatedAt = DateTime.Now,
+                        IsActive = true,
                         ModifiedByUserId = null
                     });
                 }
