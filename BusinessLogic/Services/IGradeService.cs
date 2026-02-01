@@ -264,25 +264,35 @@ namespace BusinessLogic.Services
                 .Select(cs => cs.Class.Level + cs.Class.Letter)
                 .FirstOrDefaultAsync();
 
+            string? modifiedByName = null;
+            if (grade.ModifiedByUserId.HasValue)
+            {
+                modifiedByName = await _context.Users
+                    .Where(u => u.Id == grade.ModifiedByUserId.Value)
+                    .Select(u => u.LastName + " " + u.FirstName)
+                    .FirstOrDefaultAsync();
+            }
+
             return new
             {
                 grade.Id,
                 StudentId = grade.StudentId,
-                StudentName = grade.Student.LastName + " " + grade.Student.FirstName,
+                StudentName = grade.Student!.LastName + " " + grade.Student.FirstName,
                 ClassName = className,
                 SubjectId = grade.SubjectId,
-                SubjectName = grade.Subject.Name,
+                SubjectName = grade.Subject!.Name,
                 GradeTypeId = grade.GradeTypeId,
-                GradeTypeName = grade.GradeType.Numeric,
+                GradeTypeName = grade.GradeType!.Numeric + " (" + grade.GradeType.Name + ")",
                 GradeValue = grade.GradeType.Value,
                 GradeCategoryId = grade.GradeCategoryId,
-                CategoryName = grade.GradeCategory.Name,
+                CategoryName = grade.GradeCategory!.Name,
                 TeacherId = grade.TeacherId,
-                TeacherName = grade.Teacher.LastName + " " + grade.Teacher.FirstName,
+                TeacherName = grade.Teacher!.LastName + " " + grade.Teacher.FirstName,
                 grade.Comment,
                 grade.CreatedAt,
                 grade.UpdatedAt,
-                grade.IsActive
+                grade.IsActive,
+                ModifiedByName = modifiedByName
             };
         }
 

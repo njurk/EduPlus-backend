@@ -37,8 +37,18 @@ namespace API.Controllers
                 _ => sortDesc ? query.OrderByDescending(r => r.UpdatedAt) : query.OrderBy(r => r.UpdatedAt)
             };
 
-            var reasons = await query.ToListAsync();
-            return Ok(reasons);
+            var result = await query
+                .Select(r => new
+                {
+                    r.Id,
+                    r.Name,
+                    r.IsActive,
+                    r.CreatedAt,
+                    r.UpdatedAt,
+                    ModifiedByName = _context.Users.Where(u => u.Id == r.ModifiedByUserId).Select(u => u.LastName + " " + u.FirstName).FirstOrDefault() ?? "System"
+                })
+                .ToListAsync();
+            return Ok(result);
         }
 
         [HttpGet("active")]

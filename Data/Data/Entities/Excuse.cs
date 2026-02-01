@@ -8,9 +8,9 @@ namespace Data.Data.Entities
     {
         [Key]
         public int Id { get; set; }
-        public int AttendanceId { get; set; }
-        [ForeignKey(nameof(AttendanceId))]
-        public virtual Attendance? Attendance { get; set; } = null!;
+        public int StudentId { get; set; }
+        [ForeignKey(nameof(StudentId))]
+        public virtual User? Student { get; set; } = null!;
         public int ParentId { get; set; }
         [ForeignKey(nameof(ParentId))]
         public virtual User? Parent { get; set; } = null!;
@@ -21,5 +21,6 @@ namespace Data.Data.Entities
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
         public int? ModifiedByUserId { get; set; }
+        public virtual ICollection<ExcuseAttendance> ExcuseAttendances { get; set; } = new List<ExcuseAttendance>();
     }
 }

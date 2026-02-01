@@ -77,6 +77,11 @@
             {
                 SeedTickets();
             }
+
+            if (!_context.Excuses.Any())
+            {
+                SeedExcuses();
+            }
         }
 
         private List<(int SubjectId, string FirstName, string LastName, string Email, string Street, string City, string PostalCode)> GetTeachersData()
@@ -961,6 +966,67 @@
             };
 
             _context.Classes.AddRange(classes);
+            _context.SaveChanges();
+        }
+
+        private void SeedExcuses()
+        {
+            var absences = _context.Attendances
+                .Where(a => a.AttendanceTypeId == 2 && a.IsActive)
+                .Take(30)
+                .ToList();
+
+            if (absences.Count < 20) return;
+
+            var parentStudents = _context.ParentStudents.ToList();
+
+            var reasons = new[]
+            {
+                ("Dzień dobry,\n\nPragnę usprawiedliwić nieobecność mojego dziecka w szkole.\nDziecko przebywało w domu z powodu silnej infekcji dróg oddechowych z wysoką gorączką. Lekarz zalecił leżenie w łóżku i odpoczynek przez kilka dni.\n\nPozdrawiam", 3),
+                ("Szanowni Państwo,\n\nUprzejmie proszę o usprawiedliwienie nieobecności.\n\nMoje dziecko uczestniczyło w wizycie kontrolnej u lekarza specjalisty.\n\nPozdrawiam serdecznie", 2),
+                ("Nieobecność z przyczyn osobistych.", 1),
+                ("Proszę o usprawiedliwienie - sprawy rodzinne.", 2),
+                ("Dzień dobry,\n\nMoje dziecko źle się czuło rano, miało bóle brzucha i mdłości. Zdecydowałam się zostawić je w domu na obserwację.\n\nJeśli potrzebne będą dodatkowe wyjaśnienia, jestem do dyspozycji.\n\nZ poważaniem", 3),
+                ("Dzień dobry,\n\nPragnę usprawiedliwić nieobecność mojego dziecka spowodowaną nagłą sytuacją rodzinną wymagającą naszej obecności.\n\nPozdrawiam", 4),
+                ("Witam,\n\nDziecko chorowało na anginę i musiało pozostać w domu przez tydzień. Proszę o usprawiedliwienie nieobecności.\n\nDziękuję", 2),
+                ("Proszę o usprawiedliwienie nieobecności z powodu złego samopoczucia.\n\nDziecko miało wysoką temperaturę i silny kaszel. Wizyta lekarska zaplanowana na jutro.", 3),
+                ("Dzień dobry,\n\nDziecko miało zaplanowaną wizytę u ortodonty w Krakowie. Ze względu na odległość i godzinę wizyty niemożliwe było dojechanie do szkoły.\n\nZ góry dziękuję za zrozumienie", 2),
+                ("Proszę o usprawiedliwienie dzisiejszej nieobecności.\n\nDziecko brało udział w konkursie przedmiotowym na szczeblu powiatowym.\n\nPotwierdzenie organizatora mogę przedstawić w razie potrzeby.", 2)
+            };
+
+            int absenceIdx = 0;
+            for (int i = 0; i < reasons.Length && absenceIdx < absences.Count; i++)
+            {
+                var (reason, count) = reasons[i];
+                var firstAbsence = absences[absenceIdx];
+                var parentId = parentStudents.FirstOrDefault(ps => ps.StudentId == firstAbsence.StudentId)?.ParentId ?? parentStudents.First().ParentId;
+
+                var excuse = new Excuse
+                {
+                    StudentId = firstAbsence.StudentId,
+                    ParentId = parentId,
+                    Reason = reason,
+                    IsAccepted = null,
+                    AcceptedAt = null,
+                    IsActive = true,
+                    CreatedAt = DateTime.Now.AddDays(-14 + i),
+                    UpdatedAt = DateTime.Now.AddDays(-14 + i),
+                    ModifiedByUserId = null
+                };
+
+                _context.Excuses.Add(excuse);
+                _context.SaveChanges();
+
+                for (int j = 0; j < count && absenceIdx < absences.Count; j++, absenceIdx++)
+                {
+                    _context.ExcuseAttendances.Add(new ExcuseAttendance
+                    {
+                        ExcuseId = excuse.Id,
+                        AttendanceId = absences[absenceIdx].Id
+                    });
+                }
+            }
+
             _context.SaveChanges();
         }
     }

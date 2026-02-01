@@ -205,9 +205,9 @@ namespace Data.Data
             modelBuilder.Entity<GradeCategory>().HasData(
                 new GradeCategory { Id = 1, Name = "Sprawdzian", Weight = 3, ColorHex = "#ef4444", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new GradeCategory { Id = 2, Name = "Kartkówka", Weight = 2, ColorHex = "#22c55e", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new GradeCategory { Id = 3, Name = "Odpowiedź ustna", Weight = 1, ColorHex = "#858585", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new GradeCategory { Id = 4, Name = "Aktywność", Weight = 1, ColorHex = "#858585", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new GradeCategory { Id = 5, Name = "Zadanie domowe", Weight = 1, ColorHex = "#858585", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null }
+                new GradeCategory { Id = 3, Name = "Odpowiedź ustna", Weight = 1, ColorHex = "#f97316", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new GradeCategory { Id = 4, Name = "Aktywność", Weight = 1, ColorHex = "#3b82f6", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new GradeCategory { Id = 5, Name = "Zadanie domowe", Weight = 1, ColorHex = "#eab308", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null }
             );
         }
 

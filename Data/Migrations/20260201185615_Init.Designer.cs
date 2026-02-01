@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(EduPlusDbContext))]
-    [Migration("20260131164448_Init")]
+    [Migration("20260201185615_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -1630,9 +1630,6 @@ namespace Data.Migrations
                     b.Property<DateTime?>("AcceptedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("AttendanceId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
@@ -1654,6 +1651,9 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("StudentId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
@@ -1661,11 +1661,35 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AttendanceId");
-
                     b.HasIndex("ParentId");
 
+                    b.HasIndex("StudentId");
+
                     b.ToTable("Excuses");
+                });
+
+            modelBuilder.Entity("Data.Data.Entities.ExcuseAttendance", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AttendanceId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ExcuseId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AttendanceId");
+
+                    b.HasIndex("ExcuseId", "AttendanceId")
+                        .IsUnique();
+
+                    b.ToTable("ExcuseAttendances");
                 });
 
             modelBuilder.Entity("Data.Data.Entities.Grade", b =>
@@ -1794,7 +1818,7 @@ namespace Data.Migrations
                         new
                         {
                             Id = 3,
-                            ColorHex = "#858585",
+                            ColorHex = "#f97316",
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             Name = "Odpowiedź ustna",
@@ -1804,7 +1828,7 @@ namespace Data.Migrations
                         new
                         {
                             Id = 4,
-                            ColorHex = "#858585",
+                            ColorHex = "#3b82f6",
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             Name = "Aktywność",
@@ -1814,7 +1838,7 @@ namespace Data.Migrations
                         new
                         {
                             Id = 5,
-                            ColorHex = "#858585",
+                            ColorHex = "#eab308",
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
                             Name = "Zadanie domowe",
@@ -3397,21 +3421,40 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Data.Data.Entities.Excuse", b =>
                 {
+                    b.HasOne("Data.Data.Entities.User", "Parent")
+                        .WithMany()
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Data.Data.Entities.User", "Student")
+                        .WithMany()
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Parent");
+
+                    b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("Data.Data.Entities.ExcuseAttendance", b =>
+                {
                     b.HasOne("Data.Data.Entities.Attendance", "Attendance")
                         .WithMany()
                         .HasForeignKey("AttendanceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Data.Data.Entities.User", "Parent")
-                        .WithMany()
-                        .HasForeignKey("ParentId")
+                    b.HasOne("Data.Data.Entities.Excuse", "Excuse")
+                        .WithMany("ExcuseAttendances")
+                        .HasForeignKey("ExcuseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Attendance");
 
-                    b.Navigation("Parent");
+                    b.Navigation("Excuse");
                 });
 
             modelBuilder.Entity("Data.Data.Entities.Grade", b =>
@@ -3729,6 +3772,11 @@ namespace Data.Migrations
             modelBuilder.Entity("Data.Data.Entities.Class", b =>
                 {
                     b.Navigation("ClassStudents");
+                });
+
+            modelBuilder.Entity("Data.Data.Entities.Excuse", b =>
+                {
+                    b.Navigation("ExcuseAttendances");
                 });
 
             modelBuilder.Entity("Data.Data.Entities.Role", b =>

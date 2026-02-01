@@ -25,9 +25,11 @@ public class ExcuseController : ControllerBase
         [FromQuery] string? search = null,
         [FromQuery] string? sortBy = null,
         [FromQuery] bool sortDesc = true,
-        [FromQuery] bool showInactive = false)
+        [FromQuery] bool showInactive = false,
+        [FromQuery] string? statusFilter = null,
+        [FromQuery] int? classId = null)
     {
-        return Ok(await _service.GetAllAsync(pageNumber, pageSize, search, sortBy, sortDesc, showInactive));
+        return Ok(await _service.GetAllAsync(pageNumber, pageSize, search, sortBy, sortDesc, showInactive, statusFilter, classId));
     }
 
     [HttpGet("{id}")]
@@ -48,6 +50,13 @@ public class ExcuseController : ControllerBase
     public async Task<IActionResult> Accept(int id, [FromBody] AcceptExcuseDto dto)
     {
         var success = await _service.AcceptAsync(id, dto.IsAccepted, GetUserId());
+        return success ? NoContent() : NotFound();
+    }
+
+    [HttpPatch("{id}/restore")]
+    public async Task<IActionResult> Restore(int id)
+    {
+        var success = await _service.RestoreAsync(id, GetUserId());
         return success ? NoContent() : NotFound();
     }
 

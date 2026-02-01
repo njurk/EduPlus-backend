@@ -44,7 +44,7 @@ namespace BusinessLogic.Services
                 "weight" => sortDesc ? query.OrderByDescending(x => x.Weight) : query.OrderBy(x => x.Weight),
                 "created" => sortDesc ? query.OrderByDescending(x => x.CreatedAt) : query.OrderBy(x => x.CreatedAt),
                 "updated" => sortDesc ? query.OrderByDescending(x => x.UpdatedAt) : query.OrderBy(x => x.UpdatedAt),
-                _ => sortDesc ? query.OrderByDescending(x => x.Name) : query.OrderBy(x => x.Name)
+                _ => sortDesc ? query.OrderByDescending(x => x.Weight) : query.OrderBy(x => x.Weight)
             };
 
             return await query
@@ -53,6 +53,7 @@ namespace BusinessLogic.Services
                     x.Id,
                     x.Name,
                     x.Weight,
+                    x.ColorHex,
                     x.IsActive,
                     x.CreatedAt,
                     x.UpdatedAt,

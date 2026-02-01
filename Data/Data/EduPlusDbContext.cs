@@ -21,6 +21,7 @@ namespace Data.Data
         public DbSet<ClassStudent> ClassStudents { get; set; } = null!;
         public DbSet<ClassSubject> ClassSubjects { get; set; } = null!;
         public DbSet<Excuse> Excuses { get; set; } = null!;
+        public DbSet<ExcuseAttendance> ExcuseAttendances { get; set; } = null!;
         public DbSet<Grade> Grades { get; set; } = null!;
         public DbSet<GradeCategory> GradeCategories { get; set; } = null!;
         public DbSet<GradeType> GradeTypes { get; set; } = null!;
@@ -137,6 +138,17 @@ namespace Data.Data
                  .IsUnique();
                 e.HasIndex(a => new { a.IsActive, a.LessonId });
                 e.HasOne(x => x.Student).WithMany().OnDelete(DeleteBehavior.Restrict);
+            });
+
+            modelBuilder.Entity<ExcuseAttendance>(e =>
+            {
+                e.HasIndex(ea => new { ea.ExcuseId, ea.AttendanceId }).IsUnique();
+            });
+
+            modelBuilder.Entity<Excuse>(e =>
+            {
+                e.HasOne(ex => ex.Student).WithMany().OnDelete(DeleteBehavior.Restrict);
+                e.HasOne(ex => ex.Parent).WithMany().OnDelete(DeleteBehavior.Restrict);
             });
 
             modelBuilder.Entity<Grade>(e =>

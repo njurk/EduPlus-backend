@@ -367,6 +367,39 @@ namespace Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Excuses",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    StudentId = table.Column<int>(type: "int", nullable: false),
+                    ParentId = table.Column<int>(type: "int", nullable: false),
+                    Reason = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsAccepted = table.Column<bool>(type: "bit", nullable: true),
+                    AcceptedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    ModifiedByUserId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Excuses", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Excuses_Users_ParentId",
+                        column: x => x.ParentId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Excuses_Users_StudentId",
+                        column: x => x.StudentId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Grades",
                 columns: table => new
                 {
@@ -907,34 +940,27 @@ namespace Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Excuses",
+                name: "ExcuseAttendances",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    AttendanceId = table.Column<int>(type: "int", nullable: false),
-                    ParentId = table.Column<int>(type: "int", nullable: false),
-                    Reason = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsAccepted = table.Column<bool>(type: "bit", nullable: true),
-                    AcceptedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
-                    ModifiedByUserId = table.Column<int>(type: "int", nullable: true)
+                    ExcuseId = table.Column<int>(type: "int", nullable: false),
+                    AttendanceId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Excuses", x => x.Id);
+                    table.PrimaryKey("PK_ExcuseAttendances", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Excuses_Attendances_AttendanceId",
+                        name: "FK_ExcuseAttendances_Attendances_AttendanceId",
                         column: x => x.AttendanceId,
                         principalTable: "Attendances",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Excuses_Users_ParentId",
-                        column: x => x.ParentId,
-                        principalTable: "Users",
+                        name: "FK_ExcuseAttendances_Excuses_ExcuseId",
+                        column: x => x.ExcuseId,
+                        principalTable: "Excuses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -958,9 +984,9 @@ namespace Data.Migrations
                 {
                     { 1, "#ef4444", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "Sprawdzian", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), 3 },
                     { 2, "#22c55e", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "Kartkówka", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), 2 },
-                    { 3, "#858585", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "Odpowiedź ustna", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), 1 },
-                    { 4, "#858585", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "Aktywność", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), 1 },
-                    { 5, "#858585", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "Zadanie domowe", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), 1 }
+                    { 3, "#f97316", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "Odpowiedź ustna", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), 1 },
+                    { 4, "#3b82f6", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "Aktywność", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), 1 },
+                    { 5, "#eab308", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), true, null, "Zadanie domowe", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), 1 }
                 });
 
             migrationBuilder.InsertData(
@@ -1263,14 +1289,25 @@ namespace Data.Migrations
                 column: "SubjectId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Excuses_AttendanceId",
-                table: "Excuses",
+                name: "IX_ExcuseAttendances_AttendanceId",
+                table: "ExcuseAttendances",
                 column: "AttendanceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ExcuseAttendances_ExcuseId_AttendanceId",
+                table: "ExcuseAttendances",
+                columns: new[] { "ExcuseId", "AttendanceId" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Excuses_ParentId",
                 table: "Excuses",
                 column: "ParentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Excuses_StudentId",
+                table: "Excuses",
+                column: "StudentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Grades_GradeCategoryId",
@@ -1494,7 +1531,7 @@ namespace Data.Migrations
                 name: "ClassSubjects");
 
             migrationBuilder.DropTable(
-                name: "Excuses");
+                name: "ExcuseAttendances");
 
             migrationBuilder.DropTable(
                 name: "Grades");
@@ -1528,6 +1565,9 @@ namespace Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Attendances");
+
+            migrationBuilder.DropTable(
+                name: "Excuses");
 
             migrationBuilder.DropTable(
                 name: "GradeCategories");
