@@ -63,6 +63,9 @@ namespace BusinessLogic.Services
             var role = await _context.Roles.FindAsync(id);
             if (role == null) return false;
 
+            if (await _context.Roles.AnyAsync(r => r.Name == dto.Name && r.Id != id))
+                throw new InvalidOperationException("Nazwa roli musi być unikalna");
+
             role.Name = dto.Name;
             role.Description = dto.Description;
             role.UpdatedAt = DateTime.Now;

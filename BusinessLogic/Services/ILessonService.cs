@@ -144,6 +144,16 @@ namespace BusinessLogic.Services
 
         public async Task<Lesson> CreateAsync(CreateLessonDto dto)
         {
+            var activeSchoolYear = await _context.SchoolYears
+                .FirstOrDefaultAsync(sy => sy.IsActive);
+            
+            if (activeSchoolYear != null)
+            {
+                var lessonDate = DateOnly.FromDateTime(dto.Date);
+                if (lessonDate < activeSchoolYear.StartDate || lessonDate > activeSchoolYear.EndDate)
+                    throw new InvalidOperationException("Data lekcji musi być w zakresie aktywnego roku szkolnego");
+            }
+
             var entity = new Lesson
             {
                 SubjectId = dto.SubjectId,

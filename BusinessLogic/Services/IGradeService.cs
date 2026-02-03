@@ -15,7 +15,7 @@ namespace BusinessLogic.Services
         Task<IEnumerable<object>> GetClassGradesAsync(int classId, int subjectId, int semester, int? schoolYearId);
         Task<PaginatedResponse<object>> GetAllAsync(int pageNumber = 1, int pageSize = 20, string? search = null, string? sortBy = null, bool sortDesc = true, int? classId = null, int? semesterId = null, int? schoolYearId = null, int? subjectId = null, int? gradeTypeId = null, int? gradeCategoryId = null, int? teacherId = null, bool showInactive = false);
         Task<object?> GetByIdAsync(int id);
-        Task<object> CreateAsync(GradeDto dto, int teacherId);
+        Task<object> CreateAsync(GradeDto dto, int teacherId, IEmailService emailService);
         Task<object?> UpdateAsync(int id, GradeDto dto);
         Task<bool> DeleteAsync(int id);
         Task<bool> RestoreAsync(int id);
@@ -178,8 +178,14 @@ namespace BusinessLogic.Services
             };
         }
 
-        public async Task<object> CreateAsync(GradeDto dto, int teacherId)
+        public async Task<object> CreateAsync(GradeDto dto, int teacherId, IEmailService emailService)
         {
+            if (!await _context.GradeTypes.AnyAsync(gt => gt.Id == dto.GradeTypeId && gt.IsActive))
+                throw new InvalidOperationException("Wybrany typ oceny nie istnieje lub jest nieaktywny");
+
+            if (!await _context.GradeCategories.AnyAsync(gc => gc.Id == dto.GradeCategoryId && gc.IsActive))
+                throw new InvalidOperationException("Wybrana kategoria oceny nie istnieje lub jest nieaktywna");
+
             var entity = new Grade
             {
                 StudentId = dto.StudentId,
@@ -196,10 +202,13 @@ namespace BusinessLogic.Services
             _context.Grades.Add(entity);
             await _context.SaveChangesAsync();
 
-            return await _context.Grades
+            var gradeData = await _context.Grades
+                .Include(g => g.Student)
+                .Include(g => g.Subject)
                 .Include(g => g.GradeType)
                 .Include(g => g.GradeCategory)
                 .Include(g => g.Teacher)
+                .Where(g => g.Id == entity.Id)
                 .Select(g => new
                 {
                     g.Id,
@@ -209,9 +218,28 @@ namespace BusinessLogic.Services
                     g.CreatedAt,
                     GradeType = new { g.GradeType.Numeric, g.GradeType.Name, g.GradeType.Value },
                     GradeCategory = new { g.GradeCategory.Name },
-                    TeacherName = g.Teacher.LastName + " " + g.Teacher.FirstName
+                    TeacherName = g.Teacher.LastName + " " + g.Teacher.FirstName,
+                    StudentName = g.Student.LastName + " " + g.Student.FirstName,
+                    StudentEmail = g.Student.Email,
+                    SubjectName = g.Subject.Name,
+                    StudentId = g.StudentId
                 })
-                .FirstOrDefaultAsync(g => g.Id == entity.Id);
+                .FirstAsync();
+
+            var gradeValue = $"{gradeData.GradeType.Numeric} ({gradeData.GradeType.Name})";
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    await emailService.SendNewGradeEmailAsync(gradeData.StudentEmail, gradeData.StudentName, gradeData.SubjectName, gradeValue, gradeData.TeacherName, gradeData.CreatedAt);
+                    var parents = await _context.ParentStudents.Include(ps => ps.Parent).Where(ps => ps.StudentId == gradeData.StudentId).Select(ps => ps.Parent!.Email).ToListAsync();
+                    foreach (var email in parents)
+                        await emailService.SendNewGradeEmailAsync(email, gradeData.StudentName, gradeData.SubjectName, gradeValue, gradeData.TeacherName, gradeData.CreatedAt);
+                }
+                catch { }
+            });
+
+            return new { gradeData.Id, gradeData.GradeTypeId, gradeData.GradeCategoryId, gradeData.Comment, gradeData.CreatedAt, gradeData.GradeType, gradeData.GradeCategory, gradeData.TeacherName };
         }
 
         public async Task<object?> UpdateAsync(int id, GradeDto dto)

@@ -64,6 +64,12 @@ namespace BusinessLogic.Services
 
         public async Task<GradeType> CreateAsync(GradeType entity)
         {
+            if (entity.Value < 0)
+                throw new InvalidOperationException("Wartość oceny nie może być ujemna");
+
+            if (await _context.GradeTypes.AnyAsync(x => x.Numeric == entity.Numeric && x.IsActive))
+                throw new InvalidOperationException("Taki symbol oceny już istnieje");
+
             entity.IsActive = true;
             entity.CreatedAt = DateTime.Now;
             entity.UpdatedAt = DateTime.Now;
@@ -75,6 +81,12 @@ namespace BusinessLogic.Services
         public async Task<GradeType?> UpdateAsync(int id, GradeType entity)
         {
             if (id != entity.Id) return null;
+
+            if (entity.Value < 0)
+                throw new InvalidOperationException("Wartość oceny nie może być ujemna");
+
+            if (await _context.GradeTypes.AnyAsync(x => x.Numeric == entity.Numeric && x.Id != id && x.IsActive))
+                throw new InvalidOperationException("Taki symbol oceny już istnieje");
 
             _context.Entry(entity).State = EntityState.Modified;
             _context.Entry(entity).Property(x => x.CreatedAt).IsModified = false;

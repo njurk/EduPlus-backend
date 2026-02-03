@@ -29,8 +29,7 @@ namespace Data.Data
             modelBuilder.Entity<Target>().HasData(
                 new Target { Id = 1, Label = "WebAdmin", Title = "Administrator - strona internetowa", CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new Target { Id = 2, Label = "WebTeacher", Title = "Nauczyciel - strona internetowa", CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new Target { Id = 3, Label = "MobileParent", Title = "Rodzic - aplikacja mobilna", CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new Target { Id = 4, Label = "MobileStudent", Title = "Uczeń - aplikacja mobilna", CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new Target { Id = 3, Label = "Mobile", Title = "Aplikacja mobilna", CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new Target { Id = 5, Label = "All", Title = "Zasoby wspólne", CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null }
             );
         }
@@ -180,11 +179,11 @@ namespace Data.Data
         private static void SeedAttendanceTypes(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<AttendanceType>().HasData(
-                new AttendanceType { Id = 1, Name = "Obecność", Slug = "present", ShortCode = "OB", ColorHex = "#22c55e", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new AttendanceType { Id = 2, Name = "Nieobecność", Slug = "absent", ShortCode = "NB", ColorHex = "#ef4444", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new AttendanceType { Id = 3, Name = "Spóźnienie", Slug = "late", ShortCode = "SP", ColorHex = "#eab308", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new AttendanceType { Id = 4, Name = "Usprawiedliwione", Slug = "excused", ShortCode = "U", ColorHex = "#8b5cf6", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new AttendanceType { Id = 5, Name = "Zwolnienie", Slug = "released", ShortCode = "ZW", ColorHex = "#3b82f6", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null }
+                new AttendanceType { Id = 1, Name = "Obecność", Slug = "present", ShortCode = "OB", ColorHex = "#22c55e", IsNegative = false, IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new AttendanceType { Id = 2, Name = "Nieobecność", Slug = "absent", ShortCode = "NB", ColorHex = "#ef4444", IsNegative = true, IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new AttendanceType { Id = 3, Name = "Spóźnienie", Slug = "late", ShortCode = "SP", ColorHex = "#eab308", IsNegative = true, IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new AttendanceType { Id = 4, Name = "Usprawiedliwione", Slug = "excused", ShortCode = "U", ColorHex = "#8b5cf6", IsNegative = true, IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new AttendanceType { Id = 5, Name = "Zwolnienie", Slug = "released", ShortCode = "ZW", ColorHex = "#3b82f6", IsNegative = true, IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null }
             );
         }
 

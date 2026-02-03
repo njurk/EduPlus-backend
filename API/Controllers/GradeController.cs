@@ -10,10 +10,12 @@ using System.Security.Claims;
 public class GradeController : ControllerBase
 {
     private readonly IGradeService _service;
+    private readonly IEmailService _emailService;
 
-    public GradeController(IGradeService service)
+    public GradeController(IGradeService service, IEmailService emailService)
     {
         _service = service;
+        _emailService = emailService;
     }
 
     [HttpGet("current-semester/{schoolYearId}")]
@@ -65,8 +67,15 @@ public class GradeController : ControllerBase
         var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier) ?? User.FindFirst("id");
         if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out int teacherId)) return Unauthorized();
 
-        var result = await _service.CreateAsync(dto, teacherId);
-        return Ok(result);
+        try
+        {
+            var result = await _service.CreateAsync(dto, teacherId, _emailService);
+            return Ok(result);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
     }
 
     [HttpPut("{id}")]

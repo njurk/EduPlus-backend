@@ -64,6 +64,12 @@ namespace BusinessLogic.Services
 
         public async Task<GradeCategory> CreateAsync(GradeCategory entity)
         {
+            if (entity.Weight <= 0)
+                throw new InvalidOperationException("Waga musi być większa od 0");
+
+            if (await _context.GradeCategories.AnyAsync(x => x.Name == entity.Name && x.IsActive))
+                throw new InvalidOperationException("Ta nazwa kategorii już istnieje");
+
             entity.IsActive = true;
             entity.CreatedAt = DateTime.Now;
             entity.UpdatedAt = DateTime.Now;
@@ -75,6 +81,12 @@ namespace BusinessLogic.Services
         public async Task<GradeCategory?> UpdateAsync(int id, GradeCategory entity)
         {
             if (id != entity.Id) return null;
+
+            if (entity.Weight <= 0)
+                throw new InvalidOperationException("Waga musi być większa od 0");
+
+            if (await _context.GradeCategories.AnyAsync(x => x.Name == entity.Name && x.Id != id && x.IsActive))
+                throw new InvalidOperationException("Ta nazwa kategorii już istnieje");
 
             _context.Entry(entity).State = EntityState.Modified;
             _context.Entry(entity).Property(x => x.CreatedAt).IsModified = false;

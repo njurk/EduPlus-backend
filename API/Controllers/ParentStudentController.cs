@@ -24,8 +24,15 @@ public class ParentStudentController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create(ParentStudent entity)
     {
-        var result = await _service.CreateAsync(entity);
-        return Ok(result);
+        try
+        {
+            var result = await _service.CreateAsync(entity);
+            return Ok(result);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
     }
 
     [HttpDelete("{id}")]

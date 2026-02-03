@@ -36,8 +36,15 @@ namespace API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateOrUpdate([FromBody] WeeklyScheduleDto dto)
         {
-            var result = await _service.CreateOrUpdateAsync(dto);
-            return Ok(result);
+            try
+            {
+                var result = await _service.CreateOrUpdateAsync(dto);
+                return Ok(result);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
         [HttpDelete("clear")]

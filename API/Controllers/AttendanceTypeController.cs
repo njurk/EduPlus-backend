@@ -25,19 +25,33 @@ public class AttendanceTypeController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] AttendanceType entity)
     {
-        var result = await _service.CreateAsync(entity);
-        return Ok(result);
+        try
+        {
+            var result = await _service.CreateAsync(entity);
+            return Ok(result);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
     }
 
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] AttendanceType entity)
     {
-        if (id != entity.Id) return BadRequest("Złe ID");
+        try
+        {
+            if (id != entity.Id) return BadRequest("Złe ID");
 
-        var result = await _service.UpdateAsync(id, entity);
-        if (result == null) return NotFound();
+            var result = await _service.UpdateAsync(id, entity);
+            if (result == null) return NotFound();
 
-        return Ok(result);
+            return Ok(result);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
     }
 
     [HttpDelete("{id}")]

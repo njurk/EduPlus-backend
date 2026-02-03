@@ -24,16 +24,30 @@ public class GradeCategoryController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create(GradeCategory entity)
     {
-        var result = await _service.CreateAsync(entity);
-        return Ok(result);
+        try
+        {
+            var result = await _service.CreateAsync(entity);
+            return Ok(result);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
     }
 
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, GradeCategory entity)
     {
-        var result = await _service.UpdateAsync(id, entity);
-        if (result == null) return NotFound();
-        return Ok(result);
+        try
+        {
+            var result = await _service.UpdateAsync(id, entity);
+            if (result == null) return NotFound();
+            return Ok(result);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
     }
 
     [HttpDelete("{id}")]

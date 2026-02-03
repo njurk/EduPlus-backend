@@ -63,6 +63,12 @@ namespace BusinessLogic.Services
 
         public async Task<LessonHour> CreateAsync(LessonHour entity)
         {
+            if (entity.StartTime >= entity.EndTime)
+                throw new InvalidOperationException("Godzina rozpoczęcia musi być wcześniejsza niż godzina zakończenia");
+
+            if (await _context.LessonHours.AnyAsync(x => x.OrderNumber == entity.OrderNumber && x.IsActive))
+                throw new InvalidOperationException("Ten numer lekcji już istnieje");
+
             entity.IsActive = true;
             entity.CreatedAt = DateTime.Now;
             entity.UpdatedAt = DateTime.Now;
@@ -74,6 +80,12 @@ namespace BusinessLogic.Services
         public async Task<LessonHour?> UpdateAsync(int id, LessonHour entity)
         {
             if (id != entity.Id) return null;
+
+            if (entity.StartTime >= entity.EndTime)
+                throw new InvalidOperationException("Godzina rozpoczęcia musi być wcześniejsza niż godzina zakończenia");
+
+            if (await _context.LessonHours.AnyAsync(x => x.OrderNumber == entity.OrderNumber && x.Id != id && x.IsActive))
+                throw new InvalidOperationException("Ten numer lekcji już istnieje");
 
             _context.Entry(entity).State = EntityState.Modified;
             _context.Entry(entity).Property(x => x.CreatedAt).IsModified = false;

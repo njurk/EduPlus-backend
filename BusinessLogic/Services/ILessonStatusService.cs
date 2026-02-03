@@ -61,6 +61,9 @@ namespace BusinessLogic.Services
 
         public async Task<LessonStatus> CreateAsync(LessonStatus entity)
         {
+            if (await _context.LessonStatuses.AnyAsync(x => x.Name == entity.Name && x.IsActive))
+                throw new InvalidOperationException("Ten status lekcji już istnieje");
+
             entity.IsActive = true;
             entity.CreatedAt = DateTime.Now;
             entity.UpdatedAt = DateTime.Now;
@@ -72,6 +75,9 @@ namespace BusinessLogic.Services
         public async Task<LessonStatus?> UpdateAsync(int id, LessonStatus entity)
         {
             if (id != entity.Id) return null;
+
+            if (await _context.LessonStatuses.AnyAsync(x => x.Name == entity.Name && x.Id != id && x.IsActive))
+                throw new InvalidOperationException("Ten status lekcji już istnieje");
 
             _context.Entry(entity).State = EntityState.Modified;
             _context.Entry(entity).Property(x => x.CreatedAt).IsModified = false;
@@ -93,6 +99,7 @@ namespace BusinessLogic.Services
         {
             var item = await _context.LessonStatuses.FindAsync(id);
             if (item == null) return false;
+            if (!string.IsNullOrEmpty(item.Slug)) return false;
 
             if (item.IsActive)
             {

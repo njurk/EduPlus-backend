@@ -10,12 +10,13 @@ namespace BusinessLogic.Services
 {
     public interface ISchoolYearService
     {
-        Task<IEnumerable<object>> GetAllAsync();
+        Task<IEnumerable<object>> GetAllAsync(string? search = null, string? sortBy = null, bool sortDesc = false, bool showInactive = false);
         Task<object?> GetByIdAsync(int id);
         Task<IEnumerable<object>> GetSemestersAsync(int id);
         Task<SchoolYear> CreateAsync(SchoolYear entity);
         Task<SchoolYear?> UpdateAsync(int id, SchoolYear entity);
         Task<bool> DeleteAsync(int id);
+        Task<bool> RestoreAsync(int id);
     }
 
     public class SchoolYearService : ISchoolYearService
@@ -27,10 +28,29 @@ namespace BusinessLogic.Services
             _context = context;
         }
 
-        public async Task<IEnumerable<object>> GetAllAsync()
+        public async Task<IEnumerable<object>> GetAllAsync(string? search = null, string? sortBy = null, bool sortDesc = false, bool showInactive = false)
         {
-            return await _context.SchoolYears.AsNoTracking()
-                .OrderByDescending(x => x.StartDate)
+            var query = _context.SchoolYears.AsNoTracking().AsQueryable();
+
+            query = showInactive ? query.Where(x => !x.IsActive) : query.Where(x => x.IsActive);
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                var s = search.Trim().ToLower();
+                query = query.Where(x => x.Name.ToLower().Contains(s));
+            }
+
+            query = sortBy?.ToLower() switch
+            {
+                "name" => sortDesc ? query.OrderByDescending(x => x.Name) : query.OrderBy(x => x.Name),
+                "startdate" => sortDesc ? query.OrderByDescending(x => x.StartDate) : query.OrderBy(x => x.StartDate),
+                "enddate" => sortDesc ? query.OrderByDescending(x => x.EndDate) : query.OrderBy(x => x.EndDate),
+                "created" => sortDesc ? query.OrderByDescending(x => x.CreatedAt) : query.OrderBy(x => x.CreatedAt),
+                "updated" => sortDesc ? query.OrderByDescending(x => x.UpdatedAt) : query.OrderBy(x => x.UpdatedAt),
+                _ => sortDesc ? query.OrderByDescending(x => x.StartDate) : query.OrderBy(x => x.StartDate)
+            };
+
+            return await query
                 .Select(x => new
                 {
                     x.Id,
@@ -39,7 +59,8 @@ namespace BusinessLogic.Services
                     x.EndDate,
                     x.IsActive,
                     x.CreatedAt,
-                    x.UpdatedAt
+                    x.UpdatedAt,
+                    ModifiedByName = _context.Users.Where(u => u.Id == x.ModifiedByUserId).Select(u => u.LastName + " " + u.FirstName).FirstOrDefault() ?? "System"
                 })
                 .ToListAsync();
         }
@@ -81,6 +102,13 @@ namespace BusinessLogic.Services
 
         public async Task<SchoolYear> CreateAsync(SchoolYear entity)
         {
+            if (entity.StartDate >= entity.EndDate)
+                throw new InvalidOperationException("Data rozpoczęcia musi być wcześniejsza niż data zakończenia");
+
+            if (await _context.SchoolYears.AnyAsync(x => x.Name == entity.Name && x.IsActive))
+                throw new InvalidOperationException("Taki rok szkolny już istnieje");
+
+            entity.IsActive = true;
             entity.CreatedAt = DateTime.Now;
             entity.UpdatedAt = DateTime.Now;
             _context.SchoolYears.Add(entity);
@@ -91,6 +119,15 @@ namespace BusinessLogic.Services
         public async Task<SchoolYear?> UpdateAsync(int id, SchoolYear entity)
         {
             if (id != entity.Id) return null;
+
+            if (entity.StartDate >= entity.EndDate)
+                throw new InvalidOperationException("Data rozpoczęcia musi być wcześniejsza niż data zakończenia");
+
+            if (await _context.SchoolYears.AnyAsync(x => x.Name == entity.Name && x.Id != id && x.IsActive))
+                throw new InvalidOperationException("Taki rok szkolny już istnieje");
+
+            if (entity.IsActive && entity.Name.EndsWith(" (nieaktywny)"))
+                entity.Name = entity.Name.Replace(" (nieaktywny)", "").Trim();
 
             _context.Entry(entity).State = EntityState.Modified;
             _context.Entry(entity).Property(x => x.CreatedAt).IsModified = false;
@@ -113,7 +150,31 @@ namespace BusinessLogic.Services
             var item = await _context.SchoolYears.FindAsync(id);
             if (item == null) return false;
 
-            _context.SchoolYears.Remove(item);
+            if (item.IsActive)
+            {
+                if (!item.Name.EndsWith(" (nieaktywny)"))
+                    item.Name = $"{item.Name} (nieaktywny)";
+                item.IsActive = false;
+                item.UpdatedAt = DateTime.Now;
+            }
+            else
+            {
+                _context.SchoolYears.Remove(item);
+            }
+
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> RestoreAsync(int id)
+        {
+            var item = await _context.SchoolYears.IgnoreQueryFilters().FirstOrDefaultAsync(x => x.Id == id);
+            if (item == null) return false;
+
+            item.IsActive = true;
+            if (item.Name.EndsWith(" (nieaktywny)"))
+                item.Name = item.Name.Replace(" (nieaktywny)", "").Trim();
+            item.UpdatedAt = DateTime.Now;
             await _context.SaveChangesAsync();
             return true;
         }

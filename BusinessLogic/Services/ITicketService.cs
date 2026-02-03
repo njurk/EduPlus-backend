@@ -120,6 +120,9 @@ namespace BusinessLogic.Services
 
         public async Task<Ticket> CreateAsync(CreateTicketDto dto, IEmailService emailService)
         {
+            if (!await _context.TicketReasons.AnyAsync(tr => tr.Id == dto.ReasonId && tr.IsActive))
+                throw new InvalidOperationException("Wybrany powód zgłoszenia nie istnieje lub jest nieaktywny");
+
             var ticket = new Ticket
             {
                 Email = dto.Email,

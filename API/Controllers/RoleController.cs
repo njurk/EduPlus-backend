@@ -24,7 +24,14 @@ public class RoleController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] RoleUpdateDto dto)
     {
-        var result = await _service.UpdateAsync(id, dto);
-        return result ? NoContent() : NotFound();
+        try
+        {
+            var result = await _service.UpdateAsync(id, dto);
+            return result ? NoContent() : NotFound();
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
     }
 }

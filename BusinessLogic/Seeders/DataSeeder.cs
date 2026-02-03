@@ -847,7 +847,7 @@
                 },
                 new {
                     Title = "Zmiana w planie lekcji - klasa 1A",
-                    Description = "<p><strong>Uwaga!</strong> W dniu <em>jutrzejszym (21.01.2026)</em> nastąpi zmiana w planie lekcji klasy 1A:</p><table><thead><tr><th>Lekcja</th><th>Było</th><th>Będzie</th></tr></thead><tbody><tr><td>3</td><td>Matematyka</td><td><strong>Wychowanie fizyczne</strong></td></tr><tr><td>4</td><td>Wychowanie fizyczne</td><td><strong>Matematyka</strong></td></tr></tbody></table><p>Prosimy o zabranie odpowiedniego stroju sportowego.</p>"
+                    Description = "<p><strong>Uwaga!</strong> W dniu <em>jutrzejszym (21.01.2026)</em> nastąpi zmiana w planie lekcji klasy 1A:</p><ul><li><strong>Lekcja 3:</strong> Matematyka → <strong>Wychowanie fizyczne</strong></li><li><strong>Lekcja 4:</strong> Wychowanie fizyczne → <strong>Matematyka</strong></li></ul><p>Prosimy o zabranie odpowiedniego stroju sportowego.</p>"
                 },
                 new {
                     Title = "Konkursy szkolne - zapisy do 30 stycznia",

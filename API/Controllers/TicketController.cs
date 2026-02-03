@@ -55,8 +55,15 @@ namespace API.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Create([FromBody] CreateTicketDto dto)
         {
-            var result = await _service.CreateAsync(dto, _emailService);
-            return Ok(result);
+            try
+            {
+                var result = await _service.CreateAsync(dto, _emailService);
+                return Ok(result);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
         [HttpPatch("{id}/close")]

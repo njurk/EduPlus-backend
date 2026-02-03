@@ -63,6 +63,9 @@ namespace BusinessLogic.Services
 
         public async Task<UserRole> CreateAsync(UserRole entity)
         {
+            if (await _context.UserRoles.AnyAsync(ur => ur.UserId == entity.UserId && ur.RoleId == entity.RoleId))
+                throw new InvalidOperationException("Użytkownik ma już przypisaną tę rolę");
+
             entity.CreatedAt = DateTime.Now;
             entity.UpdatedAt = DateTime.Now;
             _context.UserRoles.Add(entity);

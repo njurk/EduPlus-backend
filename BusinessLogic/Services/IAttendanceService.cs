@@ -15,7 +15,7 @@ namespace BusinessLogic.Services
     {
         Task<PaginatedResponse<AttendanceAdminDto>> GetAllForAdminAsync(bool includeInactive, int pageNumber = 1, int pageSize = 20, string? search = null, string? sortBy = null, bool sortDesc = true, int? classId = null, DateTime? date = null, string? subjectName = null, string? teacherName = null, string? attendanceTypeShortCode = null, int? orderNumber = null);
         Task<IEnumerable<Attendance>> GetAllAsync();
-        Task<Attendance?> UpdateAsync(int id, int attendanceTypeId);
+        Task<Attendance?> UpdateAsync(int id, int attendanceTypeId, IEmailService emailService);
     }
 
     public class AttendanceService : IAttendanceService
@@ -115,15 +115,43 @@ namespace BusinessLogic.Services
                 .ToListAsync();
         }
 
-        public async Task<Attendance?> UpdateAsync(int id, int attendanceTypeId)
+        public async Task<Attendance?> UpdateAsync(int id, int attendanceTypeId, IEmailService emailService)
         {
+            if (!await _context.AttendanceTypes.AnyAsync(at => at.Id == attendanceTypeId && at.IsActive))
+                throw new InvalidOperationException("Wybrany rodzaj frekwencji nie istnieje lub jest nieaktywny");
+
             var item = await _context.Attendances.FindAsync(id);
             if (item == null) return null;
 
+            var oldTypeId = item.AttendanceTypeId;
             item.AttendanceTypeId = attendanceTypeId;
             item.UpdatedAt = DateTime.Now;
-
             await _context.SaveChangesAsync();
+
+            var newType = await _context.AttendanceTypes.FindAsync(attendanceTypeId);
+            if (newType?.IsNegative == true && oldTypeId != attendanceTypeId)
+            {
+                var data = await _context.Attendances
+                    .Include(a => a.Student)
+                    .Include(a => a.Lesson).ThenInclude(l => l.Subject)
+                    .Include(a => a.Lesson).ThenInclude(l => l.Teacher)
+                    .Where(a => a.Id == id)
+                    .Select(a => new { StudentName = a.Student.LastName + " " + a.Student.FirstName, a.Student.Email, a.StudentId, SubjectName = a.Lesson.Subject.Name, TeacherName = a.Lesson.Teacher.LastName + " " + a.Lesson.Teacher.FirstName, a.Lesson.Date })
+                    .FirstAsync();
+
+                _ = Task.Run(async () =>
+                {
+                    try
+                    {
+                        await emailService.SendNegativeAttendanceEmailAsync(data.Email, data.StudentName, data.SubjectName, newType.Name, data.TeacherName, data.Date);
+                        var parents = await _context.ParentStudents.Include(ps => ps.Parent).Where(ps => ps.StudentId == data.StudentId).Select(ps => ps.Parent!.Email).ToListAsync();
+                        foreach (var email in parents)
+                            await emailService.SendNegativeAttendanceEmailAsync(email, data.StudentName, data.SubjectName, newType.Name, data.TeacherName, data.Date);
+                    }
+                    catch { }
+                });
+            }
+
             return item;
         }
     }

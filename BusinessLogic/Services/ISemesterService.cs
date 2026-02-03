@@ -48,6 +48,9 @@ namespace BusinessLogic.Services
 
         public async Task<Semester> CreateAsync(Semester entity)
         {
+            if (entity.StartDate >= entity.EndDate)
+                throw new InvalidOperationException("Data rozpoczęcia semestru musi być wcześniejsza niż data zakończenia");
+
             entity.CreatedAt = DateTime.Now;
             entity.UpdatedAt = DateTime.Now;
             _context.Semesters.Add(entity);
@@ -58,6 +61,9 @@ namespace BusinessLogic.Services
         public async Task<Semester?> UpdateAsync(int id, Semester entity)
         {
             if (id != entity.Id) return null;
+
+            if (entity.StartDate >= entity.EndDate)
+                throw new InvalidOperationException("Data rozpoczęcia semestru musi być wcześniejsza niż data zakończenia");
 
             _context.Entry(entity).State = EntityState.Modified;
             _context.Entry(entity).Property(x => x.CreatedAt).IsModified = false;

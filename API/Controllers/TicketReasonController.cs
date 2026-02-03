@@ -67,6 +67,9 @@ namespace API.Controllers
         [Authorize]
         public async Task<IActionResult> Create([FromBody] TicketReason dto)
         {
+            if (await _context.TicketReasons.AnyAsync(r => r.Name == dto.Name && r.IsActive))
+                return BadRequest(new { message = "Taki powód zgłoszenia już istnieje" });
+
             var reason = new TicketReason
             {
                 Name = dto.Name,
@@ -87,6 +90,9 @@ namespace API.Controllers
         {
             var reason = await _context.TicketReasons.FindAsync(id);
             if (reason == null) return NotFound();
+
+            if (await _context.TicketReasons.AnyAsync(r => r.Name == dto.Name && r.Id != id && r.IsActive))
+                return BadRequest(new { message = "Taki powód zgłoszenia już istnieje" });
 
             reason.Name = dto.Name;
             reason.IsActive = dto.IsActive;

@@ -69,6 +69,9 @@ namespace BusinessLogic.Services
 
         public async Task<ParentStudent> CreateAsync(ParentStudent entity)
         {
+            if (await _context.ParentStudents.AnyAsync(ps => ps.ParentId == entity.ParentId && ps.StudentId == entity.StudentId))
+                throw new InvalidOperationException("Ta relacja już istnieje");
+
             entity.CreatedAt = DateTime.Now;
             entity.UpdatedAt = DateTime.Now;
             _context.ParentStudents.Add(entity);

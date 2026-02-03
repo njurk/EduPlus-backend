@@ -9,10 +9,12 @@ using Shared.DTOs;
 public class AttendanceController : ControllerBase
 {
     private readonly IAttendanceService _service;
+    private readonly IEmailService _emailService;
 
-    public AttendanceController(IAttendanceService service)
+    public AttendanceController(IAttendanceService service, IEmailService emailService)
     {
         _service = service;
+        _emailService = emailService;
     }
 
     [HttpGet("admin")]
@@ -43,8 +45,15 @@ public class AttendanceController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] UpdateAttendanceDto dto)
     {
-        var result = await _service.UpdateAsync(id, dto.AttendanceTypeId);
-        if (result == null) return NotFound();
-        return Ok(result);
+        try
+        {
+            var result = await _service.UpdateAsync(id, dto.AttendanceTypeId, _emailService);
+            if (result == null) return NotFound();
+            return Ok(result);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
     }
 }

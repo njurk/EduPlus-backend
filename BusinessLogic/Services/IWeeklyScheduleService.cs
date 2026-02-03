@@ -116,6 +116,27 @@ namespace BusinessLogic.Services
             {
                 entity = await _context.WeeklySchedules.FindAsync(dto.Id.Value) 
                     ?? throw new Exception("Nie znaleziono planu");
+
+                var classroomConflict = await _context.WeeklySchedules.AnyAsync(ws =>
+                    ws.ClassroomId == dto.ClassroomId &&
+                    ws.DayOfWeek == entity.DayOfWeek &&
+                    ws.LessonHourId == entity.LessonHourId &&
+                    ws.SemesterId == entity.SemesterId &&
+                    ws.Id != entity.Id &&
+                    ws.IsActive);
+                if (classroomConflict)
+                    throw new InvalidOperationException("Sala jest już zajęta w tym terminie");
+
+                var teacherConflict = await _context.WeeklySchedules.AnyAsync(ws =>
+                    ws.TeacherId == dto.TeacherId &&
+                    ws.DayOfWeek == entity.DayOfWeek &&
+                    ws.LessonHourId == entity.LessonHourId &&
+                    ws.SemesterId == entity.SemesterId &&
+                    ws.Id != entity.Id &&
+                    ws.IsActive);
+                if (teacherConflict)
+                    throw new InvalidOperationException("Nauczyciel ma już lekcję w tym terminie");
+
                 entity.SubjectId = dto.SubjectId;
                 entity.TeacherId = dto.TeacherId;
                 entity.ClassroomId = dto.ClassroomId;
@@ -140,6 +161,25 @@ namespace BusinessLogic.Services
                     CreatedAt = DateTime.Now,
                     UpdatedAt = DateTime.Now
                 };
+
+                var classroomConflict = await _context.WeeklySchedules.AnyAsync(ws =>
+                    ws.ClassroomId == dto.ClassroomId &&
+                    ws.DayOfWeek == dto.DayOfWeek &&
+                    ws.LessonHourId == dto.LessonHourId &&
+                    ws.SemesterId == dto.SemesterId &&
+                    ws.IsActive);
+                if (classroomConflict)
+                    throw new InvalidOperationException("Sala jest już zajęta w tym terminie");
+
+                var teacherConflict = await _context.WeeklySchedules.AnyAsync(ws =>
+                    ws.TeacherId == dto.TeacherId &&
+                    ws.DayOfWeek == dto.DayOfWeek &&
+                    ws.LessonHourId == dto.LessonHourId &&
+                    ws.SemesterId == dto.SemesterId &&
+                    ws.IsActive);
+                if (teacherConflict)
+                    throw new InvalidOperationException("Nauczyciel ma już lekcję w tym terminie");
+
                 _context.WeeklySchedules.Add(entity);
             }
 

@@ -62,6 +62,9 @@ namespace BusinessLogic.Services
 
         public async Task<Classroom> CreateAsync(Classroom entity)
         {
+            if (await _context.Classrooms.AnyAsync(x => x.Name == entity.Name && x.IsActive))
+                throw new InvalidOperationException("Ta sala już istnieje");
+
             entity.IsActive = true;
             _context.Classrooms.Add(entity);
             await _context.SaveChangesAsync();
@@ -71,6 +74,9 @@ namespace BusinessLogic.Services
         public async Task<Classroom?> UpdateAsync(int id, Classroom entity)
         {
             if (id != entity.Id) return null;
+
+            if (await _context.Classrooms.AnyAsync(x => x.Name == entity.Name && x.Id != id && x.IsActive))
+                throw new InvalidOperationException("Ta sala już istnieje");
 
             if (entity.IsActive && entity.Name.EndsWith(" (nieaktywny)"))
                 entity.Name = entity.Name.Replace(" (nieaktywny)", "");

@@ -75,6 +75,7 @@ namespace API
             builder.Services.AddScoped<IBadgeService, BadgeService>();
             builder.Services.AddSingleton<IEventLogService, EventLogService>();
             builder.Services.AddSingleton<IBadgeNotificationService, BadgeNotificationService>();
+            builder.Services.AddScoped<IMobileService, MobileService>();
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -83,7 +84,7 @@ namespace API
             {
                 options.AddPolicy("Allow",
                     policy => policy
-                        .WithOrigins("http://localhost:5173")
+                        .WithOrigins("http://localhost:5173", "http://192.168.88.89:5173")
                         .AllowAnyMethod()
                         .AllowAnyHeader()
                         .AllowCredentials()

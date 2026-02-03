@@ -1179,16 +1179,8 @@ namespace Data.Migrations
                         {
                             Id = 3,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Label = "MobileParent",
-                            Title = "Rodzic - aplikacja mobilna",
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Label = "MobileStudent",
-                            Title = "Uczeń - aplikacja mobilna",
+                            Label = "Mobile",
+                            Title = "Aplikacja mobilna",
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
@@ -1375,6 +1367,9 @@ namespace Data.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsNegative")
+                        .HasColumnType("bit");
+
                     b.Property<int?>("ModifiedByUserId")
                         .HasColumnType("int");
 
@@ -1387,7 +1382,6 @@ namespace Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Slug")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("UpdatedAt")
@@ -1406,6 +1400,7 @@ namespace Data.Migrations
                             ColorHex = "#22c55e",
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
+                            IsNegative = false,
                             Name = "Obecność",
                             ShortCode = "OB",
                             Slug = "present",
@@ -1417,6 +1412,7 @@ namespace Data.Migrations
                             ColorHex = "#ef4444",
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
+                            IsNegative = true,
                             Name = "Nieobecność",
                             ShortCode = "NB",
                             Slug = "absent",
@@ -1428,6 +1424,7 @@ namespace Data.Migrations
                             ColorHex = "#eab308",
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
+                            IsNegative = true,
                             Name = "Spóźnienie",
                             ShortCode = "SP",
                             Slug = "late",
@@ -1439,6 +1436,7 @@ namespace Data.Migrations
                             ColorHex = "#8b5cf6",
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
+                            IsNegative = true,
                             Name = "Usprawiedliwione",
                             ShortCode = "U",
                             Slug = "excused",
@@ -1450,6 +1448,7 @@ namespace Data.Migrations
                             ColorHex = "#3b82f6",
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             IsActive = true,
+                            IsNegative = true,
                             Name = "Zwolnienie",
                             ShortCode = "ZW",
                             Slug = "released",
@@ -2169,7 +2168,6 @@ namespace Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Slug")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("UpdatedAt")

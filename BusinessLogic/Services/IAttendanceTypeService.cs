@@ -52,8 +52,10 @@ namespace BusinessLogic.Services
                 {
                     x.Id,
                     x.Name,
+                    x.Slug,
                     x.ShortCode,
                     x.ColorHex,
+                    x.IsNegative,
                     x.IsActive,
                     x.CreatedAt,
                     x.UpdatedAt,
@@ -64,6 +66,12 @@ namespace BusinessLogic.Services
 
         public async Task<AttendanceType> CreateAsync(AttendanceType entity)
         {
+            if (await _context.AttendanceTypes.AnyAsync(x => x.Name == entity.Name && x.IsActive))
+                throw new InvalidOperationException("Taka nazwa frekwencji już istnieje");
+
+            if (await _context.AttendanceTypes.AnyAsync(x => x.ShortCode == entity.ShortCode && x.IsActive))
+                throw new InvalidOperationException("Taki skrót już istnieje");
+
             entity.IsActive = true;
             _context.AttendanceTypes.Add(entity);
             await _context.SaveChangesAsync();
@@ -73,6 +81,12 @@ namespace BusinessLogic.Services
         public async Task<AttendanceType?> UpdateAsync(int id, AttendanceType entity)
         {
             if (id != entity.Id) return null;
+
+            if (await _context.AttendanceTypes.AnyAsync(x => x.Name == entity.Name && x.Id != id && x.IsActive))
+                throw new InvalidOperationException("Taka nazwa frekwencji już istnieje");
+
+            if (await _context.AttendanceTypes.AnyAsync(x => x.ShortCode == entity.ShortCode && x.Id != id && x.IsActive))
+                throw new InvalidOperationException("Taki skrót już istnieje");
 
             if (entity.IsActive && entity.Name.EndsWith(" (nieaktywny)"))
                 entity.Name = entity.Name.Replace(" (nieaktywny)", "");
@@ -96,6 +110,7 @@ namespace BusinessLogic.Services
         {
             var item = await _context.AttendanceTypes.FindAsync(id);
             if (item == null) return false;
+            if (!string.IsNullOrEmpty(item.Slug)) return false;
 
             if (item.IsActive)
             {

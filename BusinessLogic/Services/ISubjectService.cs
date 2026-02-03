@@ -11,7 +11,7 @@ namespace BusinessLogic.Services
 {
     public interface ISubjectService
     {
-        Task<IEnumerable<object>> GetAllAsync();
+        Task<IEnumerable<object>> GetAllAsync(string? search = null, string? sortBy = null, bool sortDesc = false, bool showInactive = false);
         Task<IEnumerable<object>> GetTeachersAsync(int subjectId);
         Task<PaginatedResponse<object>> GetAllSubjectTeachersAsync(int pageNumber, int pageSize, string? sortBy, bool sortDesc, string? search, int? subjectId, int? teacherId, bool showInactive);
         Task AddTeacherToSubjectAsync(int subjectId, int teacherId, int userId);
@@ -21,6 +21,7 @@ namespace BusinessLogic.Services
         Task<Subject> CreateAsync(Subject entity);
         Task<Subject?> UpdateAsync(int id, Subject entity);
         Task<bool> DeleteAsync(int id);
+        Task<bool> RestoreAsync(int id);
     }
 
     public class SubjectService : ISubjectService
@@ -32,11 +33,36 @@ namespace BusinessLogic.Services
             _context = context;
         }
 
-        public async Task<IEnumerable<object>> GetAllAsync()
+        public async Task<IEnumerable<object>> GetAllAsync(string? search = null, string? sortBy = null, bool sortDesc = false, bool showInactive = false)
         {
-            return await _context.Subjects.AsNoTracking()
-                .OrderBy(x => x.Name)
-                .Select(x => new { x.Id, x.Name })
+            var query = _context.Subjects.AsNoTracking().AsQueryable();
+
+            query = showInactive ? query.Where(x => !x.IsActive) : query.Where(x => x.IsActive);
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                var s = search.Trim().ToLower();
+                query = query.Where(x => x.Name.ToLower().Contains(s));
+            }
+
+            query = sortBy?.ToLower() switch
+            {
+                "name" => sortDesc ? query.OrderByDescending(x => x.Name) : query.OrderBy(x => x.Name),
+                "created" => sortDesc ? query.OrderByDescending(x => x.CreatedAt) : query.OrderBy(x => x.CreatedAt),
+                "updated" => sortDesc ? query.OrderByDescending(x => x.UpdatedAt) : query.OrderBy(x => x.UpdatedAt),
+                _ => sortDesc ? query.OrderByDescending(x => x.Name) : query.OrderBy(x => x.Name)
+            };
+
+            return await query
+                .Select(x => new
+                {
+                    x.Id,
+                    x.Name,
+                    x.IsActive,
+                    x.CreatedAt,
+                    x.UpdatedAt,
+                    ModifiedByName = _context.Users.Where(u => u.Id == x.ModifiedByUserId).Select(u => u.LastName + " " + u.FirstName).FirstOrDefault() ?? "System"
+                })
                 .ToListAsync();
         }
 
@@ -204,6 +230,9 @@ namespace BusinessLogic.Services
 
         public async Task<Subject> CreateAsync(Subject entity)
         {
+            if (await _context.Subjects.AnyAsync(x => x.Name == entity.Name && x.IsActive))
+                throw new InvalidOperationException("Ta nazwa przedmiotu już istnieje");
+
             entity.CreatedAt = DateTime.Now;
             entity.UpdatedAt = DateTime.Now;
             _context.Subjects.Add(entity);
@@ -214,6 +243,9 @@ namespace BusinessLogic.Services
         public async Task<Subject?> UpdateAsync(int id, Subject entity)
         {
             if (id != entity.Id) return null;
+
+            if (await _context.Subjects.AnyAsync(x => x.Name == entity.Name && x.Id != id && x.IsActive))
+                throw new InvalidOperationException("Ta nazwa przedmiotu już istnieje");
 
             _context.Entry(entity).State = EntityState.Modified;
             _context.Entry(entity).Property(x => x.CreatedAt).IsModified = false;
@@ -236,7 +268,31 @@ namespace BusinessLogic.Services
             var item = await _context.Subjects.FindAsync(id);
             if (item == null) return false;
 
-            _context.Subjects.Remove(item);
+            if (item.IsActive)
+            {
+                if (!item.Name.EndsWith(" (nieaktywny)"))
+                    item.Name = $"{item.Name} (nieaktywny)";
+                item.IsActive = false;
+                item.UpdatedAt = DateTime.Now;
+            }
+            else
+            {
+                _context.Subjects.Remove(item);
+            }
+
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> RestoreAsync(int id)
+        {
+            var item = await _context.Subjects.IgnoreQueryFilters().FirstOrDefaultAsync(x => x.Id == id);
+            if (item == null) return false;
+
+            item.IsActive = true;
+            if (item.Name.EndsWith(" (nieaktywny)"))
+                item.Name = item.Name.Replace(" (nieaktywny)", "").Trim();
+            item.UpdatedAt = DateTime.Now;
             await _context.SaveChangesAsync();
             return true;
         }
