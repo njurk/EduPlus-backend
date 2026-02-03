@@ -12,6 +12,7 @@
 
         private const string adminMail = "eduplus.test.1@gmail.com";
         private const string teacherMail = "eduplus.test.2@gmail.com";
+        private const string parentMail = "eduplus.test.3@gmail.com";
         private const string password = "Test123!";
 
         public DataSeeder(EduPlusDbContext context)
@@ -116,7 +117,7 @@
         {
             return new List<(string, string, string, string, string, string, string, string)>
             {
-                ("Leon", "Urbaniak", "lurbaniak@szkola.edu.pl", "Marek", "murbaniak@szkola.edu.pl", "Długa 55", "Grodzisk Mazowiecki", "05-825"),
+                ("Leon", "Urbaniak", "lurbaniak@szkola.edu.pl", "Marek", parentMail, "Długa 55", "Grodzisk Mazowiecki", "05-825"),
                 ("Pola", "Sikora", "psikora@szkola.edu.pl", "Ewa", "esikora@szkola.edu.pl", "Krótka 1", "Mińsk Mazowiecki", "05-300"),
                 ("Oliwier", "Baran", "obaran@szkola.edu.pl", "Adam", "abaran@szkola.edu.pl", "Spacerowa 9", "Milanów", "05-822"),
                 ("Laura", "Krajewska", "lkrajewska@szkola.edu.pl", "Monika", "mkrajewska@szkola.edu.pl", "Wspólna 12", "Brwinów", "05-840"),

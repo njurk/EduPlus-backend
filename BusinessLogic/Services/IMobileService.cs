@@ -21,11 +21,22 @@ namespace BusinessLogic.Services
             _context = context;
         }
 
+        private async Task<int> GetStudentIdAsync(int userId)
+        {
+            var parentStudent = await _context.ParentStudents
+                .Where(ps => ps.ParentId == userId)
+                .FirstOrDefaultAsync();
+            
+            return parentStudent?.StudentId ?? userId;
+        }
+
         public async Task<MobileScheduleDto?> GetScheduleAsync(int userId)
         {
+            var studentId = await GetStudentIdAsync(userId);
+            
             var classStudent = await _context.ClassStudents
                 .Include(cs => cs.Class)
-                .Where(cs => cs.StudentId == userId && cs.IsActive)
+                .Where(cs => cs.StudentId == studentId && cs.IsActive)
                 .FirstOrDefaultAsync();
 
             if (classStudent == null) return null;
@@ -67,12 +78,14 @@ namespace BusinessLogic.Services
 
         public async Task<MobileGradesDto> GetGradesAsync(int userId, int? semesterId = null)
         {
+            var studentId = await GetStudentIdAsync(userId);
+            
             var query = _context.Grades
                 .Include(g => g.Subject)
                 .Include(g => g.GradeType)
                 .Include(g => g.GradeCategory)
                 .Include(g => g.Teacher)
-                .Where(g => g.StudentId == userId && g.IsActive);
+                .Where(g => g.StudentId == studentId && g.IsActive);
 
             if (semesterId.HasValue)
             {
@@ -112,10 +125,12 @@ namespace BusinessLogic.Services
 
         public async Task<MobileAttendanceDto> GetAttendanceAsync(int userId, int? semesterId = null)
         {
+            var studentId = await GetStudentIdAsync(userId);
+            
             var query = _context.Attendances
                 .Include(a => a.Lesson).ThenInclude(l => l.Subject)
                 .Include(a => a.AttendanceType)
-                .Where(a => a.StudentId == userId && a.IsActive);
+                .Where(a => a.StudentId == studentId && a.IsActive);
 
             if (semesterId.HasValue)
             {
