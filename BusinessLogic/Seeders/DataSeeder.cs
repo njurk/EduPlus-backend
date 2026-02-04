@@ -639,7 +639,7 @@
                                 GradeTypeId = gradeTypeIds[_random.Next(gradeTypeIds.Count)],
                                 GradeCategoryId = gradeCategoryIds[_random.Next(gradeCategoryIds.Count)],
                                 DateTime = lesson.Date,
-                                Comment = null,
+                                Comment = "test",
                                 IsActive = true,
                                 CreatedAt = lesson.Date,
                                 UpdatedAt = lesson.Date,

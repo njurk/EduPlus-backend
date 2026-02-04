@@ -109,18 +109,38 @@ namespace BusinessLogic.Services
                     Average = (double?)group.Where(g => g.GradeType?.Value != null).Average(g => g.GradeType!.Value),
                     Grades = group.OrderByDescending(g => g.CreatedAt).Select(g => new MobileGradeDto
                     {
+                        Id = g.Id,
                         Value = g.GradeType?.Numeric ?? "",
                         CategoryName = g.GradeCategory?.Name ?? "",
                         CategoryColorHex = g.GradeCategory?.ColorHex ?? "",
                         TeacherName = g.Teacher != null ? $"{g.Teacher.FirstName} {g.Teacher.LastName}" : "",
                         Comment = g.Comment,
+                        Weight = g.GradeCategory?.Weight ?? 1,
                         CreatedAt = g.CreatedAt
                     }).ToList()
                 })
                 .OrderBy(s => s.SubjectName)
                 .ToList();
 
-            return new MobileGradesDto { Subjects = subjects };
+            var recentGrades = grades
+                .OrderByDescending(g => g.CreatedAt)
+                .Take(5)
+                .Select(g => new MobileRecentGradeDto
+                {
+                    Id = g.Id,
+                    SubjectName = g.Subject?.Name ?? "",
+                    Value = g.GradeType?.Numeric ?? "",
+                    CategoryName = g.GradeCategory?.Name ?? "",
+                    CategoryColorHex = g.GradeCategory?.ColorHex ?? "",
+                    TeacherName = g.Teacher != null ? $"{g.Teacher.FirstName} {g.Teacher.LastName}" : "",
+                    Comment = g.Comment,
+                    Weight = g.GradeCategory?.Weight ?? 1,
+                    Date = g.CreatedAt.ToString("dd.MM.yyyy"),
+                    CreatedAt = g.CreatedAt
+                })
+                .ToList();
+
+            return new MobileGradesDto { Subjects = subjects, RecentGrades = recentGrades };
         }
 
         public async Task<MobileAttendanceDto> GetAttendanceAsync(int userId, int? semesterId = null)
@@ -168,7 +188,20 @@ namespace BusinessLogic.Services
                 .OrderBy(s => s.SubjectName)
                 .ToList();
 
-            return new MobileAttendanceDto { Subjects = subjects };
+            var recentRecords = attendances
+                .OrderByDescending(a => a.Lesson?.Date)
+                .ThenByDescending(a => a.CreatedAt)
+                .Take(5)
+                .Select(a => new MobileAttendanceRecordDto
+                {
+                    SubjectName = a.Lesson?.Subject?.Name ?? "",
+                    Date = a.Lesson?.Date.ToString("dd.MM.yyyy") ?? "",
+                    Type = a.AttendanceType?.ShortCode ?? "",
+                    TypeColorHex = a.AttendanceType?.ColorHex ?? ""
+                })
+                .ToList();
+
+            return new MobileAttendanceDto { Subjects = subjects, RecentRecords = recentRecords };
         }
 
         public async Task<List<MobileAnnouncementDto>> GetAnnouncementsAsync(int userId)
