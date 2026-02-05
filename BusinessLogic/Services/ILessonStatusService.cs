@@ -11,10 +11,7 @@ namespace BusinessLogic.Services
     public interface ILessonStatusService
     {
         Task<IEnumerable<object>> GetAllAsync(string? search, string? sortBy, bool sortDesc, bool showInactive);
-        Task<LessonStatus> CreateAsync(LessonStatus entity);
         Task<LessonStatus?> UpdateAsync(int id, LessonStatus entity);
-        Task<bool> DeleteAsync(int id);
-        Task<bool> RestoreAsync(int id);
     }
 
     public class LessonStatusService : ILessonStatusService
@@ -59,19 +56,6 @@ namespace BusinessLogic.Services
                 .ToListAsync();
         }
 
-        public async Task<LessonStatus> CreateAsync(LessonStatus entity)
-        {
-            if (await _context.LessonStatuses.AnyAsync(x => x.Name == entity.Name && x.IsActive))
-                throw new InvalidOperationException("Ten status lekcji już istnieje");
-
-            entity.IsActive = true;
-            entity.CreatedAt = DateTime.Now;
-            entity.UpdatedAt = DateTime.Now;
-            _context.LessonStatuses.Add(entity);
-            await _context.SaveChangesAsync();
-            return entity;
-        }
-
         public async Task<LessonStatus?> UpdateAsync(int id, LessonStatus entity)
         {
             if (id != entity.Id) return null;
@@ -93,37 +77,6 @@ namespace BusinessLogic.Services
                 if (!await _context.LessonStatuses.AnyAsync(e => e.Id == id)) return null;
                 throw;
             }
-        }
-
-        public async Task<bool> DeleteAsync(int id)
-        {
-            var item = await _context.LessonStatuses.FindAsync(id);
-            if (item == null) return false;
-            if (!string.IsNullOrEmpty(item.Slug)) return false;
-
-            if (item.IsActive)
-            {
-                item.IsActive = false;
-                item.UpdatedAt = DateTime.Now;
-            }
-            else
-            {
-                _context.LessonStatuses.Remove(item);
-            }
-
-            await _context.SaveChangesAsync();
-            return true;
-        }
-
-        public async Task<bool> RestoreAsync(int id)
-        {
-            var item = await _context.LessonStatuses.IgnoreQueryFilters().FirstOrDefaultAsync(x => x.Id == id);
-            if (item == null) return false;
-
-            item.IsActive = true;
-            item.UpdatedAt = DateTime.Now;
-            await _context.SaveChangesAsync();
-            return true;
         }
     }
 }

@@ -14,5 +14,6 @@ namespace Shared.DTOs
         public required string UserName { get; set; }
         public required List<string> Roles { get; set; }
         public int MaxRoleLevel { get; set; }
+        public string? StudentName { get; set; }
     }
 }

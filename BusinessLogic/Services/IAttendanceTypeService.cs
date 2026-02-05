@@ -12,10 +12,7 @@ namespace BusinessLogic.Services
     public interface IAttendanceTypeService
     {
         Task<IEnumerable<object>> GetAllAsync(string? search, string? sortBy, bool sortDesc, bool showInactive);
-        Task<AttendanceType> CreateAsync(AttendanceType entity);
         Task<AttendanceType?> UpdateAsync(int id, AttendanceType entity);
-        Task<bool> DeleteAsync(int id);
-        Task<bool> RestoreAsync(int id);
     }
 
     public class AttendanceTypeService : IAttendanceTypeService
@@ -64,20 +61,6 @@ namespace BusinessLogic.Services
                 .ToListAsync();
         }
 
-        public async Task<AttendanceType> CreateAsync(AttendanceType entity)
-        {
-            if (await _context.AttendanceTypes.AnyAsync(x => x.Name == entity.Name && x.IsActive))
-                throw new InvalidOperationException("Taka nazwa frekwencji już istnieje");
-
-            if (await _context.AttendanceTypes.AnyAsync(x => x.ShortCode == entity.ShortCode && x.IsActive))
-                throw new InvalidOperationException("Taki skrót już istnieje");
-
-            entity.IsActive = true;
-            _context.AttendanceTypes.Add(entity);
-            await _context.SaveChangesAsync();
-            return entity;
-        }
-
         public async Task<AttendanceType?> UpdateAsync(int id, AttendanceType entity)
         {
             if (id != entity.Id) return null;
@@ -105,40 +88,5 @@ namespace BusinessLogic.Services
                 throw;
             }
         }
-
-        public async Task<bool> DeleteAsync(int id)
-        {
-            var item = await _context.AttendanceTypes.FindAsync(id);
-            if (item == null) return false;
-            if (!string.IsNullOrEmpty(item.Slug)) return false;
-
-            if (item.IsActive)
-            {
-                item.IsActive = false;
-                if (!item.Name.EndsWith(" (nieaktywny)"))
-                    item.Name += " (nieaktywny)";
-            }
-            else
-            {
-                _context.AttendanceTypes.Remove(item);
-            }
-
-            await _context.SaveChangesAsync();
-            return true;
-        }
-
-        public async Task<bool> RestoreAsync(int id)
-        {
-            var item = await _context.AttendanceTypes.IgnoreQueryFilters().FirstOrDefaultAsync(x => x.Id == id);
-            if (item == null) return false;
-
-            item.IsActive = true;
-            if (item.Name.EndsWith(" (nieaktywny)"))
-                item.Name = item.Name.Replace(" (nieaktywny)", "").Trim();
-
-            await _context.SaveChangesAsync();
-            return true;
-        }
     }
 }
-

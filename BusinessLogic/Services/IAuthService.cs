@@ -87,6 +87,19 @@ namespace BusinessLogic.Services
             }
 
             var response = BuildLoginResponse(user);
+
+            if (maxLevel == 3)
+            {
+                var parentStudent = await _context.ParentStudents
+                    .Include(ps => ps.Student)
+                    .FirstOrDefaultAsync(ps => ps.ParentId == user.Id);
+                
+                if (parentStudent?.Student != null)
+                {
+                    response.StudentName = $"{parentStudent.Student.FirstName} {parentStudent.Student.LastName}";
+                }
+            }
+
             _eventLogService.Log("LOGIN", user.Id, user.Email, roleLevels);
             return response;
         }

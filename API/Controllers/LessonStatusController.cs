@@ -21,20 +21,6 @@ public class LessonStatusController : ControllerBase
         return Ok(await _service.GetAllAsync(search, sortBy, sortDesc, showInactive));
     }
 
-    [HttpPost]
-    public async Task<IActionResult> Create(LessonStatus entity)
-    {
-        try
-        {
-            var result = await _service.CreateAsync(entity);
-            return Ok(result);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
-    }
-
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, LessonStatus entity)
     {
@@ -48,21 +34,5 @@ public class LessonStatusController : ControllerBase
         {
             return BadRequest(new { message = ex.Message });
         }
-    }
-
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(int id)
-    {
-        var success = await _service.DeleteAsync(id);
-        if (!success) return NotFound();
-        return NoContent();
-    }
-
-    [HttpPatch("{id}/restore")]
-    public async Task<IActionResult> Restore(int id)
-    {
-        var success = await _service.RestoreAsync(id);
-        if (!success) return NotFound();
-        return Ok(new { message = "Przywrócono", id });
     }
 }

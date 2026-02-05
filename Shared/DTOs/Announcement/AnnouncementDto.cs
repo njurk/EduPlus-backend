@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Shared.DTOs
 {
@@ -13,20 +12,5 @@ namespace Shared.DTOs
         public bool IsActive { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
-    }
-
-    public class CreateAnnouncementDto
-    {
-        public string Title { get; set; } = string.Empty;
-        public string Description { get; set; } = string.Empty;
-        public int AuthorId { get; set; }
-        public List<int>? RoleIds { get; set; }
-    }
-
-    public class UpdateAnnouncementDto
-    {
-        public string Title { get; set; } = string.Empty;
-        public string Description { get; set; } = string.Empty;
-        public List<int>? RoleIds { get; set; }
     }
 }

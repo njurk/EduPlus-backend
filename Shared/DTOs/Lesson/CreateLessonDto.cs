@@ -13,20 +13,4 @@ namespace Shared.DTOs
         public int StatusId { get; set; }
         public DateTime Date { get; set; }
     }
-
-    public class UpdateLessonDto
-    {
-        public string? Topic { get; set; }
-        public int? StatusId { get; set; }
-        public int? ClassroomId { get; set; }
-        public int? TeacherId { get; set; }
-    }
-
-    public class CreateFromScheduleDto
-    {
-        public int ScheduleId { get; set; }
-        public DateTime Date { get; set; }
-        public int? TeacherId { get; set; }
-        public int? StatusId { get; set; }
-    }
 }
