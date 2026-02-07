@@ -79,8 +79,8 @@ namespace BusinessLogic.Services
             var projected = query.Select(x => new ExcuseDto
             {
                 Id = x.e.Id,
-                ParentName = x.p.LastName + " " + x.p.FirstName,
-                StudentName = x.s.LastName + " " + x.s.FirstName,
+                ParentName = x.p.LastName + " " + x.p.FirstName + (x.p.IsActive ? "" : " (nieaktywny)"),
+                StudentName = x.s.LastName + " " + x.s.FirstName + (x.s.IsActive ? "" : " (nieaktywny)"),
                 ClassName = x.ClassName,
                 IsAccepted = x.e.IsAccepted,
                 AcceptedAt = x.e.AcceptedAt,
@@ -144,8 +144,8 @@ namespace BusinessLogic.Services
             return new ExcuseDetailsDto
             {
                 Id = excuse.Id,
-                ParentName = parent != null ? $"{parent.LastName} {parent.FirstName}" : "",
-                StudentName = student != null ? $"{student.LastName} {student.FirstName}" : "",
+                ParentName = parent != null ? $"{parent.LastName} {parent.FirstName}" + (parent.IsActive ? "" : " (nieaktywny)") : "",
+                StudentName = student != null ? $"{student.LastName} {student.FirstName}" + (student.IsActive ? "" : " (nieaktywny)") : "",
                 IsAccepted = excuse.IsAccepted,
                 AcceptedAt = excuse.AcceptedAt,
                 ModifiedByName = modifiedBy != null ? $"{modifiedBy.LastName} {modifiedBy.FirstName}" : null,

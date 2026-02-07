@@ -19,7 +19,7 @@ namespace BusinessLogic.Services
             string? sortBy = null,
             bool sortDesc = true,
             bool showInactive = false,
-            bool onlyUnassignedParents = false,
+            bool onlyUnassignedRelations = false,
             int? roleLevel = null);
         Task<object?> GetByIdAsync(int id);
         Task<User> CreateAsync(UserCreateDto dto);
@@ -47,7 +47,7 @@ namespace BusinessLogic.Services
             string? sortBy = null,
             bool sortDesc = true,
             bool showInactive = false,
-            bool onlyUnassignedParents = false,
+            bool onlyUnassignedRelations = false,
             int? roleLevel = null)
         {
             var dbQuery = _context.UserList.AsNoTracking().AsQueryable();
@@ -70,9 +70,9 @@ namespace BusinessLogic.Services
                     dbQuery = dbQuery.Where(u => u.RoleNames.Contains(roleName));
             }
 
-            if (onlyUnassignedParents)
+            if (onlyUnassignedRelations)
             {
-                dbQuery = dbQuery.Where(u => u.IsUnassignedParent);
+                dbQuery = dbQuery.Where(u => u.IsUnassignedRelation);
             }
 
             dbQuery = sortBy?.ToLower() switch

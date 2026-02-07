@@ -48,8 +48,8 @@ namespace BusinessLogic.Services
                 ps.Id,
                 ps.ParentId,
                 ps.StudentId,
-                ParentName = ps.Parent.LastName + " " + ps.Parent.FirstName,
-                StudentName = ps.Student.LastName + " " + ps.Student.FirstName,
+                ParentName = ps.Parent.LastName + " " + ps.Parent.FirstName + (ps.Parent.IsActive ? "" : " (nieaktywny)"),
+                StudentName = ps.Student.LastName + " " + ps.Student.FirstName + (ps.Student.IsActive ? "" : " (nieaktywny)"),
                 ps.CreatedAt,
                 ps.UpdatedAt,
                 ModifiedByName = ps.ModifiedByUserId != null 

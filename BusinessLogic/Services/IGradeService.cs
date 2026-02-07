@@ -74,7 +74,7 @@ namespace BusinessLogic.Services
                             g.CreatedAt,
                             GradeType = new { g.GradeType.Numeric, g.GradeType.Name, g.GradeType.Value },
                             GradeCategory = new { g.GradeCategory.Name },
-                            TeacherName = g.Teacher.LastName + " " + g.Teacher.FirstName
+                            TeacherName = g.Teacher.LastName + " " + g.Teacher.FirstName + (g.Teacher.IsActive ? "" : " (nieaktywny)")
                         }).ToList()
                 })
                 .OrderBy(x => x.OrderNumber).ToListAsync();
@@ -135,14 +135,14 @@ namespace BusinessLogic.Services
             var projected = query.Select(g => new
             {
                 g.Id,
-                g.StudentName,
+                StudentName = g.StudentName + (_context.Users.Where(u => u.Id == g.StudentId).Select(u => u.IsActive).FirstOrDefault() ? "" : " (nieaktywny)"),
                 g.ClassName,
-                g.SubjectName,
+                SubjectName = g.SubjectName + (_context.Subjects.Where(s => s.Id == g.SubjectId).Select(s => s.IsActive).FirstOrDefault() ? "" : " (nieaktywny)"),
                 GradeTypeName = g.GradeTypeName,
                 GradeValue = g.GradeValue,
                 CategoryName = g.CategoryName,
                 CategoryColorHex = g.CategoryColorHex,
-                g.TeacherName,
+                TeacherName = g.TeacherName + (_context.Users.Where(u => u.Id == g.TeacherId).Select(u => u.IsActive).FirstOrDefault() ? "" : " (nieaktywny)"),
                 g.Comment,
                 g.CreatedAt,
                 g.UpdatedAt,
@@ -218,10 +218,10 @@ namespace BusinessLogic.Services
                     g.CreatedAt,
                     GradeType = new { g.GradeType.Numeric, g.GradeType.Name, g.GradeType.Value },
                     GradeCategory = new { g.GradeCategory.Name },
-                    TeacherName = g.Teacher.LastName + " " + g.Teacher.FirstName,
-                    StudentName = g.Student.LastName + " " + g.Student.FirstName,
+                    TeacherName = g.Teacher.LastName + " " + g.Teacher.FirstName + (g.Teacher.IsActive ? "" : " (nieaktywny)"),
+                    StudentName = g.Student.LastName + " " + g.Student.FirstName + (g.Student.IsActive ? "" : " (nieaktywny)"),
                     StudentEmail = g.Student.Email,
-                    SubjectName = g.Subject.Name,
+                    SubjectName = g.Subject.Name + (g.Subject.IsActive ? "" : " (nieaktywny)"),
                     StudentId = g.StudentId
                 })
                 .FirstAsync();
@@ -271,7 +271,7 @@ namespace BusinessLogic.Services
                 existing.CreatedAt,
                 GradeType = new { existing.GradeType.Numeric, existing.GradeType.Name, existing.GradeType.Value },
                 GradeCategory = new { existing.GradeCategory.Name },
-                TeacherName = existing.Teacher.LastName + " " + existing.Teacher.FirstName
+                TeacherName = existing.Teacher.LastName + " " + existing.Teacher.FirstName + (existing.Teacher.IsActive ? "" : " (nieaktywny)")
             };
         }
 
@@ -305,17 +305,17 @@ namespace BusinessLogic.Services
             {
                 grade.Id,
                 StudentId = grade.StudentId,
-                StudentName = grade.Student!.LastName + " " + grade.Student.FirstName,
+                StudentName = grade.Student!.LastName + " " + grade.Student.FirstName + (grade.Student.IsActive ? "" : " (nieaktywny)"),
                 ClassName = className,
                 SubjectId = grade.SubjectId,
-                SubjectName = grade.Subject!.Name,
+                SubjectName = grade.Subject!.Name + (grade.Subject.IsActive ? "" : " (nieaktywny)"),
                 GradeTypeId = grade.GradeTypeId,
                 GradeTypeName = grade.GradeType!.Numeric + " (" + grade.GradeType.Name + ")",
                 GradeValue = grade.GradeType.Value,
                 GradeCategoryId = grade.GradeCategoryId,
                 CategoryName = grade.GradeCategory!.Name,
                 TeacherId = grade.TeacherId,
-                TeacherName = grade.Teacher!.LastName + " " + grade.Teacher.FirstName,
+                TeacherName = grade.Teacher!.LastName + " " + grade.Teacher.FirstName + (grade.Teacher!.IsActive ? "" : " (nieaktywny)"),
                 grade.Comment,
                 grade.CreatedAt,
                 grade.UpdatedAt,

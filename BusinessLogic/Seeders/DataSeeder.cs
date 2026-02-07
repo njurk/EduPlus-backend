@@ -559,9 +559,6 @@
             var gradeTypeIds = _context.GradeTypes.Select(x => x.Id).ToList();
             var gradeCategoryIds = _context.GradeCategories.Select(x => x.Id).ToList();
 
-            if (!gradeTypeIds.Any() || !gradeCategoryIds.Any())
-                throw new Exception("Brak typów lub kategorii ocen");
-
             var weeklySchedules = _context.WeeklySchedules.ToList();
             if (!weeklySchedules.Any()) return;
 
@@ -584,7 +581,7 @@
                         TeacherId = slot.TeacherId,
                         ClassroomId = slot.ClassroomId,
                         LessonHourId = slot.LessonHourId,
-                        Topic = $"Temat lekcji",
+                        Topic = $"Temat testowy",
                         StatusId = 1,
                         IsActive = true,
                         Date = date,
@@ -706,10 +703,10 @@
                 {
                     Email = "murbaniak@szkola.edu.pl",
                     ReasonId = reasons.First(r => r.Name == "Problem z logowaniem").Id,
-                    Content = "Nie mogę się zalogować do systemu. Wprowadziłem poprawne dane, ale wywietla się komunikat o blednym haśle.",
+                    Content = "Nie mogę się zalogować do systemu. Wprowadzam poprawne dane ale ciągle wyświetla się komunikat o blednym haśle, mimo kilkukrotnej jego zmiany. Bardzo proszę o szybkie rozwiązanie problemu",
                     IsClosed = true,
                     ClosedAt = DateTime.Now.AddDays(-1),
-                    AdminResponse = "<p>Hasło zostało zresetowane. Proszę sprawdzić, czy problem z logowaniem został rozwiązany, a po udanej próbie logowania natychmiast zmienić hasło.</p><p>Nowe hasło: E4G$%Vedv%3D3Ad.</p>",
+                    AdminResponse = "<p>Witam, hasło zostało przywrócone. Proszę sprawdzić, czy problem z logowaniem został rozwiązany</p>",
                     ModifiedByUserId = adminId,
                     CreatedAt = DateTime.Now.AddDays(-5),
                     UpdatedAt = DateTime.Now.AddDays(-1)
@@ -718,7 +715,7 @@
                 {
                     Email = "abaran@szkola.edu.pl",
                     ReasonId = reasons.First(r => r.Name == "Problem z logowaniem").Id,
-                    Content = "Próbuję zalogować się do systemu, ale ciągle pokazuje się błąd. Czy moje konto jest aktywne?",
+                    Content = "Próbuję zalogować się do systemu, ale wyświetla się błąd 500 już od 3 dni.",
                     IsClosed = false,
                     CreatedAt = DateTime.Now.AddHours(-3),
                     UpdatedAt = DateTime.Now.AddHours(-3),
@@ -728,7 +725,7 @@
                 {
                     Email = "mkrajewska@szkola.edu.pl",
                     ReasonId = reasons.First(r => r.Name == "Problem z logowaniem").Id,
-                    Content = "Zapomniałem hasła, a email z linkiem do resetowania nie przychodzi.",
+                    Content = "Zapomniałam hasła a email z linkiem nie przychodzi, próbowałam już kilka razy, bez skutku.",
                     IsClosed = false,
                     CreatedAt = DateTime.Now.AddDays(-1),
                     UpdatedAt = DateTime.Now.AddDays(-1),
@@ -736,41 +733,9 @@
                 },
                 new Ticket
                 {
-                    Email = "pmroz@szkola.edu.pl",
-                    ReasonId = reasons.First(r => r.Name == "Zmiana danych osobowych").Id,
-                    Content = "Proszę o zmianę mojego numeru telefonu w systemie. Nowy numer: 600-700-800",
-                    IsClosed = true,
-                    ClosedAt = DateTime.Now.AddDays(-2),
-                    AdminResponse = "<p>Numer telefonu został zaktualizowany w systemie.</p>",
-                    ModifiedByUserId = adminId,
-                    CreatedAt = DateTime.Now.AddDays(-3),
-                    UpdatedAt = DateTime.Now.AddDays(-2)
-                },
-                new Ticket
-                {
-                    Email = "awroblewska@szkola.edu.pl",
-                    ReasonId = reasons.First(r => r.Name == "Zmiana danych osobowych").Id,
-                    Content = "W systemie jest błędny adres zamieszkania mojego dziecka. Jak mogę to zmienić?",
-                    IsClosed = false,
-                    CreatedAt = DateTime.Now.AddHours(-12),
-                    UpdatedAt = DateTime.Now.AddHours(-12),
-                    ModifiedByUserId = null
-                },
-                new Ticket
-                {
-                    Email = teacherMail,
-                    ReasonId = reasons.First(r => r.Name == "Zmiana danych osobowych").Id,
-                    Content = "Proszę o aktualizację adresu zamieszkania - nowy adres to: ul. Nowa 14, 44-200 Rybnik",
-                    IsClosed = false,
-                    CreatedAt = DateTime.Now.AddDays(-1),
-                    UpdatedAt = DateTime.Now.AddHours(-5),
-                    ModifiedByUserId = null
-                },
-                new Ticket
-                {
                     Email = "esikora@szkola.edu.pl",
                     ReasonId = reasons.First(r => r.Name == "Błąd w systemie").Id,
-                    Content = "Przy próbie usprawiedliwienia nieobecności mojej córki system pokazuje błąd 404.",
+                    Content = "Przy próbie usprawiedliwienia nieobecności aplikacja się zawiesza. Dzieje się to już od dwóch dni. Proszę jak najszybciej rozwiązać problem",
                     IsClosed = false,
                     CreatedAt = DateTime.Now.AddDays(-2),
                     UpdatedAt = DateTime.Now.AddDays(-2),
@@ -780,10 +745,10 @@
                 {
                     Email = "mazakrzewska@szkola.edu.pl",
                     ReasonId = reasons.First(r => r.Name == "Błąd w systemie").Id,
-                    Content = "Plan lekcji nie wyświetla się poprawnie - brakuje przedmiotów z piątku.",
+                    Content = "Plan lekcji nie wyświetla się od kilku dni, ładuje się bez końca. Bardzo proszę o możliwie szybkie rozpatrzenie problemu",
                     IsClosed = true,
                     ClosedAt = DateTime.Now.AddHours(-2),
-                    AdminResponse = "<p>Problem został naprawiony - plan lekcji powinien wyświetlać się teraz poprawnie.</p><p>Dziękujemy za zgłoszenie.</p>",
+                    AdminResponse = "<p>Problem został naprawiony. plan lekcji powinien wyświetlać się teraz poprawnie.</p><p>Dziękujemy za zgłoszenie</p>",
                     ModifiedByUserId = adminId,
                     CreatedAt = DateTime.Now.AddDays(-1),
                     UpdatedAt = DateTime.Now.AddHours(-2)
@@ -792,7 +757,7 @@
                 {
                     Email = "plaskowski@szkola.edu.pl",
                     ReasonId = reasons.First(r => r.Name == "Błąd w systemie").Id,
-                    Content = "Eksport planu lekcji do pliku CSV nie działa - dostaję błąd o kodzie 500.",
+                    Content = "Eksport planu lekcji nie działa, po kliknięciu różnych opcji nic się nie dzieje",
                     IsClosed = false,
                     CreatedAt = DateTime.Now.AddHours(-8),
                     UpdatedAt = DateTime.Now.AddHours(-8),
@@ -802,10 +767,10 @@
                 {
                     Email = "kglowacki@szkola.edu.pl",
                     ReasonId = reasons.First(r => r.Name == "Inne").Id,
-                    Content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                    Content = "Lorem ipsum",
                     IsClosed = true,
                     ClosedAt = DateTime.Now.AddDays(-1),
-                    AdminResponse = "<p>Odpowiedź lorem ipsum</p>",
+                    AdminResponse = "<p>testowa odpowiedź</p>",
                     ModifiedByUserId = adminId,
                     CreatedAt = DateTime.Now.AddDays(-4),
                     UpdatedAt = DateTime.Now.AddDays(-1),
@@ -814,7 +779,7 @@
                 {
                     Email = "zmakowska@szkola.edu.pl",
                     ReasonId = reasons.First(r => r.Name == "Inne").Id,
-                    Content = "Czy możliwe jest dodanie powiadomień SMS o nowych ocenach?",
+                    Content = "Czy rozważycie dodanie powiadomień sms oprócz maili?",
                     IsClosed = false,
                     CreatedAt = DateTime.Now.AddDays(-3),
                     UpdatedAt = DateTime.Now.AddDays(-3),
@@ -839,24 +804,24 @@
             var announcementsData = new[]
             {
                 new {
-                    Title = "Zebranie rodziców - klasy 1-3",
-                    Description = "<p><strong>Szanowni Rodzice,</strong></p><p>Zapraszamy na zebranie, które odbędzie się:</p><ul><li>Data: <strong>15 lutego 2026</strong></li><li>Godzina: <strong>18:00</strong></li><li>Miejsce: aula</li></ul><p>Podczas spotkania omówimy:</p><ol><li>Postępy w nauce uczniów</li><li>Dalsze plany nauki</li><li>Proponowane wycieczki szkolne</li></ol><p>Obecność obowiązkowa!</p>"
+                    Title = "Zebranie rodziców klas 1-3",
+                    Description = "<p><strong>Szanowni rodzice,</strong></p><p>Zapraszamy na zebranie które odbędzie się:</p><ul><li>Data: <strong>15 lutego 2026</strong></li><li>Godzina: <strong>18:00</strong></li><li>Miejsce: aula</li></ul><p>Podczas spotkania omówimy:</p><ol><li>Postępy w nauce waszych uczniów</li><li>Zbliżające się wydarzenia w szkole</li><li>Planowane wycieczki</li></ol><p>Obecność jest obowiązkowa</p>"
                 },
                 new {
-                    Title = "Ważna informacja - zmiana godzin pracy sekretariatu",
-                    Description = "<p>Informujemy, że od <strong>1 lutego 2026</strong> sekretariat szkoły będzie czynny w następujących godzinach:</p><ul><li>Poniedziałek-Piątek: <strong>7:30 - 15:30</strong></li><li>Przerwa: <strong>12:00 - 12:30</strong></li></ul><p>W sprawach pilnych prosimy o kontakt telefoniczny pod numerem <strong>22 123 45 67</strong>.</p><p>Dziękujemy za zrozumienie.</p>"
+                    Title = "Zmiana godzin pracy sekretariatu",
+                    Description = "<p>Informujemy, że od 1 lutego 2026 sekretariat szkoły będzie czynny w następujących godzinach:</p><ul><li>Pon. - pt.: <strong>7:30 - 15:30</strong></li><li>Przerwa: <strong>12:00 - 12:30</strong></li></ul><p>W sprawach pilnych prosimy o kontakt telefoniczny: <strong>22 123 45 67</strong>.</p>"
                 },
                 new {
-                    Title = "Zmiana w planie lekcji - klasa 1A",
-                    Description = "<p><strong>Uwaga!</strong> W dniu <em>jutrzejszym (21.01.2026)</em> nastąpi zmiana w planie lekcji klasy 1A:</p><ul><li><strong>Lekcja 3:</strong> Matematyka → <strong>Wychowanie fizyczne</strong></li><li><strong>Lekcja 4:</strong> Wychowanie fizyczne → <strong>Matematyka</strong></li></ul><p>Prosimy o zabranie odpowiedniego stroju sportowego.</p>"
+                    Title = "Zmiana obuwia",
+                    Description = "<p><strong>Uwaga!</strong> Przypominamy o obowiązku zmiany obuwia na terenie szkoły. Brak obuwia zamiennego może skutkować uwagą w dzienniku!</p>"
                 },
                 new {
-                    Title = "Konkursy szkolne - zapisy do 30 stycznia",
-                    Description = "<p>Zapraszamy uczniów do udziału w <strong>konkursach szkolnych</strong>:</p><h3>Konkurs matematyczny</h3><ul><li>Termin: 10 lutego 2026</li><li>Klasy: 4-8</li><li>Zgłoszenia: u wychowawcy klasy</li></ul><h3>Konkurs plastyczny \"Moja szkoła\"</h3><ul><li>Termin oddania prac: 15 lutego 2026</li><li>Klasy: 1-8</li><li>Format: A3, dowolna technika</li></ul><p><em>Zachęcamy do aktywnego udziału!</em> Laureaci otrzymają dyplomy i nagrody rzeczowe.</p>"
+                    Title = "Konkursy szkolne",
+                    Description = "<p>Zapraszamy uczniów do udziału w konkursach szkolnych:</p><h3>Kangur matematyczny</h3><ul><li>Termin: 16 marca</li><li>Klasy: 4-8</li><li>Zgłoszenia: u wychowawcy klasy</li></ul><h3>Konkurs plastyczny \"Moja szkoła\"</h3><ul><li>Termin oddania prac: 23 marca</li><li>Klasy: 1-8</li><li>Format: A3, technika dowolna</li></ul><p><em>Zachęcamy do aktywnego udziału!</em> Zwycięzcy otrzymają dyplomy i drobne nagrody</p>"
                 },
                 new {
-                    Title = "Wycieczka do Krakowa - klasy 7-8",
-                    Description = "<p><strong>Organizujemy wycieczkę do Krakowa</strong> dla uczniów klas 7-8!</p><h3>Szczegóły wycieczki:</h3><ul><li>Termin: <strong>5-7 marca 2026</strong> (3 dni)</li><li>Koszt: <strong>450 zł/osobę</strong> (transport, nocleg, wyżywienie, bilety wstępu)</li><li>Program: Wawel, Kopalnię Soli, Muzeum Fabryki Schindlera</li></ul><h3>Terminy:</h3><ol><li>Wpłata zaliczki 150 zł: <em>do 10 lutego</em></li><li>Dopłata 300 zł: <em>do 25 lutego</em></li><li>Oddanie zgód: <em>do 1 marca</em></li></ol><p>Liczba miejsc ograniczona do 50 osób. <strong>Decyduje kolejność zgłoszeń!</strong></p>"
+                    Title = "Wycieczka do Krakowa",
+                    Description = "<p><strong>Organizujemy wycieczkę do Krakowa</strong> dla uczniów klas 7-8.</p><h3>Szczegóły wycieczki:</h3><ul><li>Termin: <strong>10-12 maja</strong></li><li>Koszt: <strong>450 zł/osobę</strong> (transport, nocleg, wyżywienie, wstęp)</li><li>Program: Wawel, Kopalnia Soli Wieliczka, Fabryka Schindlera</li></ul><h3>Terminy:</h3><ol><li>Wpłata zaliczki 150 zł: <em>do 27 lutego</em></li><li>Dopłata 300 zł: <em>do 3 marca</em></li><li>Oddanie zgód: <em>do 25 lutego</em></li></ol><p>Liczba miejsc ograniczona do 50 osób</p>"
                 }
             };
 
@@ -983,16 +948,16 @@
 
             var reasons = new[]
             {
-                ("Dzień dobry,\n\nPragnę usprawiedliwić nieobecność mojego dziecka w szkole.\nDziecko przebywało w domu z powodu silnej infekcji dróg oddechowych z wysoką gorączką. Lekarz zalecił leżenie w łóżku i odpoczynek przez kilka dni.\n\nPozdrawiam", 3),
-                ("Szanowni Państwo,\n\nUprzejmie proszę o usprawiedliwienie nieobecności.\n\nMoje dziecko uczestniczyło w wizycie kontrolnej u lekarza specjalisty.\n\nPozdrawiam serdecznie", 2),
-                ("Nieobecność z przyczyn osobistych.", 1),
-                ("Proszę o usprawiedliwienie - sprawy rodzinne.", 2),
-                ("Dzień dobry,\n\nMoje dziecko źle się czuło rano, miało bóle brzucha i mdłości. Zdecydowałam się zostawić je w domu na obserwację.\n\nJeśli potrzebne będą dodatkowe wyjaśnienia, jestem do dyspozycji.\n\nZ poważaniem", 3),
-                ("Dzień dobry,\n\nPragnę usprawiedliwić nieobecność mojego dziecka spowodowaną nagłą sytuacją rodzinną wymagającą naszej obecności.\n\nPozdrawiam", 4),
-                ("Witam,\n\nDziecko chorowało na anginę i musiało pozostać w domu przez tydzień. Proszę o usprawiedliwienie nieobecności.\n\nDziękuję", 2),
-                ("Proszę o usprawiedliwienie nieobecności z powodu złego samopoczucia.\n\nDziecko miało wysoką temperaturę i silny kaszel. Wizyta lekarska zaplanowana na jutro.", 3),
-                ("Dzień dobry,\n\nDziecko miało zaplanowaną wizytę u ortodonty w Krakowie. Ze względu na odległość i godzinę wizyty niemożliwe było dojechanie do szkoły.\n\nZ góry dziękuję za zrozumienie", 2),
-                ("Proszę o usprawiedliwienie dzisiejszej nieobecności.\n\nDziecko brało udział w konkursie przedmiotowym na szczeblu powiatowym.\n\nPotwierdzenie organizatora mogę przedstawić w razie potrzeby.", 2)
+                ("Dzień dobry,\n\nChciałbym usprawiedliwić nieobecność mojego dziecka w szkole.\nDziecko przebywało w domu z powodu grypy. Lekarz zalecił leżenie w łóżku i odpoczynek przez kilka dni.\n\nPozdrawiam", 3),
+                ("Szanowni Państwo,\n\nUprzejmie proszę o usprawiedliwienie nieobecności.\n\nMoje dziecko musiało przejść wizytę kontrolna u lekarza.\n\nPozdrawiam serdecznie", 2),
+                ("Dizeń dobry, niestety moje dziecko nie mogło być obecne z przyczyn osobistych. Proszę o wyrozumiałość", 1),
+                ("Proszę o usprawiedliwienie nieobecności dziecka, wypadły nam ważne sprawy rodzinne.", 2),
+                ("Dzień dobry,\n\nMoje dziecko źle się czuło rano, miało bóle brzucha i mdłości. Proszę o usprawiedliwienie\n\nZ poważaniem", 3),
+                ("Dzień dobry,\n\nPragnę usprawiedliwić nieobecność dziecka spowodowaną nagłą sytuacją rodzinną.\n\nPozdrawiam", 4),
+                ("Witam,\n\nDziecko zachorowało na anginę, musieliśmy jechać do lekarza. Proszę o usprawiedliwienie nieobecności.\n\nDziękuję", 2),
+                ("Proszę o usprawiedliwienie nieobecności z powodu złego samopoczucia.\n\nDziecko miało wysoką temperaturę i ból głowy. Jutro wizyta u lekarza.", 3),
+                ("Dzień dobry,\n\nDziecko miało zaplanowaną wizytę u ortodonty. Ze względu na odległość i godzinę wizyty niemożliwe było dojechanie do szkoły.\n\nZ góry dziękuję za zrozumienie", 2),
+                ("Proszę o usprawiedliwienie dzisiejszej nieobecności.\n\nDziecko brało udział w konkursie przedmiotowym.", 2)
             };
 
             int absenceIdx = 0;

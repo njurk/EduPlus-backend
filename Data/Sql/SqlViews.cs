@@ -40,8 +40,12 @@ namespace Data.Sql
                 cast(case 
                     when exists(select 1 from UserRoles ur join Roles r on ur.RoleId = r.Id where ur.UserId = u.Id and r.Level = 3) 
                          and not exists(select 1 from ParentStudents ps where ps.ParentId = u.Id) 
-                    then 1 else 0 
-                end as bit) as IsUnassignedParent,
+                    then 1
+                    when exists(select 1 from UserRoles ur join Roles r on ur.RoleId = r.Id where ur.UserId = u.Id and r.Level = 4) 
+                         and not exists(select 1 from ParentStudents ps where ps.StudentId = u.Id) 
+                    then 1
+                    else 0 
+                end as bit) as IsUnassignedRelation,
                 isnull(m.FirstName + ' ' + m.LastName, 'System') as ModifiedByName
             from Users u
             left join Users m on u.ModifiedByUserId = m.Id;";

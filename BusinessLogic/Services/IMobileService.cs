@@ -12,6 +12,7 @@ namespace BusinessLogic.Services
         Task<List<MobileAnnouncementDto>> GetAnnouncementsAsync(int userId);
         Task<List<MobileNegativeAttendanceDto>> GetNegativeAttendancesAsync(int userId, int? studentId = null, int? semesterId = null);
         Task CreateExcuseAsync(int userId, int? studentId, CreateMobileExcuseDto dto);
+        Task<List<MobileExcuseDto>> GetExcusesAsync(int userId, int? studentId = null, int? semesterId = null);
         Task<List<MobileSemesterDto>> GetSemestersAsync();
         Task<List<MobileChildDto>> GetChildrenAsync(int userId);
     }
@@ -66,9 +67,9 @@ namespace BusinessLogic.Services
                     OrderNumber = ws.LessonHour != null ? ws.LessonHour.OrderNumber : 0,
                     StartTime = ws.LessonHour != null ? ws.LessonHour.StartTime.ToString(@"HH\:mm") : "",
                     EndTime = ws.LessonHour != null ? ws.LessonHour.EndTime.ToString(@"HH\:mm") : "",
-                    SubjectName = ws.Subject != null ? ws.Subject.Name : "",
-                    TeacherName = ws.Teacher != null ? ws.Teacher.FirstName + " " + ws.Teacher.LastName : "",
-                    ClassroomName = ws.Classroom != null ? ws.Classroom.Name : ""
+                    SubjectName = ws.Subject != null ? ws.Subject.Name + (ws.Subject.IsActive ? "" : " (nieaktywny)") : "",
+                    TeacherName = ws.Teacher != null ? ws.Teacher.FirstName + " " + ws.Teacher.LastName + (ws.Teacher.IsActive ? "" : " (nieaktywny)") : "",
+                    ClassroomName = ws.Classroom != null ? ws.Classroom.Name + (ws.Classroom.IsActive ? "" : " (nieaktywna)") : ""
                 })
                 .OrderBy(l => l.DayOfWeek).ThenBy(l => l.OrderNumber)
                 .ToListAsync();
@@ -120,7 +121,7 @@ namespace BusinessLogic.Services
                         Value = g.GradeType?.Numeric ?? "",
                         CategoryName = g.GradeCategory?.Name ?? "",
                         CategoryColorHex = g.GradeCategory?.ColorHex ?? "",
-                        TeacherName = g.Teacher != null ? $"{g.Teacher.FirstName} {g.Teacher.LastName}" : "",
+                        TeacherName = g.Teacher != null ? $"{g.Teacher.FirstName} {g.Teacher.LastName}" + (g.Teacher.IsActive ? "" : " (nieaktywny)") : "",
                         Comment = g.Comment,
                         Weight = g.GradeCategory?.Weight ?? 1,
                         CreatedAt = g.CreatedAt
@@ -139,7 +140,7 @@ namespace BusinessLogic.Services
                     Value = g.GradeType?.Numeric ?? "",
                     CategoryName = g.GradeCategory?.Name ?? "",
                     CategoryColorHex = g.GradeCategory?.ColorHex ?? "",
-                    TeacherName = g.Teacher != null ? $"{g.Teacher.FirstName} {g.Teacher.LastName}" : "",
+                    TeacherName = g.Teacher != null ? $"{g.Teacher.FirstName} {g.Teacher.LastName}" + (g.Teacher.IsActive ? "" : " (nieaktywny)") : "",
                     Comment = g.Comment,
                     Weight = g.GradeCategory?.Weight ?? 1,
                     Date = g.CreatedAt.ToString("dd.MM.yyyy"),
@@ -299,7 +300,7 @@ namespace BusinessLogic.Services
                     Id = a.Id,
                     Title = a.Title,
                     Content = a.Description,
-                    AuthorName = a.Author != null ? a.Author.FirstName + " " + a.Author.LastName : "",
+                    AuthorName = a.Author != null ? a.Author.FirstName + " " + a.Author.LastName + (a.Author.IsActive ? "" : " (nieaktywny)") : "",
                     CreatedAt = a.CreatedAt,
                     UpdatedAt = a.UpdatedAt != a.CreatedAt ? a.UpdatedAt : null,
                     IsRead = readIds.Contains(a.Id)
@@ -385,6 +386,56 @@ namespace BusinessLogic.Services
             await _context.SaveChangesAsync();
         }
 
+        public async Task<List<MobileExcuseDto>> GetExcusesAsync(int userId, int? studentId = null, int? semesterId = null)
+        {
+            var resolvedStudentId = await GetStudentIdAsync(userId, studentId);
+
+            var query = _context.Excuses
+                .Include(e => e.ExcuseAttendances)
+                    .ThenInclude(ea => ea.Attendance)
+                        .ThenInclude(a => a.Lesson)
+                            .ThenInclude(l => l.Subject)
+                .Include(e => e.ExcuseAttendances)
+                    .ThenInclude(ea => ea.Attendance)
+                        .ThenInclude(a => a.Lesson)
+                            .ThenInclude(l => l.LessonHour)
+                .Include(e => e.ExcuseAttendances)
+                    .ThenInclude(ea => ea.Attendance)
+                        .ThenInclude(a => a.AttendanceType)
+                .Where(e => e.StudentId == resolvedStudentId && e.IsActive)
+                .AsQueryable();
+
+            if (semesterId.HasValue)
+            {
+                var semester = await _context.Semesters.FindAsync(semesterId.Value);
+                if (semester != null)
+                {
+                    query = query.Where(e => e.ExcuseAttendances.Any(ea => 
+                        DateOnly.FromDateTime(ea.Attendance.Lesson.Date) >= semester.StartDate 
+                        && DateOnly.FromDateTime(ea.Attendance.Lesson.Date) <= semester.EndDate));
+                }
+            }
+
+            var excuses = await query.OrderByDescending(e => e.CreatedAt).ToListAsync();
+
+            return excuses.Select(e => new MobileExcuseDto
+            {
+                Id = e.Id,
+                Reason = e.Reason,
+                Status = e.IsAccepted == null ? "Oczekujące" : e.IsAccepted == true ? "Zaakceptowane" : "Odrzucone",
+                StatusColorHex = e.IsAccepted == null ? "#f59e0b" : e.IsAccepted == true ? "#22c55e" : "#ef4444",
+                CreatedAt = e.CreatedAt,
+                Attendances = e.ExcuseAttendances.Select(ea => new MobileExcuseAttendanceDto
+                {
+                    Id = ea.AttendanceId,
+                    SubjectName = ea.Attendance.Lesson?.Subject?.Name ?? "",
+                    Date = ea.Attendance.Lesson?.Date.ToString("dd.MM.yyyy") ?? "",
+                    LessonHour = ea.Attendance.Lesson?.LessonHour?.OrderNumber ?? 0,
+                    AttendanceType = ea.Attendance.AttendanceType?.ShortCode ?? ""
+                }).ToList()
+            }).ToList();
+        }
+
         public async Task<List<MobileSemesterDto>> GetSemestersAsync()
         {
             var today = DateOnly.FromDateTime(DateTime.Today);
@@ -418,7 +469,7 @@ namespace BusinessLogic.Services
                 .Select(ps => new MobileChildDto
                 {
                     Id = ps.StudentId,
-                    Name = ps.Student != null ? $"{ps.Student.FirstName} {ps.Student.LastName}" : "",
+                    Name = ps.Student != null ? $"{ps.Student.FirstName} {ps.Student.LastName}" + (ps.Student.IsActive ? "" : " (nieaktywny)") : "",
                     ClassName = _context.ClassStudents
                         .Include(cs => cs.Class)
                         .Where(cs => cs.StudentId == ps.StudentId && cs.IsActive)

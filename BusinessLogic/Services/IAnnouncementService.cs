@@ -92,7 +92,7 @@ namespace BusinessLogic.Services
                     a.Title,
                     a.Description,
                     a.AuthorId,
-                    AuthorName = a.Author != null ? a.Author.LastName + " " + a.Author.FirstName : null,
+                    AuthorName = a.Author != null ? a.Author.LastName + " " + a.Author.FirstName + (a.Author.IsActive ? "" : " (nieaktywny)") : null,
                     TargetRoles = a.AnnouncementTargets.Any(at => at.RoleId == null)
                         ? "Wszyscy"
                         : string.Join(", ", a.AnnouncementTargets.Where(at => at.RoleId != null).Select(at => at.Role!.Name)),
@@ -206,8 +206,6 @@ namespace BusinessLogic.Services
 
             if (item.IsActive)
             {
-                if (!item.Title.EndsWith(" (nieaktywny)"))
-                    item.Title = $"{item.Title} (nieaktywny)";
                 item.IsActive = false;
             }
             else
@@ -225,8 +223,6 @@ namespace BusinessLogic.Services
             if (item == null) return false;
 
             item.IsActive = true;
-            if (item.Title.EndsWith(" (nieaktywny)"))
-                item.Title = item.Title.Replace(" (nieaktywny)", "").Trim();
 
             await _context.SaveChangesAsync();
             return true;

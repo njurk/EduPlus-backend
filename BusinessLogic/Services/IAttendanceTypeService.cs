@@ -71,9 +71,6 @@ namespace BusinessLogic.Services
             if (await _context.AttendanceTypes.AnyAsync(x => x.ShortCode == entity.ShortCode && x.Id != id && x.IsActive))
                 throw new InvalidOperationException("Taki skrót już istnieje");
 
-            if (entity.IsActive && entity.Name.EndsWith(" (nieaktywny)"))
-                entity.Name = entity.Name.Replace(" (nieaktywny)", "");
-
             _context.Entry(entity).State = EntityState.Modified;
             _context.Entry(entity).Property(x => x.CreatedAt).IsModified = false;
 

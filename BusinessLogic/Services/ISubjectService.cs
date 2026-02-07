@@ -106,8 +106,8 @@ namespace BusinessLogic.Services
             {
                 st.SubjectId,
                 st.TeacherId,
-                SubjectName = st.Subject.Name,
-                TeacherName = st.Teacher.LastName + " " + st.Teacher.FirstName,
+                SubjectName = st.Subject.Name + (st.Subject.IsActive ? "" : " (nieaktywny)"),
+                TeacherName = st.Teacher.LastName + " " + st.Teacher.FirstName + (st.Teacher.IsActive ? "" : " (nieaktywny)"),
                 st.CreatedAt,
                 st.UpdatedAt,
                 st.IsActive,
@@ -270,8 +270,6 @@ namespace BusinessLogic.Services
 
             if (item.IsActive)
             {
-                if (!item.Name.EndsWith(" (nieaktywny)"))
-                    item.Name = $"{item.Name} (nieaktywny)";
                 item.IsActive = false;
                 item.UpdatedAt = DateTime.Now;
             }
@@ -290,8 +288,6 @@ namespace BusinessLogic.Services
             if (item == null) return false;
 
             item.IsActive = true;
-            if (item.Name.EndsWith(" (nieaktywny)"))
-                item.Name = item.Name.Replace(" (nieaktywny)", "").Trim();
             item.UpdatedAt = DateTime.Now;
             await _context.SaveChangesAsync();
             return true;

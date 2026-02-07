@@ -11,7 +11,7 @@
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public string? RoleNames { get; set; }
-        public bool IsUnassignedParent { get; set; }
+        public bool IsUnassignedRelation { get; set; }
         public string ModifiedByName { get; set; } = "System";
     }
 }

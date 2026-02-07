@@ -11,7 +11,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace BusinessLogic.Helpers
@@ -216,30 +215,6 @@ namespace BusinessLogic.Helpers
             using var stream = new MemoryStream();
             workbook.SaveAs(stream);
             return stream.ToArray();
-        }
-
-        public byte[] GenerateCsv(ScheduleGrid grid)
-        {
-            var header = GetMainHeader(grid);
-            var sb = new StringBuilder();
-            sb.AppendLine(header);
-            sb.AppendLine();
-            sb.AppendLine($"Nr;Godziny;{string.Join(";", _dayNamesFull.Skip(1))}");
-
-            foreach (var hour in grid.LessonHours)
-            {
-                var row = new List<string> { hour.Order.ToString(), $"{hour.Start}-{hour.End}" };
-                for (int d = 1; d <= 5; d++)
-                {
-                    var cell = grid.Cells.GetValueOrDefault((hour.Order, d));
-                    row.Add(cell != null && !string.IsNullOrEmpty(cell.SubjectName)
-                        ? $"\"{cell.SubjectName}\n{cell.ClassroomName}\n{cell.TeacherName}\""
-                        : "");
-                }
-                sb.AppendLine(string.Join(";", row));
-            }
-
-            return Encoding.UTF8.GetPreamble().Concat(Encoding.UTF8.GetBytes(sb.ToString())).ToArray();
         }
 
         public byte[] GenerateDocx(ScheduleGrid grid)

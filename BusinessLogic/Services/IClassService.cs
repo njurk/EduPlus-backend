@@ -43,8 +43,7 @@ namespace BusinessLogic.Services
             if (schoolYearId.HasValue)
                 query = query.Where(c => c.SchoolYearId == schoolYearId);
 
-            if (!includeInactive)
-                query = query.Where(c => c.IsActive);
+            query = query.Where(c => includeInactive ? !c.IsActive : c.IsActive);
 
             if (level.HasValue)
                 query = query.Where(c => c.Level == level.Value);
@@ -66,7 +65,7 @@ namespace BusinessLogic.Services
                     c.IsActive,
                     c.CreatedAt,
                     c.UpdatedAt,
-                    StudentCount = c.ClassStudents.Count
+                    StudentCount = c.ClassStudents.Count(cs => cs.IsActive)
                 });
 
             projected = sortBy?.ToLower() switch
@@ -139,7 +138,7 @@ namespace BusinessLogic.Services
                 ModifiedByName = cs.ModifiedByUserId != null 
                     ? _context.Users.Where(u => u.Id == cs.ModifiedByUserId).Select(u => u.LastName + " " + u.FirstName).FirstOrDefault()
                     : "System",
-                Student = new { cs.Student.Id, cs.Student.FirstName, cs.Student.LastName, cs.Student.Email }
+                Student = new { cs.Student.Id, cs.Student.FirstName, cs.Student.LastName, cs.Student.Email, cs.Student.IsActive }
             }).ToListAsync();
 
             var subjectsQuery = _context.ClassSubjects.AsNoTracking()
@@ -153,7 +152,7 @@ namespace BusinessLogic.Services
                 cs.Id,
                 cs.ClassId,
                 cs.SubjectId,
-                SubjectName = cs.Subject.Name,
+                SubjectName = cs.Subject.Name + (cs.Subject.IsActive ? "" : " (nieaktywny)"),
                 cs.CreatedAt,
                 cs.UpdatedAt,
                 cs.IsActive,
@@ -162,7 +161,7 @@ namespace BusinessLogic.Services
                     : "System",
                 TeacherInfo = _context.TeacherClassSubjects
                     .Where(t => t.ClassId == id && t.SubjectId == cs.SubjectId && t.IsActive)
-                    .Select(t => new { t.TeacherId, Name = t.Teacher.LastName + " " + t.Teacher.FirstName })
+                    .Select(t => new { t.TeacherId, Name = t.Teacher.LastName + " " + t.Teacher.FirstName + (t.Teacher.IsActive ? "" : " (nieaktywny)") })
                     .FirstOrDefault()
             }).ToListAsync();
 
@@ -206,7 +205,7 @@ namespace BusinessLogic.Services
         {
             var query = _context.Users.AsNoTracking()
                 .Where(u => u.IsActive && u.UserRoles.Any(ur => ur.Role.Name == "Uczeń"))
-                .Where(u => !u.ClassStudents.Any(cs => cs.ClassId == classId));
+                .Where(u => !u.ClassStudents.Any(cs => cs.IsActive));
 
             if (!string.IsNullOrWhiteSpace(search))
             {
@@ -409,14 +408,11 @@ namespace BusinessLogic.Services
         public async Task<bool> DeleteAsync(int id)
         {
             var classEntity = await _context.Classes.FindAsync(id);
-            if (classEntity == null) return false;
+            if (classEntity == null || !classEntity.IsActive) return false;
 
-            if (classEntity.IsActive)
-            {
-                classEntity.IsActive = false;
-                classEntity.UpdatedAt = DateTime.Now;
-                await _context.SaveChangesAsync();
-            }
+            classEntity.IsActive = false;
+            classEntity.UpdatedAt = DateTime.Now;
+            await _context.SaveChangesAsync();
 
             return true;
         }

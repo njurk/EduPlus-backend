@@ -10,32 +10,13 @@ namespace Data.Data
 
         public static void Seed(ModelBuilder modelBuilder)
         {
-            SeedTargets(modelBuilder);
-            SeedPages(modelBuilder);
-            SeedPageContents(modelBuilder);
-            SeedRoles(modelBuilder);
-            SeedSchoolYears(modelBuilder);
-            SeedAttendanceTypes(modelBuilder);
-            SeedGradeTypes(modelBuilder);
-            SeedGradeCategories(modelBuilder);
-            SeedLessonStatuses(modelBuilder);
-            SeedLessonHours(modelBuilder);
-            SeedSemesters(modelBuilder);
-            SeedTicketReasons(modelBuilder);
-        }
-
-        private static void SeedTargets(ModelBuilder modelBuilder)
-        {
             modelBuilder.Entity<Target>().HasData(
-                new Target { Id = 1, Label = "WebAdmin", Title = "Administrator - strona internetowa", CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new Target { Id = 2, Label = "WebTeacher", Title = "Nauczyciel - strona internetowa", CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new Target { Id = 3, Label = "Mobile", Title = "Aplikacja mobilna", CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new Target { Id = 5, Label = "All", Title = "Zasoby wspólne", CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null }
+                new Target { Id = 1, Label = "WebAdmin", Title = "Administrator", CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new Target { Id = 2, Label = "WebTeacher", Title = "Nauczyciel", CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new Target { Id = 3, Label = "Mobile", Title = "Rodzic/Uczeń", CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new Target { Id = 5, Label = "All", Title = "Wspólne", CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null }
             );
-        }
 
-        private static void SeedPages(ModelBuilder modelBuilder)
-        {
             modelBuilder.Entity<Page>().HasData(
                 new Page { Id = 1, Title = "System", Link = "system", Position = 1, TargetId = 5, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new Page { Id = 2, Title = "Dashboard", Link = "dashboard", Position = 1, TargetId = 1, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
@@ -48,23 +29,31 @@ namespace Data.Data
                 new Page { Id = 9, Title = "Oceny", Link = "grades", Position = 8, TargetId = 1, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new Page { Id = 10, Title = "Frekwencja", Link = "attendance", Position = 9, TargetId = 1, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new Page { Id = 11, Title = "Zarządzanie klasami", Link = "classManagement", Position = 10, TargetId = 1, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new Page { Id = 12, Title = "Ustawienia konta", Link = "settings", Position = 11, TargetId = 5, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new Page { Id = 13, Title = "Konfiguracja", Link = "systemConfig", Position = 12, TargetId = 1, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new Page { Id = 14, Title = "Pasek boczny", Link = "layout", Position = 0, TargetId = 1, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new Page { Id = 15, Title = "Teacher Login", Link = "teacherLogin", Position = 0, TargetId = 2, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new Page { Id = 14, Title = "Nawigacja boczna", Link = "layout", Position = 0, TargetId = 1, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new Page { Id = 15, Title = "Logowanie", Link = "teacherLogin", Position = 0, TargetId = 2, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new Page { Id = 16, Title = "Reset hasła", Link = "resetPassword", Position = 0, TargetId = 5, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new Page { Id = 17, Title = "Zgłoś problem", Link = "submitTicket", Position = 0, TargetId = 5, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new Page { Id = 18, Title = "Admin Login", Link = "adminLogin", Position = 0, TargetId = 1, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new Page { Id = 19, Title = "Przedmioty", Link = "subjects", Position = 13, TargetId = 1, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null }
+                new Page { Id = 18, Title = "Logowanie", Link = "adminLogin", Position = 0, TargetId = 1, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new Page { Id = 19, Title = "Przedmioty", Link = "subjects", Position = 13, TargetId = 1, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new Page { Id = 20, Title = "Pulpit", Link = "mobileDashboard", Position = 1, TargetId = 3, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new Page { Id = 21, Title = "Oceny", Link = "mobileGrades", Position = 2, TargetId = 3, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new Page { Id = 22, Title = "Frekwencja", Link = "mobileAttendance", Position = 3, TargetId = 3, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new Page { Id = 23, Title = "Plan lekcji", Link = "mobileSchedule", Position = 4, TargetId = 3, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new Page { Id = 24, Title = "Ogłoszenia", Link = "mobileAnnouncements", Position = 5, TargetId = 3, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new Page { Id = 25, Title = "Usprawiedliwienia", Link = "mobileExcuses", Position = 6, TargetId = 3, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new Page { Id = 26, Title = "Logowanie", Link = "mobileLogin", Position = 0, TargetId = 3, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new Page { Id = 27, Title = "Ustawienia", Link = "mobileSettings", Position = 0, TargetId = 3, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new Page { Id = 28, Title = "Pojedyncze ogłoszenie", Link = "mobileAnnouncementDetail", Position = 0, TargetId = 3, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new Page { Id = 29, Title = "Formularz usprawiedliwienia", Link = "mobileExcuseForm", Position = 0, TargetId = 3, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null }
             );
-        }
 
-        private static void SeedPageContents(ModelBuilder modelBuilder)
-        {
             modelBuilder.Entity<PageContent>().HasData(
                 new PageContent { Id = 1, Key = "systemName", Value = "EduPlus", PageId = 1, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 2, Key = "pageTitle", Value = "EduPlus - Twój e-dziennik", PageId = 1, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 3, Key = "faviconUrl", Value = "logo-64.png", PageId = 1, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 120, Key = "logoUrl", Value = "logo-512.png", PageId = 1, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 37, Key = "version", Value = "v1.0.0", PageId = 1, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 4, Key = "title", Value = "Pulpit", PageId = 2, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 5, Key = "schoolYear", Value = "Rok szkolny", PageId = 2, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 6, Key = "stats.users", Value = "Wszystkich użytkowników", PageId = 2, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
@@ -93,12 +82,8 @@ namespace Data.Data
                 new PageContent { Id = 29, Key = "title", Value = "Oceny", PageId = 9, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 30, Key = "title", Value = "Frekwencja", PageId = 10, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 31, Key = "title", Value = "Klasy", PageId = 11, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new PageContent { Id = 32, Key = "title", Value = "Ustawienia konta", PageId = 12, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new PageContent { Id = 33, Key = "section.profile", Value = "Profil", PageId = 12, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new PageContent { Id = 34, Key = "section.password", Value = "Zmiana hasła", PageId = 12, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 35, Key = "title", Value = "Konfiguracja", PageId = 13, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 36, Key = "systemName", Value = "EduPlus Admin", PageId = 14, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new PageContent { Id = 37, Key = "version", Value = "v1.0.0 EduPlus", PageId = 14, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 38, Key = "nav.dashboard", Value = "Pulpit", PageId = 14, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 39, Key = "nav.section.management", Value = "Zarządzanie", PageId = 14, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 40, Key = "nav.users", Value = "Użytkownicy", PageId = 14, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
@@ -116,10 +101,9 @@ namespace Data.Data
                 new PageContent { Id = 51, Key = "nav.config", Value = "Konfiguracja", PageId = 14, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 52, Key = "nav.cms", Value = "CMS", PageId = 14, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 53, Key = "title", Value = "EduPlus", PageId = 15, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new PageContent { Id = 54, Key = "logoUrl", Value = "logo-512.png", PageId = 15, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+
                 new PageContent { Id = 55, Key = "logoAlt", Value = "EduPlus", PageId = 15, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 56, Key = "form.forgotPassword", Value = "Zapomniałeś hasła?", PageId = 15, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new PageContent { Id = 57, Key = "footer", Value = "EduPlus v1.0.0", PageId = 15, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 58, Key = "helpLink", Value = "Masz problem? Kliknij tutaj", PageId = 15, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 59, Key = "adminLink", Value = "Jestem administratorem", PageId = 15, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 60, Key = "title.request", Value = "Resetowanie hasła", PageId = 16, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
@@ -133,10 +117,9 @@ namespace Data.Data
                 new PageContent { Id = 68, Key = "form.descriptionPlaceholder", Value = "Opisz szczegółowo problem który napotkałeś", PageId = 17, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 69, Key = "success.message", Value = "Twoje zgłoszenie zostało przyjęte. Odpowiedź otrzymasz na podany adres email.", PageId = 17, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 70, Key = "title", Value = "EduPlus Admin", PageId = 18, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new PageContent { Id = 71, Key = "logoUrl", Value = "logo-512.png", PageId = 18, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+
                 new PageContent { Id = 72, Key = "logoAlt", Value = "EduPlus", PageId = 18, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 73, Key = "form.forgotPassword", Value = "Zapomniałeś hasła?", PageId = 18, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new PageContent { Id = 74, Key = "footer", Value = "EduPlus v1.0.0", PageId = 18, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 75, Key = "helpLink", Value = "Masz problem? Kliknij tutaj", PageId = 18, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 76, Key = "teacherLink", Value = "Jestem nauczycielem", PageId = 18, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 77, Key = "tabs.users", Value = "Użytkownicy", PageId = 3, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
@@ -153,31 +136,48 @@ namespace Data.Data
                 new PageContent { Id = 88, Key = "tabs.ticketReasons", Value = "Powody zgłoszeń", PageId = 13, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 89, Key = "title", Value = "Przedmioty", PageId = 19, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 90, Key = "tabs.students", Value = "Uczniowie", PageId = 11, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new PageContent { Id = 91, Key = "tabs.subjects", Value = "Przedmioty", PageId = 11, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null }
+                new PageContent { Id = 91, Key = "tabs.subjects", Value = "Przedmioty", PageId = 11, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 93, Key = "title", Value = "Pulpit", PageId = 20, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 94, Key = "title", Value = "Oceny", PageId = 21, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 95, Key = "title", Value = "Frekwencja", PageId = 22, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 96, Key = "title", Value = "Plan lekcji", PageId = 23, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 97, Key = "title", Value = "Ogłoszenia", PageId = 24, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 98, Key = "title", Value = "Usprawiedliwienia", PageId = 25, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 99, Key = "greeting", Value = "Witaj, {name}!", PageId = 20, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 100, Key = "studentLabel", Value = "Uczeń:", PageId = 20, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 101, Key = "lessonsToday", Value = "Lekcje dzisiaj ({day})", PageId = 20, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 102, Key = "recentGrades", Value = "Ostatnie oceny", PageId = 20, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 103, Key = "recentAttendance", Value = "Ostatnia frekwencja", PageId = 20, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 104, Key = "recentAnnouncements", Value = "Ostatnie ogłoszenia", PageId = 20, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 105, Key = "subtitle", Value = "Twój e-dziennik", PageId = 26, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 106, Key = "link.forgotPassword", Value = "Zapomniałeś hasła?", PageId = 26, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 107, Key = "link.submitTicket", Value = "Masz problem? Kliknij tutaj", PageId = 26, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 108, Key = "subtitle", Value = "Podaj adres email którego używasz w systemie EduPlus", PageId = 16, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 109, Key = "title", Value = "Pomoc techniczna", PageId = 17, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 110, Key = "subtitle", Value = "Wyślij do nas wiadomość", PageId = 17, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 111, Key = "success.title", Value = "Zgłoszenie wysłane", PageId = 17, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 112, Key = "success.message", Value = "Dziękujemy za kontakt. Odpowiemy najszybciej jak to możliwe.", PageId = 17, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 113, Key = "title", Value = "Ustawienia", PageId = 27, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 114, Key = "title", Value = "Ogłoszenie", PageId = 28, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 115, Key = "title", Value = "Usprawiedliwienie", PageId = 29, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 116, Key = "tabs.week", Value = "Tydzień", PageId = 22, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 117, Key = "tabs.stats", Value = "Statystyki", PageId = 22, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 118, Key = "section.unexcused", Value = "Nieusprawiedliwione", PageId = 25, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 119, Key = "section.excused", Value = "Usprawiedliwione", PageId = 25, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null }
             );
-        }
 
-
-        private static void SeedRoles(ModelBuilder modelBuilder)
-        {
             modelBuilder.Entity<Role>().HasData(
                 new Role { Id = 1, Name = "Administrator", IsActive = true, Description = "Najwyższy poziom uprawnień", Level = 1, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new Role { Id = 2, Name = "Nauczyciel", IsActive = true, Description = "Zarządzanie przydzielonymi klasami", Level = 2, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new Role { Id = 3, Name = "Rodzic", IsActive = true, Description = "Dostęp do dziennika dziecka", Level = 3, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new Role { Id = 4, Name = "Uczeń", IsActive = true, Description = "Dostęp do własnego dziennika", Level = 4, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null }
             );
-        }
 
-        private static void SeedSchoolYears(ModelBuilder modelBuilder)
-        {
             modelBuilder.Entity<SchoolYear>().HasData(
                 new SchoolYear { Id = 1, Name = "2025/2026", StartDate = new DateOnly(2025, 9, 1), EndDate = new DateOnly(2026, 6, 30), IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new SchoolYear { Id = 2, Name = "2026/2027", StartDate = new DateOnly(2026, 9, 1), EndDate = new DateOnly(2027, 6, 30), IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null }
             );
-        }
 
-        private static void SeedAttendanceTypes(ModelBuilder modelBuilder)
-        {
             modelBuilder.Entity<AttendanceType>().HasData(
                 new AttendanceType { Id = 1, Name = "Obecność", Slug = "present", ShortCode = "OB", ColorHex = "#22c55e", IsNegative = false, IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new AttendanceType { Id = 2, Name = "Nieobecność", Slug = "absent", ShortCode = "NB", ColorHex = "#ef4444", IsNegative = true, IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
@@ -185,10 +185,7 @@ namespace Data.Data
                 new AttendanceType { Id = 4, Name = "Usprawiedliwione", Slug = "excused", ShortCode = "U", ColorHex = "#8b5cf6", IsNegative = true, IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new AttendanceType { Id = 5, Name = "Zwolnienie", Slug = "released", ShortCode = "ZW", ColorHex = "#3b82f6", IsNegative = true, IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null }
             );
-        }
 
-        private static void SeedGradeTypes(ModelBuilder modelBuilder)
-        {
             modelBuilder.Entity<GradeType>().HasData(
                 new GradeType { Id = 1, Numeric = "1", Name = "Niedostateczny", Value = 1.0m, IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new GradeType { Id = 2, Numeric = "2", Name = "Dopuszczający", Value = 2.0m, IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
@@ -197,10 +194,7 @@ namespace Data.Data
                 new GradeType { Id = 5, Numeric = "5", Name = "Bardzo dobry", Value = 5.0m, IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new GradeType { Id = 6, Numeric = "6", Name = "Celujący", Value = 6.0m, IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null }
             );
-        }
 
-        private static void SeedGradeCategories(ModelBuilder modelBuilder)
-        {
             modelBuilder.Entity<GradeCategory>().HasData(
                 new GradeCategory { Id = 1, Name = "Sprawdzian", Weight = 3, ColorHex = "#ef4444", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new GradeCategory { Id = 2, Name = "Kartkówka", Weight = 2, ColorHex = "#22c55e", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
@@ -208,19 +202,13 @@ namespace Data.Data
                 new GradeCategory { Id = 4, Name = "Aktywność", Weight = 1, ColorHex = "#3b82f6", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new GradeCategory { Id = 5, Name = "Zadanie domowe", Weight = 1, ColorHex = "#eab308", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null }
             );
-        }
 
-        private static void SeedLessonStatuses(ModelBuilder modelBuilder)
-        {
             modelBuilder.Entity<LessonStatus>().HasData(
                 new LessonStatus { Id = 1, Name = "Zrealizowana", Slug = "completed", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new LessonStatus { Id = 2, Name = "Odwołana", Slug = "cancelled", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new LessonStatus { Id = 3, Name = "Zastępstwo", Slug = "substitute", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null }            
+                new LessonStatus { Id = 3, Name = "Zastępstwo", Slug = "substitute", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null }
             );
-        }
 
-        private static void SeedLessonHours(ModelBuilder modelBuilder)
-        {
             modelBuilder.Entity<LessonHour>().HasData(
                 new LessonHour { Id = 1, OrderNumber = 1, StartTime = new TimeOnly(8, 0), EndTime = new TimeOnly(8, 45), IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new LessonHour { Id = 2, OrderNumber = 2, StartTime = new TimeOnly(8, 55), EndTime = new TimeOnly(9, 40), IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
@@ -232,27 +220,19 @@ namespace Data.Data
                 new LessonHour { Id = 8, OrderNumber = 8, StartTime = new TimeOnly(14, 40), EndTime = new TimeOnly(15, 25), IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new LessonHour { Id = 9, OrderNumber = 9, StartTime = new TimeOnly(15, 30), EndTime = new TimeOnly(16, 15), IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null }
             );
-        }
 
-        private static void SeedSemesters(ModelBuilder modelBuilder)
-        {
             modelBuilder.Entity<Semester>().HasData(
                 new Semester { Id = 1, SchoolYearId = 1, Name = "Semestr 1", StartDate = new DateOnly(2025, 09, 01), EndDate = new DateOnly(2026, 02, 28), IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new Semester { Id = 2, SchoolYearId = 1, Name = "Semestr 2", StartDate = new DateOnly(2026, 03, 01), EndDate = new DateOnly(2026, 06, 30), IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new Semester { Id = 3, SchoolYearId = 2, Name = "Semestr 1", StartDate = new DateOnly(2026, 09, 01), EndDate = new DateOnly(2027, 02, 28), IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new Semester { Id = 4, SchoolYearId = 2, Name = "Semestr 2", StartDate = new DateOnly(2027, 03, 01), EndDate = new DateOnly(2027, 06, 30), IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null }
             );
-        }
 
-        private static void SeedTicketReasons(ModelBuilder modelBuilder)
-        {
             modelBuilder.Entity<TicketReason>().HasData(
                 new TicketReason { Id = 1, Name = "Problem z logowaniem", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new TicketReason { Id = 2, Name = "Zmiana danych osobowych", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new TicketReason { Id = 3, Name = "Błąd w systemie", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new TicketReason { Id = 4, Name = "Inne", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null }
+                new TicketReason { Id = 2, Name = "Błąd w systemie", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new TicketReason { Id = 3, Name = "Inne", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null }
             );
         }
     }
 }
-

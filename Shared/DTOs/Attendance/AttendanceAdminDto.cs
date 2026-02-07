@@ -16,6 +16,7 @@ namespace Shared.DTOs.API.DTOs
         public string TeacherName { get; set; } = string.Empty;
         public string TypeName { get; set; } = string.Empty;
         public string ShortCode { get; set; } = string.Empty;
+        public string ColorHex { get; set; } = string.Empty;
         public int AttendanceTypeId { get; set; }
         public int OrderNumber { get; set; }
         public string ClassName { get; set; } = string.Empty;

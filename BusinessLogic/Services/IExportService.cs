@@ -25,7 +25,6 @@ namespace BusinessLogic.Services
         {
             ["pdf"] = "application/pdf",
             ["xlsx"] = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            ["csv"] = "text/csv",
             ["docx"] = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
         };
 
@@ -42,7 +41,6 @@ namespace BusinessLogic.Services
             {
                 "pdf" => _scheduleHelper.GeneratePdf(grid),
                 "xlsx" => _scheduleHelper.GenerateXlsx(grid),
-                "csv" => _scheduleHelper.GenerateCsv(grid),
                 "docx" => _scheduleHelper.GenerateDocx(grid),
                 _ => throw new ArgumentException($"Nieobsługiwany format: {format}")
             };
@@ -64,7 +62,6 @@ namespace BusinessLogic.Services
                 {
                     "pdf" => _gradesHelper.GenerateStudentPdf(studentData),
                     "xlsx" => _gradesHelper.GenerateStudentXlsx(studentData),
-                    "csv" => _gradesHelper.GenerateStudentCsv(studentData),
                     _ => throw new ArgumentException($"Nieobsługiwany format: {format}")
                 };
                 return new ExportResult
@@ -80,7 +77,6 @@ namespace BusinessLogic.Services
             {
                 "pdf" => _gradesHelper.GeneratePdf(data),
                 "xlsx" => _gradesHelper.GenerateXlsx(data),
-                "csv" => _gradesHelper.GenerateCsv(data),
                 _ => throw new ArgumentException($"Nieobsługiwany format: {format}")
             };
 

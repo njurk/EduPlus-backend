@@ -51,6 +51,27 @@ namespace API.Controllers
             return StatusCode(403);
         }
 
+        [HttpPost("upload-image")]
+        public async Task<IActionResult> UploadImage(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+                return BadRequest("Nie przesłano pliku.");
+
+            var allowedExtensions = new[] { ".png", ".jpg", ".jpeg", ".svg", ".webp", ".ico" };
+            var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
+
+            if (!allowedExtensions.Contains(extension))
+                return BadRequest("Niedozwolony format pliku.");
+
+            var fileName = $"{Guid.NewGuid()}{extension}";
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", fileName);
+
+            using var stream = new FileStream(filePath, FileMode.Create);
+            await file.CopyToAsync(stream);
+
+            return Ok(fileName);
+        }
+
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {

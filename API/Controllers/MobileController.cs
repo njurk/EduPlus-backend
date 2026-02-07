@@ -74,6 +74,13 @@ namespace API.Controllers
             return Ok();
         }
 
+        [HttpGet("excuses")]
+        public async Task<IActionResult> GetExcuses([FromQuery] int? studentId = null, [FromQuery] int? semesterId = null)
+        {
+            var result = await _mobileService.GetExcusesAsync(GetUserId(), studentId, semesterId);
+            return Ok(result);
+        }
+
         [HttpGet("semesters")]
         public async Task<IActionResult> GetSemesters()
         {

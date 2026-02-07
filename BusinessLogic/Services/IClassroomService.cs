@@ -78,9 +78,6 @@ namespace BusinessLogic.Services
             if (await _context.Classrooms.AnyAsync(x => x.Name == entity.Name && x.Id != id && x.IsActive))
                 throw new InvalidOperationException("Ta sala już istnieje");
 
-            if (entity.IsActive && entity.Name.EndsWith(" (nieaktywny)"))
-                entity.Name = entity.Name.Replace(" (nieaktywny)", "");
-
             _context.Entry(entity).State = EntityState.Modified;
             _context.Entry(entity).Property(x => x.CreatedAt).IsModified = false;
 
@@ -104,8 +101,6 @@ namespace BusinessLogic.Services
             if (item.IsActive)
             {
                 item.IsActive = false;
-                if (!item.Name.EndsWith(" (nieaktywny)"))
-                    item.Name += " (nieaktywny)";
             }
             else
             {
@@ -122,8 +117,6 @@ namespace BusinessLogic.Services
             if (item == null) return false;
 
             item.IsActive = true;
-            if (item.Name.EndsWith(" (nieaktywny)"))
-                item.Name = item.Name.Replace(" (nieaktywny)", "").Trim();
 
             await _context.SaveChangesAsync();
             return true;

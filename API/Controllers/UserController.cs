@@ -24,10 +24,10 @@ public class UserController : ControllerBase
         [FromQuery] string? sortBy = null,
         [FromQuery] bool sortDesc = true,
         [FromQuery] bool showInactive = false,
-        [FromQuery] bool onlyUnassignedParents = false,
+        [FromQuery] bool onlyUnassignedRelations = false,
         [FromQuery] int? roleLevel = null)
     {
-        return Ok(await _service.GetAllAsync(pageNumber, pageSize, search, sortBy, sortDesc, showInactive, onlyUnassignedParents, roleLevel));
+        return Ok(await _service.GetAllAsync(pageNumber, pageSize, search, sortBy, sortDesc, showInactive, onlyUnassignedRelations, roleLevel));
     }
 
     [HttpGet("{id}")]

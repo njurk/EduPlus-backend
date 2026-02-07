@@ -8,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace BusinessLogic.Helpers
@@ -175,24 +174,6 @@ namespace BusinessLogic.Helpers
             return stream.ToArray();
         }
 
-        public byte[] GenerateCsv(GradesExportData data)
-        {
-            var sb = new StringBuilder();
-            sb.AppendLine($"Wykaz ocen - {data.ClassName} - {data.SubjectName} ({data.SemesterName}, {data.SchoolYearName})");
-            sb.AppendLine();
-            sb.AppendLine("Lp;Uczeń;Oceny;Średnia");
-
-            int lp = 0;
-            foreach (var student in data.Students)
-            {
-                lp++;
-                var grades = string.Join(", ", student.Grades.Select(g => g.Value));
-                sb.AppendLine($"{lp};\"{student.StudentName}\";\"{grades}\";{student.Average?.ToString("0.00") ?? "-"}");
-            }
-
-            return Encoding.UTF8.GetPreamble().Concat(Encoding.UTF8.GetBytes(sb.ToString())).ToArray();
-        }
-
         public string GenerateFileName(GradesExportData data, string extension) =>
             $"{DateTime.Now:yyyyMMddHHmmss}-wykaz-ocen-{data.ClassName.ToLower()}-{data.SubjectName.ToLower().Replace(" ", "-")}.{extension}";
 
@@ -356,24 +337,6 @@ namespace BusinessLogic.Helpers
             using var stream = new MemoryStream();
             workbook.SaveAs(stream);
             return stream.ToArray();
-        }
-
-        public byte[] GenerateStudentCsv(StudentExportData data)
-        {
-            var sb = new StringBuilder();
-            sb.AppendLine($"Wykaz ocen - {data.StudentName} ({data.ClassName}, {data.SemesterName}, {data.SchoolYearName})");
-            sb.AppendLine();
-            sb.AppendLine("Lp;Przedmiot;Oceny;Średnia");
-
-            int lp = 0;
-            foreach (var subject in data.Subjects)
-            {
-                lp++;
-                var grades = string.Join(", ", subject.Grades.Select(g => g.Value));
-                sb.AppendLine($"{lp};\"{subject.SubjectName}\";\"{grades}\";{subject.Average?.ToString("0.00") ?? "-"}");
-            }
-
-            return Encoding.UTF8.GetPreamble().Concat(Encoding.UTF8.GetBytes(sb.ToString())).ToArray();
         }
 
         public string GenerateStudentFileName(StudentExportData data, string extension) =>
