@@ -1231,8 +1231,8 @@ namespace Data.Migrations
                     { 115, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "title", null, 29, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Usprawiedliwienie" },
                     { 116, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "tabs.week", null, 22, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Tydzień" },
                     { 117, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "tabs.stats", null, 22, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Statystyki" },
-                    { 118, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "section.unexcused", null, 25, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Nieusprawiedliwione" },
-                    { 119, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "section.excused", null, 25, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Usprawiedliwione" },
+                    { 118, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "section.unexcused", null, 25, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Do usprawiedliwienia" },
+                    { 119, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "section.excused", null, 25, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Wysłane" },
                     { 120, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "logoUrl", null, 1, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "logo-512.png" }
                 });
 

@@ -27,9 +27,10 @@ public class ExcuseController : ControllerBase
         [FromQuery] bool sortDesc = true,
         [FromQuery] bool showInactive = false,
         [FromQuery] string? statusFilter = null,
-        [FromQuery] int? classId = null)
+        [FromQuery] int? classId = null,
+        [FromQuery] int? semesterId = null)
     {
-        return Ok(await _service.GetAllAsync(pageNumber, pageSize, search, sortBy, sortDesc, showInactive, statusFilter, classId));
+        return Ok(await _service.GetAllAsync(pageNumber, pageSize, search, sortBy, sortDesc, showInactive, statusFilter, classId, semesterId));
     }
 
     [HttpGet("{id}")]

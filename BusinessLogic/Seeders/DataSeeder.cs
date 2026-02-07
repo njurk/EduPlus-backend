@@ -703,7 +703,7 @@
                 {
                     Email = "murbaniak@szkola.edu.pl",
                     ReasonId = reasons.First(r => r.Name == "Problem z logowaniem").Id,
-                    Content = "Nie mogę się zalogować do systemu. Wprowadzam poprawne dane ale ciągle wyświetla się komunikat o blednym haśle, mimo kilkukrotnej jego zmiany. Bardzo proszę o szybkie rozwiązanie problemu",
+                    Content = "Nie mogę się zalogować do systemu. Wprowadzam poprawne dane ale ciągle wyświetla się komunikat o blednym haśle, mimo kilkukrotnej jego zmiany. Bardzo proszę o szybką pomoc",
                     IsClosed = true,
                     ClosedAt = DateTime.Now.AddDays(-1),
                     AdminResponse = "<p>Witam, hasło zostało przywrócone. Proszę sprawdzić, czy problem z logowaniem został rozwiązany</p>",
@@ -715,7 +715,7 @@
                 {
                     Email = "abaran@szkola.edu.pl",
                     ReasonId = reasons.First(r => r.Name == "Problem z logowaniem").Id,
-                    Content = "Próbuję zalogować się do systemu, ale wyświetla się błąd 500 już od 3 dni.",
+                    Content = "Próbuję zalogować się do systemu ale wyświetla się błąd 500",
                     IsClosed = false,
                     CreatedAt = DateTime.Now.AddHours(-3),
                     UpdatedAt = DateTime.Now.AddHours(-3),
@@ -725,7 +725,7 @@
                 {
                     Email = "mkrajewska@szkola.edu.pl",
                     ReasonId = reasons.First(r => r.Name == "Problem z logowaniem").Id,
-                    Content = "Zapomniałam hasła a email z linkiem nie przychodzi, próbowałam już kilka razy, bez skutku.",
+                    Content = "Zapomniałam hasła, próbowałam zresetować ale email z linkiem nie przychodzi",
                     IsClosed = false,
                     CreatedAt = DateTime.Now.AddDays(-1),
                     UpdatedAt = DateTime.Now.AddDays(-1),
@@ -745,10 +745,10 @@
                 {
                     Email = "mazakrzewska@szkola.edu.pl",
                     ReasonId = reasons.First(r => r.Name == "Błąd w systemie").Id,
-                    Content = "Plan lekcji nie wyświetla się od kilku dni, ładuje się bez końca. Bardzo proszę o możliwie szybkie rozpatrzenie problemu",
+                    Content = "Plan lekcji nie ładuje się od kilku godzin, proszę o możliwie szybkie rozpatrzenie problemu",
                     IsClosed = true,
                     ClosedAt = DateTime.Now.AddHours(-2),
-                    AdminResponse = "<p>Problem został naprawiony. plan lekcji powinien wyświetlać się teraz poprawnie.</p><p>Dziękujemy za zgłoszenie</p>",
+                    AdminResponse = "<p>Problem został naprawiony. Plan lekcji powinien wyświetlać się teraz poprawnie.</p><p>Dziękujemy za zgłoszenie</p>",
                     ModifiedByUserId = adminId,
                     CreatedAt = DateTime.Now.AddDays(-1),
                     UpdatedAt = DateTime.Now.AddHours(-2)
@@ -757,7 +757,7 @@
                 {
                     Email = "plaskowski@szkola.edu.pl",
                     ReasonId = reasons.First(r => r.Name == "Błąd w systemie").Id,
-                    Content = "Eksport planu lekcji nie działa, po kliknięciu różnych opcji nic się nie dzieje",
+                    Content = "Eksport planu lekcji nie działa, po kliknięciu różnych opcji nic się nie pobiera",
                     IsClosed = false,
                     CreatedAt = DateTime.Now.AddHours(-8),
                     UpdatedAt = DateTime.Now.AddHours(-8),

@@ -12,7 +12,7 @@ namespace BusinessLogic.Services
     {
         Task<IEnumerable<object>> GetAllAsync(string? search, string? sortBy, bool sortDesc);
         Task<ParentStudent> CreateAsync(ParentStudent entity);
-        Task<bool> DeleteAsync(int id);
+        Task<bool> DeleteAsync(int id, int? modifiedByUserId);
     }
 
     public class ParentStudentService : IParentStudentService
@@ -79,12 +79,26 @@ namespace BusinessLogic.Services
             return entity;
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(int id, int? modifiedByUserId)
         {
             var item = await _context.ParentStudents.FindAsync(id);
             if (item == null) return false;
 
+            var parentId = item.ParentId;
+            var studentId = item.StudentId;
             _context.ParentStudents.Remove(item);
+
+            var remaining = await _context.ParentStudents
+                .Where(ps => ps.ParentId == parentId || ps.StudentId == studentId)
+                .Where(ps => ps.Id != id)
+                .ToListAsync();
+
+            foreach (var rel in remaining)
+            {
+                rel.UpdatedAt = DateTime.Now;
+                rel.ModifiedByUserId = modifiedByUserId;
+            }
+
             await _context.SaveChangesAsync();
             return true;
         }

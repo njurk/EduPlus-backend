@@ -1391,7 +1391,7 @@ namespace Data.Migrations
                             Key = "section.unexcused",
                             PageId = 25,
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Nieusprawiedliwione"
+                            Value = "Do usprawiedliwienia"
                         },
                         new
                         {
@@ -1400,7 +1400,7 @@ namespace Data.Migrations
                             Key = "section.excused",
                             PageId = 25,
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Usprawiedliwione"
+                            Value = "Wysłane"
                         });
                 });
 

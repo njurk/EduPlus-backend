@@ -10,10 +10,12 @@ namespace API.Controllers
     public class PageContentController : ControllerBase
     {
         private readonly IPageContentService _service;
+        private readonly IWebHostEnvironment _env;
 
-        public PageContentController(IPageContentService service)
+        public PageContentController(IPageContentService service, IWebHostEnvironment env)
         {
             _service = service;
+            _env = env;
         }
 
         [HttpGet]
@@ -64,7 +66,7 @@ namespace API.Controllers
                 return BadRequest("Niedozwolony format pliku.");
 
             var fileName = $"{Guid.NewGuid()}{extension}";
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", fileName);
+            var filePath = Path.Combine(_env.WebRootPath, fileName);
 
             using var stream = new FileStream(filePath, FileMode.Create);
             await file.CopyToAsync(stream);

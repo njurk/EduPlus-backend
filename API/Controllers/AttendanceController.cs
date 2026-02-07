@@ -30,9 +30,10 @@ public class AttendanceController : ControllerBase
         [FromQuery] string? subjectName = null,
         [FromQuery] string? teacherName = null,
         [FromQuery] string? attendanceTypeShortCode = null,
-        [FromQuery] int? orderNumber = null)
+        [FromQuery] int? orderNumber = null,
+        [FromQuery] int? semesterId = null)
     {
-        var result = await _service.GetAllForAdminAsync(includeInactive, pageNumber, pageSize, search, sortBy, sortDesc, classId, date, subjectName, teacherName, attendanceTypeShortCode, orderNumber);
+        var result = await _service.GetAllForAdminAsync(includeInactive, pageNumber, pageSize, search, sortBy, sortDesc, classId, date, subjectName, teacherName, attendanceTypeShortCode, orderNumber, semesterId);
         return Ok(result);
     }
 

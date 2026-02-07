@@ -153,6 +153,7 @@ namespace API
 
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseMiddleware<RoleValidationMiddleware>();
 
             app.MapControllers();
 

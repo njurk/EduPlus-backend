@@ -233,7 +233,7 @@ namespace BusinessLogic.Services
                 }
             }
 
-            if (dto.ParentIds != null && dto.ParentIds.Any())
+            if (dto.ParentIds != null)
             {
                 var currentParents = await _context.ParentStudents
                     .Where(ps => ps.StudentId == id)
@@ -252,9 +252,14 @@ namespace BusinessLogic.Services
                 {
                     _context.ParentStudents.Add(new ParentStudent { StudentId = id, ParentId = pid });
                 }
+                foreach (var existing in currentParents.Where(ps => !toRemove.Contains(ps.ParentId)))
+                {
+                    existing.UpdatedAt = DateTime.Now;
+                    existing.ModifiedByUserId = modifiedByUserId;
+                }
             }
 
-            if (dto.ChildIds != null && dto.ChildIds.Any())
+            if (dto.ChildIds != null)
             {
                 var currentChilds = await _context.ParentStudents
                     .Where(ps => ps.ParentId == id)
@@ -272,6 +277,11 @@ namespace BusinessLogic.Services
                 foreach (var sid in toAdd)
                 {
                     _context.ParentStudents.Add(new ParentStudent { ParentId = id, StudentId = sid });
+                }
+                foreach (var existing in currentChilds.Where(ps => !toRemove.Contains(ps.StudentId)))
+                {
+                    existing.UpdatedAt = DateTime.Now;
+                    existing.ModifiedByUserId = modifiedByUserId;
                 }
             }
 

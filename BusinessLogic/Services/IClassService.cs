@@ -43,7 +43,8 @@ namespace BusinessLogic.Services
             if (schoolYearId.HasValue)
                 query = query.Where(c => c.SchoolYearId == schoolYearId);
 
-            query = query.Where(c => includeInactive ? !c.IsActive : c.IsActive);
+            if (!includeInactive)
+                query = query.Where(c => c.IsActive);
 
             if (level.HasValue)
                 query = query.Where(c => c.Level == level.Value);

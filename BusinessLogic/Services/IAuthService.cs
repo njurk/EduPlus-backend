@@ -48,7 +48,7 @@ namespace BusinessLogic.Services
 
             if (!user.UserRoles.Any(ur => ur.Role.Level == 1))
             {
-                _eventLogService.Log("LOGIN_FAIL", user.Id, user.Email, roleLevels, "AdminLogin attempt");
+                _eventLogService.Log("LOGIN_FAIL", user.Id, user.Email, roleLevels, "admin login attempt");
                 throw new UnauthorizedAccessException("Panel administratora jest przeznaczony tylko dla administratorów");
             }
 
@@ -65,7 +65,7 @@ namespace BusinessLogic.Services
 
             if (maxLevel == 1 || maxLevel >= 3)
             {
-                _eventLogService.Log("LOGIN_FAIL", user.Id, user.Email, roleLevels, "TeacherLogin attempt");
+                _eventLogService.Log("LOGIN_FAIL", user.Id, user.Email, roleLevels, "teacher login attempt");
                 throw new UnauthorizedAccessException("Panel nauczyciela jest przeznaczony tylko dla nauczycieli");
             }
 
@@ -82,7 +82,7 @@ namespace BusinessLogic.Services
 
             if (maxLevel <= 2)
             {
-                _eventLogService.Log("LOGIN_FAIL", user.Id, user.Email, roleLevels, "MobileLogin attempt");
+                _eventLogService.Log("LOGIN_FAIL", user.Id, user.Email, roleLevels, "mobile login attempt");
                 throw new UnauthorizedAccessException("Aplikacja mobilna jest przeznaczona tylko dla uczniów i rodziców");
             }
 
@@ -161,7 +161,7 @@ namespace BusinessLogic.Services
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddHours(4),
+                Expires = DateTime.Now.AddHours(2),
                 Issuer = _configuration["Jwt:Issuer"],
                 Audience = _configuration["Jwt:Audience"],
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

@@ -13,7 +13,7 @@ namespace BusinessLogic.Services
 {
     public interface IAttendanceService
     {
-        Task<PaginatedResponse<AttendanceAdminDto>> GetAllForAdminAsync(bool includeInactive, int pageNumber = 1, int pageSize = 20, string? search = null, string? sortBy = null, bool sortDesc = true, int? classId = null, DateTime? date = null, string? subjectName = null, string? teacherName = null, string? attendanceTypeShortCode = null, int? orderNumber = null);
+        Task<PaginatedResponse<AttendanceAdminDto>> GetAllForAdminAsync(bool includeInactive, int pageNumber = 1, int pageSize = 20, string? search = null, string? sortBy = null, bool sortDesc = true, int? classId = null, DateTime? date = null, string? subjectName = null, string? teacherName = null, string? attendanceTypeShortCode = null, int? orderNumber = null, int? semesterId = null);
         Task<IEnumerable<Attendance>> GetAllAsync();
         Task<Attendance?> UpdateAsync(int id, int attendanceTypeId, IEmailService emailService);
     }
@@ -27,11 +27,12 @@ namespace BusinessLogic.Services
             _context = context;
         }
 
-        public async Task<PaginatedResponse<AttendanceAdminDto>> GetAllForAdminAsync(bool includeInactive, int pageNumber = 1, int pageSize = 20, string? search = null, string? sortBy = null, bool sortDesc = true, int? classId = null, DateTime? date = null, string? subjectName = null, string? teacherName = null, string? attendanceTypeShortCode = null, int? orderNumber = null)
+        public async Task<PaginatedResponse<AttendanceAdminDto>> GetAllForAdminAsync(bool includeInactive, int pageNumber = 1, int pageSize = 20, string? search = null, string? sortBy = null, bool sortDesc = true, int? classId = null, DateTime? date = null, string? subjectName = null, string? teacherName = null, string? attendanceTypeShortCode = null, int? orderNumber = null, int? semesterId = null)
         {
             var query = _context.AttendanceAdminList.AsNoTracking().AsQueryable();
 
-            query = query.Where(x => includeInactive ? !x.IsActive : x.IsActive);
+            if (!includeInactive)
+                query = query.Where(x => x.IsActive);
 
             if (classId.HasValue)
                 query = query.Where(a => a.ClassId == classId.Value);
@@ -53,6 +54,17 @@ namespace BusinessLogic.Services
 
             if (orderNumber.HasValue)
                 query = query.Where(a => a.OrderNumber == orderNumber.Value);
+
+            if (semesterId.HasValue)
+            {
+                var semester = await _context.Semesters.AsNoTracking().FirstOrDefaultAsync(s => s.Id == semesterId.Value);
+                if (semester != null)
+                {
+                    var startDate = semester.StartDate.ToDateTime(TimeOnly.MinValue);
+                    var endDate = semester.EndDate.ToDateTime(TimeOnly.MaxValue);
+                    query = query.Where(a => a.LessonDate >= startDate && a.LessonDate <= endDate);
+                }
+            }
 
             if (!string.IsNullOrWhiteSpace(search))
             {

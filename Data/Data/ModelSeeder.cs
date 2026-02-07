@@ -162,8 +162,8 @@ namespace Data.Data
                 new PageContent { Id = 115, Key = "title", Value = "Usprawiedliwienie", PageId = 29, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 116, Key = "tabs.week", Value = "Tydzień", PageId = 22, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 117, Key = "tabs.stats", Value = "Statystyki", PageId = 22, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new PageContent { Id = 118, Key = "section.unexcused", Value = "Nieusprawiedliwione", PageId = 25, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new PageContent { Id = 119, Key = "section.excused", Value = "Usprawiedliwione", PageId = 25, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null }
+                new PageContent { Id = 118, Key = "section.unexcused", Value = "Do usprawiedliwienia", PageId = 25, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 119, Key = "section.excused", Value = "Wysłane", PageId = 25, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null }
             );
 
             modelBuilder.Entity<Role>().HasData(

@@ -7,7 +7,7 @@ namespace BusinessLogic.Services
 {
     public interface IExcuseService
     {
-        Task<PaginatedResponse<ExcuseDto>> GetAllAsync(int pageNumber = 1, int pageSize = 20, string? search = null, string? sortBy = null, bool sortDesc = true, bool showInactive = false, string? statusFilter = null, int? classId = null);
+        Task<PaginatedResponse<ExcuseDto>> GetAllAsync(int pageNumber = 1, int pageSize = 20, string? search = null, string? sortBy = null, bool sortDesc = true, bool showInactive = false, string? statusFilter = null, int? classId = null, int? semesterId = null);
         Task<ExcuseDetailsDto?> GetByIdAsync(int id);
         Task<Excuse> CreateAsync(CreateExcuseDto dto, int parentId);
         Task<bool> AcceptAsync(int id, bool? isAccepted, int modifiedByUserId);
@@ -24,7 +24,7 @@ namespace BusinessLogic.Services
             _context = context;
         }
 
-        public async Task<PaginatedResponse<ExcuseDto>> GetAllAsync(int pageNumber = 1, int pageSize = 20, string? search = null, string? sortBy = null, bool sortDesc = true, bool showInactive = false, string? statusFilter = null, int? classId = null)
+        public async Task<PaginatedResponse<ExcuseDto>> GetAllAsync(int pageNumber = 1, int pageSize = 20, string? search = null, string? sortBy = null, bool sortDesc = true, bool showInactive = false, string? statusFilter = null, int? classId = null, int? semesterId = null)
         {
             var query = from e in _context.Excuses.AsNoTracking()
                         join s in _context.Users on e.StudentId equals s.Id
@@ -74,6 +74,21 @@ namespace BusinessLogic.Services
             if (classId.HasValue)
             {
                 query = query.Where(x => x.ClassId == classId.Value);
+            }
+
+            if (semesterId.HasValue)
+            {
+                var semester = await _context.Semesters.AsNoTracking().FirstOrDefaultAsync(s => s.Id == semesterId.Value);
+                if (semester != null)
+                {
+                    var startDate = semester.StartDate.ToDateTime(TimeOnly.MinValue);
+                    var endDate = semester.EndDate.ToDateTime(TimeOnly.MaxValue);
+                    query = query.Where(x => _context.ExcuseAttendances
+                        .Where(ea => ea.ExcuseId == x.e.Id)
+                        .Join(_context.Attendances, ea => ea.AttendanceId, a => a.Id, (ea, a) => a)
+                        .Join(_context.Lessons, a => a.LessonId, l => l.Id, (a, l) => l)
+                        .Any(l => l.Date >= startDate && l.Date <= endDate));
+                }
             }
 
             var projected = query.Select(x => new ExcuseDto
