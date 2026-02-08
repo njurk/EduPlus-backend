@@ -44,6 +44,7 @@ namespace BusinessLogic.Services
 
             query = sortBy?.ToLower() switch
             {
+                "id" => sortDesc ? query.OrderByDescending(t => t.Id) : query.OrderBy(t => t.Id),
                 "email" => sortDesc ? query.OrderByDescending(t => t.Email) : query.OrderBy(t => t.Email),
                 "reason" => sortDesc ? query.OrderByDescending(t => t.Reason!.Name) : query.OrderBy(t => t.Reason!.Name),
                 "isclosed" or "closed" => sortDesc ? query.OrderByDescending(t => t.IsClosed) : query.OrderBy(t => t.IsClosed),

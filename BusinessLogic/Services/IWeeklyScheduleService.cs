@@ -11,6 +11,7 @@ namespace BusinessLogic.Services
     public interface IWeeklyScheduleService
     {
         Task<List<LessonDto>> GetScheduleForClassAsync(int classId, int? semesterId = null);
+        Task<List<LessonDto>> GetScheduleForTeacherAsync(int teacherId, int? semesterId = null);
         Task<List<ScheduleTemplateDto>> GetAvailableForDateAsync(DateTime date, int? classId = null, int? teacherId = null, int? semesterId = null);
         Task<LessonDto> CreateOrUpdateAsync(WeeklyScheduleDto dto);
         Task<bool> DeleteAsync(int id);
@@ -59,6 +60,39 @@ namespace BusinessLogic.Services
             }).ToList();
 
             return result;
+        }
+
+        public async Task<List<LessonDto>> GetScheduleForTeacherAsync(int teacherId, int? semesterId = null)
+        {
+            var query = _context.WeeklySchedules
+                .Include(ws => ws.Subject)
+                .Include(ws => ws.Class)
+                .Include(ws => ws.Teacher)
+                .Include(ws => ws.Classroom)
+                .Include(ws => ws.LessonHour)
+                .Where(ws => ws.TeacherId == teacherId && ws.IsActive);
+
+            if (semesterId.HasValue)
+                query = query.Where(ws => ws.SemesterId == semesterId.Value);
+
+            var scheduleEntries = await query.ToListAsync();
+
+            return scheduleEntries.Select(ws => new LessonDto
+            {
+                Id = ws.Id,
+                SubjectId = ws.SubjectId,
+                SubjectName = ws.Subject != null ? ws.Subject.Name + (ws.Subject.IsActive ? "" : " (nieaktywny)") : "-",
+                ClassId = ws.ClassId,
+                ClassName = ws.Class != null ? $"{ws.Class.Level}{ws.Class.Letter}" + (ws.Class.IsActive ? "" : " (nieaktywna)") : "",
+                TeacherId = ws.TeacherId,
+                TeacherName = ws.Teacher != null ? $"{ws.Teacher.FirstName} {ws.Teacher.LastName}" + (ws.Teacher.IsActive ? "" : " (nieaktywny)") : "",
+                ClassroomId = ws.ClassroomId,
+                ClassroomName = ws.Classroom != null ? ws.Classroom.Name + (ws.Classroom.IsActive ? "" : " (nieaktywna)") : "",
+                DayOfWeek = ws.DayOfWeek,
+                OrderNumber = ws.LessonHour?.OrderNumber ?? 0,
+                StartTime = ws.LessonHour?.StartTime.ToString(@"HH\:mm") ?? "",
+                EndTime = ws.LessonHour?.EndTime.ToString(@"HH\:mm") ?? ""
+            }).ToList();
         }
 
         public async Task<List<ScheduleTemplateDto>> GetAvailableForDateAsync(DateTime date, int? classId = null, int? teacherId = null, int? semesterId = null)

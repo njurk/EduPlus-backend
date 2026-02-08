@@ -55,6 +55,7 @@ namespace API
             builder.Services.AddScoped<ILessonStatusService, LessonStatusService>();
 
             builder.Services.AddScoped<IGradeService, GradeService>();
+            builder.Services.AddScoped<IGradeColumnService, GradeColumnService>();
             builder.Services.AddScoped<IGradeTypeService, GradeTypeService>();
             builder.Services.AddScoped<IGradeCategoryService, GradeCategoryService>();
 

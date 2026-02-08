@@ -24,6 +24,9 @@ namespace Data.Data.Entities
         [ForeignKey(nameof(GradeCategoryId))]
         public virtual GradeCategory? GradeCategory { get; set; } = null!;
         public DateTime DateTime { get; set; } = DateTime.Now;
+        public int? GradeColumnId { get; set; }
+        [ForeignKey(nameof(GradeColumnId))]
+        public virtual GradeColumn? GradeColumn { get; set; }
         [MaxLength(255)]
         public string? Comment { get; set; }
         public bool IsActive { get; set; } = true;

@@ -13,6 +13,7 @@ namespace Shared.DTOs
         public int SubjectId { get; set; }
         public int GradeTypeId { get; set; }
         public int GradeCategoryId { get; set; }
+        public int? GradeColumnId { get; set; }
         public string? Comment { get; set; }
     }
 }

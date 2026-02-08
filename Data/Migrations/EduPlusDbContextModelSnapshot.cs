@@ -1990,6 +1990,9 @@ namespace Data.Migrations
                     b.Property<int>("GradeCategoryId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("GradeColumnId")
+                        .HasColumnType("int");
+
                     b.Property<int>("GradeTypeId")
                         .HasColumnType("int");
 
@@ -2016,6 +2019,8 @@ namespace Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("GradeCategoryId");
+
+                    b.HasIndex("GradeColumnId");
 
                     b.HasIndex("GradeTypeId");
 
@@ -2120,6 +2125,51 @@ namespace Data.Migrations
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Weight = 1
                         });
+                });
+
+            modelBuilder.Entity("Data.Data.Entities.GradeColumn", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ClassId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GradeCategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("Order")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SemesterId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SubjectId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TeacherId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GradeCategoryId");
+
+                    b.HasIndex("SemesterId");
+
+                    b.HasIndex("SubjectId");
+
+                    b.HasIndex("TeacherId");
+
+                    b.HasIndex("ClassId", "SubjectId", "SemesterId");
+
+                    b.ToTable("GradeColumns");
                 });
 
             modelBuilder.Entity("Data.Data.Entities.GradeType", b =>
@@ -3731,6 +3781,11 @@ namespace Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Data.Data.Entities.GradeColumn", "GradeColumn")
+                        .WithMany()
+                        .HasForeignKey("GradeColumnId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
                     b.HasOne("Data.Data.Entities.GradeType", "GradeType")
                         .WithMany()
                         .HasForeignKey("GradeTypeId")
@@ -3757,9 +3812,54 @@ namespace Data.Migrations
 
                     b.Navigation("GradeCategory");
 
+                    b.Navigation("GradeColumn");
+
                     b.Navigation("GradeType");
 
                     b.Navigation("Student");
+
+                    b.Navigation("Subject");
+
+                    b.Navigation("Teacher");
+                });
+
+            modelBuilder.Entity("Data.Data.Entities.GradeColumn", b =>
+                {
+                    b.HasOne("Data.Data.Entities.Class", "Class")
+                        .WithMany()
+                        .HasForeignKey("ClassId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Data.Data.Entities.GradeCategory", "GradeCategory")
+                        .WithMany()
+                        .HasForeignKey("GradeCategoryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Data.Data.Entities.Semester", "Semester")
+                        .WithMany()
+                        .HasForeignKey("SemesterId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Data.Data.Entities.Subject", "Subject")
+                        .WithMany()
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Data.Data.Entities.User", "Teacher")
+                        .WithMany()
+                        .HasForeignKey("TeacherId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Class");
+
+                    b.Navigation("GradeCategory");
+
+                    b.Navigation("Semester");
 
                     b.Navigation("Subject");
 

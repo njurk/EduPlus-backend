@@ -24,6 +24,7 @@ namespace Data.Data
         public DbSet<ExcuseAttendance> ExcuseAttendances { get; set; } = null!;
         public DbSet<Grade> Grades { get; set; } = null!;
         public DbSet<GradeCategory> GradeCategories { get; set; } = null!;
+        public DbSet<GradeColumn> GradeColumns { get; set; } = null!;
         public DbSet<GradeType> GradeTypes { get; set; } = null!;
         public DbSet<Lesson> Lessons { get; set; } = null!;
         public DbSet<LessonHour> LessonHours { get; set; } = null!;
@@ -157,6 +158,17 @@ namespace Data.Data
                 e.HasIndex(g => new { g.IsActive, g.CreatedAt });
                 e.HasOne(g => g.Student).WithMany().OnDelete(DeleteBehavior.Restrict);
                 e.HasOne(g => g.Teacher).WithMany().OnDelete(DeleteBehavior.Restrict);
+                e.HasOne(g => g.GradeColumn).WithMany().OnDelete(DeleteBehavior.SetNull);
+            });
+
+            modelBuilder.Entity<GradeColumn>(e =>
+            {
+                e.HasIndex(gc => new { gc.ClassId, gc.SubjectId, gc.SemesterId });
+                e.HasOne(gc => gc.Class).WithMany().OnDelete(DeleteBehavior.Restrict);
+                e.HasOne(gc => gc.Subject).WithMany().OnDelete(DeleteBehavior.Restrict);
+                e.HasOne(gc => gc.Semester).WithMany().OnDelete(DeleteBehavior.Restrict);
+                e.HasOne(gc => gc.GradeCategory).WithMany().OnDelete(DeleteBehavior.Restrict);
+                e.HasOne(gc => gc.Teacher).WithMany().OnDelete(DeleteBehavior.Restrict);
             });
 
             modelBuilder.Entity<Announcement>(e =>
