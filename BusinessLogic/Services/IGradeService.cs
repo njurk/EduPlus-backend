@@ -19,6 +19,8 @@ namespace BusinessLogic.Services
         Task<object?> UpdateAsync(int id, GradeDto dto);
         Task<bool> DeleteAsync(int id);
         Task<bool> RestoreAsync(int id);
+        Task<IEnumerable<object>> GetTeacherAssignmentsAsync(int teacherId, int yearId);
+        Task<object> CreateBulkAsync(BulkGradeCreateDto dto, int teacherId, IEmailService emailService);
     }
 
     public class GradeService : IGradeService
@@ -63,8 +65,8 @@ namespace BusinessLogic.Services
                     cs.OrderNumber,
                     Average = EduPlusDbContext.CalculateWeightedAverage(cs.StudentId, subjectId, start, end),
                     Grades = _context.Grades
-                        .Where(g => g.StudentId == cs.StudentId && g.SubjectId == subjectId && g.IsActive && g.CreatedAt >= start && g.CreatedAt <= end)
-                        .OrderBy(g => g.CreatedAt)
+                        .Where(g => g.StudentId == cs.StudentId && g.SubjectId == subjectId && g.IsActive && g.DateTime >= start && g.DateTime <= end)
+                        .OrderBy(g => g.DateTime)
                         .Select(g => new
                         {
                             g.Id,
@@ -74,7 +76,7 @@ namespace BusinessLogic.Services
                             g.Comment,
                             g.CreatedAt,
                             GradeType = new { g.GradeType.Numeric, g.GradeType.Name, g.GradeType.Value },
-                            GradeCategory = new { g.GradeCategory.Name },
+                            GradeCategory = new { g.GradeCategory.Name, g.GradeCategory.ColorHex },
                             TeacherName = g.Teacher.LastName + " " + g.Teacher.FirstName + (g.Teacher.IsActive ? "" : " (nieaktywny)")
                         }).ToList()
                 })
@@ -353,6 +355,70 @@ namespace BusinessLogic.Services
             item.UpdatedAt = DateTime.Now;
             await _context.SaveChangesAsync();
             return true;
+        }
+
+        public async Task<IEnumerable<object>> GetTeacherAssignmentsAsync(int teacherId, int yearId)
+        {
+            return await _context.TeacherAssignmentsList.AsNoTracking()
+                .Where(ta => ta.TeacherId == teacherId
+                    && _context.Classes.Any(c => c.Id == ta.ClassId && c.SchoolYearId == yearId))
+                .Select(ta => new
+                {
+                    ta.ClassId,
+                    ta.ClassName,
+                    ta.SubjectId,
+                    ta.SubjectName
+                })
+                .OrderBy(x => x.ClassName)
+                .ThenBy(x => x.SubjectName)
+                .ToListAsync();
+        }
+
+        public async Task<object> CreateBulkAsync(BulkGradeCreateDto dto, int teacherId, IEmailService emailService)
+        {
+            if (!await _context.GradeCategories.AnyAsync(gc => gc.Id == dto.GradeCategoryId && gc.IsActive))
+                throw new InvalidOperationException("Wybrana kategoria oceny nie istnieje lub jest nieaktywna");
+
+            var gradesJson = System.Text.Json.JsonSerializer.Serialize(
+                dto.Grades.Select(g => new { studentId = g.StudentId, gradeTypeId = g.GradeTypeId }));
+
+            var result = await _context.Database.ExecuteSqlRawAsync(
+                "EXEC sp_BulkInsertGrades @SubjectId = {0}, @GradeCategoryId = {1}, @GradeColumnId = {2}, @TeacherId = {3}, @GradesJson = {4}",
+                dto.SubjectId, dto.GradeCategoryId, (object?)dto.GradeColumnId ?? DBNull.Value, teacherId, gradesJson);
+
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    var cutoff = DateTime.Now.AddMinutes(-1);
+                    var gradeData = await _context.Grades.AsNoTracking()
+                        .Include(g => g.Student).Include(g => g.Subject)
+                        .Include(g => g.GradeType).Include(g => g.Teacher)
+                        .Where(g => g.TeacherId == teacherId && g.SubjectId == dto.SubjectId && g.CreatedAt >= cutoff)
+                        .Select(g => new
+                        {
+                            g.StudentId,
+                            StudentEmail = g.Student.Email,
+                            StudentName = g.Student.LastName + " " + g.Student.FirstName,
+                            SubjectName = g.Subject.Name,
+                            GradeValue = g.GradeType.Numeric + " (" + g.GradeType.Name + ")",
+                            TeacherName = g.Teacher.LastName + " " + g.Teacher.FirstName,
+                            g.CreatedAt
+                        }).ToListAsync();
+
+                    foreach (var gd in gradeData)
+                    {
+                        await emailService.SendNewGradeEmailAsync(gd.StudentEmail, gd.StudentName, gd.SubjectName, gd.GradeValue, gd.TeacherName, gd.CreatedAt);
+                        var parents = await _context.ParentStudents.Include(ps => ps.Parent)
+                            .Where(ps => ps.StudentId == gd.StudentId).Select(ps => ps.Parent!.Email).ToListAsync();
+                        foreach (var email in parents)
+                            await emailService.SendNewGradeEmailAsync(email, gd.StudentName, gd.SubjectName, gd.GradeValue, gd.TeacherName, gd.CreatedAt);
+                    }
+                }
+                catch { }
+            });
+
+            return new { count = dto.Grades.Count };
         }
     }
 }

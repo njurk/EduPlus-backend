@@ -11,11 +11,11 @@ namespace BusinessLogic.Services
 {
     public interface ILessonService
     {
-        Task<PaginatedResponse<LessonDto>> GetAllAsync(int pageNumber = 1, int pageSize = 20, string? search = null, string? sortBy = null, bool sortDesc = true, int? classId = null, int? subjectId = null, int? semesterId = null, int? schoolYearId = null, bool showInactive = false, int? statusId = null, int? classroomId = null, int? teacherId = null);
+        Task<PaginatedResponse<LessonDto>> GetAllAsync(int pageNumber = 1, int pageSize = 20, string? search = null, string? sortBy = null, bool sortDesc = true, int? classId = null, int? subjectId = null, int? semesterId = null, int? schoolYearId = null, bool showInactive = false, int? statusId = null, int? classroomId = null, int? teacherId = null, string? date = null);
         Task<Lesson?> GetByIdAsync(int id);
         Task<LessonDetailsDto?> GetDetailsAsync(int id);
         Task<IEnumerable<LessonAttendanceDto>> GetLessonAttendanceAsync(int lessonId);
-        Task<bool> UpdateLessonAttendanceAsync(int lessonId, int studentId, int? attendanceTypeId);
+        Task<IEnumerable<LessonAttendanceDto>?> UpdateLessonAttendanceAsync(int lessonId, int studentId, int? attendanceTypeId);
         Task<Lesson> CreateAsync(CreateLessonDto dto);
         Task<Lesson?> UpdateAsync(int id, UpdateLessonDto dto);
         Task<bool> DeleteAsync(int id);
@@ -32,7 +32,7 @@ namespace BusinessLogic.Services
             _context = context;
         }
 
-        public async Task<PaginatedResponse<LessonDto>> GetAllAsync(int pageNumber = 1, int pageSize = 20, string? search = null, string? sortBy = null, bool sortDesc = true, int? classId = null, int? subjectId = null, int? semesterId = null, int? schoolYearId = null, bool showInactive = false, int? statusId = null, int? classroomId = null, int? teacherId = null)
+        public async Task<PaginatedResponse<LessonDto>> GetAllAsync(int pageNumber = 1, int pageSize = 20, string? search = null, string? sortBy = null, bool sortDesc = true, int? classId = null, int? subjectId = null, int? semesterId = null, int? schoolYearId = null, bool showInactive = false, int? statusId = null, int? classroomId = null, int? teacherId = null, string? date = null)
         {
             var query = _context.LessonsAdminList.AsNoTracking()
                 .Where(l => showInactive ? !l.IsActive : l.IsActive)
@@ -74,6 +74,13 @@ namespace BusinessLogic.Services
             if (teacherId.HasValue)
                 query = query.Where(l => l.TeacherId == teacherId.Value);
 
+            if (!string.IsNullOrWhiteSpace(date) && DateOnly.TryParse(date, out var filterDate))
+            {
+                var filterDateTime = filterDate.ToDateTime(TimeOnly.MinValue);
+                var filterDateEnd = filterDate.ToDateTime(TimeOnly.MaxValue);
+                query = query.Where(l => l.Date >= filterDateTime && l.Date <= filterDateEnd);
+            }
+
             if (!string.IsNullOrWhiteSpace(search))
             {
                 var searchLower = search.ToLower();
@@ -109,7 +116,6 @@ namespace BusinessLogic.Services
                 "date" => sortDesc ? projected.OrderByDescending(l => l.Date) : projected.OrderBy(l => l.Date),
                 "subject" => sortDesc ? projected.OrderByDescending(l => l.SubjectName) : projected.OrderBy(l => l.SubjectName),
                 "class" => sortDesc ? projected.OrderByDescending(l => l.ClassName) : projected.OrderBy(l => l.ClassName),
-                "ordernumber" => sortDesc ? projected.OrderByDescending(l => l.OrderNumber) : projected.OrderBy(l => l.OrderNumber),
                 "created" => sortDesc ? projected.OrderByDescending(l => l.CreatedAt) : projected.OrderBy(l => l.CreatedAt),
                 _ => sortDesc ? projected.OrderByDescending(l => l.Date).ThenByDescending(l => l.OrderNumber) : projected.OrderBy(l => l.Date).ThenBy(l => l.OrderNumber)
             };
@@ -384,10 +390,10 @@ namespace BusinessLogic.Services
             return result;
         }
 
-        public async Task<bool> UpdateLessonAttendanceAsync(int lessonId, int studentId, int? attendanceTypeId)
+        public async Task<IEnumerable<LessonAttendanceDto>?> UpdateLessonAttendanceAsync(int lessonId, int studentId, int? attendanceTypeId)
         {
             var lesson = await _context.Lessons.FindAsync(lessonId);
-            if (lesson == null) return false;
+            if (lesson == null) return null;
 
             var existing = await _context.Attendances
                 .FirstOrDefaultAsync(a => a.LessonId == lessonId && a.StudentId == studentId);
@@ -424,7 +430,7 @@ namespace BusinessLogic.Services
             }
 
             await _context.SaveChangesAsync();
-            return true;
+            return await GetLessonAttendanceAsync(lessonId);
         }
     }
 }

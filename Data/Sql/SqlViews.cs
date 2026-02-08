@@ -137,7 +137,7 @@ namespace Data.Sql
                 at.Name as TypeName,
                 at.ShortCode,
                 at.ColorHex,
-                isnull(mb.LastName + ' ' + mb.FirstName, null) as ModifiedByName
+                isnull(mb.LastName + ' ' + mb.FirstName, 'System') as ModifiedByName
             from Attendances a
             join Users s on a.StudentId = s.Id
             join Lessons l on a.LessonId = l.Id
@@ -170,7 +170,7 @@ namespace Data.Sql
                 gc.Name as CategoryName,
                 gc.ColorHex as CategoryColorHex,
                 t.LastName + ' ' + t.FirstName as TeacherName,
-                isnull(mb.LastName + ' ' + mb.FirstName, null) as ModifiedByName
+                isnull(mb.LastName + ' ' + mb.FirstName, 'System') as ModifiedByName
             from Grades g
             join Users s on g.StudentId = s.Id
             join Subjects sub on g.SubjectId = sub.Id
@@ -204,7 +204,7 @@ namespace Data.Sql
                 l.CreatedAt,
                 l.UpdatedAt,
                 l.IsActive,
-                isnull(mb.LastName + ' ' + mb.FirstName, null) as ModifiedByName
+                isnull(mb.LastName + ' ' + mb.FirstName, 'System') as ModifiedByName
             from Lessons l
             join Subjects sub on l.SubjectId = sub.Id
             join Classes c on l.ClassId = c.Id
@@ -213,6 +213,19 @@ namespace Data.Sql
             join LessonHours lh on l.LessonHourId = lh.Id
             left join LessonStatuses ls on l.StatusId = ls.Id
             left join Users mb on l.ModifiedByUserId = mb.Id;";
+
+        public const string TeacherAssignments = @"
+            create or alter view [dbo].[vw_TeacherAssignments] as
+            select distinct
+                tcs.TeacherId,
+                tcs.ClassId,
+                cast(c.Level as nvarchar(10)) + c.Letter as ClassName,
+                tcs.SubjectId,
+                sub.Name as SubjectName
+            from TeacherClassSubjects tcs
+            join Classes c on tcs.ClassId = c.Id
+            join Subjects sub on tcs.SubjectId = sub.Id
+            where tcs.IsActive = 1 and c.IsActive = 1;";
 
         public const string DropDashboardStats = "drop view if exists [dbo].[vw_DashboardStatsView]";
         public const string DropParentStudent = "drop view if exists [dbo].[vw_ParentStudentView]";
@@ -223,5 +236,6 @@ namespace Data.Sql
         public const string DropAttendanceAdmin = "drop view if exists [dbo].[vw_AttendanceAdmin]";
         public const string DropGradesAdmin = "drop view if exists [dbo].[vw_GradesAdmin]";
         public const string DropLessonsAdmin = "drop view if exists [dbo].[vw_LessonsAdmin]";
+        public const string DropTeacherAssignments = "drop view if exists [dbo].[vw_TeacherAssignments]";
     }
 }

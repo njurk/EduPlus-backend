@@ -53,10 +53,11 @@ namespace Data.Data
         public DbSet<AttendanceAdminView> AttendanceAdminList { get; set; }
         public DbSet<GradesAdminView> GradesAdminList { get; set; }
         public DbSet<LessonsAdminView> LessonsAdminList { get; set; }
+        public DbSet<TeacherAssignmentView> TeacherAssignmentsList { get; set; }
 
 
         [DbFunction("fn_CalculateWeightedAverage", "dbo")]
-        public static decimal CalculateWeightedAverage(int studentId, int subjectId, DateTime startDate, DateTime endDate)
+        public static decimal? CalculateWeightedAverage(int studentId, int subjectId, DateTime startDate, DateTime endDate)
         {
             throw new NotSupportedException();
         }
@@ -236,6 +237,7 @@ namespace Data.Data
             modelBuilder.Entity<AttendanceAdminView>().HasNoKey().ToView("vw_AttendanceAdmin");
             modelBuilder.Entity<GradesAdminView>().HasNoKey().ToView("vw_GradesAdmin");
             modelBuilder.Entity<LessonsAdminView>().HasNoKey().ToView("vw_LessonsAdmin");
+            modelBuilder.Entity<TeacherAssignmentView>().HasNoKey().ToView("vw_TeacherAssignments");
 
             ModelSeeder.Seed(modelBuilder);
         }
@@ -259,6 +261,9 @@ namespace Data.Data
             Database.ExecuteSqlRaw(Sql.SqlViews.AttendanceAdmin);
             Database.ExecuteSqlRaw(Sql.SqlViews.GradesAdmin);
             Database.ExecuteSqlRaw(Sql.SqlViews.LessonsAdmin);
+            Database.ExecuteSqlRaw(Sql.SqlViews.TeacherAssignments);
+
+            Database.ExecuteSqlRaw(Sql.SqlProcedures.BulkInsertGrades);
         }
     }
 }

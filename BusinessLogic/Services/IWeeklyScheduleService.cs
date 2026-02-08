@@ -128,6 +128,7 @@ namespace BusinessLogic.Services
                 .Select(ws => new ScheduleTemplateDto
                 {
                     Id = ws.Id,
+                    SubjectId = ws.SubjectId,
                     SubjectName = ws.Subject != null ? ws.Subject.Name + (ws.Subject.IsActive ? "" : " (nieaktywny)") : "-",
                     ClassName = ws.Class != null ? $"{ws.Class.Level}{ws.Class.Letter}" + (ws.Class.IsActive ? "" : " (nieaktywna)") : "",
                     TeacherName = ws.Teacher != null ? $"{ws.Teacher.FirstName} {ws.Teacher.LastName}" + (ws.Teacher.IsActive ? "" : " (nieaktywny)") : "",

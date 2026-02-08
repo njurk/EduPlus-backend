@@ -25,6 +25,7 @@ namespace BusinessLogic.Services
         Task UpdateSubjectTeacherAsync(int classSubjectId, int teacherId, int userId);
         Task<Class> UpdateAsync(int id, Class entity);
         Task<bool> DeleteAsync(int id);
+        Task<IEnumerable<object>> GetStudentsWithParentsAsync(int classId);
     }
 
     public class ClassService : IClassService
@@ -499,6 +500,30 @@ namespace BusinessLogic.Services
             classSubject.ModifiedByUserId = userId;
 
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<object>> GetStudentsWithParentsAsync(int classId)
+        {
+            var students = await _context.ClassStudents.AsNoTracking()
+                .Where(cs => cs.ClassId == classId && cs.IsActive)
+                .OrderBy(cs => cs.OrderNumber)
+                .Select(cs => new
+                {
+                    cs.StudentId,
+                    cs.OrderNumber,
+                    StudentName = cs.Student.LastName + " " + cs.Student.FirstName,
+                    Parents = _context.ParentStudents
+                        .Where(ps => ps.StudentId == cs.StudentId)
+                        .Select(ps => new
+                        {
+                            ps.Parent!.Id,
+                            Name = ps.Parent.LastName + " " + ps.Parent.FirstName,
+                            ps.Parent.Email,
+                            ps.Parent.Phone
+                        }).ToList()
+                }).ToListAsync();
+
+            return students;
         }
     }
 }

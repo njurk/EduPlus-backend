@@ -16,7 +16,7 @@ namespace Data.Sql
 
                 select top 1 @LastEndDate = EndDate from SchoolYears order by EndDate desc;
 
-                if @LastEndDate is null set @LastEndDate = '2023-08-31';
+                if @LastEndDate is null throw 50001, 'Brak aktywnego roku szkolnego. Należy utworzyć w konfiguracji systemu', 1;
 
                 set @NewStartDate = dateadd(day, 1, @LastEndDate);
                 set @NewEndDate = dateadd(year, 1, @LastEndDate);
@@ -102,9 +102,44 @@ namespace Data.Sql
                 select @@rowcount as UpdatedCount;
             end;";
 
+        public const string BulkInsertGrades = @"
+            create or alter procedure [dbo].[sp_BulkInsertGrades]
+                @SubjectId int,
+                @GradeCategoryId int,
+                @GradeColumnId int = null,
+                @TeacherId int,
+                @GradesJson nvarchar(max)
+            as
+            begin
+                set nocount on;
+
+                insert into Grades (StudentId, SubjectId, GradeTypeId, GradeCategoryId, GradeColumnId, Comment, DateTime, TeacherId, IsActive, CreatedAt, UpdatedAt)
+                select
+                    g.StudentId,
+                    @SubjectId,
+                    g.GradeTypeId,
+                    @GradeCategoryId,
+                    @GradeColumnId,
+                    g.Comment,
+                    getdate(),
+                    @TeacherId,
+                    1,
+                    getdate(),
+                    getdate()
+                from openjson(@GradesJson)
+                with (
+                    StudentId int '$.studentId',
+                    GradeTypeId int '$.gradeTypeId',
+                    Comment nvarchar(255) '$.comment'
+                ) g;
+
+                select @@rowcount as InsertedCount;
+            end;";
+
         public const string DropGenerateNextSchoolYear = "drop procedure if exists [dbo].[sp_GenerateNextSchoolYear]";
         public const string DropDeactivateLessonAttendance = "drop procedure if exists [dbo].[sp_DeactivateLessonAttendance]";
         public const string DropGenerateLessonAttendance = "drop procedure if exists [dbo].[sp_GenerateLessonAttendance]";
         public const string DropRecalculateClassStudentOrder = "drop procedure if exists [dbo].[sp_RecalculateClassStudentOrder]";
+        public const string DropBulkInsertGrades = "drop procedure if exists [dbo].[sp_BulkInsertGrades]";
     }
 }

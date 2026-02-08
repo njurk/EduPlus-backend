@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(EduPlusDbContext))]
-    [Migration("20260208003506_Init")]
+    [Migration("20260208174532_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -3545,6 +3545,30 @@ namespace Data.Migrations
                     b.ToTable((string)null);
 
                     b.ToView("vw_ParentStudentView", (string)null);
+                });
+
+            modelBuilder.Entity("Data.Data.EntitiesForView.TeacherAssignmentView", b =>
+                {
+                    b.Property<int>("ClassId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ClassName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SubjectId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SubjectName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TeacherId")
+                        .HasColumnType("int");
+
+                    b.ToTable((string)null);
+
+                    b.ToView("vw_TeacherAssignments", (string)null);
                 });
 
             modelBuilder.Entity("Data.Data.EntitiesForView.UserListView", b =>

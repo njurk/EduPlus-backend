@@ -3,6 +3,7 @@ namespace Shared.DTOs
     public class ScheduleTemplateDto
     {
         public int Id { get; set; }
+        public int SubjectId { get; set; }
         public string SubjectName { get; set; } = "";
         public string ClassName { get; set; } = "";
         public string TeacherName { get; set; } = "";

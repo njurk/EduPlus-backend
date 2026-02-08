@@ -109,4 +109,29 @@ public class GradeController : ControllerBase
         if (!success) return NotFound();
         return Ok(new { message = "Przywrócono", id });
     }
+
+    [HttpGet("teacher-assignments")]
+    public async Task<IActionResult> GetTeacherAssignments([FromQuery] int yearId)
+    {
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier) ?? User.FindFirst("id");
+        if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out int teacherId)) return Unauthorized();
+        return Ok(await _service.GetTeacherAssignmentsAsync(teacherId, yearId));
+    }
+
+    [HttpPost("bulk")]
+    public async Task<IActionResult> CreateBulk(BulkGradeCreateDto dto)
+    {
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier) ?? User.FindFirst("id");
+        if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out int teacherId)) return Unauthorized();
+
+        try
+        {
+            var result = await _service.CreateBulkAsync(dto, teacherId, _emailService);
+            return Ok(result);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+    }
 }

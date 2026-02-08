@@ -29,9 +29,10 @@ public class LessonController : ControllerBase
         [FromQuery] bool showInactive = false,
         [FromQuery] int? statusId = null,
         [FromQuery] int? classroomId = null,
-        [FromQuery] int? teacherId = null)
+        [FromQuery] int? teacherId = null,
+        [FromQuery] string? date = null)
     {
-        var result = await _service.GetAllAsync(pageNumber, pageSize, search, sortBy, sortDesc, classId, subjectId, semesterId, schoolYearId, showInactive, statusId, classroomId, teacherId);
+        var result = await _service.GetAllAsync(pageNumber, pageSize, search, sortBy, sortDesc, classId, subjectId, semesterId, schoolYearId, showInactive, statusId, classroomId, teacherId, date);
         return Ok(result);
     }
 
@@ -61,9 +62,9 @@ public class LessonController : ControllerBase
     [HttpPatch("{id}/attendance/{studentId}")]
     public async Task<IActionResult> UpdateAttendance(int id, int studentId, [FromBody] UpdateLessonAttendanceDto dto)
     {
-        var success = await _service.UpdateLessonAttendanceAsync(id, studentId, dto.AttendanceTypeId);
-        if (!success) return NotFound();
-        return NoContent();
+        var result = await _service.UpdateLessonAttendanceAsync(id, studentId, dto.AttendanceTypeId);
+        if (result == null) return NotFound();
+        return Ok(result);
     }
 
     [HttpPost]

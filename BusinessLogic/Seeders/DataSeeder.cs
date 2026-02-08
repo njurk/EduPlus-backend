@@ -595,6 +595,37 @@
             _context.Lessons.AddRange(generatedLessons);
             _context.SaveChanges();
 
+            var tcsEntries = _context.TeacherClassSubjects
+                .Where(t => t.IsActive)
+                .Select(t => new { t.ClassId, t.SubjectId, t.TeacherId })
+                .ToList();
+
+            var gradeColumns = new List<GradeColumn>();
+            var columnLookup = new Dictionary<(int ClassId, int SubjectId, int CategoryId), GradeColumn>();
+
+            foreach (var tcs in tcsEntries)
+            {
+                int order = 0;
+                foreach (var categoryId in gradeCategoryIds)
+                {
+                    var column = new GradeColumn
+                    {
+                        Name = "Tytuł",
+                        ClassId = tcs.ClassId,
+                        SubjectId = tcs.SubjectId,
+                        SemesterId = 1,
+                        GradeCategoryId = categoryId,
+                        TeacherId = tcs.TeacherId,
+                        Order = ++order
+                    };
+                    gradeColumns.Add(column);
+                    columnLookup[(tcs.ClassId, tcs.SubjectId, categoryId)] = column;
+                }
+            }
+
+            _context.GradeColumns.AddRange(gradeColumns);
+            _context.SaveChanges();
+
             var attendances = new List<Attendance>();
             var grades = new List<Grade>();
             var attendanceCheck = new HashSet<(int StudentId, int LessonId)>();
@@ -628,13 +659,17 @@
 
                         foreach (var lesson in selectedForGrades)
                         {
+                            var categoryId = gradeCategoryIds[_random.Next(gradeCategoryIds.Count)];
+                            var columnId = columnLookup.TryGetValue((classId, subjectId, categoryId), out var col) ? col.Id : (int?)null;
+
                             grades.Add(new Grade
                             {
                                 StudentId = studentId,
                                 TeacherId = lesson.TeacherId,
                                 SubjectId = subjectId,
                                 GradeTypeId = gradeTypeIds[_random.Next(gradeTypeIds.Count)],
-                                GradeCategoryId = gradeCategoryIds[_random.Next(gradeCategoryIds.Count)],
+                                GradeCategoryId = categoryId,
+                                GradeColumnId = columnId,
                                 DateTime = lesson.Date,
                                 Comment = "test",
                                 IsActive = true,

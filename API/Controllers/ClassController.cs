@@ -30,6 +30,12 @@ public class ClassController : ControllerBase
         return Ok(result);
     }
 
+    [HttpGet("{id}/student-parents")]
+    public async Task<IActionResult> GetStudentsWithParents(int id)
+    {
+        return Ok(await _service.GetStudentsWithParentsAsync(id));
+    }
+
     [HttpGet("{classId}/candidates")]
     public async Task<IActionResult> GetStudentCandidates(int classId, string search = "")
     {

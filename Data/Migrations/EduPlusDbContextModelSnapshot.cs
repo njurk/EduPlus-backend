@@ -3544,6 +3544,30 @@ namespace Data.Migrations
                     b.ToView("vw_ParentStudentView", (string)null);
                 });
 
+            modelBuilder.Entity("Data.Data.EntitiesForView.TeacherAssignmentView", b =>
+                {
+                    b.Property<int>("ClassId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ClassName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SubjectId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SubjectName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TeacherId")
+                        .HasColumnType("int");
+
+                    b.ToTable((string)null);
+
+                    b.ToView("vw_TeacherAssignments", (string)null);
+                });
+
             modelBuilder.Entity("Data.Data.EntitiesForView.UserListView", b =>
                 {
                     b.Property<DateTime>("CreatedAt")
