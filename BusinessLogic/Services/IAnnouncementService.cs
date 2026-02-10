@@ -46,6 +46,7 @@ namespace BusinessLogic.Services
                 .Where(a => showInactive ? !a.IsActive : a.IsActive);
 
             query = query.Where(a =>
+                a.AuthorId == userId ||
                 a.AnnouncementTargets.Any(at => at.RoleId == null) ||
                 a.AnnouncementTargets.Any(at => at.RoleId != null && userRoleIds.Contains(at.RoleId.Value))
             );

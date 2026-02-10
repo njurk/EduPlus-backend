@@ -136,7 +136,8 @@ namespace BusinessLogic.Services
                 UserEmail = user.Email,
                 UserName = $"{user.FirstName} {user.LastName}",
                 Roles = user.UserRoles.Select(ur => ur.Role.Name).ToList(),
-                MaxRoleLevel = user.UserRoles.Max(ur => ur.Role.Level)
+                MaxRoleLevel = user.UserRoles.Max(ur => ur.Role.Level),
+                IsHomeroomTeacher = _context.Classes.Any(c => c.HomeroomTeacherId == user.Id && c.IsActive)
             };
         }
 
@@ -161,7 +162,7 @@ namespace BusinessLogic.Services
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddHours(2),
+                Expires = DateTime.Now.AddHours(4),
                 Issuer = _configuration["Jwt:Issuer"],
                 Audience = _configuration["Jwt:Audience"],
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

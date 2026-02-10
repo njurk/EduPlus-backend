@@ -53,7 +53,8 @@ namespace BusinessLogic.Services
             if (!string.IsNullOrWhiteSpace(search))
             {
                 var searchLower = search.ToLower().Trim();
-                query = query.Where(c => (c.Level.ToString() + c.Letter).ToLower().Contains(searchLower));
+                query = query.Where(c => (c.Level.ToString() + c.Letter).ToLower().Contains(searchLower)
+                    || (c.HomeroomTeacher != null && (c.HomeroomTeacher.LastName + " " + c.HomeroomTeacher.FirstName).ToLower().Contains(searchLower)));
             }
 
             var projected = query
@@ -65,6 +66,8 @@ namespace BusinessLogic.Services
                     c.Letter,
                     c.SchoolYearId,
                     c.IsActive,
+                    c.HomeroomTeacherId,
+                    HomeroomTeacherName = c.HomeroomTeacher != null ? c.HomeroomTeacher.LastName + " " + c.HomeroomTeacher.FirstName : null,
                     c.CreatedAt,
                     c.UpdatedAt,
                     StudentCount = c.ClassStudents.Count(cs => cs.IsActive)
@@ -195,9 +198,24 @@ namespace BusinessLogic.Services
                 TeacherName = s.TeacherInfo?.Name
             });
 
+            var homeroomTeacher = classEntity.HomeroomTeacherId.HasValue
+                ? await _context.Users.AsNoTracking().Where(u => u.Id == classEntity.HomeroomTeacherId).Select(u => u.LastName + " " + u.FirstName).FirstOrDefaultAsync()
+                : null;
+
             return new
             {
-                ClassInfo = classEntity,
+                ClassInfo = new
+                {
+                    classEntity.Id,
+                    classEntity.Level,
+                    classEntity.Letter,
+                    classEntity.SchoolYearId,
+                    classEntity.IsActive,
+                    classEntity.HomeroomTeacherId,
+                    HomeroomTeacherName = homeroomTeacher,
+                    classEntity.CreatedAt,
+                    classEntity.UpdatedAt
+                },
                 Students = students,
                 Subjects = subjects
             };
@@ -234,6 +252,12 @@ namespace BusinessLogic.Services
             );
 
             if (exists) throw new InvalidOperationException($"Klasa {entity.Level}{entity.Letter} już istnieje w tym roku szkolnym");
+
+            if (entity.HomeroomTeacherId.HasValue)
+            {
+                var teacherTaken = await _context.Classes.AnyAsync(c => c.HomeroomTeacherId == entity.HomeroomTeacherId && c.IsActive);
+                if (teacherTaken) throw new InvalidOperationException("Ten nauczyciel jest już wychowawcą innej klasy");
+            }
 
             entity.CreatedAt = DateTime.Now;
             entity.UpdatedAt = DateTime.Now;
@@ -395,12 +419,19 @@ namespace BusinessLogic.Services
 
             if (exists) throw new InvalidOperationException($"Klasa {entity.Level}{entity.Letter} już istnieje w tym roku szkolnym");
 
+            if (entity.HomeroomTeacherId.HasValue)
+            {
+                var teacherTaken = await _context.Classes.AnyAsync(c => c.HomeroomTeacherId == entity.HomeroomTeacherId && c.IsActive && c.Id != id);
+                if (teacherTaken) throw new InvalidOperationException("Ten nauczyciel jest już wychowawcą innej klasy");
+            }
+
             var dbClass = await _context.Classes.FindAsync(id);
             if (dbClass == null) throw new KeyNotFoundException("Klasa nie znaleziona");
 
             dbClass.Level = entity.Level;
             dbClass.Letter = entity.Letter;
             dbClass.IsActive = entity.IsActive;
+            dbClass.HomeroomTeacherId = entity.HomeroomTeacherId;
             dbClass.UpdatedAt = DateTime.Now;
 
             await _context.SaveChangesAsync();

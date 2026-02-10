@@ -15,6 +15,9 @@ namespace Data.Data.Entities
         [ForeignKey(nameof(SchoolYearId))]
         public virtual SchoolYear? SchoolYear { get; set; } = null!;
         public bool IsActive { get; set; } = true;
+        public int? HomeroomTeacherId { get; set; }
+        [ForeignKey(nameof(HomeroomTeacherId))]
+        public virtual User? HomeroomTeacher { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
         public int? ModifiedByUserId { get; set; }

@@ -10,7 +10,6 @@ namespace API.Controllers
     public class DashboardController : ControllerBase
     {
         private readonly IDashboardService _service;
-        private static readonly DateTime _startTime = DateTime.Now;
 
         public DashboardController(IDashboardService service)
         {
@@ -21,19 +20,6 @@ namespace API.Controllers
         public async Task<IActionResult> GetSummary()
         {
             return Ok(await _service.GetSummaryAsync());
-        }
-
-        [HttpGet("uptime")]
-        [AllowAnonymous]
-        public IActionResult GetUptime()
-        {
-            var uptime = DateTime.Now - _startTime;
-            return Ok(new
-            {
-                StartedAt = _startTime.ToString("yyyy-MM-dd HH:mm:ss"),
-                Uptime = $"{(int)uptime.TotalDays}d {uptime.Hours}h {uptime.Minutes}m {uptime.Seconds}s",
-                UptimeSeconds = (int)uptime.TotalSeconds
-            });
         }
     }
 }

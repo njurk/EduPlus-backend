@@ -49,6 +49,11 @@
                 SeedUsers(passwordHashService);
             }
 
+            if (_context.Classes.Any(c => c.HomeroomTeacherId == null))
+            {
+                AssignHomeroomTeachers();
+            }
+
             if (!_context.SubjectTeachers.Any())
             {
                 SeedSubjectTeachers();
@@ -561,10 +566,10 @@
 
             var weeklySchedules = _context.WeeklySchedules.ToList();
             if (!weeklySchedules.Any()) return;
-
             var today = DateTime.Now.Date;
             var startDate = today.AddDays(-30);
             var generatedLessons = new List<Lesson>();
+            var counter = new Dictionary<(int ClassId, int SubjectId), int>();
 
             for (var date = startDate; date <= today; date = date.AddDays(1))
             {
@@ -574,6 +579,10 @@
                 var dailySchedules = weeklySchedules.Where(ws => ws.DayOfWeek == dayOfWeek).ToList();
                 foreach (var slot in dailySchedules)
                 {
+                    var key = (slot.ClassId, slot.SubjectId);
+                    counter.TryAdd(key, 0);
+                    counter[key]++;
+
                     generatedLessons.Add(new Lesson
                     {
                         ClassId = slot.ClassId,
@@ -581,7 +590,7 @@
                         TeacherId = slot.TeacherId,
                         ClassroomId = slot.ClassroomId,
                         LessonHourId = slot.LessonHourId,
-                        Topic = $"Temat testowy",
+                        Topic = $"Temat {counter[key]}",
                         StatusId = 1,
                         IsActive = true,
                         Date = date,
@@ -967,6 +976,18 @@
             };
 
             _context.Classes.AddRange(classes);
+            _context.SaveChanges();
+        }
+
+        private void AssignHomeroomTeachers()
+        {
+            var teacher1Id = _context.Users.Where(u => u.Email == teacherMail).Select(u => u.Id).FirstOrDefault();
+            var teacher2Id = _context.Users.Where(u => u.Email == "jnowak@szkola.edu.pl").Select(u => u.Id).FirstOrDefault();
+
+            var classes = _context.Classes.OrderBy(c => c.Id).ToList();
+            if (classes.Count >= 1 && teacher1Id > 0) classes[0].HomeroomTeacherId = teacher1Id;
+            if (classes.Count >= 2 && teacher2Id > 0) classes[1].HomeroomTeacherId = teacher2Id;
+
             _context.SaveChanges();
         }
 

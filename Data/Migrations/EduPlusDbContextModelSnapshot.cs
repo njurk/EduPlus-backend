@@ -42,9 +42,6 @@ namespace Data.Migrations
                     b.Property<int?>("ModifiedByUserId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Position")
-                        .HasColumnType("int");
-
                     b.Property<int>("TargetId")
                         .HasColumnType("int");
 
@@ -69,139 +66,8 @@ namespace Data.Migrations
                             Id = 1,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Link = "system",
-                            Position = 1,
                             TargetId = 5,
                             Title = "System",
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Link = "dashboard",
-                            Position = 1,
-                            TargetId = 1,
-                            Title = "Dashboard",
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Link = "users",
-                            Position = 2,
-                            TargetId = 1,
-                            Title = "Użytkownicy",
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Link = "announcements",
-                            Position = 3,
-                            TargetId = 1,
-                            Title = "Ogłoszenia",
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
-                        },
-                        new
-                        {
-                            Id = 5,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Link = "tickets",
-                            Position = 4,
-                            TargetId = 1,
-                            Title = "Zgłoszenia",
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
-                        },
-                        new
-                        {
-                            Id = 6,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Link = "excuses",
-                            Position = 5,
-                            TargetId = 1,
-                            Title = "Usprawiedliwienia",
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
-                        },
-                        new
-                        {
-                            Id = 7,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Link = "lessons",
-                            Position = 6,
-                            TargetId = 1,
-                            Title = "Lekcje",
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
-                        },
-                        new
-                        {
-                            Id = 8,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Link = "schedule",
-                            Position = 7,
-                            TargetId = 1,
-                            Title = "Plan lekcji",
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
-                        },
-                        new
-                        {
-                            Id = 9,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Link = "grades",
-                            Position = 8,
-                            TargetId = 1,
-                            Title = "Oceny",
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
-                        },
-                        new
-                        {
-                            Id = 10,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Link = "attendance",
-                            Position = 9,
-                            TargetId = 1,
-                            Title = "Frekwencja",
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
-                        },
-                        new
-                        {
-                            Id = 11,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Link = "classManagement",
-                            Position = 10,
-                            TargetId = 1,
-                            Title = "Zarządzanie klasami",
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
-                        },
-                        new
-                        {
-                            Id = 13,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Link = "systemConfig",
-                            Position = 12,
-                            TargetId = 1,
-                            Title = "Konfiguracja",
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
-                        },
-                        new
-                        {
-                            Id = 14,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Link = "layout",
-                            Position = 0,
-                            TargetId = 1,
-                            Title = "Nawigacja boczna",
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
-                        },
-                        new
-                        {
-                            Id = 15,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Link = "teacherLogin",
-                            Position = 0,
-                            TargetId = 2,
-                            Title = "Logowanie",
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
@@ -209,7 +75,6 @@ namespace Data.Migrations
                             Id = 16,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Link = "resetPassword",
-                            Position = 0,
                             TargetId = 5,
                             Title = "Reset hasła",
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
@@ -219,9 +84,17 @@ namespace Data.Migrations
                             Id = 17,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Link = "submitTicket",
-                            Position = 0,
                             TargetId = 5,
                             Title = "Zgłoś problem",
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = 14,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Link = "layout",
+                            TargetId = 1,
+                            Title = "Nawigacja",
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
@@ -229,9 +102,35 @@ namespace Data.Migrations
                             Id = 18,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Link = "adminLogin",
-                            Position = 0,
                             TargetId = 1,
                             Title = "Logowanie",
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Link = "dashboard",
+                            TargetId = 1,
+                            Title = "Dashboard",
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Link = "users",
+                            TargetId = 1,
+                            Title = "Użytkownicy",
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = 11,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Link = "classManagement",
+                            TargetId = 1,
+                            Title = "Zarządzanie klasami",
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
@@ -239,9 +138,107 @@ namespace Data.Migrations
                             Id = 19,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Link = "subjects",
-                            Position = 13,
                             TargetId = 1,
                             Title = "Przedmioty",
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Link = "announcements",
+                            TargetId = 1,
+                            Title = "Ogłoszenia",
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Link = "tickets",
+                            TargetId = 1,
+                            Title = "Zgłoszenia",
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = 8,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Link = "schedule",
+                            TargetId = 1,
+                            Title = "Plan lekcji",
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = 7,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Link = "lessons",
+                            TargetId = 1,
+                            Title = "Lekcje",
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = 9,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Link = "grades",
+                            TargetId = 1,
+                            Title = "Oceny",
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = 10,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Link = "attendance",
+                            TargetId = 1,
+                            Title = "Frekwencja",
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = 6,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Link = "excuses",
+                            TargetId = 1,
+                            Title = "Usprawiedliwienia",
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = 13,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Link = "systemConfig",
+                            TargetId = 1,
+                            Title = "Konfiguracja",
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = 30,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Link = "teacherLayout",
+                            TargetId = 2,
+                            Title = "Nawigacja",
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = 15,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Link = "teacherLogin",
+                            TargetId = 2,
+                            Title = "Logowanie",
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = 26,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Link = "mobileLogin",
+                            TargetId = 3,
+                            Title = "Logowanie",
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
@@ -249,7 +246,6 @@ namespace Data.Migrations
                             Id = 20,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Link = "mobileDashboard",
-                            Position = 1,
                             TargetId = 3,
                             Title = "Pulpit",
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
@@ -259,7 +255,6 @@ namespace Data.Migrations
                             Id = 21,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Link = "mobileGrades",
-                            Position = 2,
                             TargetId = 3,
                             Title = "Oceny",
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
@@ -269,7 +264,6 @@ namespace Data.Migrations
                             Id = 22,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Link = "mobileAttendance",
-                            Position = 3,
                             TargetId = 3,
                             Title = "Frekwencja",
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
@@ -279,7 +273,6 @@ namespace Data.Migrations
                             Id = 23,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Link = "mobileSchedule",
-                            Position = 4,
                             TargetId = 3,
                             Title = "Plan lekcji",
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
@@ -289,7 +282,6 @@ namespace Data.Migrations
                             Id = 24,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Link = "mobileAnnouncements",
-                            Position = 5,
                             TargetId = 3,
                             Title = "Ogłoszenia",
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
@@ -299,19 +291,8 @@ namespace Data.Migrations
                             Id = 25,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Link = "mobileExcuses",
-                            Position = 6,
                             TargetId = 3,
                             Title = "Usprawiedliwienia",
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
-                        },
-                        new
-                        {
-                            Id = 26,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Link = "mobileLogin",
-                            Position = 0,
-                            TargetId = 3,
-                            Title = "Logowanie",
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
@@ -319,7 +300,6 @@ namespace Data.Migrations
                             Id = 27,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Link = "mobileSettings",
-                            Position = 0,
                             TargetId = 3,
                             Title = "Ustawienia",
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
@@ -329,7 +309,6 @@ namespace Data.Migrations
                             Id = 28,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Link = "mobileAnnouncementDetail",
-                            Position = 0,
                             TargetId = 3,
                             Title = "Pojedyncze ogłoszenie",
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
@@ -339,7 +318,6 @@ namespace Data.Migrations
                             Id = 29,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Link = "mobileExcuseForm",
-                            Position = 0,
                             TargetId = 3,
                             Title = "Formularz usprawiedliwienia",
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
@@ -567,6 +545,33 @@ namespace Data.Migrations
                         },
                         new
                         {
+                            Id = 77,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "tabs.users",
+                            PageId = 3,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Użytkownicy"
+                        },
+                        new
+                        {
+                            Id = 78,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "tabs.roles",
+                            PageId = 3,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Role"
+                        },
+                        new
+                        {
+                            Id = 79,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "tabs.relations",
+                            PageId = 3,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Powiązania"
+                        },
+                        new
+                        {
                             Id = 19,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "title",
@@ -684,12 +689,111 @@ namespace Data.Migrations
                         },
                         new
                         {
+                            Id = 90,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "tabs.students",
+                            PageId = 11,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Uczniowie"
+                        },
+                        new
+                        {
+                            Id = 91,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "tabs.subjects",
+                            PageId = 11,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Przedmioty"
+                        },
+                        new
+                        {
                             Id = 35,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "title",
                             PageId = 13,
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Value = "Konfiguracja"
+                        },
+                        new
+                        {
+                            Id = 80,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "tabs.schoolYears",
+                            PageId = 13,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Rok szkolny"
+                        },
+                        new
+                        {
+                            Id = 81,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "tabs.classrooms",
+                            PageId = 13,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Sale"
+                        },
+                        new
+                        {
+                            Id = 82,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "tabs.subjects",
+                            PageId = 13,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Przedmioty"
+                        },
+                        new
+                        {
+                            Id = 83,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "tabs.lessonHours",
+                            PageId = 13,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Godziny lekcyjne"
+                        },
+                        new
+                        {
+                            Id = 84,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "tabs.lessonStatuses",
+                            PageId = 13,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Statusy lekcji"
+                        },
+                        new
+                        {
+                            Id = 85,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "tabs.gradeTypes",
+                            PageId = 13,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Skala ocen"
+                        },
+                        new
+                        {
+                            Id = 86,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "tabs.gradeCategories",
+                            PageId = 13,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Kategorie ocen"
+                        },
+                        new
+                        {
+                            Id = 87,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "tabs.attendance",
+                            PageId = 13,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Frekwencja"
+                        },
+                        new
+                        {
+                            Id = 88,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "tabs.ticketReasons",
+                            PageId = 13,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Powody zgłoszeń"
                         },
                         new
                         {
@@ -936,6 +1040,15 @@ namespace Data.Migrations
                         },
                         new
                         {
+                            Id = 108,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "subtitle",
+                            PageId = 16,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Podaj adres email którego używasz w systemie EduPlus"
+                        },
+                        new
+                        {
                             Id = 65,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "title",
@@ -978,6 +1091,42 @@ namespace Data.Migrations
                             PageId = 17,
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Value = "Twoje zgłoszenie zostało przyjęte. Odpowiedź otrzymasz na podany adres email."
+                        },
+                        new
+                        {
+                            Id = 109,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "title",
+                            PageId = 17,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Pomoc techniczna"
+                        },
+                        new
+                        {
+                            Id = 110,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "subtitle",
+                            PageId = 17,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Wyślij do nas wiadomość"
+                        },
+                        new
+                        {
+                            Id = 111,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "success.title",
+                            PageId = 17,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Zgłoszenie wysłane"
+                        },
+                        new
+                        {
+                            Id = 112,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "success.message",
+                            PageId = 17,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Dziękujemy za kontakt. Odpowiemy najszybciej jak to możliwe."
                         },
                         new
                         {
@@ -1026,136 +1175,10 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 77,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "tabs.users",
-                            PageId = 3,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Użytkownicy"
-                        },
-                        new
-                        {
-                            Id = 78,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "tabs.roles",
-                            PageId = 3,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Role"
-                        },
-                        new
-                        {
-                            Id = 79,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "tabs.relations",
-                            PageId = 3,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Powiązania"
-                        },
-                        new
-                        {
-                            Id = 80,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "tabs.schoolYears",
-                            PageId = 13,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Rok szkolny"
-                        },
-                        new
-                        {
-                            Id = 81,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "tabs.classrooms",
-                            PageId = 13,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Sale"
-                        },
-                        new
-                        {
-                            Id = 82,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "tabs.subjects",
-                            PageId = 13,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Przedmioty"
-                        },
-                        new
-                        {
-                            Id = 83,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "tabs.lessonHours",
-                            PageId = 13,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Godziny lekcyjne"
-                        },
-                        new
-                        {
-                            Id = 84,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "tabs.lessonStatuses",
-                            PageId = 13,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Statusy lekcji"
-                        },
-                        new
-                        {
-                            Id = 85,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "tabs.gradeTypes",
-                            PageId = 13,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Skala ocen"
-                        },
-                        new
-                        {
-                            Id = 86,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "tabs.gradeCategories",
-                            PageId = 13,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Kategorie ocen"
-                        },
-                        new
-                        {
-                            Id = 87,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "tabs.attendance",
-                            PageId = 13,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Frekwencja"
-                        },
-                        new
-                        {
-                            Id = 88,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "tabs.ticketReasons",
-                            PageId = 13,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Powody zgłoszeń"
-                        },
-                        new
-                        {
                             Id = 89,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "title",
                             PageId = 19,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Przedmioty"
-                        },
-                        new
-                        {
-                            Id = 90,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "tabs.students",
-                            PageId = 11,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Uczniowie"
-                        },
-                        new
-                        {
-                            Id = 91,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "tabs.subjects",
-                            PageId = 11,
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Value = "Przedmioty"
                         },
@@ -1167,51 +1190,6 @@ namespace Data.Migrations
                             PageId = 20,
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Value = "Pulpit"
-                        },
-                        new
-                        {
-                            Id = 94,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "title",
-                            PageId = 21,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Oceny"
-                        },
-                        new
-                        {
-                            Id = 95,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "title",
-                            PageId = 22,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Frekwencja"
-                        },
-                        new
-                        {
-                            Id = 96,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "title",
-                            PageId = 23,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Plan lekcji"
-                        },
-                        new
-                        {
-                            Id = 97,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "title",
-                            PageId = 24,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Ogłoszenia"
-                        },
-                        new
-                        {
-                            Id = 98,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "title",
-                            PageId = 25,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Usprawiedliwienia"
                         },
                         new
                         {
@@ -1269,6 +1247,87 @@ namespace Data.Migrations
                         },
                         new
                         {
+                            Id = 94,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "title",
+                            PageId = 21,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Oceny"
+                        },
+                        new
+                        {
+                            Id = 95,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "title",
+                            PageId = 22,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Frekwencja"
+                        },
+                        new
+                        {
+                            Id = 116,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "tabs.week",
+                            PageId = 22,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Tydzień"
+                        },
+                        new
+                        {
+                            Id = 117,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "tabs.stats",
+                            PageId = 22,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Statystyki"
+                        },
+                        new
+                        {
+                            Id = 96,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "title",
+                            PageId = 23,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Plan lekcji"
+                        },
+                        new
+                        {
+                            Id = 97,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "title",
+                            PageId = 24,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Ogłoszenia"
+                        },
+                        new
+                        {
+                            Id = 98,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "title",
+                            PageId = 25,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Usprawiedliwienia"
+                        },
+                        new
+                        {
+                            Id = 118,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "section.unexcused",
+                            PageId = 25,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Do usprawiedliwienia"
+                        },
+                        new
+                        {
+                            Id = 119,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "section.excused",
+                            PageId = 25,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Wysłane"
+                        },
+                        new
+                        {
                             Id = 105,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "subtitle",
@@ -1293,51 +1352,6 @@ namespace Data.Migrations
                             PageId = 26,
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Value = "Masz problem? Kliknij tutaj"
-                        },
-                        new
-                        {
-                            Id = 108,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "subtitle",
-                            PageId = 16,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Podaj adres email którego używasz w systemie EduPlus"
-                        },
-                        new
-                        {
-                            Id = 109,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "title",
-                            PageId = 17,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Pomoc techniczna"
-                        },
-                        new
-                        {
-                            Id = 110,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "subtitle",
-                            PageId = 17,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Wyślij do nas wiadomość"
-                        },
-                        new
-                        {
-                            Id = 111,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "success.title",
-                            PageId = 17,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Zgłoszenie wysłane"
-                        },
-                        new
-                        {
-                            Id = 112,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "success.message",
-                            PageId = 17,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Dziękujemy za kontakt. Odpowiemy najszybciej jak to możliwe."
                         },
                         new
                         {
@@ -1368,39 +1382,102 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 116,
+                            Id = 121,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "tabs.week",
-                            PageId = 22,
+                            Key = "nav.dashboard",
+                            PageId = 30,
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Tydzień"
+                            Value = "Pulpit"
                         },
                         new
                         {
-                            Id = 117,
+                            Id = 122,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "tabs.stats",
-                            PageId = 22,
+                            Key = "nav.section.teaching",
+                            PageId = 30,
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Statystyki"
+                            Value = "Nauczanie"
                         },
                         new
                         {
-                            Id = 118,
+                            Id = 123,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "section.unexcused",
-                            PageId = 25,
+                            Key = "nav.schedule",
+                            PageId = 30,
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Do usprawiedliwienia"
+                            Value = "Plan lekcji"
                         },
                         new
                         {
-                            Id = 119,
+                            Id = 124,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "section.excused",
-                            PageId = 25,
+                            Key = "nav.registry",
+                            PageId = 30,
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Wysłane"
+                            Value = "Dziennik"
+                        },
+                        new
+                        {
+                            Id = 125,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "nav.excuses",
+                            PageId = 30,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Usprawiedliwienia"
+                        },
+                        new
+                        {
+                            Id = 126,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "nav.announcements",
+                            PageId = 30,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Ogłoszenia"
+                        },
+                        new
+                        {
+                            Id = 127,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "title.dashboard",
+                            PageId = 30,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Pulpit nauczyciela"
+                        },
+                        new
+                        {
+                            Id = 128,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "title.schedule",
+                            PageId = 30,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Plan lekcji"
+                        },
+                        new
+                        {
+                            Id = 129,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "title.registry",
+                            PageId = 30,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Dziennik"
+                        },
+                        new
+                        {
+                            Id = 130,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "title.announcements",
+                            PageId = 30,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Ogłoszenia"
+                        },
+                        new
+                        {
+                            Id = 131,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "title.excuses",
+                            PageId = 30,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Usprawiedliwienia"
                         });
                 });
 
@@ -1748,6 +1825,9 @@ namespace Data.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GETUTCDATE()");
 
+                    b.Property<int?>("HomeroomTeacherId")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -1771,6 +1851,8 @@ namespace Data.Migrations
                         .HasDefaultValueSql("GETUTCDATE()");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("HomeroomTeacherId");
 
                     b.HasIndex("SchoolYearId", "Level", "Letter")
                         .IsUnique();
@@ -3712,11 +3794,17 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Data.Data.Entities.Class", b =>
                 {
+                    b.HasOne("Data.Data.Entities.User", "HomeroomTeacher")
+                        .WithMany()
+                        .HasForeignKey("HomeroomTeacherId");
+
                     b.HasOne("Data.Data.Entities.SchoolYear", "SchoolYear")
                         .WithMany("Classes")
                         .HasForeignKey("SchoolYearId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("HomeroomTeacher");
 
                     b.Navigation("SchoolYear");
                 });

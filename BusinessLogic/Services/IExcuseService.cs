@@ -93,11 +93,12 @@ namespace BusinessLogic.Services
 
             if (teacherId.HasValue)
             {
-                query = query.Where(x => _context.ExcuseAttendances
-                    .Where(ea => ea.ExcuseId == x.e.Id)
-                    .Join(_context.Attendances, ea => ea.AttendanceId, a => a.Id, (ea, a) => a)
-                    .Join(_context.Lessons, a => a.LessonId, l => l.Id, (a, l) => l)
-                    .Any(l => l.TeacherId == teacherId.Value));
+                var homeroomStudentIds = _context.ClassStudents
+                    .Where(cs => cs.IsActive && _context.Classes.Any(c => c.Id == cs.ClassId && c.HomeroomTeacherId == teacherId.Value && c.IsActive))
+                    .Select(cs => cs.StudentId)
+                    .ToList();
+
+                query = query.Where(x => homeroomStudentIds.Contains(x.e.StudentId));
             }
 
             var projected = query.Select(x => new ExcuseDto
@@ -220,20 +221,28 @@ namespace BusinessLogic.Services
 
             if (isAccepted == true)
             {
-                var attendanceIds = await _context.ExcuseAttendances
-                    .Where(ea => ea.ExcuseId == id)
-                    .Select(ea => ea.AttendanceId)
-                    .ToListAsync();
+                var excusedTypeId = await _context.AttendanceTypes
+                    .Where(t => t.Slug == "excused")
+                    .Select(t => t.Id)
+                    .FirstOrDefaultAsync();
 
-                var attendances = await _context.Attendances
-                    .Where(a => attendanceIds.Contains(a.Id))
-                    .ToListAsync();
-
-                foreach (var attendance in attendances)
+                if (excusedTypeId > 0)
                 {
-                    attendance.AttendanceTypeId = 4;
-                    attendance.UpdatedAt = DateTime.Now;
-                    attendance.ModifiedByUserId = modifiedByUserId;
+                    var attendanceIds = await _context.ExcuseAttendances
+                        .Where(ea => ea.ExcuseId == id)
+                        .Select(ea => ea.AttendanceId)
+                        .ToListAsync();
+
+                    var attendances = await _context.Attendances
+                        .Where(a => attendanceIds.Contains(a.Id))
+                        .ToListAsync();
+
+                    foreach (var attendance in attendances)
+                    {
+                        attendance.AttendanceTypeId = excusedTypeId;
+                        attendance.UpdatedAt = DateTime.Now;
+                        attendance.ModifiedByUserId = modifiedByUserId;
+                    }
                 }
             }
 

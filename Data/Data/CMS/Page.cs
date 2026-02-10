@@ -8,7 +8,6 @@ namespace Data.Data.CMS
         public int Id { get; set; }
         public required string Title { get; set; }
         public required string Link { get; set; }
-        public required int Position { get; set; }
         public required int TargetId { get; set; }
         public Target Target { get; set; } = null!;
         public DateTime CreatedAt { get; set; } = DateTime.Now;

@@ -23,7 +23,11 @@ namespace API.Middleware
             }
             catch (Exception ex)
             {
-                _eventLogService.Log("ERROR", ex: ex);
+                var userIdClaim = context.User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+                int? userId = int.TryParse(userIdClaim, out var uid) ? uid : null;
+                var endpoint = $"{context.Request.Method} {context.Request.Path}";
+
+                _eventLogService.Log("ERROR", userId: userId, reason: endpoint, ex: ex);
 
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 context.Response.ContentType = "application/json";

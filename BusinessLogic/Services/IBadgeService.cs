@@ -40,10 +40,29 @@ namespace BusinessLogic.Services
                 .Select(t => t.Id)
                 .ToListAsync();
 
+            var pendingExcusesCount = 0;
+            var homeroomClassIds = await _context.Classes
+                .Where(c => c.HomeroomTeacherId == userId && c.IsActive)
+                .Select(c => c.Id)
+                .ToListAsync();
+
+            if (homeroomClassIds.Count > 0)
+            {
+                var homeroomStudentIds = await _context.ClassStudents
+                    .Where(cs => homeroomClassIds.Contains(cs.ClassId) && cs.IsActive)
+                    .Select(cs => cs.StudentId)
+                    .ToListAsync();
+
+                pendingExcusesCount = await _context.Excuses
+                    .Where(e => e.IsActive && e.IsAccepted == null && homeroomStudentIds.Contains(e.StudentId))
+                    .CountAsync();
+            }
+
             return new UnreadCountsDto
             {
                 Announcements = unreadAnnouncementIds.Count,
                 Tickets = unreadTicketIds.Count,
+                Excuses = pendingExcusesCount,
                 UnreadAnnouncementIds = unreadAnnouncementIds,
                 UnreadTicketIds = unreadTicketIds
             };

@@ -11,5 +11,6 @@ namespace Shared.DTOs
         public int Level { get; set; }
         public string Letter { get; set; } = string.Empty;
         public int SchoolYearId { get; set; }
+        public int? HomeroomTeacherId { get; set; }
     }
 }
