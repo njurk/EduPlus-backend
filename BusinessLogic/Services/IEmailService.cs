@@ -37,7 +37,7 @@ namespace BusinessLogic.Services
             => SendAsync(toEmail, $"EduPlus - nowa ocena z przedmiotu {subjectName}", EmailTemplates.NewGrade(studentName, subjectName, gradeValue, teacherName, issueDate.ToString("dd.MM.yyyy")));
 
         public Task SendNegativeAttendanceEmailAsync(string toEmail, string studentName, string subjectName, string attendanceType, string teacherName, DateTime date)
-            => SendAsync(toEmail, $"EduPlus - wpis frekwencji", EmailTemplates.NegativeAttendance(studentName, subjectName, attendanceType, teacherName, date.ToString("dd.MM.yyyy")));
+            => SendAsync(toEmail, $"EduPlus - nowy wpis frekwencji", EmailTemplates.NegativeAttendance(studentName, subjectName, attendanceType, teacherName, date.ToString("dd.MM.yyyy")));
 
         private async Task SendAsync(string toEmail, string subject, string htmlBody)
         {

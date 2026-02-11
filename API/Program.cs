@@ -58,6 +58,7 @@ namespace API
             builder.Services.AddScoped<IGradeColumnService, GradeColumnService>();
             builder.Services.AddScoped<IGradeTypeService, GradeTypeService>();
             builder.Services.AddScoped<IGradeCategoryService, GradeCategoryService>();
+            builder.Services.AddScoped<IGradingScaleService, GradingScaleService>();
 
             builder.Services.AddScoped<IAttendanceService, AttendanceService>();
             builder.Services.AddScoped<IAttendanceTypeService, AttendanceTypeService>();

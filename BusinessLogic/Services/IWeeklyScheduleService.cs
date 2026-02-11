@@ -16,6 +16,7 @@ namespace BusinessLogic.Services
         Task<LessonDto> CreateOrUpdateAsync(WeeklyScheduleDto dto);
         Task<bool> DeleteAsync(int id);
         Task<int> ClearScheduleAsync(int classId, int semesterId);
+        Task<List<object>> GetAvailableClassroomsAsync(int semesterId, int dayOfWeek, int lessonHourId, int? excludeId = null);
     }
 
     public class WeeklyScheduleService : IWeeklyScheduleService
@@ -269,6 +270,20 @@ namespace BusinessLogic.Services
 
             await _context.SaveChangesAsync();
             return entities.Count;
+        }
+
+        public async Task<List<object>> GetAvailableClassroomsAsync(int semesterId, int dayOfWeek, int lessonHourId, int? excludeId = null)
+        {
+            var occupiedIds = await _context.WeeklySchedules
+                .Where(ws => ws.SemesterId == semesterId && ws.DayOfWeek == dayOfWeek && ws.LessonHourId == lessonHourId && ws.IsActive && (!excludeId.HasValue || ws.Id != excludeId.Value))
+                .Select(ws => ws.ClassroomId)
+                .ToListAsync();
+
+            return await _context.Classrooms
+                .Where(c => c.IsActive && !occupiedIds.Contains(c.Id))
+                .OrderBy(c => c.Name)
+                .Select(c => (object)new { c.Id, c.Name })
+                .ToListAsync();
         }
     }
 }

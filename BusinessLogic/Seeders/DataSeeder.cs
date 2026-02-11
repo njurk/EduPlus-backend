@@ -562,7 +562,7 @@
             var teachersData = GetTeachersData();
             var subjectToEmail = teachersData.ToDictionary(t => t.SubjectId, t => t.Email);
             var gradeTypeIds = _context.GradeTypes.Select(x => x.Id).ToList();
-            var gradeCategoryIds = _context.GradeCategories.Select(x => x.Id).ToList();
+            var gradeCategoryIds = _context.GradeCategories.Where(x => x.Slug == null).Select(x => x.Id).ToList();
 
             var weeklySchedules = _context.WeeklySchedules.ToList();
             if (!weeklySchedules.Any()) return;

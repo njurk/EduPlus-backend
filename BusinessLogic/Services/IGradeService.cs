@@ -21,6 +21,7 @@ namespace BusinessLogic.Services
         Task<bool> RestoreAsync(int id);
         Task<IEnumerable<object>> GetTeacherAssignmentsAsync(int teacherId, int yearId);
         Task<object> CreateBulkAsync(BulkGradeCreateDto dto, int teacherId, IEmailService emailService);
+        Task<object> UpsertSemesterGradesAsync(BulkGradeCreateDto dto, int teacherId);
     }
 
     public class GradeService : IGradeService
@@ -76,7 +77,7 @@ namespace BusinessLogic.Services
                             g.Comment,
                             g.CreatedAt,
                             GradeType = new { g.GradeType.Numeric, g.GradeType.Name, g.GradeType.Value },
-                            GradeCategory = new { g.GradeCategory.Name, g.GradeCategory.ColorHex },
+                            GradeCategory = new { g.GradeCategory.Name, g.GradeCategory.ColorHex, g.GradeCategory.Slug },
                             TeacherName = g.Teacher.LastName + " " + g.Teacher.FirstName + (g.Teacher.IsActive ? "" : " (nieaktywny)")
                         }).ToList()
                 })
@@ -258,6 +259,7 @@ namespace BusinessLogic.Services
 
             existing.GradeTypeId = dto.GradeTypeId;
             existing.GradeCategoryId = dto.GradeCategoryId;
+            existing.GradeColumnId = dto.GradeColumnId;
             existing.Comment = dto.Comment;
             existing.UpdatedAt = DateTime.Now;
 
@@ -382,9 +384,12 @@ namespace BusinessLogic.Services
             var gradesJson = System.Text.Json.JsonSerializer.Serialize(
                 dto.Grades.Select(g => new { studentId = g.StudentId, gradeTypeId = g.GradeTypeId }));
 
+            var columnParam = new Microsoft.Data.SqlClient.SqlParameter("@GradeColumnId", System.Data.SqlDbType.Int)
+            { Value = (object?)dto.GradeColumnId ?? DBNull.Value };
+
             var result = await _context.Database.ExecuteSqlRawAsync(
-                "EXEC sp_BulkInsertGrades @SubjectId = {0}, @GradeCategoryId = {1}, @GradeColumnId = {2}, @TeacherId = {3}, @GradesJson = {4}",
-                dto.SubjectId, dto.GradeCategoryId, (object?)dto.GradeColumnId ?? DBNull.Value, teacherId, gradesJson);
+                "EXEC sp_BulkInsertGrades @SubjectId = {0}, @GradeCategoryId = {1}, @GradeColumnId = @GradeColumnId, @TeacherId = {2}, @GradesJson = {3}",
+                dto.SubjectId, dto.GradeCategoryId, teacherId, gradesJson, columnParam);
 
             _ = Task.Run(async () =>
             {
@@ -419,6 +424,56 @@ namespace BusinessLogic.Services
             });
 
             return new { count = dto.Grades.Count };
+        }
+
+        public async Task<object> UpsertSemesterGradesAsync(BulkGradeCreateDto dto, int teacherId)
+        {
+            var studentIds = dto.Grades.Select(g => g.StudentId).ToList();
+            var existing = await _context.Grades
+                .Where(g => g.SubjectId == dto.SubjectId && g.GradeCategoryId == dto.GradeCategoryId
+                    && studentIds.Contains(g.StudentId) && g.IsActive)
+                .ToListAsync();
+
+            var existingMap = existing.ToDictionary(g => g.StudentId);
+            int updated = 0, created = 0, deleted = 0;
+
+            foreach (var item in dto.Grades)
+            {
+                if (existingMap.TryGetValue(item.StudentId, out var grade))
+                {
+                    if (item.GradeTypeId == 0)
+                    {
+                        grade.IsActive = false;
+                        grade.UpdatedAt = DateTime.Now;
+                        deleted++;
+                    }
+                    else
+                    {
+                        grade.GradeTypeId = item.GradeTypeId;
+                        grade.UpdatedAt = DateTime.Now;
+                        updated++;
+                    }
+                }
+                else if (item.GradeTypeId > 0)
+                {
+                    _context.Grades.Add(new Data.Data.Entities.Grade
+                    {
+                        StudentId = item.StudentId,
+                        SubjectId = dto.SubjectId,
+                        GradeTypeId = item.GradeTypeId,
+                        GradeCategoryId = dto.GradeCategoryId,
+                        TeacherId = teacherId,
+                        DateTime = DateTime.Now,
+                        IsActive = true,
+                        CreatedAt = DateTime.Now,
+                        UpdatedAt = DateTime.Now
+                    });
+                    created++;
+                }
+            }
+
+            await _context.SaveChangesAsync();
+            return new { updated, created, deleted };
         }
     }
 }

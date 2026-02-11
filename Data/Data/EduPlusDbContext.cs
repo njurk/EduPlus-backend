@@ -25,6 +25,7 @@ namespace Data.Data
         public DbSet<Grade> Grades { get; set; } = null!;
         public DbSet<GradeCategory> GradeCategories { get; set; } = null!;
         public DbSet<GradeColumn> GradeColumns { get; set; } = null!;
+        public DbSet<GradingScale> GradingScales { get; set; } = null!;
         public DbSet<GradeType> GradeTypes { get; set; } = null!;
         public DbSet<Lesson> Lessons { get; set; } = null!;
         public DbSet<LessonHour> LessonHours { get; set; } = null!;

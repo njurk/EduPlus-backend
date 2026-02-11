@@ -27,7 +27,7 @@ namespace Data.Data
                 new Page { Id = 2, Title = "Dashboard", Link = "dashboard", TargetId = 1, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new Page { Id = 3, Title = "Użytkownicy", Link = "users", TargetId = 1, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new Page { Id = 11, Title = "Zarządzanie klasami", Link = "classManagement", TargetId = 1, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new Page { Id = 19, Title = "Przydział nauczycieli", Link = "subjects", TargetId = 1, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new Page { Id = 19, Title = "Przedmioty", Link = "subjects", TargetId = 1, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new Page { Id = 4, Title = "Ogłoszenia szkolne", Link = "announcements", TargetId = 1, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new Page { Id = 5, Title = "Zgłoszenia", Link = "tickets", TargetId = 1, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new Page { Id = 8, Title = "Plany lekcji", Link = "schedule", TargetId = 1, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
@@ -90,7 +90,7 @@ namespace Data.Data
 
                 new PageContent { Id = 31, Key = "title", Value = "Klasy", PageId = 11, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 90, Key = "tabs.students", Value = "Uczniowie", PageId = 11, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new PageContent { Id = 91, Key = "tabs.subjects", Value = "Przedmioty", PageId = 11, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 91, Key = "tabs.subjects", Value = "Przydział przedmiotów", PageId = 11, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
 
                 new PageContent { Id = 35, Key = "title", Value = "Konfiguracja", PageId = 13, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 80, Key = "tabs.schoolYears", Value = "Rok szkolny", PageId = 13, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
@@ -98,8 +98,9 @@ namespace Data.Data
                 new PageContent { Id = 82, Key = "tabs.subjects", Value = "Przedmioty", PageId = 13, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 83, Key = "tabs.lessonHours", Value = "Godziny lekcyjne", PageId = 13, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 84, Key = "tabs.lessonStatuses", Value = "Statusy lekcji", PageId = 13, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new PageContent { Id = 85, Key = "tabs.gradeTypes", Value = "Skala ocen", PageId = 13, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 85, Key = "tabs.gradeTypes", Value = "Oceny", PageId = 13, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 86, Key = "tabs.gradeCategories", Value = "Kategorie ocen", PageId = 13, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 132, Key = "tabs.gradingScale", Value = "Skala oceniania", PageId = 13, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 87, Key = "tabs.attendance", Value = "Frekwencja", PageId = 13, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 88, Key = "tabs.ticketReasons", Value = "Powody zgłoszeń", PageId = 13, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
 
@@ -108,7 +109,7 @@ namespace Data.Data
                 new PageContent { Id = 39, Key = "nav.section.management", Value = "Zarządzanie", PageId = 14, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 40, Key = "nav.users", Value = "Użytkownicy", PageId = 14, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 41, Key = "nav.classes", Value = "Klasy", PageId = 14, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new PageContent { Id = 92, Key = "nav.subjects", Value = "Przedmioty", PageId = 14, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 92, Key = "nav.subjects", Value = "Przydział przedmiotów", PageId = 14, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 42, Key = "nav.announcements", Value = "Ogłoszenia", PageId = 14, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 43, Key = "nav.tickets", Value = "Zgłoszenia", PageId = 14, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 44, Key = "nav.section.teaching", Value = "Nauczanie", PageId = 14, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
@@ -232,7 +233,18 @@ namespace Data.Data
                 new GradeCategory { Id = 2, Name = "Kartkówka", Weight = 2, ColorHex = "#22c55e", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new GradeCategory { Id = 3, Name = "Odpowiedź ustna", Weight = 1, ColorHex = "#f97316", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new GradeCategory { Id = 4, Name = "Aktywność", Weight = 1, ColorHex = "#3b82f6", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new GradeCategory { Id = 5, Name = "Zadanie domowe", Weight = 1, ColorHex = "#eab308", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null }
+                new GradeCategory { Id = 5, Name = "Zadanie domowe", Weight = 1, ColorHex = "#eab308", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new GradeCategory { Id = 6, Name = "Ocena śródroczna", Weight = 0, ColorHex = "#646464ff", Slug = "midyear", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new GradeCategory { Id = 7, Name = "Ocena roczna", Weight = 0, ColorHex = "#646464ff", Slug = "final", IsActive = true, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null }
+            );
+
+            modelBuilder.Entity<GradingScale>().HasData(
+                new GradingScale { Id = 1, GradeTypeId = 1, MinAverage = 0.00m, MaxAverage = 1.59m, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
+                new GradingScale { Id = 2, GradeTypeId = 2, MinAverage = 1.60m, MaxAverage = 2.59m, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
+                new GradingScale { Id = 3, GradeTypeId = 3, MinAverage = 2.60m, MaxAverage = 3.59m, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
+                new GradingScale { Id = 4, GradeTypeId = 4, MinAverage = 3.60m, MaxAverage = 4.59m, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
+                new GradingScale { Id = 5, GradeTypeId = 5, MinAverage = 4.60m, MaxAverage = 5.29m, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime },
+                new GradingScale { Id = 6, GradeTypeId = 6, MinAverage = 5.30m, MaxAverage = 6.00m, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime }
             );
 
             modelBuilder.Entity<LessonStatus>().HasData(

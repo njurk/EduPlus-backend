@@ -16,9 +16,9 @@ public class GradeCategoryController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll(string? search, string? sortBy, bool sortDesc = false, bool showInactive = false)
+    public async Task<IActionResult> GetAll(string? search, string? sortBy, bool sortDesc = false, bool showInactive = false, bool includeSystem = false)
     {
-        return Ok(await _service.GetAllAsync(search, sortBy, sortDesc, showInactive));
+        return Ok(await _service.GetAllAsync(search, sortBy, sortDesc, showInactive, includeSystem));
     }
 
     [HttpPost]
@@ -64,5 +64,14 @@ public class GradeCategoryController : ControllerBase
         var success = await _service.RestoreAsync(id);
         if (!success) return NotFound();
         return Ok(new { message = "Przywrócono", id });
+    }
+
+    [HttpGet("semester/{order}")]
+    public async Task<IActionResult> GetBySemester(int order)
+    {
+        var slug = order == 1 ? "midyear" : "final";
+        var category = await _service.GetBySlugAsync(slug);
+        if (category == null) return NotFound();
+        return Ok(category);
     }
 }

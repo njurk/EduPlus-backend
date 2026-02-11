@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(EduPlusDbContext))]
-    [Migration("20260210200909_Init")]
+    [Migration("20260211162052_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -142,7 +142,7 @@ namespace Data.Migrations
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Link = "subjects",
                             TargetId = 1,
-                            Title = "Przydział nauczycieli",
+                            Title = "Przedmioty",
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
@@ -616,7 +616,7 @@ namespace Data.Migrations
                             Key = "tabs.subjects",
                             PageId = 11,
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Przedmioty"
+                            Value = "Przydział przedmiotów"
                         },
                         new
                         {
@@ -679,7 +679,7 @@ namespace Data.Migrations
                             Key = "tabs.gradeTypes",
                             PageId = 13,
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Skala ocen"
+                            Value = "Oceny"
                         },
                         new
                         {
@@ -689,6 +689,15 @@ namespace Data.Migrations
                             PageId = 13,
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Value = "Kategorie ocen"
+                        },
+                        new
+                        {
+                            Id = 132,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "tabs.gradingScale",
+                            PageId = 13,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Skala oceniania"
                         },
                         new
                         {
@@ -760,7 +769,7 @@ namespace Data.Migrations
                             Key = "nav.subjects",
                             PageId = 14,
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Przedmioty"
+                            Value = "Przydział przedmiotów"
                         },
                         new
                         {
@@ -2057,6 +2066,9 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Slug")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
@@ -2119,6 +2131,28 @@ namespace Data.Migrations
                             Name = "Zadanie domowe",
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Weight = 1
+                        },
+                        new
+                        {
+                            Id = 6,
+                            ColorHex = "#646464ff",
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            Name = "Ocena śródroczna",
+                            Slug = "midyear",
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Weight = 0
+                        },
+                        new
+                        {
+                            Id = 7,
+                            ColorHex = "#646464ff",
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            Name = "Ocena roczna",
+                            Slug = "final",
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Weight = 0
                         });
                 });
 
@@ -2266,6 +2300,99 @@ namespace Data.Migrations
                             Numeric = "6",
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Value = 6.0m
+                        });
+                });
+
+            modelBuilder.Entity("Data.Data.Entities.GradingScale", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<int>("GradeTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("MaxAverage")
+                        .HasColumnType("decimal(4, 2)");
+
+                    b.Property<decimal>("MinAverage")
+                        .HasColumnType("decimal(4, 2)");
+
+                    b.Property<int?>("ModifiedByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GradeTypeId");
+
+                    b.ToTable("GradingScales");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            GradeTypeId = 1,
+                            MaxAverage = 1.59m,
+                            MinAverage = 0.00m,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            GradeTypeId = 2,
+                            MaxAverage = 2.59m,
+                            MinAverage = 1.60m,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            GradeTypeId = 3,
+                            MaxAverage = 3.59m,
+                            MinAverage = 2.60m,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            GradeTypeId = 4,
+                            MaxAverage = 4.59m,
+                            MinAverage = 3.60m,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            GradeTypeId = 5,
+                            MaxAverage = 5.29m,
+                            MinAverage = 4.60m,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = 6,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            GradeTypeId = 6,
+                            MaxAverage = 6.00m,
+                            MinAverage = 5.30m,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
                         });
                 });
 
@@ -3852,6 +3979,17 @@ namespace Data.Migrations
                     b.Navigation("Subject");
 
                     b.Navigation("Teacher");
+                });
+
+            modelBuilder.Entity("Data.Data.Entities.GradingScale", b =>
+                {
+                    b.HasOne("Data.Data.Entities.GradeType", "GradeType")
+                        .WithMany()
+                        .HasForeignKey("GradeTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("GradeType");
                 });
 
             modelBuilder.Entity("Data.Data.Entities.Lesson", b =>

@@ -10,11 +10,12 @@ namespace BusinessLogic.Services
 {
     public interface IGradeCategoryService
     {
-        Task<IEnumerable<object>> GetAllAsync(string? search, string? sortBy, bool sortDesc, bool showInactive);
+        Task<IEnumerable<object>> GetAllAsync(string? search, string? sortBy, bool sortDesc, bool showInactive, bool includeSystem = false);
         Task<GradeCategory> CreateAsync(GradeCategory entity);
         Task<GradeCategory?> UpdateAsync(int id, GradeCategory entity);
         Task<bool> DeleteAsync(int id);
         Task<bool> RestoreAsync(int id);
+        Task<object?> GetBySlugAsync(string slug);
     }
 
     public class GradeCategoryService : IGradeCategoryService
@@ -26,11 +27,12 @@ namespace BusinessLogic.Services
             _context = context;
         }
 
-        public async Task<IEnumerable<object>> GetAllAsync(string? search, string? sortBy, bool sortDesc, bool showInactive)
+        public async Task<IEnumerable<object>> GetAllAsync(string? search, string? sortBy, bool sortDesc, bool showInactive, bool includeSystem = false)
         {
             var query = _context.GradeCategories.AsNoTracking().AsQueryable();
 
             query = showInactive ? query.Where(x => !x.IsActive) : query.Where(x => x.IsActive);
+            if (!includeSystem) query = query.Where(x => x.Slug == null);
 
             if (!string.IsNullOrWhiteSpace(search))
             {
@@ -54,6 +56,7 @@ namespace BusinessLogic.Services
                     x.Name,
                     x.Weight,
                     x.ColorHex,
+                    x.Slug,
                     x.IsActive,
                     x.CreatedAt,
                     x.UpdatedAt,
@@ -71,6 +74,7 @@ namespace BusinessLogic.Services
                 throw new InvalidOperationException("Ta nazwa kategorii już istnieje");
 
             entity.IsActive = true;
+            entity.Slug = null;
             entity.CreatedAt = DateTime.Now;
             entity.UpdatedAt = DateTime.Now;
             _context.GradeCategories.Add(entity);
@@ -87,6 +91,11 @@ namespace BusinessLogic.Services
 
             if (await _context.GradeCategories.AnyAsync(x => x.Name == entity.Name && x.Id != id && x.IsActive))
                 throw new InvalidOperationException("Ta nazwa kategorii już istnieje");
+
+            var existing = await _context.GradeCategories.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+            if (existing == null) return null;
+            if (existing.Slug != null)
+                throw new InvalidOperationException("Nie można edytować kategorii systemowej");
 
             _context.Entry(entity).State = EntityState.Modified;
             _context.Entry(entity).Property(x => x.CreatedAt).IsModified = false;
@@ -108,6 +117,8 @@ namespace BusinessLogic.Services
         {
             var item = await _context.GradeCategories.FindAsync(id);
             if (item == null) return false;
+            if (item.Slug != null)
+                throw new InvalidOperationException("Nie można usunąć kategorii systemowej");
 
             if (item.IsActive)
             {
@@ -132,6 +143,14 @@ namespace BusinessLogic.Services
             item.UpdatedAt = DateTime.Now;
             await _context.SaveChangesAsync();
             return true;
+        }
+
+        public async Task<object?> GetBySlugAsync(string slug)
+        {
+            return await _context.GradeCategories.AsNoTracking()
+                .Where(x => x.Slug == slug)
+                .Select(x => new { x.Id, x.Name, x.Slug })
+                .FirstOrDefaultAsync();
         }
     }
 }

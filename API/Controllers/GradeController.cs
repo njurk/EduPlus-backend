@@ -134,4 +134,14 @@ public class GradeController : ControllerBase
             return BadRequest(new { message = ex.Message });
         }
     }
+
+    [HttpPut("bulk-semester")]
+    public async Task<IActionResult> UpsertSemesterGrades(BulkGradeCreateDto dto)
+    {
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier) ?? User.FindFirst("id");
+        if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out int teacherId)) return Unauthorized();
+
+        var result = await _service.UpsertSemesterGradesAsync(dto, teacherId);
+        return Ok(result);
+    }
 }

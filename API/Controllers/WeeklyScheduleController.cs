@@ -61,6 +61,13 @@ namespace API.Controllers
             return Ok(new { deletedCount = count });
         }
 
+        [HttpGet("available-classrooms")]
+        public async Task<IActionResult> GetAvailableClassrooms([FromQuery] int semesterId, [FromQuery] int dayOfWeek, [FromQuery] int lessonHourId, [FromQuery] int? excludeId = null)
+        {
+            var classrooms = await _service.GetAvailableClassroomsAsync(semesterId, dayOfWeek, lessonHourId, excludeId);
+            return Ok(classrooms);
+        }
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
