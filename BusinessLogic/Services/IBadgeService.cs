@@ -34,11 +34,8 @@ namespace BusinessLogic.Services
                 .Select(a => a.Id)
                 .ToListAsync();
 
-            var unreadTicketIds = await _context.Tickets
-                .Where(t => !t.IsClosed)
-                .Where(t => !_context.TicketReads.Any(tr => tr.TicketId == t.Id && tr.UserId == userId))
-                .Select(t => t.Id)
-                .ToListAsync();
+            var pendingTicketsCount = await _context.Tickets
+                .CountAsync(t => !t.IsClosed);
 
             var pendingExcusesCount = 0;
             var homeroomClassIds = await _context.Classes
@@ -61,10 +58,9 @@ namespace BusinessLogic.Services
             return new UnreadCountsDto
             {
                 Announcements = unreadAnnouncementIds.Count,
-                Tickets = unreadTicketIds.Count,
+                Tickets = pendingTicketsCount,
                 Excuses = pendingExcusesCount,
-                UnreadAnnouncementIds = unreadAnnouncementIds,
-                UnreadTicketIds = unreadTicketIds
+                UnreadAnnouncementIds = unreadAnnouncementIds
             };
         }
     }

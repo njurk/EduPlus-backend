@@ -41,7 +41,6 @@ namespace Data.Data
         public DbSet<ParentStudent> ParentStudents { get; set; } = null!;
         public DbSet<Ticket> Tickets { get; set; }
         public DbSet<TicketReason> TicketReasons { get; set; }
-        public DbSet<TicketRead> TicketReads { get; set; }
         public DbSet<PasswordResetToken> PasswordResetTokens { get; set; }
         public DbSet<Page> Pages { get; set; } = null!;
         public DbSet<Target> Targets { get; set; } = null!;

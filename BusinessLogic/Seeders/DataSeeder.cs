@@ -619,7 +619,7 @@
                 {
                     var column = new GradeColumn
                     {
-                        Name = "Tytuł",
+                        Name = $"Kolumna {order + 1}",
                         ClassId = tcs.ClassId,
                         SubjectId = tcs.SubjectId,
                         SemesterId = 1,

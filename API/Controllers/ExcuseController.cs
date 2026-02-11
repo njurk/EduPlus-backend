@@ -10,10 +10,12 @@ using System.Security.Claims;
 public class ExcuseController : ControllerBase
 {
     private readonly IExcuseService _service;
+    private readonly IBadgeNotificationService _badgeNotification;
 
-    public ExcuseController(IExcuseService service)
+    public ExcuseController(IExcuseService service, IBadgeNotificationService badgeNotification)
     {
         _service = service;
+        _badgeNotification = badgeNotification;
     }
 
     private int GetUserId() => int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
@@ -45,6 +47,7 @@ public class ExcuseController : ControllerBase
     public async Task<IActionResult> Create([FromBody] CreateExcuseDto dto)
     {
         var result = await _service.CreateAsync(dto, GetUserId());
+        _badgeNotification.NotifyBadgeChanged(GetUserId());
         return Ok(result);
     }
 
@@ -52,20 +55,26 @@ public class ExcuseController : ControllerBase
     public async Task<IActionResult> Accept(int id, [FromBody] AcceptExcuseDto dto)
     {
         var success = await _service.AcceptAsync(id, dto.IsAccepted, GetUserId());
-        return success ? NoContent() : NotFound();
+        if (!success) return NotFound();
+        _badgeNotification.NotifyBadgeChanged(GetUserId());
+        return NoContent();
     }
 
     [HttpPatch("{id}/restore")]
     public async Task<IActionResult> Restore(int id)
     {
         var success = await _service.RestoreAsync(id, GetUserId());
-        return success ? NoContent() : NotFound();
+        if (!success) return NotFound();
+        _badgeNotification.NotifyBadgeChanged(GetUserId());
+        return NoContent();
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
         var success = await _service.DeleteAsync(id, GetUserId());
-        return success ? NoContent() : NotFound();
+        if (!success) return NotFound();
+        _badgeNotification.NotifyBadgeChanged(GetUserId());
+        return NoContent();
     }
 }

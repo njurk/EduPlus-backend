@@ -49,7 +49,8 @@ namespace Data.Data
                 new Page { Id = 25, Title = "Usprawiedliwienia", Link = "mobileExcuses", TargetId = 3, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new Page { Id = 27, Title = "Ustawienia", Link = "mobileSettings", TargetId = 3, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new Page { Id = 28, Title = "Pojedyncze ogłoszenie", Link = "mobileAnnouncementDetail", TargetId = 3, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new Page { Id = 29, Title = "Formularz usprawiedliwienia", Link = "mobileExcuseForm", TargetId = 3, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null }
+                new Page { Id = 29, Title = "Formularz usprawiedliwienia", Link = "mobileExcuseForm", TargetId = 3, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new Page { Id = 31, Title = "Zgłoszenie problemu", Link = "mobileSubmitTicket", TargetId = 3, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null }
             );
 
             modelBuilder.Entity<PageContent>().HasData(
@@ -60,19 +61,8 @@ namespace Data.Data
                 new PageContent { Id = 37, Key = "version", Value = "v1.0.0", PageId = 1, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
 
                 new PageContent { Id = 4, Key = "title", Value = "Pulpit", PageId = 2, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new PageContent { Id = 5, Key = "schoolYear", Value = "Rok szkolny", PageId = 2, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new PageContent { Id = 6, Key = "stats.users", Value = "Wszystkich użytkowników", PageId = 2, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new PageContent { Id = 7, Key = "stats.students", Value = "Uczniów", PageId = 2, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new PageContent { Id = 8, Key = "stats.teachers", Value = "Nauczycieli", PageId = 2, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new PageContent { Id = 9, Key = "stats.parents", Value = "Rodziców", PageId = 2, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new PageContent { Id = 10, Key = "stats.classes", Value = "Klas", PageId = 2, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 11, Key = "quickActions.title", Value = "Szybkie akcje", PageId = 2, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new PageContent { Id = 12, Key = "quickActions.manageUsers", Value = "Zarządzaj użytkownikami", PageId = 2, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new PageContent { Id = 13, Key = "quickActions.newAnnouncement", Value = "Nowe ogłoszenie", PageId = 2, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new PageContent { Id = 14, Key = "quickActions.tickets", Value = "Zgłoszenia", PageId = 2, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 15, Key = "tickets.title", Value = "Ostatnie zgłoszenia", PageId = 2, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new PageContent { Id = 16, Key = "tickets.viewAll", Value = "Zobacz wszystkie", PageId = 2, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new PageContent { Id = 17, Key = "tickets.empty", Value = "Brak zgłoszeń", PageId = 2, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
 
                 new PageContent { Id = 18, Key = "title", Value = "Użytkownicy", PageId = 3, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 77, Key = "tabs.users", Value = "Użytkownicy", PageId = 3, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
@@ -149,10 +139,11 @@ namespace Data.Data
                 new PageContent { Id = 67, Key = "form.description", Value = "Opis problemu", PageId = 17, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 68, Key = "form.descriptionPlaceholder", Value = "Opisz szczegółowo problem który napotkałeś", PageId = 17, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 69, Key = "success.message", Value = "Twoje zgłoszenie zostało przyjęte. Odpowiedź otrzymasz na podany adres email.", PageId = 17, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new PageContent { Id = 109, Key = "title", Value = "Pomoc techniczna", PageId = 17, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new PageContent { Id = 110, Key = "subtitle", Value = "Wyślij do nas wiadomość", PageId = 17, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new PageContent { Id = 111, Key = "success.title", Value = "Zgłoszenie wysłane", PageId = 17, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new PageContent { Id = 112, Key = "success.message", Value = "Dziękujemy za kontakt. Odpowiemy najszybciej jak to możliwe.", PageId = 17, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+
+                new PageContent { Id = 109, Key = "title", Value = "Pomoc techniczna", PageId = 31, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 110, Key = "subtitle", Value = "Wyślij do nas wiadomość", PageId = 31, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 111, Key = "success.title", Value = "Zgłoszenie wysłane", PageId = 31, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 112, Key = "success.message", Value = "Dziękujemy za kontakt. Odpowiemy najszybciej jak to możliwe.", PageId = 31, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
 
                 new PageContent { Id = 70, Key = "title", Value = "EduPlus Admin", PageId = 18, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 72, Key = "logoAlt", Value = "EduPlus", PageId = 18, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },

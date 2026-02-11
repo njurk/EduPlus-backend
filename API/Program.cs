@@ -66,7 +66,6 @@ namespace API
             builder.Services.AddScoped<IAnnouncementService, AnnouncementService>();
             builder.Services.AddScoped<IAnnouncementReadService, AnnouncementReadService>();
             builder.Services.AddScoped<ITicketService, TicketService>();
-            builder.Services.AddScoped<ITicketReadService, TicketReadService>();
 
             builder.Services.AddScoped<IDashboardService, DashboardService>();
             builder.Services.AddScoped<IExportService, ExportService>();

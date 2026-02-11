@@ -543,35 +543,6 @@ namespace Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TicketReads",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    TicketId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
-                    ModifiedByUserId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TicketReads", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_TicketReads_Tickets_TicketId",
-                        column: x => x.TicketId,
-                        principalTable: "Tickets",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_TicketReads_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AnnouncementReads",
                 columns: table => new
                 {
@@ -1139,11 +1110,11 @@ namespace Data.Migrations
                     { 1, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "system", null, 5, "System", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
                     { 2, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "dashboard", null, 1, "Dashboard", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
                     { 3, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "users", null, 1, "Użytkownicy", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
-                    { 4, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "announcements", null, 1, "Ogłoszenia", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 4, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "announcements", null, 1, "Ogłoszenia szkolne", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
                     { 5, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "tickets", null, 1, "Zgłoszenia", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
                     { 6, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "excuses", null, 1, "Usprawiedliwienia", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
                     { 7, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "lessons", null, 1, "Lekcje", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
-                    { 8, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "schedule", null, 1, "Plan lekcji", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 8, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "schedule", null, 1, "Plany lekcji", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
                     { 9, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "grades", null, 1, "Oceny", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
                     { 10, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "attendance", null, 1, "Frekwencja", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
                     { 11, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "classManagement", null, 1, "Zarządzanie klasami", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
@@ -1153,7 +1124,7 @@ namespace Data.Migrations
                     { 16, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "resetPassword", null, 5, "Reset hasła", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
                     { 17, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "submitTicket", null, 5, "Zgłoś problem", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
                     { 18, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "adminLogin", null, 1, "Logowanie", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
-                    { 19, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "subjects", null, 1, "Przedmioty", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 19, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "subjects", null, 1, "Przydział nauczycieli", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
                     { 20, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "mobileDashboard", null, 3, "Pulpit", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
                     { 21, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "mobileGrades", null, 3, "Oceny", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
                     { 22, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "mobileAttendance", null, 3, "Frekwencja", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
@@ -1164,7 +1135,8 @@ namespace Data.Migrations
                     { 27, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "mobileSettings", null, 3, "Ustawienia", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
                     { 28, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "mobileAnnouncementDetail", null, 3, "Pojedyncze ogłoszenie", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
                     { 29, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "mobileExcuseForm", null, 3, "Formularz usprawiedliwienia", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
-                    { 30, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "teacherLayout", null, 2, "Nawigacja", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) }
+                    { 30, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "teacherLayout", null, 2, "Nawigacja", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) },
+                    { 31, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "mobileSubmitTicket", null, 3, "Zgłoszenie problemu", new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc) }
                 });
 
             migrationBuilder.InsertData(
@@ -1187,19 +1159,8 @@ namespace Data.Migrations
                     { 2, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "pageTitle", null, 1, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "EduPlus - Twój e-dziennik" },
                     { 3, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "faviconUrl", null, 1, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "logo-64.png" },
                     { 4, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "title", null, 2, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Pulpit" },
-                    { 5, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "schoolYear", null, 2, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Rok szkolny" },
-                    { 6, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "stats.users", null, 2, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Wszystkich użytkowników" },
-                    { 7, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "stats.students", null, 2, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Uczniów" },
-                    { 8, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "stats.teachers", null, 2, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Nauczycieli" },
-                    { 9, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "stats.parents", null, 2, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Rodziców" },
-                    { 10, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "stats.classes", null, 2, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Klas" },
                     { 11, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "quickActions.title", null, 2, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Szybkie akcje" },
-                    { 12, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "quickActions.manageUsers", null, 2, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Zarządzaj użytkownikami" },
-                    { 13, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "quickActions.newAnnouncement", null, 2, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Nowe ogłoszenie" },
-                    { 14, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "quickActions.tickets", null, 2, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Zgłoszenia" },
                     { 15, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "tickets.title", null, 2, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Ostatnie zgłoszenia" },
-                    { 16, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "tickets.viewAll", null, 2, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Zobacz wszystkie" },
-                    { 17, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "tickets.empty", null, 2, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Brak zgłoszeń" },
                     { 18, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "title", null, 3, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Użytkownicy" },
                     { 19, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "title", null, 4, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Ogłoszenia" },
                     { 20, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "title", null, 5, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Zgłoszenia" },
@@ -1284,10 +1245,10 @@ namespace Data.Migrations
                     { 106, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "link.forgotPassword", null, 26, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Zapomniałeś hasła?" },
                     { 107, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "link.submitTicket", null, 26, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Masz problem? Kliknij tutaj" },
                     { 108, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "subtitle", null, 16, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Podaj adres email którego używasz w systemie EduPlus" },
-                    { 109, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "title", null, 17, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Pomoc techniczna" },
-                    { 110, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "subtitle", null, 17, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Wyślij do nas wiadomość" },
-                    { 111, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "success.title", null, 17, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Zgłoszenie wysłane" },
-                    { 112, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "success.message", null, 17, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Dziękujemy za kontakt. Odpowiemy najszybciej jak to możliwe." },
+                    { 109, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "title", null, 31, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Pomoc techniczna" },
+                    { 110, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "subtitle", null, 31, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Wyślij do nas wiadomość" },
+                    { 111, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "success.title", null, 31, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Zgłoszenie wysłane" },
+                    { 112, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "success.message", null, 31, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Dziękujemy za kontakt. Odpowiemy najszybciej jak to możliwe." },
                     { 113, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "title", null, 27, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Ustawienia" },
                     { 114, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "title", null, 28, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Ogłoszenie" },
                     { 115, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "title", null, 29, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Usprawiedliwienie" },
@@ -1574,17 +1535,6 @@ namespace Data.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TicketReads_TicketId_UserId",
-                table: "TicketReads",
-                columns: new[] { "TicketId", "UserId" },
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TicketReads_UserId",
-                table: "TicketReads",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Tickets_Email",
                 table: "Tickets",
                 column: "Email");
@@ -1689,7 +1639,7 @@ namespace Data.Migrations
                 name: "TeacherClassSubjects");
 
             migrationBuilder.DropTable(
-                name: "TicketReads");
+                name: "Tickets");
 
             migrationBuilder.DropTable(
                 name: "UserRoles");
@@ -1716,7 +1666,7 @@ namespace Data.Migrations
                 name: "Pages");
 
             migrationBuilder.DropTable(
-                name: "Tickets");
+                name: "TicketReasons");
 
             migrationBuilder.DropTable(
                 name: "Roles");
@@ -1735,9 +1685,6 @@ namespace Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Targets");
-
-            migrationBuilder.DropTable(
-                name: "TicketReasons");
 
             migrationBuilder.DropTable(
                 name: "Classes");

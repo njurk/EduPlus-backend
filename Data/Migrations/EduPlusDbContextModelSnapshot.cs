@@ -139,7 +139,7 @@ namespace Data.Migrations
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Link = "subjects",
                             TargetId = 1,
-                            Title = "Przedmioty",
+                            Title = "Przydział nauczycieli",
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
@@ -148,7 +148,7 @@ namespace Data.Migrations
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Link = "announcements",
                             TargetId = 1,
-                            Title = "Ogłoszenia",
+                            Title = "Ogłoszenia szkolne",
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
@@ -166,7 +166,7 @@ namespace Data.Migrations
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Link = "schedule",
                             TargetId = 1,
-                            Title = "Plan lekcji",
+                            Title = "Plany lekcji",
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
@@ -321,6 +321,15 @@ namespace Data.Migrations
                             TargetId = 3,
                             Title = "Formularz usprawiedliwienia",
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = 31,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Link = "mobileSubmitTicket",
+                            TargetId = 3,
+                            Title = "Zgłoszenie problemu",
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc)
                         });
                 });
 
@@ -419,60 +428,6 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 5,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "schoolYear",
-                            PageId = 2,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Rok szkolny"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "stats.users",
-                            PageId = 2,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Wszystkich użytkowników"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "stats.students",
-                            PageId = 2,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Uczniów"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "stats.teachers",
-                            PageId = 2,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Nauczycieli"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "stats.parents",
-                            PageId = 2,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Rodziców"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "stats.classes",
-                            PageId = 2,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Klas"
-                        },
-                        new
-                        {
                             Id = 11,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "quickActions.title",
@@ -482,57 +437,12 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 12,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "quickActions.manageUsers",
-                            PageId = 2,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Zarządzaj użytkownikami"
-                        },
-                        new
-                        {
-                            Id = 13,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "quickActions.newAnnouncement",
-                            PageId = 2,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Nowe ogłoszenie"
-                        },
-                        new
-                        {
-                            Id = 14,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "quickActions.tickets",
-                            PageId = 2,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Zgłoszenia"
-                        },
-                        new
-                        {
                             Id = 15,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "tickets.title",
                             PageId = 2,
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Value = "Ostatnie zgłoszenia"
-                        },
-                        new
-                        {
-                            Id = 16,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "tickets.viewAll",
-                            PageId = 2,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Zobacz wszystkie"
-                        },
-                        new
-                        {
-                            Id = 17,
-                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Key = "tickets.empty",
-                            PageId = 2,
-                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
-                            Value = "Brak zgłoszeń"
                         },
                         new
                         {
@@ -1097,7 +1007,7 @@ namespace Data.Migrations
                             Id = 109,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "title",
-                            PageId = 17,
+                            PageId = 31,
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Value = "Pomoc techniczna"
                         },
@@ -1106,7 +1016,7 @@ namespace Data.Migrations
                             Id = 110,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "subtitle",
-                            PageId = 17,
+                            PageId = 31,
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Value = "Wyślij do nas wiadomość"
                         },
@@ -1115,7 +1025,7 @@ namespace Data.Migrations
                             Id = 111,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "success.title",
-                            PageId = 17,
+                            PageId = 31,
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Value = "Zgłoszenie wysłane"
                         },
@@ -1124,7 +1034,7 @@ namespace Data.Migrations
                             Id = 112,
                             CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Key = "success.message",
-                            PageId = 17,
+                            PageId = 31,
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Value = "Dziękujemy za kontakt. Odpowiemy najszybciej jak to możliwe."
                         },
@@ -3083,43 +2993,6 @@ namespace Data.Migrations
                     b.ToTable("Tickets");
                 });
 
-            modelBuilder.Entity("Data.Data.Entities.TicketRead", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
-
-                    b.Property<int?>("ModifiedByUserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TicketId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.HasIndex("TicketId", "UserId")
-                        .IsUnique();
-
-                    b.ToTable("TicketReads");
-                });
-
             modelBuilder.Entity("Data.Data.Entities.TicketReason", b =>
                 {
                     b.Property<int>("Id")
@@ -4133,25 +4006,6 @@ namespace Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Reason");
-                });
-
-            modelBuilder.Entity("Data.Data.Entities.TicketRead", b =>
-                {
-                    b.HasOne("Data.Data.Entities.Ticket", "Ticket")
-                        .WithMany()
-                        .HasForeignKey("TicketId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Data.Data.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Ticket");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Data.Data.Entities.UserRole", b =>

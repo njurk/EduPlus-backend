@@ -13,26 +13,19 @@ namespace API.Controllers
     {
         private readonly ITicketService _service;
         private readonly IEmailService _emailService;
-        private readonly ITicketReadService _ticketReadService;
         private readonly IBadgeNotificationService _badgeNotification;
 
-        public TicketController(ITicketService service, IEmailService emailService, ITicketReadService ticketReadService, IBadgeNotificationService badgeNotification)
+        public TicketController(ITicketService service, IEmailService emailService, IBadgeNotificationService badgeNotification)
         {
             _service = service;
             _emailService = emailService;
-            _ticketReadService = ticketReadService;
             _badgeNotification = badgeNotification;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll(int pageNumber = 1, int pageSize = 10, bool? showClosed = null, string? search = null, string? sortBy = "createdAt", bool sortDesc = true, int? reasonId = null)
         {
-            int? userId = null;
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (!string.IsNullOrEmpty(userIdClaim) && int.TryParse(userIdClaim, out var parsedUserId))
-                userId = parsedUserId;
-
-            var result = await _service.GetAllAsync(pageNumber, pageSize, showClosed, search, sortBy, sortDesc, reasonId, userId);
+            var result = await _service.GetAllAsync(pageNumber, pageSize, showClosed, search, sortBy, sortDesc, reasonId);
             return Ok(result);
         }
 
@@ -71,21 +64,12 @@ namespace API.Controllers
         {
             var success = await _service.CloseAsync(id, dto, _emailService);
             if (!success) return NotFound();
-            return NoContent();
-        }
 
-        [HttpPost("{id}/read")]
-        public async Task<IActionResult> MarkAsRead(int id)
-        {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var userId))
-                return Unauthorized();
+            if (!string.IsNullOrEmpty(userIdClaim) && int.TryParse(userIdClaim, out var userId))
+                _badgeNotification.NotifyBadgeChanged(userId);
 
-            await _ticketReadService.MarkAsReadAsync(id, userId);
-            _badgeNotification.NotifyBadgeChanged(userId);
             return NoContent();
         }
     }
 }
-
-
