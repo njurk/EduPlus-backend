@@ -15,14 +15,12 @@ namespace BusinessLogic.Services
     public class PasswordResetService : IPasswordResetService
     {
         private readonly EduPlusDbContext _context;
-        private readonly string _resetUrl;
-        private readonly int _tokenExpirationHours;
+        private readonly double _tokenExpirationHours;
 
         public PasswordResetService(EduPlusDbContext context, Microsoft.Extensions.Configuration.IConfiguration configuration)
         {
             _context = context;
-            _resetUrl = configuration["PasswordReset:ResetUrl"];
-            _tokenExpirationHours = int.Parse(configuration["PasswordReset:TokenExpirationHours"] ?? "1");
+            _tokenExpirationHours = double.Parse(configuration["PasswordReset:TokenExpirationHours"] ?? "1");
         }
 
         public async Task<string> RequestResetAsync(string email, IEmailService emailService)
@@ -31,21 +29,20 @@ namespace BusinessLogic.Services
             if (user == null)
                 throw new KeyNotFoundException("Użytkownik o podanym adresie email nie istnieje");
 
-            var token = Guid.NewGuid().ToString();
+            var code = new Random().Next(100000, 999999).ToString();
             var resetToken = new PasswordResetToken
             {
                 UserId = user.Id,
-                Token = token,
+                Token = code,
                 ExpirationDate = DateTime.Now.AddHours(_tokenExpirationHours)
             };
 
             _context.PasswordResetTokens.Add(resetToken);
             await _context.SaveChangesAsync();
 
-            var resetLink = $"{_resetUrl}{token}";
-            await emailService.SendPasswordResetEmailAsync(email, resetLink);
+            await emailService.SendPasswordResetEmailAsync(email, code);
 
-            return token;
+            return code;
         }
 
         public async Task<bool> ValidateTokenAsync(string token)

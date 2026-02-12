@@ -60,6 +60,7 @@ namespace BusinessLogic.Services
                 Announcements = unreadAnnouncementIds.Count,
                 Tickets = pendingTicketsCount,
                 Excuses = pendingExcusesCount,
+                IsHomeroomTeacher = homeroomClassIds.Count > 0,
                 UnreadAnnouncementIds = unreadAnnouncementIds
             };
         }

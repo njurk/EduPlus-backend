@@ -206,7 +206,7 @@ namespace BusinessLogic.Services
             user.Street = dto.Street;
             user.City = dto.City;
             user.PostalCode = dto.PostalCode;
-            user.IsActive = dto.IsActive;
+            if (dto.IsActive.HasValue) user.IsActive = dto.IsActive.Value;
             user.UpdatedAt = DateTime.Now;
             user.ModifiedByUserId = modifiedByUserId;
 

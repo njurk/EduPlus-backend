@@ -12,7 +12,7 @@ namespace BusinessLogic.Services
 {
     public interface IClassService
     {
-        Task<PaginatedResponse<object>> GetAllAsync(int? schoolYearId, bool includeInactive, int pageNumber = 1, int pageSize = 20, string? sortBy = null, bool sortDesc = false, int? level = null, string? search = null);
+        Task<PaginatedResponse<object>> GetAllAsync(int? schoolYearId, bool showInactive = false, int pageNumber = 1, int pageSize = 20, string? sortBy = null, bool sortDesc = false, int? level = null, string? search = null);
         Task<object?> GetDetailsAsync(int id, string sortBy, bool sortDesc, string studentSearch, string subjectSearch, string subjectSortBy, bool subjectSortDesc, bool showInactiveSubjects = false, bool showInactiveStudents = false);
         Task<IEnumerable<object>> GetCandidatesAsync(int classId, string search);
         Task AddStudentsBulkAsync(int classId, List<int> studentIds);
@@ -37,15 +37,14 @@ namespace BusinessLogic.Services
             _context = context;
         }
 
-        public async Task<PaginatedResponse<object>> GetAllAsync(int? schoolYearId, bool includeInactive, int pageNumber = 1, int pageSize = 20, string? sortBy = null, bool sortDesc = false, int? level = null, string? search = null)
+        public async Task<PaginatedResponse<object>> GetAllAsync(int? schoolYearId, bool showInactive = false, int pageNumber = 1, int pageSize = 20, string? sortBy = null, bool sortDesc = false, int? level = null, string? search = null)
         {
             var query = _context.Classes.AsNoTracking();
 
             if (schoolYearId.HasValue)
                 query = query.Where(c => c.SchoolYearId == schoolYearId);
 
-            if (!includeInactive)
-                query = query.Where(c => c.IsActive);
+            query = query.Where(c => c.IsActive != showInactive);
 
             if (level.HasValue)
                 query = query.Where(c => c.Level == level.Value);

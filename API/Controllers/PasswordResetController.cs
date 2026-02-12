@@ -25,16 +25,18 @@ namespace API.Controllers
             try
             {
                 await _service.RequestResetAsync(dto.Email, _emailService);
-                return Ok(new { message = "Link do resetu hasła został wysłany" });
             }
-            catch (KeyNotFoundException)
-            {
-                return Ok(new { message = "Jeśli podany email jest w naszym systemie, link zostanie wysłany" });
-            }
-            catch (Exception)
-            {
-                return Ok(new { message = "Jeśli podany email jest w naszym systemie, link zostanie wysłany" });
-            }
+            catch { }
+            return Ok();
+        }
+
+        [HttpPost("validate")]
+        public async Task<IActionResult> ValidateToken([FromBody] ValidateTokenDto dto)
+        {
+            var isValid = await _service.ValidateTokenAsync(dto.Token);
+            if (!isValid)
+                return BadRequest("Kod jest nieprawidłowy lub wygasł");
+            return Ok();
         }
 
         [HttpPost("reset")]
@@ -42,9 +44,8 @@ namespace API.Controllers
         {
             var success = await _service.ResetPasswordAsync(dto, _passwordHashService);
             if (!success)
-                return BadRequest(new { message = "Token jest nieprawidłowy lub wygasł" });
-
-            return Ok(new { message = "Hasło zostało zresetowane pomyślnie" });
+                return BadRequest("Kod jest nieprawidłowy lub wygasł");
+            return Ok();
         }
     }
 }

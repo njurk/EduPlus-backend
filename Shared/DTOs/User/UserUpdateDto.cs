@@ -24,12 +24,12 @@ namespace Shared.DTOs
 
         public string? Password { get; set; }
 
-        public bool IsActive { get; set; }
+        public bool? IsActive { get; set; }
 
-        public List<int> RoleIds { get; set; } = new List<int>();
+        public List<int>? RoleIds { get; set; }
 
-        public List<int> ChildIds { get; set; } = new List<int>();
+        public List<int>? ChildIds { get; set; }
 
-        public List<int> ParentIds { get; set; } = new List<int>();
+        public List<int>? ParentIds { get; set; }
     }
 }

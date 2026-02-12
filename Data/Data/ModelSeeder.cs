@@ -128,12 +128,13 @@ namespace Data.Data
                 new PageContent { Id = 58, Key = "helpLink", Value = "Masz problem? Kliknij tutaj", PageId = 15, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 59, Key = "adminLink", Value = "Jestem administratorem", PageId = 15, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
 
-                new PageContent { Id = 60, Key = "title.request", Value = "Resetowanie hasła", PageId = 16, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new PageContent { Id = 61, Key = "title.sent", Value = "Sprawdź swoją skrzynkę", PageId = 16, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new PageContent { Id = 62, Key = "title.reset", Value = "Ustaw nowe hasło", PageId = 16, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new PageContent { Id = 63, Key = "message.sent", Value = "Jeśli adres {email} istnieje w naszej bazie, za chwilę otrzymasz wiadomość z linkiem do resetowania hasła.", PageId = 16, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new PageContent { Id = 64, Key = "message.linkExpirationTime", Value = "Link wygasa po 1 godzinie", PageId = 16, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+
+                new PageContent { Id = 63, Key = "message.codeSent", Value = "Wysłaliśmy 6-cyfrowy kod na {email}", PageId = 16, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 64, Key = "message.codeExpiration", Value = "Kod jest ważny przez godzinę", PageId = 16, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 108, Key = "subtitle", Value = "Podaj adres email którego używasz w systemie EduPlus", PageId = 16, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 134, Key = "message.success", Value = "Hasło zostało zmienione pomyślnie", PageId = 16, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 135, Key = "subtitle.code", Value = "Sprawdź swoją skrzynkę pocztową", PageId = 16, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 136, Key = "subtitle.reset", Value = "Ustaw nowe hasło dla swojego konta", PageId = 16, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
 
                 new PageContent { Id = 65, Key = "title", Value = "Zgłoś problem", PageId = 17, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 66, Key = "subtitle", Value = "Masz problem z logowaniem lub chcesz zgłosić inny problem? Wypełnij formularz poniżej.", PageId = 17, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },

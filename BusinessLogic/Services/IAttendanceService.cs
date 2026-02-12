@@ -13,7 +13,7 @@ namespace BusinessLogic.Services
 {
     public interface IAttendanceService
     {
-        Task<PaginatedResponse<AttendanceAdminDto>> GetAllForAdminAsync(bool includeInactive, int pageNumber = 1, int pageSize = 20, string? search = null, string? sortBy = null, bool sortDesc = true, int? classId = null, DateTime? date = null, string? subjectName = null, string? teacherName = null, string? attendanceTypeShortCode = null, int? orderNumber = null, int? semesterId = null);
+        Task<PaginatedResponse<AttendanceAdminDto>> GetAllForAdminAsync(bool showInactive = false, int pageNumber = 1, int pageSize = 20, string? search = null, string? sortBy = null, bool sortDesc = true, int? classId = null, DateTime? date = null, string? subjectName = null, string? teacherName = null, string? attendanceTypeShortCode = null, int? orderNumber = null, int? semesterId = null);
         Task<IEnumerable<Attendance>> GetAllAsync();
         Task<Attendance?> UpdateAsync(int id, int attendanceTypeId, IEmailService emailService);
     }
@@ -27,12 +27,11 @@ namespace BusinessLogic.Services
             _context = context;
         }
 
-        public async Task<PaginatedResponse<AttendanceAdminDto>> GetAllForAdminAsync(bool includeInactive, int pageNumber = 1, int pageSize = 20, string? search = null, string? sortBy = null, bool sortDesc = true, int? classId = null, DateTime? date = null, string? subjectName = null, string? teacherName = null, string? attendanceTypeShortCode = null, int? orderNumber = null, int? semesterId = null)
+        public async Task<PaginatedResponse<AttendanceAdminDto>> GetAllForAdminAsync(bool showInactive = false, int pageNumber = 1, int pageSize = 20, string? search = null, string? sortBy = null, bool sortDesc = true, int? classId = null, DateTime? date = null, string? subjectName = null, string? teacherName = null, string? attendanceTypeShortCode = null, int? orderNumber = null, int? semesterId = null)
         {
             var query = _context.AttendanceAdminList.AsNoTracking().AsQueryable();
 
-            if (!includeInactive)
-                query = query.Where(x => x.IsActive);
+            query = query.Where(x => x.IsActive != showInactive);
 
             if (classId.HasValue)
                 query = query.Where(a => a.ClassId == classId.Value);

@@ -8,7 +8,7 @@ namespace BusinessLogic.Services
 {
     public interface IEmailService
     {
-        Task SendPasswordResetEmailAsync(string toEmail, string resetLink);
+        Task SendPasswordResetEmailAsync(string toEmail, string code);
         Task SendTicketCreatedEmailAsync(string toEmail, int ticketNumber, string reason, string content);
         Task SendTicketClosedEmailAsync(string toEmail, int ticketNumber, string reason, string content, string adminResponse, string resolvedBy);
         Task SendNewGradeEmailAsync(string toEmail, string studentName, string subjectName, string gradeValue, string teacherName, DateTime issueDate);
@@ -24,8 +24,8 @@ namespace BusinessLogic.Services
             _configuration = configuration;
         }
 
-        public Task SendPasswordResetEmailAsync(string toEmail, string resetLink)
-            => SendAsync(toEmail, "EduPlus - resetowanie hasła", EmailTemplates.PasswordReset(resetLink));
+        public Task SendPasswordResetEmailAsync(string toEmail, string code)
+            => SendAsync(toEmail, "EduPlus - resetowanie hasła", EmailTemplates.PasswordReset(code));
 
         public Task SendTicketCreatedEmailAsync(string toEmail, int ticketNumber, string reason, string content)
             => SendAsync(toEmail, $"EduPlus - zgłoszenie #{ticketNumber} zostało przyjęte", EmailTemplates.TicketCreated(ticketNumber, reason, content));

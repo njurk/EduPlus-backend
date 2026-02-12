@@ -121,6 +121,7 @@ namespace BusinessLogic.Services
                         Value = g.GradeType?.Numeric ?? "",
                         CategoryName = g.GradeCategory?.Name ?? "",
                         CategoryColorHex = g.GradeCategory?.ColorHex ?? "",
+                CategorySlug = g.GradeCategory?.Slug,
                         TeacherName = g.Teacher != null ? $"{g.Teacher.FirstName} {g.Teacher.LastName}" + (g.Teacher.IsActive ? "" : " (nieaktywny)") : "",
                         Comment = g.Comment,
                         Weight = g.GradeCategory?.Weight ?? 1,

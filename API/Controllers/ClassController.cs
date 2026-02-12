@@ -17,9 +17,9 @@ public class ClassController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll(int? schoolYearId, bool includeInactive = true, int pageNumber = 1, int pageSize = 20, string? sortBy = null, bool sortDesc = false, int? level = null, string? search = null)
+    public async Task<IActionResult> GetAll(int? schoolYearId, bool showInactive = false, int pageNumber = 1, int pageSize = 20, string? sortBy = null, bool sortDesc = false, int? level = null, string? search = null)
     {
-        return Ok(await _service.GetAllAsync(schoolYearId, includeInactive, pageNumber, pageSize, sortBy, sortDesc, level, search));
+        return Ok(await _service.GetAllAsync(schoolYearId, showInactive, pageNumber, pageSize, sortBy, sortDesc, level, search));
     }
 
     [HttpGet("{id}/details")]

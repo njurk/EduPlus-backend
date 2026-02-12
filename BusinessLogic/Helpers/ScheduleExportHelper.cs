@@ -80,6 +80,55 @@ namespace BusinessLogic.Helpers
             };
         }
 
+        public async Task<ScheduleGrid> GetTeacherScheduleGridAsync(int teacherId, int semesterId)
+        {
+            var teacher = await _context.Users.FirstOrDefaultAsync(u => u.Id == teacherId);
+            var teacherLabel = teacher != null ? $"{teacher.FirstName} {teacher.LastName}" : "Nauczyciel";
+
+            var semester = await _context.Semesters.Include(s => s.SchoolYear).FirstOrDefaultAsync(s => s.Id == semesterId);
+            var yearName = semester?.SchoolYear?.Name;
+            var semesterName = semester?.Name;
+
+            var lessonHours = await _context.LessonHours
+                .Where(lh => lh.IsActive)
+                .OrderBy(lh => lh.OrderNumber)
+                .Select(lh => new LessonHourInfo
+                {
+                    Order = lh.OrderNumber,
+                    Start = lh.StartTime.ToString(@"HH\:mm"),
+                    End = lh.EndTime.ToString(@"HH\:mm")
+                })
+                .ToListAsync();
+
+            var schedules = await _context.WeeklySchedules
+                .Where(ws => ws.TeacherId == teacherId && ws.SemesterId == semesterId && ws.IsActive)
+                .Include(ws => ws.Subject)
+                .Include(ws => ws.Class)
+                .Include(ws => ws.Classroom)
+                .Include(ws => ws.LessonHour)
+                .ToListAsync();
+
+            var cells = schedules.ToDictionary(
+                s => (s.LessonHour?.OrderNumber ?? 0, s.DayOfWeek),
+                s => new ScheduleCell
+                {
+                    SubjectName = s.Subject?.Name ?? "",
+                    TeacherName = s.Class != null ? $"{s.Class.Level}{s.Class.Letter}" : "",
+                    ClassroomName = s.Classroom?.Name ?? ""
+                }
+            );
+
+            return new ScheduleGrid
+            {
+                ClassName = teacherLabel,
+                IsTeacher = true,
+                YearName = yearName,
+                SemesterName = semesterName,
+                LessonHours = lessonHours,
+                Cells = cells
+            };
+        }
+
         public string GenerateFileName(string className, string extension) =>
             $"{DateTime.Now:yyyyMMddHHmmss}-plan-lekcji-{className.ToLower().Replace(" ", "-")}.{extension}";
 
@@ -88,7 +137,7 @@ namespace BusinessLogic.Helpers
             var parts = new List<string> { "Plan lekcji" };
             if (!string.IsNullOrEmpty(grid.YearName)) parts.Add(grid.YearName);
             if (!string.IsNullOrEmpty(grid.SemesterName)) parts.Add(grid.SemesterName.ToLower());
-            parts.Add($"klasa {grid.ClassName}");
+            parts.Add(grid.IsTeacher ? grid.ClassName : $"klasa {grid.ClassName}");
             return string.Join(", ", parts);
         }
 
@@ -318,6 +367,7 @@ namespace BusinessLogic.Helpers
     public class ScheduleGrid
     {
         public string ClassName { get; set; } = "";
+        public bool IsTeacher { get; set; }
         public string? YearName { get; set; }
         public string? SemesterName { get; set; }
         public List<LessonHourInfo> LessonHours { get; set; } = new();

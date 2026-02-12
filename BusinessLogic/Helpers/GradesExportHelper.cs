@@ -41,6 +41,11 @@ namespace BusinessLogic.Helpers
             var start = startDate.ToDateTime(TimeOnly.MinValue);
             var end = endDate.ToDateTime(TimeOnly.MaxValue);
 
+            var semesterCategoryIds = await _context.Set<Data.Data.Entities.GradeCategory>()
+                .Where(gc => gc.Slug == "midyear" || gc.Slug == "final")
+                .Select(gc => gc.Id)
+                .ToListAsync();
+
             var query = _context.ClassStudents.AsNoTracking()
                 .Where(cs => cs.ClassId == classId);
 
@@ -55,7 +60,8 @@ namespace BusinessLogic.Helpers
                     OrderNumber = cs.OrderNumber,
                     StudentName = $"{cs.Student.LastName} {cs.Student.FirstName}",
                     Grades = _context.Grades
-                        .Where(g => g.StudentId == cs.StudentId && g.SubjectId == subjectId && g.IsActive && g.CreatedAt >= start && g.CreatedAt <= end)
+                        .Where(g => g.StudentId == cs.StudentId && g.SubjectId == subjectId && g.IsActive && g.CreatedAt >= start && g.CreatedAt <= end
+                            && !semesterCategoryIds.Contains(g.GradeCategoryId))
                         .OrderBy(g => g.CreatedAt)
                         .Select(g => new GradeInfo
                         {
@@ -64,7 +70,13 @@ namespace BusinessLogic.Helpers
                             Category = g.GradeCategory.Name,
                             Weight = g.GradeCategory.Weight
                         }).ToList(),
-                    Average = EduPlusDbContext.CalculateWeightedAverage(cs.StudentId, subjectId, start, end)
+                    Average = EduPlusDbContext.CalculateWeightedAverage(cs.StudentId, subjectId, start, end),
+                    FinalGrade = _context.Grades
+                        .Where(g => g.StudentId == cs.StudentId && g.SubjectId == subjectId && g.IsActive && g.CreatedAt >= start && g.CreatedAt <= end
+                            && semesterCategoryIds.Contains(g.GradeCategoryId))
+                        .OrderByDescending(g => g.CreatedAt)
+                        .Select(g => g.GradeType.Numeric)
+                        .FirstOrDefault()
                 })
                 .ToListAsync();
 
@@ -105,6 +117,7 @@ namespace BusinessLogic.Helpers
                             columns.RelativeColumn(3);
                             columns.RelativeColumn(8);
                             columns.ConstantColumn(50);
+                            columns.ConstantColumn(55);
                         });
 
                         table.Header(h =>
@@ -113,6 +126,7 @@ namespace BusinessLogic.Helpers
                             h.Cell().Background(Colors.Grey.Lighten2).Border(1).BorderColor(Colors.Grey.Lighten1).Padding(4).Text("Uczeń").FontSize(9).SemiBold();
                             h.Cell().Background(Colors.Grey.Lighten2).Border(1).BorderColor(Colors.Grey.Lighten1).Padding(4).Text("Oceny").FontSize(9).SemiBold();
                             h.Cell().Background(Colors.Grey.Lighten2).Border(1).BorderColor(Colors.Grey.Lighten1).Padding(4).AlignCenter().Text("Średnia").FontSize(9).SemiBold();
+                            h.Cell().Background(Colors.Grey.Lighten2).Border(1).BorderColor(Colors.Grey.Lighten1).Padding(4).AlignCenter().Text("Ocena końcowa").FontSize(9).SemiBold();
                         });
 
                         int lp = 0;
@@ -123,6 +137,7 @@ namespace BusinessLogic.Helpers
                             table.Cell().Border(1).BorderColor(Colors.Grey.Lighten1).Padding(4).Text(row.StudentName).FontSize(9);
                             table.Cell().Border(1).BorderColor(Colors.Grey.Lighten1).Padding(4).Text(string.Join(", ", row.Grades.Select(g => g.Value))).FontSize(9);
                             table.Cell().Border(1).BorderColor(Colors.Grey.Lighten1).Padding(4).AlignCenter().Text(row.Average?.ToString("0.00") ?? "-").FontSize(9).SemiBold();
+                            table.Cell().Border(1).BorderColor(Colors.Grey.Lighten1).Padding(4).AlignCenter().Text(row.FinalGrade ?? "-").FontSize(9).SemiBold();
                         }
                     });
 
@@ -144,13 +159,14 @@ namespace BusinessLogic.Helpers
 
             var header = $"Wykaz ocen - {data.ClassName} - {data.SubjectName} ({data.SemesterName}, {data.SchoolYearName})";
             ws.Cell(1, 1).Value = header;
-            ws.Range(1, 1, 1, 4).Merge().Style.Font.SetBold().Font.FontSize = 14;
+            ws.Range(1, 1, 1, 5).Merge().Style.Font.SetBold().Font.FontSize = 14;
 
             ws.Cell(3, 1).Value = "Lp";
             ws.Cell(3, 2).Value = "Uczeń";
             ws.Cell(3, 3).Value = "Oceny";
             ws.Cell(3, 4).Value = "Średnia";
-            ws.Range(3, 1, 3, 4).Style.Font.SetBold().Fill.BackgroundColor = XLColor.LightGray;
+            ws.Cell(3, 5).Value = "Ocena końcowa";
+            ws.Range(3, 1, 3, 5).Style.Font.SetBold().Fill.BackgroundColor = XLColor.LightGray;
 
             int row = 4;
             int lp = 0;
@@ -161,6 +177,7 @@ namespace BusinessLogic.Helpers
                 ws.Cell(row, 2).Value = student.StudentName;
                 ws.Cell(row, 3).Value = string.Join(", ", student.Grades.Select(g => g.Value));
                 ws.Cell(row, 4).Value = student.Average?.ToString("0.00") ?? "-";
+                ws.Cell(row, 5).Value = student.FinalGrade ?? "-";
                 row++;
             }
 
@@ -168,6 +185,7 @@ namespace BusinessLogic.Helpers
             ws.Column(2).Width = 30;
             ws.Column(3).Width = 50;
             ws.Column(4).Width = 10;
+            ws.Column(5).Width = 15;
 
             using var stream = new MemoryStream();
             workbook.SaveAs(stream);
@@ -202,11 +220,17 @@ namespace BusinessLogic.Helpers
                 .OrderBy(cs => cs.Subject.Name)
                 .ToListAsync();
 
+            var semesterCategoryIds = await _context.Set<Data.Data.Entities.GradeCategory>()
+                .Where(gc => gc.Slug == "midyear" || gc.Slug == "final")
+                .Select(gc => gc.Id)
+                .ToListAsync();
+
             var subjects = new List<SubjectGradeRow>();
             foreach (var cs in classSubjects)
             {
                 var grades = await _context.Grades.AsNoTracking()
-                    .Where(g => g.StudentId == studentId && g.SubjectId == cs.SubjectId && g.IsActive && g.CreatedAt >= start && g.CreatedAt <= end)
+                    .Where(g => g.StudentId == studentId && g.SubjectId == cs.SubjectId && g.IsActive && g.CreatedAt >= start && g.CreatedAt <= end
+                        && !semesterCategoryIds.Contains(g.GradeCategoryId))
                     .OrderBy(g => g.CreatedAt)
                     .Select(g => new GradeInfo
                     {
@@ -224,12 +248,20 @@ namespace BusinessLogic.Helpers
                         average = grades.Sum(g => g.NumericValue * g.Weight) / totalWeight;
                 }
 
+                var finalGrade = await _context.Grades.AsNoTracking()
+                    .Where(g => g.StudentId == studentId && g.SubjectId == cs.SubjectId && g.IsActive && g.CreatedAt >= start && g.CreatedAt <= end
+                        && semesterCategoryIds.Contains(g.GradeCategoryId))
+                    .OrderByDescending(g => g.CreatedAt)
+                    .Select(g => g.GradeType.Numeric)
+                    .FirstOrDefaultAsync();
+
                 subjects.Add(new SubjectGradeRow
                 {
                     SubjectId = cs.SubjectId,
                     SubjectName = cs.Subject?.Name ?? "",
                     Grades = grades,
-                    Average = average
+                    Average = average,
+                    FinalGrade = finalGrade
                 });
             }
 
@@ -270,6 +302,7 @@ namespace BusinessLogic.Helpers
                             columns.RelativeColumn(3);
                             columns.RelativeColumn(8);
                             columns.ConstantColumn(50);
+                            columns.ConstantColumn(55);
                         });
 
                         table.Header(h =>
@@ -278,6 +311,7 @@ namespace BusinessLogic.Helpers
                             h.Cell().Background(Colors.Grey.Lighten2).Border(1).BorderColor(Colors.Grey.Lighten1).Padding(4).Text("Przedmiot").FontSize(9).SemiBold();
                             h.Cell().Background(Colors.Grey.Lighten2).Border(1).BorderColor(Colors.Grey.Lighten1).Padding(4).Text("Oceny").FontSize(9).SemiBold();
                             h.Cell().Background(Colors.Grey.Lighten2).Border(1).BorderColor(Colors.Grey.Lighten1).Padding(4).AlignCenter().Text("Średnia").FontSize(9).SemiBold();
+                            h.Cell().Background(Colors.Grey.Lighten2).Border(1).BorderColor(Colors.Grey.Lighten1).Padding(4).AlignCenter().Text("Ocena końcowa").FontSize(9).SemiBold();
                         });
 
                         int lp = 0;
@@ -288,6 +322,7 @@ namespace BusinessLogic.Helpers
                             table.Cell().Border(1).BorderColor(Colors.Grey.Lighten1).Padding(4).Text(row.SubjectName).FontSize(9);
                             table.Cell().Border(1).BorderColor(Colors.Grey.Lighten1).Padding(4).Text(string.Join(", ", row.Grades.Select(g => g.Value))).FontSize(9);
                             table.Cell().Border(1).BorderColor(Colors.Grey.Lighten1).Padding(4).AlignCenter().Text(row.Average?.ToString("0.00") ?? "-").FontSize(9).SemiBold();
+                            table.Cell().Border(1).BorderColor(Colors.Grey.Lighten1).Padding(4).AlignCenter().Text(row.FinalGrade ?? "-").FontSize(9).SemiBold();
                         }
                     });
 
@@ -309,13 +344,14 @@ namespace BusinessLogic.Helpers
 
             var header = $"Wykaz ocen - {data.StudentName} ({data.ClassName}, {data.SemesterName}, {data.SchoolYearName})";
             ws.Cell(1, 1).Value = header;
-            ws.Range(1, 1, 1, 4).Merge().Style.Font.SetBold().Font.FontSize = 14;
+            ws.Range(1, 1, 1, 5).Merge().Style.Font.SetBold().Font.FontSize = 14;
 
             ws.Cell(3, 1).Value = "Lp";
             ws.Cell(3, 2).Value = "Przedmiot";
             ws.Cell(3, 3).Value = "Oceny";
             ws.Cell(3, 4).Value = "Średnia";
-            ws.Range(3, 1, 3, 4).Style.Font.SetBold().Fill.BackgroundColor = XLColor.LightGray;
+            ws.Cell(3, 5).Value = "Ocena końcowa";
+            ws.Range(3, 1, 3, 5).Style.Font.SetBold().Fill.BackgroundColor = XLColor.LightGray;
 
             int row = 4;
             int lp = 0;
@@ -326,6 +362,7 @@ namespace BusinessLogic.Helpers
                 ws.Cell(row, 2).Value = subject.SubjectName;
                 ws.Cell(row, 3).Value = string.Join(", ", subject.Grades.Select(g => g.Value));
                 ws.Cell(row, 4).Value = subject.Average?.ToString("0.00") ?? "-";
+                ws.Cell(row, 5).Value = subject.FinalGrade ?? "-";
                 row++;
             }
 
@@ -333,6 +370,7 @@ namespace BusinessLogic.Helpers
             ws.Column(2).Width = 30;
             ws.Column(3).Width = 50;
             ws.Column(4).Width = 10;
+            ws.Column(5).Width = 15;
 
             using var stream = new MemoryStream();
             workbook.SaveAs(stream);
@@ -370,6 +408,7 @@ namespace BusinessLogic.Helpers
         public string StudentName { get; set; } = "";
         public List<GradeInfo> Grades { get; set; } = new();
         public decimal? Average { get; set; }
+        public string? FinalGrade { get; set; }
     }
 
     public class SubjectGradeRow
@@ -378,6 +417,7 @@ namespace BusinessLogic.Helpers
         public string SubjectName { get; set; } = "";
         public List<GradeInfo> Grades { get; set; } = new();
         public decimal? Average { get; set; }
+        public string? FinalGrade { get; set; }
     }
 
     public class GradeInfo

@@ -4,10 +4,10 @@ namespace BusinessLogic.Templates
     {
         private const string Footer = "<br/><p>Pozdrawiamy,<br/>Zespół EduPlus</p>";
 
-        public static string PasswordReset(string resetLink) => $@"
-            <p>Otrzymaliśmy prośbę o reset hasła do twojego konta w serwisie EduPlus. Kliknij poniższy link, aby zresetować hasło:</p>
-            <p><a href=""{resetLink}"">{resetLink}</a></p>
-            <p>Link jest ważny przez 1 godzinę</p>
+        public static string PasswordReset(string code) => $@"
+            <p>Otrzymaliśmy prośbę o reset hasła do twojego konta w serwisie EduPlus. Twój kod weryfikacyjny:</p>
+            <div style=""text-align:center;font-size:32px;font-weight:bold;letter-spacing:8px;padding:16px;background-color:#f5f5f5;border-radius:4px;margin:16px 0;"">{code}</div>
+            <p>Kod jest ważny przez 1 godzinę.</p>
             <p>Jeśli nie prosiłeś o reset hasła, zignoruj tę wiadomość.</p>
             {Footer}";
 
