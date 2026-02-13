@@ -90,7 +90,11 @@ namespace API
             {
                 options.AddPolicy("Allow",
                     policy => policy
-                        .WithOrigins("http://localhost:5173", "http://192.168.88.89:5173")
+                        .WithOrigins(
+                            "http://localhost:5173",
+                            "http://10.0.2.2:5107",
+                            "http://192.168.88.89:5107"
+                        )
                         .AllowAnyMethod()
                         .AllowAnyHeader()
                         .AllowCredentials()
