@@ -1308,7 +1308,9 @@ namespace Data.Migrations
                     { 132, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "tabs.gradingScale", null, 13, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Skala oceniania" },
                     { 134, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "message.success", null, 16, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Hasło zostało zmienione pomyślnie" },
                     { 135, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "subtitle.code", null, 16, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Sprawdź swoją skrzynkę pocztową" },
-                    { 136, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "subtitle.reset", null, 16, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Ustaw nowe hasło dla swojego konta" }
+                    { 136, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "subtitle.reset", null, 16, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Ustaw nowe hasło dla swojego konta" },
+                    { 137, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "nav.templates", null, 30, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Szablony" },
+                    { 138, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "title.templates", null, 30, new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc), "Szablony dokumentów" }
                 });
 
             migrationBuilder.CreateIndex(

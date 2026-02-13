@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(EduPlusDbContext))]
-    [Migration("20260213162109_Init")]
+    [Migration("20260213170126_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -1400,6 +1400,24 @@ namespace Data.Migrations
                             PageId = 30,
                             UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
                             Value = "Usprawiedliwienia"
+                        },
+                        new
+                        {
+                            Id = 137,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "nav.templates",
+                            PageId = 30,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Szablony"
+                        },
+                        new
+                        {
+                            Id = 138,
+                            CreatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Key = "title.templates",
+                            PageId = 30,
+                            UpdatedAt = new DateTime(2025, 12, 27, 10, 0, 0, 0, DateTimeKind.Utc),
+                            Value = "Szablony dokumentów"
                         });
                 });
 

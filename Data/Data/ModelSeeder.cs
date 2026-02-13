@@ -197,7 +197,9 @@ namespace Data.Data
                 new PageContent { Id = 128, Key = "title.schedule", Value = "Plan lekcji", PageId = 30, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 129, Key = "title.registry", Value = "Dziennik", PageId = 30, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
                 new PageContent { Id = 130, Key = "title.announcements", Value = "Ogłoszenia", PageId = 30, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
-                new PageContent { Id = 131, Key = "title.excuses", Value = "Usprawiedliwienia", PageId = 30, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null }
+                new PageContent { Id = 131, Key = "title.excuses", Value = "Usprawiedliwienia", PageId = 30, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 137, Key = "nav.templates", Value = "Szablony", PageId = 30, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null },
+                new PageContent { Id = 138, Key = "title.templates", Value = "Szablony dokumentów", PageId = 30, CreatedAt = InitialDateTime, UpdatedAt = InitialDateTime, ModifiedByUserId = null }
             );
 
             modelBuilder.Entity<Role>().HasData(

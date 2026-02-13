@@ -77,6 +77,11 @@ namespace API
             builder.Services.AddSingleton<IEventLogService, EventLogService>();
             builder.Services.AddSingleton<IBadgeNotificationService, BadgeNotificationService>();
             builder.Services.AddScoped<IMobileService, MobileService>();
+            builder.Services.AddScoped<ITemplateService>(sp =>
+            {
+                var env = sp.GetRequiredService<IWebHostEnvironment>();
+                return new TemplateService(Path.Combine(env.ContentRootPath, "Templates"));
+            });
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
