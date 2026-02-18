@@ -1,4 +1,4 @@
-namespace Data.Sql
+﻿namespace Data.Sql
 {
     public static class SqlViews
     {
@@ -49,73 +49,6 @@ namespace Data.Sql
                 isnull(m.FirstName + ' ' + m.LastName, 'System') as ModifiedByName
             from Users u
             left join Users m on u.ModifiedByUserId = m.Id;";
-
-        public const string StudentGradesSummary = @"
-            create or alter view [dbo].[vw_StudentGradesSummary] as
-            select
-                u.Id as StudentId,
-                u.FirstName + ' ' + u.LastName as StudentName,
-                c.Id as ClassId,
-                cast(c.Level as varchar) + c.Letter as ClassName,
-                s.Id as SubjectId,
-                s.Name as SubjectName,
-                count(g.Id) as GradeCount,
-                [dbo].[fn_CalculateWeightedAverage](u.Id, s.Id, sy.StartDate, sy.EndDate) as WeightedAverage
-            from Users u
-            join ClassStudents cs on u.Id = cs.StudentId
-            join Classes c on cs.ClassId = c.Id
-            join SchoolYears sy on c.SchoolYearId = sy.Id
-            join ClassSubjects csub on c.Id = csub.ClassId
-            join Subjects s on csub.SubjectId = s.Id
-            left join Grades g on u.Id = g.StudentId and s.Id = g.SubjectId and g.IsActive = 1
-            where u.IsActive = 1 and c.IsActive = 1
-            group by u.Id, u.FirstName, u.LastName, c.Id, c.Level, c.Letter, s.Id, s.Name, sy.StartDate, sy.EndDate;";
-
-        public const string ClassAttendanceSummary = @"
-            create or alter view [dbo].[vw_ClassAttendanceSummary] as
-            select
-                c.Id as ClassId,
-                cast(c.Level as varchar) + c.Letter as ClassName,
-                count(distinct cs.StudentId) as StudentCount,
-                count(case when at.Slug = 'present' then 1 end) as PresentCount,
-                count(case when at.Slug = 'absent' then 1 end) as AbsentCount,
-                count(case when at.Slug = 'late' then 1 end) as LateCount,
-                count(case when at.Slug = 'excused' then 1 end) as ExcusedCount,
-                cast(round(
-                    cast(count(case when at.Slug in ('present', 'late') then 1 end) as float) / 
-                    nullif(cast(count(a.Id) as float), 0) * 100, 2
-                ) as decimal(5,2)) as AttendancePercentage
-            from Classes c
-            join ClassStudents cs on c.Id = cs.ClassId
-            join Lessons l on c.Id = l.ClassId
-            left join Attendances a on l.Id = a.LessonId and cs.StudentId = a.StudentId
-            left join AttendanceTypes at on a.AttendanceTypeId = at.Id
-            where c.IsActive = 1
-            group by c.Id, c.Level, c.Letter;";
-
-        public const string TeacherSchedule = @"
-            create or alter view [dbo].[vw_TeacherSchedule] as
-            select
-                ws.Id,
-                ws.DayOfWeek,
-                lh.OrderNumber as LessonNumber,
-                lh.StartTime,
-                lh.EndTime,
-                t.Id as TeacherId,
-                t.FirstName + ' ' + t.LastName as TeacherName,
-                c.Id as ClassId,
-                cast(c.Level as varchar) + c.Letter as ClassName,
-                s.Id as SubjectId,
-                s.Name as SubjectName,
-                cr.Id as ClassroomId,
-                cr.Name as ClassroomName
-            from WeeklySchedules ws
-            join Users t on ws.TeacherId = t.Id
-            join Classes c on ws.ClassId = c.Id
-            join Subjects s on ws.SubjectId = s.Id
-            join Classrooms cr on ws.ClassroomId = cr.Id
-            join LessonHours lh on ws.LessonHourId = lh.Id
-            where ws.IsActive = 1;";
 
         public const string AttendanceAdmin = @"
             create or alter view [dbo].[vw_AttendanceAdmin] as
@@ -230,9 +163,6 @@ namespace Data.Sql
         public const string DropDashboardStats = "drop view if exists [dbo].[vw_DashboardStatsView]";
         public const string DropParentStudent = "drop view if exists [dbo].[vw_ParentStudentView]";
         public const string DropUserList = "drop view if exists [dbo].[vw_UserListView]";
-        public const string DropStudentGradesSummary = "drop view if exists [dbo].[vw_StudentGradesSummary]";
-        public const string DropClassAttendanceSummary = "drop view if exists [dbo].[vw_ClassAttendanceSummary]";
-        public const string DropTeacherSchedule = "drop view if exists [dbo].[vw_TeacherSchedule]";
         public const string DropAttendanceAdmin = "drop view if exists [dbo].[vw_AttendanceAdmin]";
         public const string DropGradesAdmin = "drop view if exists [dbo].[vw_GradesAdmin]";
         public const string DropLessonsAdmin = "drop view if exists [dbo].[vw_LessonsAdmin]";

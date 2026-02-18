@@ -247,23 +247,18 @@ namespace Data.Data
             Database.ExecuteSqlRaw(Sql.SqlFunctions.CalculateWeightedAverage);
             Database.ExecuteSqlRaw(Sql.SqlFunctions.GetUserRoles);
 
-            Database.ExecuteSqlRaw(Sql.SqlProcedures.GenerateNextSchoolYear);
             Database.ExecuteSqlRaw(Sql.SqlProcedures.DeactivateLessonAttendance);
             Database.ExecuteSqlRaw(Sql.SqlProcedures.GenerateLessonAttendance);
             Database.ExecuteSqlRaw(Sql.SqlProcedures.RecalculateClassStudentOrder);
+            Database.ExecuteSqlRaw(Sql.SqlProcedures.BulkInsertGrades);
 
             Database.ExecuteSqlRaw(Sql.SqlViews.DashboardStats);
             Database.ExecuteSqlRaw(Sql.SqlViews.ParentStudent);
             Database.ExecuteSqlRaw(Sql.SqlViews.UserList);
-            Database.ExecuteSqlRaw(Sql.SqlViews.StudentGradesSummary);
-            Database.ExecuteSqlRaw(Sql.SqlViews.ClassAttendanceSummary);
-            Database.ExecuteSqlRaw(Sql.SqlViews.TeacherSchedule);
             Database.ExecuteSqlRaw(Sql.SqlViews.AttendanceAdmin);
             Database.ExecuteSqlRaw(Sql.SqlViews.GradesAdmin);
             Database.ExecuteSqlRaw(Sql.SqlViews.LessonsAdmin);
             Database.ExecuteSqlRaw(Sql.SqlViews.TeacherAssignments);
-
-            Database.ExecuteSqlRaw(Sql.SqlProcedures.BulkInsertGrades);
         }
     }
 }

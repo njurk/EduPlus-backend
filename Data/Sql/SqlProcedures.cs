@@ -1,39 +1,7 @@
-namespace Data.Sql
+﻿namespace Data.Sql
 {
     public static class SqlProcedures
     {
-        public const string GenerateNextSchoolYear = @"
-            create or alter procedure [dbo].[sp_GenerateNextSchoolYear]
-            as
-            begin
-                set nocount on;
-
-                declare @LastEndDate date;
-                declare @NewStartDate date;
-                declare @NewEndDate date;
-                declare @NewYearName nvarchar(20);
-                declare @NewYearId int;
-
-                select top 1 @LastEndDate = EndDate from SchoolYears order by EndDate desc;
-
-                if @LastEndDate is null throw 50001, 'Brak aktywnego roku szkolnego. Należy utworzyć w konfiguracji systemu', 1;
-
-                set @NewStartDate = dateadd(day, 1, @LastEndDate);
-                set @NewEndDate = dateadd(year, 1, @LastEndDate);
-                set @NewYearName = concat(year(@NewStartDate), '/', year(@NewEndDate));
-
-                insert into SchoolYears (Name, StartDate, EndDate, IsActive, CreatedAt, UpdatedAt)
-                values (@NewYearName, @NewStartDate, @NewEndDate, 0, getdate(), getdate());
-
-                set @NewYearId = scope_identity();
-
-                insert into Semesters (Name, StartDate, EndDate, IsActive, CreatedAt, UpdatedAt, SchoolYearId)
-                values ('Semestr 1', @NewStartDate, datefromparts(year(@NewEndDate), 1, 31), 1, getdate(), getdate(), @NewYearId);
-
-                insert into Semesters (Name, StartDate, EndDate, IsActive, CreatedAt, UpdatedAt, SchoolYearId)
-                values ('Semestr 2', datefromparts(year(@NewEndDate), 2, 1), @NewEndDate, 1, getdate(), getdate(), @NewYearId);
-            end;";
-
         public const string DeactivateLessonAttendance = @"
             create or alter procedure [dbo].[sp_DeactivateLessonAttendance]
                 @LessonId int
@@ -136,7 +104,6 @@ namespace Data.Sql
                 select @@rowcount as InsertedCount;
             end;";
 
-        public const string DropGenerateNextSchoolYear = "drop procedure if exists [dbo].[sp_GenerateNextSchoolYear]";
         public const string DropDeactivateLessonAttendance = "drop procedure if exists [dbo].[sp_DeactivateLessonAttendance]";
         public const string DropGenerateLessonAttendance = "drop procedure if exists [dbo].[sp_GenerateLessonAttendance]";
         public const string DropRecalculateClassStudentOrder = "drop procedure if exists [dbo].[sp_RecalculateClassStudentOrder]";

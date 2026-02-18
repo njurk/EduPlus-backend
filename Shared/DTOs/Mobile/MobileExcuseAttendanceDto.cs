@@ -7,5 +7,6 @@
         public string Date { get; set; } = string.Empty;
         public int LessonHour { get; set; }
         public string AttendanceType { get; set; } = string.Empty;
+        public string AttendanceTypeColorHex { get; set; }
     }
 }

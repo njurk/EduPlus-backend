@@ -1,4 +1,4 @@
-using Data.Data;
+﻿using Data.Data;
 using Microsoft.EntityFrameworkCore;
 using Shared.DTOs.Mobile;
 
@@ -392,49 +392,48 @@ namespace BusinessLogic.Services
             var resolvedStudentId = await GetStudentIdAsync(userId, studentId);
 
             var query = _context.Excuses
-                .Include(e => e.ExcuseAttendances)
-                    .ThenInclude(ea => ea.Attendance)
-                        .ThenInclude(a => a.Lesson)
-                            .ThenInclude(l => l.Subject)
-                .Include(e => e.ExcuseAttendances)
-                    .ThenInclude(ea => ea.Attendance)
-                        .ThenInclude(a => a.Lesson)
-                            .ThenInclude(l => l.LessonHour)
-                .Include(e => e.ExcuseAttendances)
-                    .ThenInclude(ea => ea.Attendance)
-                        .ThenInclude(a => a.AttendanceType)
-                .Where(e => e.StudentId == resolvedStudentId && e.IsActive)
-                .AsQueryable();
+                .Where(e => e.StudentId == resolvedStudentId && e.IsActive);
 
             if (semesterId.HasValue)
             {
-                var semester = await _context.Semesters.FindAsync(semesterId.Value);
+                var semester = await _context.Semesters
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(s => s.Id == semesterId.Value);
+
                 if (semester != null)
                 {
-                    query = query.Where(e => e.ExcuseAttendances.Any(ea => 
-                        DateOnly.FromDateTime(ea.Attendance.Lesson.Date) >= semester.StartDate 
-                        && DateOnly.FromDateTime(ea.Attendance.Lesson.Date) <= semester.EndDate));
+                    var startDate = semester.StartDate.ToDateTime(TimeOnly.MinValue);
+                    var endDate = semester.EndDate.ToDateTime(TimeOnly.MaxValue);
+
+                    query = query.Where(e => e.ExcuseAttendances.Any(ea =>
+                        ea.Attendance.Lesson.Date >= startDate &&
+                        ea.Attendance.Lesson.Date <= endDate));
                 }
             }
 
-            var excuses = await query.OrderByDescending(e => e.CreatedAt).ToListAsync();
-
-            return excuses.Select(e => new MobileExcuseDto
-            {
-                Id = e.Id,
-                Reason = e.Reason,
-                Status = e.IsAccepted == null ? "Oczekujące" : e.IsAccepted == true ? "Zaakceptowane" : "Odrzucone",
-                StatusColorHex = e.IsAccepted == null ? "#f59e0b" : e.IsAccepted == true ? "#22c55e" : "#ef4444",
-                CreatedAt = e.CreatedAt,
-                Attendances = e.ExcuseAttendances.Select(ea => new MobileExcuseAttendanceDto
+            var result = await query
+                .OrderByDescending(e => e.CreatedAt)
+                .Select(e => new MobileExcuseDto
                 {
-                    Id = ea.AttendanceId,
-                    SubjectName = ea.Attendance.Lesson?.Subject?.Name ?? "",
-                    Date = ea.Attendance.Lesson?.Date.ToString("dd.MM.yyyy") ?? "",
-                    LessonHour = ea.Attendance.Lesson?.LessonHour?.OrderNumber ?? 0,
-                    AttendanceType = ea.Attendance.AttendanceType?.ShortCode ?? ""
-                }).ToList()
-            }).ToList();
+                    Id = e.Id,
+                    Reason = e.Reason,
+                    Status = e.IsAccepted == null ? "Oczekujące" : e.IsAccepted == true ? "Zaakceptowane" : "Odrzucone",
+                    StatusColorHex = e.IsAccepted == null ? "#f59e0b" : e.IsAccepted == true ? "#22c55e" : "#ef4444",
+                    CreatedAt = e.CreatedAt,
+                    Attendances = e.ExcuseAttendances.Select(ea => new MobileExcuseAttendanceDto
+                    {
+                        Id = ea.AttendanceId,
+                        SubjectName = ea.Attendance.Lesson.Subject.Name ?? "",
+                        Date = ea.Attendance.Lesson.Date.ToString("dd.MM.yyyy"),
+                        LessonHour = ea.Attendance.Lesson.LessonHour.OrderNumber,
+                        AttendanceType = ea.Attendance.AttendanceType.ShortCode ?? "",
+                        AttendanceTypeColorHex = ea.Attendance.AttendanceType.ColorHex
+                    }).ToList()
+                })
+                .AsNoTracking()
+                .ToListAsync();
+
+            return result;
         }
 
         public async Task<List<MobileSemesterDto>> GetSemestersAsync()
